@@ -27,8 +27,8 @@ def read_mnist_labels(file):
 
 def read_mnist_dir(dirname):
   import os
-  imgs_file = os.path.join(dirname, 'train-images.idx3-ubyte')
-  labels_file = os.path.join(dirname, 'train-labels.idx1-ubyte')
+  imgs_file = os.path.join(dirname, 'train-images-idx3-ubyte')
+  labels_file = os.path.join(dirname, 'train-labels-idx1-ubyte')
 
   return (read_mnist_images(imgs_file), read_mnist_labels(labels_file))
 
