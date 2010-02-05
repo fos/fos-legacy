@@ -66,12 +66,15 @@ def display():
     
     gl.glClear (gl.GL_COLOR_BUFFER_BIT)          
     
+    '''
     gl.glRotatef(day, 0.0, 1.0, 0.0) 
     #gl.glTranslatef(0.0, 0.0, zdist)            
     gl.glCallList(1)
     glut.glutWireSphere(1.0, 20, 16) #sun
-    
     '''
+    
+    #'''
+
     global day,year,zdist    
     
     gl.glClear (gl.GL_COLOR_BUFFER_BIT)          
@@ -104,7 +107,7 @@ def display():
     glut.glutSolidSphere(0.1, 10, 8) #moon of planet 2
     
     gl.glPopMatrix()
-    '''
+    #'''
     
     glut.glutSwapBuffers()    
    
@@ -118,7 +121,7 @@ def reshape (w, h):
     
     gl.glMatrixMode (gl.GL_MODELVIEW)    
     gl.glLoadIdentity ()
-    glu.gluLookAt(0.0,0.0,5.0, 0.0,0.0,0.0, 0.0,1.0,0.0)
+    #glu.gluLookAt(0.0,0.0,5.0, 0.0,0.0,0.0, 0.0,1.0,0.0)
     
    
 def spin():
