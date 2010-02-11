@@ -16,9 +16,9 @@ try:
   from OpenGL.GLU import *
 except:
   print ''' Error: PyOpenGL not installed properly !!'''
-  sys.exit(  )
+  sys.exit( )
 
-class MouseInteractor ( object ):
+class MouseInteractor (object):
 	"""Connection between mouse motion and transformation matrix"""
 	def __init__( self, translationScale=0.1, rotationScale=.2):
 		self.scalingFactorRotation = rotationScale

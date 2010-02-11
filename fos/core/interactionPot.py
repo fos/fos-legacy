@@ -7,7 +7,7 @@
 # Details are given in the file license.txt included in this distribution.
 
 import sys
-from mouseInteractor import MouseInteractor
+from mouse import MouseInteractor
 
 try:
   from OpenGL.GLUT import *
