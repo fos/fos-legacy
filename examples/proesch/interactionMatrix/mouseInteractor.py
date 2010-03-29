@@ -59,7 +59,7 @@ class MouseInteractor ( object ):
 			tZ = deltaY * self.scalingFactorTranslation
 			self.translationMatrix.addTranslation(0, 0, tZ)
 		self.oldMousePos[0], self.oldMousePos[1] = x, y
-		glutPostRedisplay( )
+		glutPostRedisplay()
 
 	def applyTransformation( self ):
 		"""Concatenation of the current translation and rotation

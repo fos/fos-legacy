@@ -13,6 +13,9 @@ except ImportError:
     
     ImportError('PyOpenGL is not installed')
 
+import mouse
+
+
 # objects
 
 SELECT_BUFFER_SIZE=100
@@ -77,12 +80,13 @@ def display():
     #gl.glCallList(1)
     #glut.glutWireSphere(1.0, 20, 16) #sun
     drawRects(gl.GL_RENDER)
-    
+    global mi
+    mi.applyTransformation( )
     glut.glutSwapBuffers()
 
 
 
-def window(w=500,h=500,title='Fos',px=100,py=100,color=(0.,0.,0.)):
+def window(w=500,h=500,title='light',px=100,py=100):
 
     #glut init
     glut.glutInit(sys.argv)
@@ -90,11 +94,13 @@ def window(w=500,h=500,title='Fos',px=100,py=100,color=(0.,0.,0.)):
     glut.glutInitWindowSize (w, h)
     glut.glutInitWindowPosition (px, py)
     glut.glutCreateWindow (title)
-    
+
+
+def init(color=(0.,0.,0.)):    
+
     #add objects
     #origin()
 
-    #gl init
     gl.glClearColor (color[0], color[1], color[2], 0.0)
     gl.glEnable(gl.GL_DEPTH_TEST)
     gl.glShadeModel (gl.GL_FLAT)
@@ -146,7 +152,7 @@ def keyboard(key, x, y):
             print min_depth, max_depth, names
     
 
-
+'''
 def mouse(button, state, x, y):    
     #global day,year
     
@@ -164,17 +170,24 @@ def mouse(button, state, x, y):
         if state == glut.GLUT_DOWN:
             glut.glutPostRedisplay()
         
+'''
 
-def interaction(disp=display,resh=reshape, key=keyboard, mous=mouse):
-    
+#def interaction(disp=display,resh=reshape, key=keyboard, mous=mouse):
+def interaction(disp=display,resh=reshape, key=keyboard):    
+
+    global mi
+    mi=mouse.MouseInteractor(.01, 1)
+    mi.registerCallbacks( )
+
     glut.glutDisplayFunc(disp)
     glut.glutReshapeFunc(resh)
     glut.glutKeyboardFunc(key)
-    glut.glutMouseFunc(mous)
+    #glut.glutMouseFunc(mous)
 
 def start():
 
     window()
+    init()
     interaction() 
     glut.glutMainLoop()
           

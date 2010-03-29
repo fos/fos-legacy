@@ -15,10 +15,10 @@ try:
   from OpenGL.GLU import *
 except:
   print ''' Fehler: PyOpenGL nicht intalliert !!'''
-  sys.exit(  )
+  sys.exit( )
 
 
-def display(  ):
+def display( ):
 	"""Glut display function."""
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT )
 	glMatrixMode( GL_PROJECTION )
@@ -39,7 +39,7 @@ def display(  ):
 	glEnable( GL_LIGHTING )
 	glutSwapBuffers( )
 
-def init(  ):
+def init( ):
 	"""Glut init function."""
 	glClearColor ( 0, 0, 0, 0 )
 	glEnable( GL_DEPTH_TEST )
