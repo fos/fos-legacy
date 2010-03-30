@@ -62,11 +62,30 @@ class MouseInteractor (object):
 		self.oldMousePos = [ 0, 0 ]
 
 	def mouseButton( self, button, mode, x, y ):
-		"""Callback function for mouse button."""
+		"""Callback function for mouse button.
+
+                http://stackoverflow.com/questions/14378/using-the-mouse-scrollwheel-in-glut
+                """
+
+                print button, mode
+
+                if button == 3 and mode == 1: #scroll up
+                    print 'inside'
+                    #tZ = deltaY * self.scalingFactorTranslation
+                    tZ=.3
+                    self.translationMatrix.addTranslation(0, 0, tZ)
+
+                if button == 4 and mode == 1: #scroll down
+                    #tZ = deltaY * self.scalingFactorTranslation
+                    tZ=.3
+                    self.translationMatrix.addTranslation(0, 0, -tZ)
+                    
+                '''                
 		if mode == glut.GLUT_DOWN:
 			self.mouseButtonPressed = button
 		else:
 			self.mouseButtonPressed = None
+                '''
 		self.oldMousePos[0], self.oldMousePos[1] = x, y
 		glut.glutPostRedisplay( )
 
@@ -80,19 +99,23 @@ class MouseInteractor (object):
 		deltaX = x - self.oldMousePos[ 0 ]
 		deltaY = y - self.oldMousePos[ 1 ]
 		if self.mouseButtonPressed == glut.GLUT_RIGHT_BUTTON:
-			tX = deltaX * self.scalingFactorTranslation
-			tY = deltaY * self.scalingFactorTranslation
-			self.translationMatrix.addTranslation(tX, -tY, 0)
+                    tX = deltaX * self.scalingFactorTranslation
+                    tY = deltaY * self.scalingFactorTranslation
+                    self.translationMatrix.addTranslation(tX, -tY, 0)
 
-		elif self.mouseButtonPressed == glut.GLUT_LEFT_BUTTON:
-			rY = deltaX * self.scalingFactorRotation
-			self.rotationMatrix.addRotation(rY, 0, 1, 0)
-			rX = deltaY * self.scalingFactorRotation
-			self.rotationMatrix.addRotation(rX, 1, 0, 0)
+		if self.mouseButtonPressed == glut.GLUT_LEFT_BUTTON:
+                    rY = deltaX * self.scalingFactorRotation
+                    self.rotationMatrix.addRotation(rY, 0, 1, 0)
+                    rX = deltaY * self.scalingFactorRotation
+                    self.rotationMatrix.addRotation(rX, 1, 0, 0)
 
-		elif self.mouseButtonPressed == glut.GLUT_MIDDLE_BUTTON:
-			tZ = deltaY * self.scalingFactorTranslation
-			self.translationMatrix.addTranslation(0, 0, tZ)
+		if self.mouseButtonPressed == glut.GLUT_MIDDLE_BUTTON:
+                    tZ = deltaY * self.scalingFactorTranslation
+                    self.translationMatrix.addTranslation(0, 0, tZ)
+
+                
+
+                    
 
 		self.oldMousePos[0], self.oldMousePos[1] = x, y
 		glut.glutPostRedisplay()

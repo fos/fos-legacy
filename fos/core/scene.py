@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
 import sys
+import thread
+import threading
 import numpy as np
 
 try:
@@ -48,8 +50,8 @@ class Scene(object):
 
         #Display settings
         self.clear_bit=gl.GL_COLOR_BUFFER_BIT
-        
 
+    
     def window(self):
 
         glut.glutInit(sys.argv)
@@ -121,17 +123,21 @@ class Scene(object):
         
 
 
-    def start(self):
+    def run(self):
 
         self.window()
         self.init()
         self.interaction()
+
         glut.glutMainLoop()
 
 
 
 engine=Scene()
-engine.start()
+engine.run()
+
+
+
 
 
 
