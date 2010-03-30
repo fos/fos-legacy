@@ -42,9 +42,9 @@ class Scene(object):
         self.mouse=None        
         
         #Reshape settings
-        self.viewport=(0,0,self.win_size[0],self.win_size[1])
-        self.glu_perspect=(60.,self.win_size[0]/self.win_size[1],1.,20.)
-        self.glu_lookat=(0.,0.,15., 0.,0.,0., 0.,1.,0.) 
+        self.viewport=(0,0,self.win_size[0],self.win_size[1])        
+        self.glu_perspect=(30.,self.win_size[0]/self.win_size[1],0.,200.)
+        self.glu_lookat=(0.,0.,150., 0.,0.,0., 0.,1.,0.) 
 
         #Display settings
         self.clear_bit=gl.GL_COLOR_BUFFER_BIT
@@ -53,6 +53,7 @@ class Scene(object):
     def window(self):
 
         glut.glutInit(sys.argv)
+        
         glut.glutInitDisplayMode (self.disp_mode)
         
         w,h=self.win_size
@@ -76,13 +77,15 @@ class Scene(object):
         gl.glDepthRange(near,far) #default z mapping
 
 
-    def interaction(self):    
+    def interaction(self):
+        
         transl_scale,rotation_scale=self.mouse_scale
         self.mouse=mouse.MouseInteractor(transl_scale,rotation_scale)
         self.mouse.registerCallbacks()
 
         glut.glutDisplayFunc(self.disp)
-        glut.glutReshapeFunc(self.resh)        
+        glut.glutReshapeFunc(self.resh)
+        
         #glut.glutKeyboardFunc(key)
         #glut.glutMouseFunc(mous)
         
@@ -92,7 +95,8 @@ class Scene(object):
         gl.glClear(self.clear_bit)
 
         #load primitives
-        glut.glutSolidTeapot(5.0)
+        #glut.glutSolidTeapot(5.0)
+        glut.glutWireCube(50.)
         
         self.mouse.applyTransformation()
         glut.glutSwapBuffers()
@@ -107,14 +111,14 @@ class Scene(object):
         
         fovy,aspect,zNear,zFar=self.glu_perspect        
         glu.gluPerspective(fovy,aspect,zNear,zFar)
-        
-        #gl.glOrtho(0.0, 8.0, 0.0, 8.0, -0.5, 2.5);
+                        
+        #gl.glOrtho(0.0, 8.0, 0.0, 8.0, -0.5, 2.5)
         gl.glMatrixMode (gl.GL_MODELVIEW)    
         gl.glLoadIdentity ()
         
-        self.glu_lookat
-        glu.gluLookAt(0.0,0.0,15.0, 0.0,0.0,0.0, 0.0,1.0,0.0)
-        #gl.glTranslatef(50,0.,0.)
+        eyex,eyey,eyez,centx,centy,centz,upx,upy,upz=self.glu_lookat
+        glu.gluLookAt(eyex,eyey,eyez,centx,centy,centz,upx,upy,upz)
+        
 
 
     def start(self):
