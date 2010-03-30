@@ -20,6 +20,9 @@ import mouse
 
 SELECT_BUFFER_SIZE=100
 
+def drawLines(mode):
+
+    pass
 
 def drawRects(mode):
 
@@ -79,14 +82,15 @@ def display():
     #gl.glTranslatef(0.0, 0.0, zdist)            
     #gl.glCallList(1)
     #glut.glutWireSphere(1.0, 20, 16) #sun
-    drawRects(gl.GL_RENDER)
+    #drawRects(gl.GL_RENDER)
+    glut.glutSolidTeapot(5.)
     global mi
     mi.applyTransformation( )
     glut.glutSwapBuffers()
 
 
 
-def window(w=500,h=500,title='light',px=100,py=100):
+def window(w=800,h=800,title='light',px=100,py=100):
 
     #glut init
     glut.glutInit(sys.argv)
@@ -176,7 +180,7 @@ def mouse(button, state, x, y):
 def interaction(disp=display,resh=reshape, key=keyboard):    
 
     global mi
-    mi=mouse.MouseInteractor(.01, 1)
+    mi=mouse.MouseInteractor(.01,0.02)
     mi.registerCallbacks( )
 
     glut.glutDisplayFunc(disp)
