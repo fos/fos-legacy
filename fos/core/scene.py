@@ -4,6 +4,8 @@ import sys
 import thread
 import threading
 import numpy as np
+import Image # PIL
+
 
 try:
     
@@ -40,6 +42,7 @@ class Scene(object):
         #Interaction settings
         self.disp=self.display
         self.resh=self.reshape
+        self.key=self.keystroke
         self.mouse_scale=(0.01,0.02) # translation & rotational scale
         self.mouse=None        
         
@@ -78,6 +81,36 @@ class Scene(object):
         near,far=self.depth_range
         gl.glDepthRange(near,far) #default z mapping
 
+    def save(self, filename="test.png", format="PNG" ):
+	"""Save current buffer to filename in format
+
+        try also test.jpg with format="JPEG"
+
+        """
+	
+	x,y,width,height = gl.glGetDoublev(gl.GL_VIEWPORT)
+        
+	width,height = int(width),int(height)
+        gl.glPixelStorei(gl.GL_PACK_ALIGNMENT, 1)
+        
+	data = gl.glReadPixels(x, y, width, height, gl.GL_RGB, gl.GL_UNSIGNED_BYTE)        
+	image = Image.fromstring( "RGB", (width, height), data )        
+	image = image.transpose( Image.FLIP_TOP_BOTTOM)
+        
+	image.save( filename, format )
+	#print 'Saved image to %s'% (os.path.abspath( filename))
+	#return image
+
+    def keystroke(self,*args):
+	# If escape is pressed, kill everything.
+
+        if args[0] == 's':
+
+            self.save()            
+            
+	if args[0] == '\033':
+            sys.exit()
+
 
     def interaction(self):
         
@@ -86,9 +119,9 @@ class Scene(object):
         self.mouse.registerCallbacks()
 
         glut.glutDisplayFunc(self.disp)
-        glut.glutReshapeFunc(self.resh)
+        glut.glutReshapeFunc(self.resh)                
+        glut.glutKeyboardFunc(self.key)
         
-        #glut.glutKeyboardFunc(key)
         #glut.glutMouseFunc(mous)
         
 
