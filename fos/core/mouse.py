@@ -80,12 +80,12 @@ class MouseInteractor (object):
                     tZ=.3
                     self.translationMatrix.addTranslation(0, 0, -tZ)
                     
-                '''                
+                
 		if mode == glut.GLUT_DOWN:
 			self.mouseButtonPressed = button
 		else:
 			self.mouseButtonPressed = None
-                '''
+                
 		self.oldMousePos[0], self.oldMousePos[1] = x, y
 		glut.glutPostRedisplay( )
 
@@ -109,10 +109,11 @@ class MouseInteractor (object):
                     rX = deltaY * self.scalingFactorRotation
                     self.rotationMatrix.addRotation(rX, 1, 0, 0)
 
+                '''    
 		if self.mouseButtonPressed == glut.GLUT_MIDDLE_BUTTON:
                     tZ = deltaY * self.scalingFactorTranslation
                     self.translationMatrix.addTranslation(0, 0, tZ)
-
+                '''
                 
 
                     

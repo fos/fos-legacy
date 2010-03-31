@@ -112,7 +112,7 @@ class Scene(object):
         gl.glLoadIdentity ()
         
         fovy,aspect,zNear,zFar=self.glu_perspect        
-        glu.gluPerspective(fovy,aspect,zNear,zFar)
+        glu.gluPerspective(fovy,w/float(h),zNear,zFar)
                         
         #gl.glOrtho(0.0, 8.0, 0.0, 8.0, -0.5, 2.5)
         gl.glMatrixMode (gl.GL_MODELVIEW)    
