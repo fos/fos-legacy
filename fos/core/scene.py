@@ -42,12 +42,14 @@ class Scene(object):
         self.disp=self.display
         self.resh=self.reshape
         self.key=self.keystroke
-        self.mouse_scale=(0.01,0.02) # translation & rotational scale
+        self.mouse_scale=(1.,1.) # translation & rotational scale
         self.mouse=None        
 
         #Timing settings
         self.timer1=self.video_timer
-        self.timer1Dt=33 # in milliseconds
+        self.timer1Dt=33 # duraction between consecutive runs in milliseconds
+        self.autostart_timer1=False
+        self.timer1on=False
 
         #Video settings
         self.frameno=0
@@ -61,6 +63,8 @@ class Scene(object):
         #Display settings
         self.clear_bit=gl.GL_COLOR_BUFFER_BIT
 
+        #Extra Testing settings        
+
     
     def window(self):
 
@@ -69,9 +73,11 @@ class Scene(object):
         glut.glutInitDisplayMode (self.disp_mode)
         
         w,h=self.win_size
+        
         glut.glutInitWindowSize (w,h)
         
         px,py=self.win_pos
+        
         glut.glutInitWindowPosition (px,py)
 
         glut.glutCreateWindow (self.win_title)
@@ -79,6 +85,7 @@ class Scene(object):
     def init(self):
         
         r,g,b,a=self.clear_color
+        
         gl.glClearColor (r,g,b,a)
         
         gl.glEnable(self.enab_depth)
@@ -102,7 +109,8 @@ class Scene(object):
         
         gl.glPixelStorei(gl.GL_PACK_ALIGNMENT, 1)
         
-	data = gl.glReadPixels(x, y, width, height, gl.GL_RGB, gl.GL_UNSIGNED_BYTE)        
+	data = gl.glReadPixels(x, y, width, height, gl.GL_RGB, gl.GL_UNSIGNED_BYTE)
+        
 	image = Image.fromstring( "RGB", (width, height), data )
         
 	image = image.transpose( Image.FLIP_TOP_BOTTOM)
@@ -116,54 +124,114 @@ class Scene(object):
 
         if args[0] == 's':
 
-            self.save()            
+            self.save()
+
+        if args[0] == 't':
+
+            if self.autostart_timer1==False:
+
+                if self.timer1on==False:
+
+                    print('timer1 is on')
+
+                    self.timer1on=True
+
+                    glut.glutTimerFunc(self.timer1Dt, self.timer1,1)
+
+                    
+
+                else:
+
+                    print('timer1 is off')                    
+
+                    self.timer1on=False
+ 
+
+        if args[0] == 'r':
+
+            self.mouse.rotationMatrix.reset()
+            
+            self.mouse.translationMatrix.reset()
+            
+            glut.glutPostRedisplay()
+            
+        if args[0] == 'j':
+
+            pass
+
+        if args[0] == 'k':
+
+            pass
             
 	if args[0] == '\033':
             sys.exit()
 
     def video_timer(self,value):
+
+        #print value
+
+        if self.timer1on==True:
+
+            self.save(filename=self.video_dir+'{0:010d}'.format(self.frameno)+'.png')
         
-        self.save(filename=self.video_dir+'{0:010d}'.format(self.frameno)+'.png')
+            self.frameno+=1
         
-        self.frameno+=1
+            glut.glutPostRedisplay()
         
-        glut.glutPostRedisplay()
+            glut.glutTimerFunc( self.timer1Dt, self.video_timer, 1)
+
         
-        glut.glutTimerFunc( self.timer1Dt, self.video_timer, 1)       
 
 
     def interaction(self):
         
-        transl_scale,rotation_scale=self.mouse_scale
         
-        self.mouse=mouse.MouseInteractor(transl_scale,rotation_scale)
-        
-        self.mouse.registerCallbacks()
-
         glut.glutDisplayFunc(self.disp)
         
         glut.glutReshapeFunc(self.resh)
         
         glut.glutKeyboardFunc(self.key)
+
+        transl_scale,rotation_scale=self.mouse_scale
         
-        glut.glutTimerFunc(self.timer1Dt,self.timer1,1)
+        self.mouse=mouse.MouseInteractor(transl_scale,rotation_scale)
+
+        #registers both glutMouseFunc and glutMotionFunc
+        self.mouse.registerCallbacks()
         
-        #glut.glutMouseFunc(mous)
+        #glut.glutTimerFunc(self.timer1Dt,self.timer1,1)       
+
         
 
     def display(self):
 
         gl.glClear(self.clear_bit)
-        #load primitives
-        #glut.glutSolidTeapot(5.0)
-        glut.glutWireCube(50.)
-        
-        self.mouse.applyTransformation()
-        
-        glut.glutSwapBuffers()
 
-    def reshape(self,w,h):
+        gl.glLoadIdentity()
+
+        eyex,eyey,eyez,centx,centy,centz,upx,upy,upz=self.glu_lookat
+
+        glu.gluLookAt(eyex,eyey,eyez,centx,centy,centz,upx,upy,upz)
+
+        self.mouse.applyTransformation()
+
+        #Add objects
+
+        glut.glutWireTeapot(50.)
         
+        glut.glutWireCube(100.)
+        
+        #gl.glRasterPos3f( 1.8, .5, 0 )
+        gl.glRasterPos3f(100.,0.,0.)
+        
+        for c in "hello :-)":
+
+            glut.glutBitmapCharacter( glut.GLUT_BITMAP_TIMES_ROMAN_24, ord(c) )
+        
+        
+        glut.glutSwapBuffers()        
+
+    def reshape(self,w,h):        
 
         #px,py,w,h=self.viewport
         gl.glViewport (0,0,w,h)
@@ -178,7 +246,7 @@ class Scene(object):
                         
         #gl.glOrtho(0.0, 8.0, 0.0, 8.0, -0.5, 2.5)
 
-        gl.glMatrixMode (gl.GL_MODELVIEW)    
+        gl.glMatrixMode (gl.GL_MODELVIEW) 
 
         gl.glLoadIdentity ()
         
@@ -200,8 +268,11 @@ class Scene(object):
 
 
 
-#engine=Scene()
-#engine.run()
+
+if __name__ == "__main__":
+
+    engine=Scene()
+    engine.run()
 
 
 

@@ -24,10 +24,10 @@ def display( ):
 	glMatrixMode( GL_PROJECTION )
 	glLoadIdentity( )
 	xSize, ySize = glutGet( GLUT_WINDOW_WIDTH ), glutGet( GLUT_WINDOW_HEIGHT )
-	gluPerspective(60, float(xSize) / float(ySize), 0.1, 50)
+	gluPerspective(60, float(xSize) / float(ySize), 0.1, 250)
 	glMatrixMode( GL_MODELVIEW )
 	glLoadIdentity( )
-	glTranslatef( 0, 0, -4 )
+	glTranslatef( 0, 0, -150 )
 	global mouseInteractor
 	mouseInteractor.applyTransformation( )
 	glCallList( tkList )
@@ -63,7 +63,9 @@ def init( ):
 	global tkList
 	tkList = glGenLists( 1 )
 	glNewList( tkList, GL_COMPILE )
-	glutSolidTeapot( 1.0 )
+	#glutSolidTeapot( 1.0 )
+        glutWireTeapot(50.0)
+        
 	glEndList( )
 
 glutInit( sys.argv )

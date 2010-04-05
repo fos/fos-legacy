@@ -67,17 +67,17 @@ class MouseInteractor (object):
                 http://stackoverflow.com/questions/14378/using-the-mouse-scrollwheel-in-glut
                 """
 
-                print button, mode
+                #print button, mode
 
                 if button == 3 and mode == 1: #scroll up
-                    print 'inside'
+                    #print 'inside'
                     #tZ = deltaY * self.scalingFactorTranslation
-                    tZ=.3
+                    tZ=5*self.scalingFactorTranslation
                     self.translationMatrix.addTranslation(0, 0, tZ)
 
                 if button == 4 and mode == 1: #scroll down
                     #tZ = deltaY * self.scalingFactorTranslation
-                    tZ=.3
+                    tZ=5*self.scalingFactorTranslation
                     self.translationMatrix.addTranslation(0, 0, -tZ)
                     
                 
