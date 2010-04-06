@@ -26,18 +26,30 @@ class Scene(object):
     def __init__(self):
 
         #Window settings
-        self.disp_mode=glut.GLUT_DOUBLE | glut.GLUT_RGBA
-        self.win_size=(1080,800)#width,height
+        self.disp_mode=glut.GLUT_DOUBLE #| glut.GLUT_RGBA | glut.GLUT_DEPTH
+        self.win_size=(250,250)#width,height
         self.win_pos=(100,100)#px,py
-        self.win_title='FOS means light in Greek'
+        self.win_title='FOS means light'
         
 
         #Init settings
         self.clear_color=(0.,0.,0.,0.) #rgba
         self.enab_depth=gl.GL_DEPTH_TEST
-        self.shade_model=gl.GL_FLAT
+        self.shade_model=gl.GL_SMOOTH #or gl.GL_FLAT
         self.depth_range=(0.0,1.0) #default z mapping
 
+        #Lights settings
+        self.enab_light=gl.GL_LIGHTING #enable lighting
+        self.enab_light0=gl.GL_LIGHT0 #enable first light
+
+        self.light_model=gl.GL_LIGHT_MODEL_TWO_SIDE
+        self.light_model_value=0 
+        self.light0_position=[1,1,1,1]  
+        self.light0_ambient=[0.8,0.8,0.8,1.]
+        self.light0_diffuse=[1.,1.,1.,1.]
+        self.light0_specular=[1.,1.,1.,1.]
+
+        
         #Interaction settings
         self.disp=self.display
         self.resh=self.reshape
@@ -57,11 +69,13 @@ class Scene(object):
         
         #Reshape settings
         self.viewport=(0,0,self.win_size[0],self.win_size[1])        
-        self.glu_perspect=(30.,self.win_size[0]/self.win_size[1],0.,200.)
-        self.glu_lookat=(0.,0.,150., 0.,0.,0., 0.,1.,0.) 
+        self.glu_perspect=(60.,self.win_size[0]/self.win_size[1],0.1,250.)
+
+        #Camera settings
+        self.glu_lookat=(0.,0.,500., 0.,0.,0., 0.,1.,0.) 
 
         #Display settings
-        self.clear_bit=gl.GL_COLOR_BUFFER_BIT
+        self.clear_bit=gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT
 
         #Extra Testing settings        
 
@@ -81,6 +95,7 @@ class Scene(object):
         glut.glutInitWindowPosition (px,py)
 
         glut.glutCreateWindow (self.win_title)
+        
 
     def init(self):
         
@@ -89,12 +104,76 @@ class Scene(object):
         gl.glClearColor (r,g,b,a)
         
         gl.glEnable(self.enab_depth)
+
+        print 'GL_DEPTH_TEST', self.enab_depth
         
         gl.glShadeModel (self.shade_model)
+
+        print 'GL_SMOOTH', self.shade_model
         
         near,far=self.depth_range
         
         gl.glDepthRange(near,far) #default z mapping
+
+        
+        gl.glEnable(self.enab_light)
+
+        print 'GL_LIGHTING', self.enab_light
+
+        gl.glEnable(self.enab_light0)
+
+        print 'First light', self.enab_light0
+        
+        gl.glLightModeli(self.light_model,self.light_model_value)
+
+        print self.light_model, self.light_model_value
+
+        gl.glLightfv(self.enab_light0,gl.GL_POSITION, self.light0_position)
+
+        print self.enab_light0, self.light0_position
+        
+        gl.glLightfv(self.enab_light0,gl.GL_AMBIENT, self.light0_ambient)
+
+        print self.enab_light0, self.light0_ambient
+        
+        gl.glLightfv(self.enab_light0,gl.GL_DIFFUSE, self.light0_diffuse)
+
+        print self.enab_light0, self.light0_diffuse
+        
+        gl.glLightfv(self.enab_light0,gl.GL_SPECULAR,self.light0_specular)
+
+        print self.enab_light0, self.light0_specular
+
+        
+
+
+        #TO BE MOVED
+        gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_AMBIENT, [0.0, 0.0, 0.2, 1] )
+
+        gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_DIFFUSE, [0.0, 0.0, 0.7, 1] )
+
+        gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_SPECULAR, [0.5, 0.5, 0.5, 1] )
+
+        gl.glMaterialf( gl.GL_FRONT_AND_BACK, gl.GL_SHININESS, 50 )
+   
+
+
+        global pot
+        
+        pot = gl.glGenLists(1)
+
+        gl.glNewList(pot,gl.GL_COMPILE)
+        
+        #gl.glColor3f(1.,0.,0.)
+
+        glut.glutSolidTeapot(50.0)
+
+        gl.glEndList()
+        
+
+
+        
+        
 
     def save(self, filename="test.png", format="PNG" ):
 	"""Save current buffer to filename in format
@@ -136,9 +215,7 @@ class Scene(object):
 
                     self.timer1on=True
 
-                    glut.glutTimerFunc(self.timer1Dt, self.timer1,1)
-
-                    
+                    glut.glutTimerFunc(self.timer1Dt, self.timer1,1)                    
 
                 else:
 
@@ -164,6 +241,7 @@ class Scene(object):
             pass
             
 	if args[0] == '\033':
+            
             sys.exit()
 
     def video_timer(self,value):
@@ -207,27 +285,32 @@ class Scene(object):
 
         gl.glClear(self.clear_bit)
 
+        gl.glMatrixMode(gl.GL_MODELVIEW)       
+
         gl.glLoadIdentity()
 
         eyex,eyey,eyez,centx,centy,centz,upx,upy,upz=self.glu_lookat
 
-        glu.gluLookAt(eyex,eyey,eyez,centx,centy,centz,upx,upy,upz)
+        #glu.gluLookAt(eyex,eyey,eyez,centx,centy,centz,upx,upy,upz)
+        gl.glTranslatef(0,0,-150)
 
         self.mouse.applyTransformation()
 
-        #Add objects
+        #Add objects        
 
-        glut.glutWireTeapot(50.)
+        gl.glCallList(pot)        
         
-        glut.glutWireCube(100.)
+        gl.glDisable(self.enab_light)
         
-        #gl.glRasterPos3f( 1.8, .5, 0 )
-        gl.glRasterPos3f(100.,0.,0.)
+        gl.glColor3f(1.,1.,0.3)        
+        
+        gl.glRasterPos3f(4.,4.,4.)
         
         for c in "hello :-)":
 
-            glut.glutBitmapCharacter( glut.GLUT_BITMAP_TIMES_ROMAN_24, ord(c) )
+            glut.glutBitmapCharacter( glut.GLUT_BITMAP_TIMES_ROMAN_24, ord(c) )       
         
+        gl.glEnable(self.enab_light)        
         
         glut.glutSwapBuffers()        
 
