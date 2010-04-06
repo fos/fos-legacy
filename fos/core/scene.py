@@ -42,7 +42,7 @@ class Scene(object):
         self.viewport=(0,0,self.win_size[0],self.win_size[1])
         self.isperspect=1
         self.glu_perspect=(60.,self.win_size[0]/self.win_size[1],0.1,2000.)
-        self.gl_orthog=(-300.,300.,-300.,300.,-500,500)       
+        self.gl_orthog=(-300.,300.,-300.,300.,-1000,1000)       
 
         #Camera settings
         self.glu_lookat=(0.,0.,150., 0.,0.,0., 0.,1.,0.) 
@@ -135,12 +135,19 @@ class Scene(object):
 
         #primitives.load_pot()
 
-        global cube
+        global cube        
 
         cube=primitives.Collection()
 
         cube.init()
-        
+
+        global cube2
+
+        cube2=primitives.Collection()
+
+        cube2.init()
+  
+      
 
         '''
 
@@ -325,6 +332,7 @@ class Scene(object):
         eyex,eyey,eyez,centx,centy,centz,upx,upy,upz=self.glu_lookat
 
         glu.gluLookAt(eyex,eyey,eyez,centx,centy,centz,upx,upy,upz)
+        
         #gl.glTranslatef(0,0,-150)
 
         self.mouse.applyTransformation()
@@ -332,6 +340,7 @@ class Scene(object):
         #Add objects
 
         cube.display()
+        cube2.display()
 
         #primitives.render_pot()
         #primitives.render2_pot()

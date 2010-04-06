@@ -12,13 +12,13 @@ class Collection(object):
 
         self.position  = [0.0, 0.0, 0.0]
 
-        self.scale     = None#[100., 50., 20.]
+        self.scale     = None #[100., 50., 20.]
 
-        self.ambient   = [0.0, 0.0, 0.2, 1]
+        self.ambient   = [0.0, 0.0, 0.2, 1.]
         
-        self.diffuse   = [0.0, 0.0, 0.7, 1]
+        self.diffuse   = [0.0, 0.0, 0.7, 1.]
         
-        self.specular  = [0.5, 0.5, 0.5, 1]
+        self.specular  = [0.5, 0.5, 0.5, 1.]
 
         self.shininess = 50.
 
@@ -38,7 +38,9 @@ class Collection(object):
     def init(self):
 
 
-        self.list_index = gl.glGenLists(1)
+        self.list_index = gl.glGenLists(4)
+
+        print self.list_index
 
         gl.glNewList( self.list_index,gl.GL_COMPILE)
 
@@ -72,6 +74,8 @@ class Collection(object):
         
         self.gridz=z.ravel()
 
+        print self.list_index
+
 
     def glyph(self,x,y,z):
 
@@ -80,11 +84,10 @@ class Collection(object):
         #gl.glLoadIdentity()
 
         #x,y,z=self.position
-
         
         gl.glTranslatef(x,y,z)
         
-        gl.glRotatef(90*np.random.rand(1)[0],0.,1.,0.)
+        gl.glRotatef(30*np.random.rand(1)[0],0.,1.,0.)
     
         gl.glCallList(self.list_index)
     
