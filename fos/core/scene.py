@@ -17,7 +17,7 @@ except ImportError:
     ImportError('PyOpenGL is not installed')
 
 import mouse
-#import primitives
+import primitives
 
 
 class Scene(object):
@@ -26,10 +26,10 @@ class Scene(object):
     def __init__(self):
 
         #Window settings
-        self.disp_mode=glut.GLUT_DOUBLE #| glut.GLUT_RGBA | glut.GLUT_DEPTH
-        self.win_size=(250,250)#width,height
+        self.disp_mode=glut.GLUT_DOUBLE | glut.GLUT_RGBA | glut.GLUT_DEPTH
+        self.win_size=(1080,800)#width,height
         self.win_pos=(100,100)#px,py
-        self.win_title='FOS means light'
+        self.win_title='F.O.S.'
         
 
         #Init settings
@@ -38,17 +38,28 @@ class Scene(object):
         self.shade_model=gl.GL_SMOOTH #or gl.GL_FLAT
         self.depth_range=(0.0,1.0) #default z mapping
 
+        #Reshape settings
+        self.viewport=(0,0,self.win_size[0],self.win_size[1])
+        self.isperspect=1
+        self.glu_perspect=(60.,self.win_size[0]/self.win_size[1],0.1,2000.)
+        self.gl_orthog=(-300.,300.,-300.,300.,-500,500)       
+
+        #Camera settings
+        self.glu_lookat=(0.,0.,150., 0.,0.,0., 0.,1.,0.) 
+
+        #Display settings
+        self.clear_bit=gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT
+
         #Lights settings
         self.enab_light=gl.GL_LIGHTING #enable lighting
         self.enab_light0=gl.GL_LIGHT0 #enable first light
 
         self.light_model=gl.GL_LIGHT_MODEL_TWO_SIDE
-        self.light_model_value=0 
-        self.light0_position=[1,1,1,1]  
+        self.light_model_value=gl.GL_FALSE 
+        self.light0_position=[1,1,1,0] # light position is at Inf,Inf,Inf 
         self.light0_ambient=[0.8,0.8,0.8,1.]
         self.light0_diffuse=[1.,1.,1.,1.]
         self.light0_specular=[1.,1.,1.,1.]
-
         
         #Interaction settings
         self.disp=self.display
@@ -66,16 +77,6 @@ class Scene(object):
         #Video settings
         self.frameno=0
         self.video_dir='/tmp/'
-        
-        #Reshape settings
-        self.viewport=(0,0,self.win_size[0],self.win_size[1])        
-        self.glu_perspect=(60.,self.win_size[0]/self.win_size[1],0.1,250.)
-
-        #Camera settings
-        self.glu_lookat=(0.,0.,500., 0.,0.,0., 0.,1.,0.) 
-
-        #Display settings
-        self.clear_bit=gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT
 
         #Extra Testing settings        
 
@@ -105,58 +106,43 @@ class Scene(object):
         
         gl.glEnable(self.enab_depth)
 
-        print 'GL_DEPTH_TEST', self.enab_depth
-        
         gl.glShadeModel (self.shade_model)
 
-        print 'GL_SMOOTH', self.shade_model
-        
         near,far=self.depth_range
         
         gl.glDepthRange(near,far) #default z mapping
-
         
         gl.glEnable(self.enab_light)
 
-        print 'GL_LIGHTING', self.enab_light
-
         gl.glEnable(self.enab_light0)
-
-        print 'First light', self.enab_light0
         
         gl.glLightModeli(self.light_model,self.light_model_value)
 
-        print self.light_model, self.light_model_value
-
         gl.glLightfv(self.enab_light0,gl.GL_POSITION, self.light0_position)
 
-        print self.enab_light0, self.light0_position
-        
         gl.glLightfv(self.enab_light0,gl.GL_AMBIENT, self.light0_ambient)
 
-        print self.enab_light0, self.light0_ambient
-        
         gl.glLightfv(self.enab_light0,gl.GL_DIFFUSE, self.light0_diffuse)
 
-        print self.enab_light0, self.light0_diffuse
-        
         gl.glLightfv(self.enab_light0,gl.GL_SPECULAR,self.light0_specular)
 
-        print self.enab_light0, self.light0_specular
+        #Load objects
 
-        
-
-
-        #TO BE MOVED
-        gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_AMBIENT, [0.0, 0.0, 0.2, 1] )
-
-        gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_DIFFUSE, [0.0, 0.0, 0.7, 1] )
-
-        gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_SPECULAR, [0.5, 0.5, 0.5, 1] )
-
-        gl.glMaterialf( gl.GL_FRONT_AND_BACK, gl.GL_SHININESS, 50 )
+        self.objects()
    
 
+    def objects(self):
+
+        #primitives.load_pot()
+
+        global cube
+
+        cube=primitives.Collection()
+
+        cube.init()
+        
+
+        '''
 
         global pot
         
@@ -164,16 +150,42 @@ class Scene(object):
 
         gl.glNewList(pot,gl.GL_COMPILE)
         
-        #gl.glColor3f(1.,0.,0.)
+        gl.glMaterialfv( gl.GL_FRONT, gl.GL_AMBIENT, [0.0, 0.0, 0.2, 1] )
 
-        glut.glutSolidTeapot(50.0)
+        gl.glMaterialfv( gl.GL_FRONT, gl.GL_DIFFUSE, [0.0, 0.0, 0.7, 1] )
+
+        gl.glMaterialfv( gl.GL_FRONT, gl.GL_SPECULAR, [0.5, 0.5, 0.5, 1] )
+
+        gl.glMaterialf( gl.GL_FRONT, gl.GL_SHININESS, 50 )
+
+        #glut.glutSolidTeapot(50.0)
+        glut.glutSolidCube(100.0)
 
         gl.glEndList()
-        
 
+        global pot2
+        
+        pot2 = gl.glGenLists(2)
 
+        gl.glNewList(pot2,gl.GL_COMPILE)
+        
+        gl.glMaterialfv( gl.GL_FRONT, gl.GL_AMBIENT, [0.7, 0.0, 0.0, 1] )
+
+        gl.glMaterialfv( gl.GL_FRONT, gl.GL_DIFFUSE, [0.2, 0.0, 0.0, 1] )
+
+        gl.glMaterialfv( gl.GL_FRONT, gl.GL_SPECULAR, [0.5, 0.5, 0.5, 1] )
+
+        gl.glMaterialf( gl.GL_FRONT, gl.GL_SHININESS, 30 )
+
+        #glut.glutSolidTeapot(50.0)
+        glut.glutSolidCube(100.0)        
+
+        gl.glEndList()
+
+        '''
         
         
+                
 
     def save(self, filename="test.png", format="PNG" ):
 	"""Save current buffer to filename in format
@@ -222,7 +234,24 @@ class Scene(object):
                     print('timer1 is off')                    
 
                     self.timer1on=False
- 
+
+        if args[0] == 'o':
+            
+            self.isperspect=int(not(self.isperspect))
+
+            if self.isperspect:
+
+                print('perspective projection on')
+                
+            else:
+                
+                print('orthogonal projection on')
+           
+            px,py,w,h=self.viewport
+            
+            self.reshape(w,h)
+            
+            glut.glutPostRedisplay()
 
         if args[0] == 'r':
 
@@ -234,11 +263,15 @@ class Scene(object):
             
         if args[0] == 'j':
 
-            pass
+            cube.position[0]+=10.
+
+            glut.glutPostRedisplay()
 
         if args[0] == 'k':
 
-            pass
+            cube.position[0]-=10.
+
+            glut.glutPostRedisplay()
             
 	if args[0] == '\033':
             
@@ -291,14 +324,29 @@ class Scene(object):
 
         eyex,eyey,eyez,centx,centy,centz,upx,upy,upz=self.glu_lookat
 
-        #glu.gluLookAt(eyex,eyey,eyez,centx,centy,centz,upx,upy,upz)
-        gl.glTranslatef(0,0,-150)
+        glu.gluLookAt(eyex,eyey,eyez,centx,centy,centz,upx,upy,upz)
+        #gl.glTranslatef(0,0,-150)
 
         self.mouse.applyTransformation()
 
-        #Add objects        
+        #Add objects
 
-        gl.glCallList(pot)        
+        cube.display()
+
+        #primitives.render_pot()
+        #primitives.render2_pot()
+
+        '''
+
+        gl.glCallList(pot)
+
+        gl.glTranslate(150,0,0)
+
+        gl.glCallList(pot2)
+
+        gl.glTranslate(-300,0,0)
+
+        gl.glCallList(pot2)
         
         gl.glDisable(self.enab_light)
         
@@ -310,7 +358,9 @@ class Scene(object):
 
             glut.glutBitmapCharacter( glut.GLUT_BITMAP_TIMES_ROMAN_24, ord(c) )       
         
-        gl.glEnable(self.enab_light)        
+        gl.glEnable(self.enab_light)
+
+        '''
         
         glut.glutSwapBuffers()        
 
@@ -318,16 +368,25 @@ class Scene(object):
 
         #px,py,w,h=self.viewport
         gl.glViewport (0,0,w,h)
+
+        self.viewport=(0,0,w,h)
         
         gl.glMatrixMode (gl.GL_PROJECTION)
         
         gl.glLoadIdentity ()
+                
+
+        if self.isperspect:
+
+            fovy,aspect,zNear,zFar=self.glu_perspect
         
-        fovy,aspect,zNear,zFar=self.glu_perspect
-        
-        glu.gluPerspective(fovy,w/float(h),zNear,zFar)
-                        
-        #gl.glOrtho(0.0, 8.0, 0.0, 8.0, -0.5, 2.5)
+            glu.gluPerspective(fovy,w/float(h),zNear,zFar)
+
+        else:
+
+            left,right,bottom,top,near,far=self.gl_orthog
+            
+            gl.glOrtho(left, right, bottom, top, near, far)
 
         gl.glMatrixMode (gl.GL_MODELVIEW) 
 

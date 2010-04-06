@@ -82,8 +82,8 @@ def display():
     #gl.glTranslatef(0.0, 0.0, zdist)            
     #gl.glCallList(1)
     #glut.glutWireSphere(1.0, 20, 16) #sun
-    #drawRects(gl.GL_RENDER)
-    glut.glutSolidTeapot(5.)
+    drawRects(gl.GL_RENDER)
+    #glut.glutSolidTeapot(5.)
     global mi
     mi.applyTransformation( )
     glut.glutSwapBuffers()

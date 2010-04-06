@@ -73,11 +73,13 @@ class MouseInteractor (object):
                     #print 'inside'
                     #tZ = deltaY * self.scalingFactorTranslation
                     tZ=5*self.scalingFactorTranslation
+                    
                     self.translationMatrix.addTranslation(0, 0, tZ)
 
                 if button == 4 and mode == 1: #scroll down
                     #tZ = deltaY * self.scalingFactorTranslation
-                    tZ=5*self.scalingFactorTranslation
+                    tZ=5 * self.scalingFactorTranslation
+                    
                     self.translationMatrix.addTranslation(0, 0, -tZ)
                     
                 
@@ -97,23 +99,34 @@ class MouseInteractor (object):
 		or a rotation matrix."""
 
 		deltaX = x - self.oldMousePos[ 0 ]
+                
 		deltaY = y - self.oldMousePos[ 1 ]
+                
 		if self.mouseButtonPressed == glut.GLUT_RIGHT_BUTTON:
+                    
                     tX = deltaX * self.scalingFactorTranslation
+                    
                     tY = deltaY * self.scalingFactorTranslation
+                    
                     self.translationMatrix.addTranslation(tX, -tY, 0)
 
 		if self.mouseButtonPressed == glut.GLUT_LEFT_BUTTON:
+                    
                     rY = deltaX * self.scalingFactorRotation
+                    
                     self.rotationMatrix.addRotation(rY, 0, 1, 0)
+                    
                     rX = deltaY * self.scalingFactorRotation
+                    
                     self.rotationMatrix.addRotation(rX, 1, 0, 0)
 
-                '''    
+                #'''    
 		if self.mouseButtonPressed == glut.GLUT_MIDDLE_BUTTON:
+                    
                     tZ = deltaY * self.scalingFactorTranslation
+                    
                     self.translationMatrix.addTranslation(0, 0, tZ)
-                '''
+                #'''
                 
 
                     
