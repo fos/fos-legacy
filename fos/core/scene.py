@@ -66,7 +66,12 @@ class Scene(object):
         self.resh=self.reshape
         self.key=self.keystroke
         self.mouse_scale=(1.,1.) # translation & rotational scale
-        self.mouse=None        
+        self.mouse=None
+
+        #Selection settings
+        self.selection_buffer_size=100
+        self.selection_buffer=self.selection_buffer_size*[0]
+        self.selection_region=(1,1)#rectangle width, height
 
         #Timing settings
         self.timer1=self.video_timer
@@ -141,58 +146,12 @@ class Scene(object):
 
         cube.init()
 
-        global cube2
+        #global cube2
 
-        cube2=primitives.Collection()
+        #cube2=primitives.Collection()
 
-        cube2.init()
+        #cube2.init()
   
-      
-
-        '''
-
-        global pot
-        
-        pot = gl.glGenLists(1)
-
-        gl.glNewList(pot,gl.GL_COMPILE)
-        
-        gl.glMaterialfv( gl.GL_FRONT, gl.GL_AMBIENT, [0.0, 0.0, 0.2, 1] )
-
-        gl.glMaterialfv( gl.GL_FRONT, gl.GL_DIFFUSE, [0.0, 0.0, 0.7, 1] )
-
-        gl.glMaterialfv( gl.GL_FRONT, gl.GL_SPECULAR, [0.5, 0.5, 0.5, 1] )
-
-        gl.glMaterialf( gl.GL_FRONT, gl.GL_SHININESS, 50 )
-
-        #glut.glutSolidTeapot(50.0)
-        glut.glutSolidCube(100.0)
-
-        gl.glEndList()
-
-        global pot2
-        
-        pot2 = gl.glGenLists(2)
-
-        gl.glNewList(pot2,gl.GL_COMPILE)
-        
-        gl.glMaterialfv( gl.GL_FRONT, gl.GL_AMBIENT, [0.7, 0.0, 0.0, 1] )
-
-        gl.glMaterialfv( gl.GL_FRONT, gl.GL_DIFFUSE, [0.2, 0.0, 0.0, 1] )
-
-        gl.glMaterialfv( gl.GL_FRONT, gl.GL_SPECULAR, [0.5, 0.5, 0.5, 1] )
-
-        gl.glMaterialf( gl.GL_FRONT, gl.GL_SHININESS, 30 )
-
-        #glut.glutSolidTeapot(50.0)
-        glut.glutSolidCube(100.0)        
-
-        gl.glEndList()
-
-        '''
-        
-        
-                
 
     def save(self, filename="test.png", format="PNG" ):
 	"""Save current buffer to filename in format
@@ -220,11 +179,17 @@ class Scene(object):
     def keystroke(self,*args):
 	# If escape is pressed, kill everything.
 
-        if args[0] == 's':
+        key=args[0]
+
+        x=args[1]
+
+        y=args[2]
+
+        if key == 's':
 
             self.save()
 
-        if args[0] == 't':
+        if key == 'v':
 
             if self.autostart_timer1==False:
 
@@ -242,7 +207,7 @@ class Scene(object):
 
                     self.timer1on=False
 
-        if args[0] == 'o':
+        if key == 'o':
             
             self.isperspect=int(not(self.isperspect))
 
@@ -268,19 +233,78 @@ class Scene(object):
             
             glut.glutPostRedisplay()
             
-        if args[0] == 'j':
+        if key == 'j':
 
             cube.position[0]+=10.
 
             glut.glutPostRedisplay()
 
-        if args[0] == 'k':
+        if key == 'k':
 
             cube.position[0]-=10.
 
             glut.glutPostRedisplay()
+
+
+        if key == 'p' or key == 'P': # picking       
+
+            viewport=gl.glGetIntegerv(gl.GL_VIEWPORT)
+ 
+            w=viewport[2]-viewport[0]
+
+            h=viewport[3]-viewport[1]
+                        
+            #gl.glSelectBuffer(self.selection_buffer_size, self.selection_buffer) 
+
+            gl.glSelectBuffer(self.selection_buffer_size)
             
-	if args[0] == '\033':
+            gl.glRenderMode(gl.GL_SELECT)
+
+            gl.glInitNames()
+
+            gl.glPushName(0)
+
+            gl.glMatrixMode(gl.GL_PROJECTION)
+
+            gl.glPushMatrix()
+
+            gl.glLoadIdentity()
+
+            selw,selh=self.selection_region
+
+            glu.gluPickMatrix(x,viewport[3]-y,selw, selh, viewport)
+
+            if self.isperspect:
+
+                fovy,aspect,zNear,zFar=self.glu_perspect
+        
+                glu.gluPerspective(fovy,w/float(h),zNear,zFar)
+
+            else:
+
+                left,right,bottom,top,near,far=self.gl_orthog
+            
+                gl.glOrtho(left, right, bottom, top, near, far)
+
+                    
+            cube.display(gl.GL_SELECT)
+            
+            gl.glPopMatrix()
+            
+            gl.glFlush()
+
+            buffer = gl.glRenderMode(gl.GL_RENDER)
+            
+            glut.glutPostRedisplay()
+        
+            for hit_record in buffer:
+
+                min_depth, max_depth, names = hit_record
+
+                print min_depth, max_depth, names#, self.selection_buffer
+                
+            
+	if key == '\033':
             
             sys.exit()
 
@@ -340,23 +364,13 @@ class Scene(object):
         #Add objects
 
         cube.display()
-        cube2.display()
+        #cube2.display()
 
         #primitives.render_pot()
         #primitives.render2_pot()
 
         '''
-
-        gl.glCallList(pot)
-
-        gl.glTranslate(150,0,0)
-
-        gl.glCallList(pot2)
-
-        gl.glTranslate(-300,0,0)
-
-        gl.glCallList(pot2)
-        
+      
         gl.glDisable(self.enab_light)
         
         gl.glColor3f(1.,1.,0.3)        

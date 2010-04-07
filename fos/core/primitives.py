@@ -4,12 +4,12 @@ import OpenGL.GLU as glu
 import OpenGL.GLUT as glut
 
 
-
-
-class Collection(object):
+class BrainSurface(object):
 
     def __init__(self):
 
+        self.rname='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/rh.pial.vtk'
+        
         self.position  = [0.0, 0.0, 0.0]
 
         self.scale     = None #[100., 50., 20.]
@@ -18,7 +18,88 @@ class Collection(object):
         
         self.diffuse   = [0.0, 0.0, 0.7, 1.]
         
-        self.specular  = [0.5, 0.5, 0.5, 1.]
+        self.specular  = [0.2, 0.2, 0.7, 1.]
+
+        self.shininess = 50.
+
+        self.emission  = [0.2, 0.2, 0.2, 0]
+        
+        self.list_index = None
+        
+        self.name_index = None
+
+
+    def load_from_disk_using_mayavi(self):
+
+        try:
+
+            import enthought.mayavi.tools.sources as sources
+            
+            from enthought.mayavi import mlab
+
+        except:
+
+            ImportError('Sources module from enthought.mayavi is missing')
+        
+        src=sources.open(self.rname)
+
+        surf=mlab.pipeline.surface(src)
+        
+        pd=src.outputs[0]
+                
+        pts=pd.points.to_array()
+        
+        polys=pd.polys.to_array()
+
+        lpol=len(polys)/4
+        
+        polys=polys.reshape(lpol,4)
+
+        return pts,polys
+
+    def load_from_disk(self):
+
+        f=open(rname,'r')
+        s=f.readlines()
+        len(s)
+        s[0]
+        s[1]
+        s[2]
+        s[3]
+        s[:10]
+        st='POINTS 167501 float\n'
+        st.split()
+        st2='19.154478  -87.738876  -15.894387\n'
+        st2.split()
+        float(st2.split())
+        st
+        st.startswith('POINTS')
+
+        open(self.rname)
+        
+
+    def init(self):        
+
+        pts,polys=self.load_from_disk()
+
+        print pts.shape, polys.shape
+        
+
+        pass
+
+class Collection(object):
+
+    def __init__(self):
+
+        self.position  = [0.0, 0.0, -350.0]
+
+        self.scale     = None #[100., 50., 20.]
+
+        self.ambient   = [0.0, 0.0, 0.2, 1.]
+        
+        self.diffuse   = [0.0, 0.0, 0.7, 1.]
+        
+        self.specular  = [0.2, 0.2, 0.7, 1.]
 
         self.shininess = 50.
 
@@ -34,11 +115,13 @@ class Collection(object):
         
         self.gridz = None
 
+        self.is3dgrid = True
+
 
     def init(self):
 
 
-        self.list_index = gl.glGenLists(4)
+        self.list_index = gl.glGenLists(1)
 
         print self.list_index
 
@@ -62,18 +145,27 @@ class Collection(object):
         
         glut.glutSolidCube(50.0)
 
+        #glut.glutSolidTeapot(20.0)
+
         gl.glPopMatrix()
 
         gl.glEndList()
 
-        x,y,z=np.mgrid[-200:200:5j,-200:200:5j, -200:200:5j]
+        if self.is3dgrid:
+
+            x,y,z=np.mgrid[-200:200:5j,-200:200:5j, -200:200:5j]
+
+            self.gridz=z.ravel()
+        
+        else:
+
+            x,y=np.mgrid[-200:200:5j,-200:200:5j]
 
         self.gridx=x.ravel()
         
         self.gridy=y.ravel()
         
-        self.gridz=z.ravel()
-
+        
         print self.list_index
 
 
@@ -87,88 +179,46 @@ class Collection(object):
         
         gl.glTranslatef(x,y,z)
         
-        gl.glRotatef(30*np.random.rand(1)[0],0.,1.,0.)
+        #gl.glRotatef(30*np.random.rand(1)[0],0.,1.,0.)
     
         gl.glCallList(self.list_index)
     
         gl.glPopMatrix()
         
 
-    def display(self):
+    def display(self,mode=gl.GL_RENDER):
+
+        gl.glInitNames()
+        
+        gl.glPushName(0)
 
         for i in range(len(self.gridx)):
 
             x=self.gridx[i]
             
             y=self.gridy[i]
+
+            if self.is3dgrid:
             
-            z=self.gridz[i]
+                z=self.gridz[i]
 
-            self.glyph(x,y,z)
+            else:
+
+                z=0
+
+            if mode == gl.GL_SELECT:
+
+                gl.glLoadName(i+1)
+
+            self.glyph(x+self.position[0],y+self.position[1],z+self.position[2])
+            
 
             
 
+rsurf=BrainSurface()
+
+rsurf.init()        
        
-        
-       
-'''
-
-def load_pot():
-
-    #global primno
-
-    global pot
-    
-    pot=gl.glGenLists(1)
-
-    gl.glNewList(pot,gl.GL_COMPILE)
-        
-    gl.glMaterialfv( gl.GL_FRONT, gl.GL_AMBIENT, [0.0, 0.0, 0.2, 1] )
-
-    gl.glMaterialfv( gl.GL_FRONT, gl.GL_DIFFUSE, [0.0, 0.0, 0.7, 1] )
-
-    gl.glMaterialfv( gl.GL_FRONT, gl.GL_SPECULAR, [0.5, 0.5, 0.5, 1] )
-
-    gl.glMaterialf( gl.GL_FRONT, gl.GL_SHININESS, 50 )
-
-    glut.glutSolidTeapot(50.0)
-
-    gl.glEndList()    
-
-        
-    
-def render_pot():
-
-    gl.glPushMatrix()
-    
-    #gl.glLoadIdentity()
-
-    gl.glTranslatef(0.,0.,0.)
-    
-    gl.glCallList(pot)
-    
-    gl.glPopMatrix()    
-
-    
-
-def render2_pot():
-
-    gl.glPushMatrix()
-    
-    #gl.glLoadIdentity()
-    
-    gl.glTranslatef(100.,0.,0.)
-    
-    gl.glCallList(pot)
-    
-    gl.glPopMatrix()
-    
-
-    
-
-'''
-
-    
 
     
 
