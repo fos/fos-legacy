@@ -3,12 +3,15 @@ import OpenGL.GL as gl
 import OpenGL.GLU as glu
 import OpenGL.GLUT as glut
 
+from fos.core.utils import list_indices as lind
 
 class BrainSurface(object):
 
     def __init__(self):
 
-        self.rname='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/rh.pial.vtk'
+        #self.rname='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/rh.pial.vtk'
+
+        self.fname='/home/eg309/./Desktop/rh.pial.vtk'
         
         self.position  = [0.0, 0.0, 0.0]
 
@@ -59,14 +62,15 @@ class BrainSurface(object):
 
     def load_from_disk(self):
 
-        f=open(rname,'r')
-        s=f.readlines()
-        len(s)
-        s[0]
-        s[1]
-        s[2]
-        s[3]
-        s[:10]
+        f=open(fname,'r')
+        lines=f.readlines()
+
+        
+
+        #iP=[si for si in lind(lines,'POINTS')]
+
+            
+        
         st='POINTS 167501 float\n'
         st.split()
         st2='19.154478  -87.738876  -15.894387\n'
