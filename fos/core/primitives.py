@@ -1,3 +1,4 @@
+import time
 import numpy as np
 import OpenGL.GL as gl
 import OpenGL.GLU as glu
@@ -9,13 +10,15 @@ class BrainSurface(object):
 
     def __init__(self):
 
-        self.fname='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/rh.pial.vtk'
+        #self.fname='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/rh.pial.vtk'
 
-        #self.fname='/home/eg309/./Desktop/rh.pial.vtk'
+        self.fname='/home/eg309/Desktop/rh.pial.vtk'
         
         self.position  = [0.0, 0.0, 0.0]
 
         self.scale     = None #[100., 50., 20.]
+
+        '''
 
         self.ambient   = [0.0, 0.0, 0.2, 1.]
         
@@ -26,6 +29,19 @@ class BrainSurface(object):
         self.shininess = 50.
 
         self.emission  = [0.2, 0.2, 0.2, 0]
+
+        '''
+
+        self.ambient   = [0.0, 0.0, 0.2, 1.]
+        
+        self.diffuse   = [0.0, 0.0, 0.5, 1.]
+        
+        self.specular  = [0.9, 0.0, 0., 1.]
+
+        self.shininess = 10.
+
+        self.emission  = [0., 0., 0.2, 0]
+        
         
         self.list_index = None
         
@@ -37,35 +53,7 @@ class BrainSurface(object):
         
 
 
-    def load_from_disk_using_mayavi(self):
-
-        try:
-
-            import enthought.mayavi.tools.sources as sources
-            
-            from enthought.mayavi import mlab
-
-        except:
-
-            ImportError('Sources module from enthought.mayavi is missing')
-        
-        src=sources.open(self.rname)
-
-        surf=mlab.pipeline.surface(src)
-        
-        pd=src.outputs[0]
-                
-        pts=pd.points.to_array()
-        
-        polys=pd.polys.to_array()
-
-        lpol=len(polys)/4
-        
-        polys=polys.reshape(lpol,4)
-
-        return pts,polys
-
-    def load_from_disk(self):
+    def load_polydata(self):
 
         f=open(self.fname,'r')
         
@@ -95,7 +83,7 @@ class BrainSurface(object):
         
         polys_index = pts_polys_tags[1]
 
-        print polys_index
+        #print polys_index
 
         polys_tag = lines[polys_index].split()
 
@@ -103,21 +91,122 @@ class BrainSurface(object):
 
         polys=lines[polys_index+1:polys_index+polys_no+1]
 
-        self.polys=np.array([np.array(pl.split(),dtype=np.int) for pl in polys])
+        self.polys=np.array([np.array(pl.split(),dtype=np.int) for pl in polys])[:,1:]
 
-        
+                
 
     def init(self):        
 
-        #pts,polys=
-        self.test=self.load_from_disk()
 
+        self.load_polydata()
+
+        n=gl.glNormal3fv
+        
+        v=gl.glVertex3fv
+
+        p=self.pts
+
+        print 'adding triangles'
+
+        time1=time.clock()
+        
         #print pts.shape, polys.shape
         
+        self.list_index = gl.glGenLists(1)
 
-        pass
+        gl.glNewList( self.list_index,gl.GL_COMPILE)
+
+        gl.glPushMatrix()
+        
+        gl.glMaterialfv( gl.GL_FRONT, gl.GL_AMBIENT, self.ambient )
+
+        gl.glMaterialfv( gl.GL_FRONT, gl.GL_DIFFUSE, self.diffuse )
+
+        gl.glMaterialfv( gl.GL_FRONT, gl.GL_SPECULAR, self.specular )
+
+        gl.glMaterialf( gl.GL_FRONT, gl.GL_SHININESS, self.shininess )
+
+        gl.glMaterialfv(gl.GL_FRONT, gl.GL_EMISSION, self.emission)
+
+        gl.glEnable(gl.GL_NORMALIZE)
+
+        gl.glBegin(gl.GL_TRIANGLES)
+
+        for l in self.polys:
+
+            n(p[l[0]])
+
+            v(p[l[0]])
+
+            n(p[l[1]])
+            
+            v(p[l[1]])
+
+            n(p[l[2]])           
+
+            v(p[l[2]])        
+
+        gl.glEnd()        
+
+        gl.glPopMatrix()
+
+        gl.glEndList()
+
+        print 'triangles ready in', time.clock()-time1, 'secs'
+
+
+    
+    def display(self,mode=gl.GL_RENDER):
+
+
+        gl.glPushMatrix()
+    
+        #gl.glLoadIdentity()
+
+        #x,y,z=self.position
+        
+        #gl.glTranslatef(x,y,z)
+        
+        #gl.glRotatef(30*np.random.rand(1)[0],0.,1.,0.)
+    
+        gl.glCallList(self.list_index)
+    
+        gl.glPopMatrix()
+
+    
+
+
+    def load_polydata_using_mayavi(self):
+
+        try:
+
+            import enthought.mayavi.tools.sources as sources
+            
+            from enthought.mayavi import mlab
+
+        except:
+
+            ImportError('Sources module from enthought.mayavi is missing')
+        
+        src=sources.open(self.rname)
+
+        surf=mlab.pipeline.surface(src)
+        
+        pd=src.outputs[0]
+                
+        pts=pd.points.to_array()
+        
+        polys=pd.polys.to_array()
+
+        lpol=len(polys)/4
+        
+        polys=polys.reshape(lpol,4)
+
+        return pts,polys
+    
 
 class Collection(object):
+    
 
     def __init__(self):
 
@@ -245,9 +334,6 @@ class Collection(object):
 
             
 
-rsurf=BrainSurface()
-
-test=rsurf.init()        
        
 
     

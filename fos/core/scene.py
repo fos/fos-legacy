@@ -140,11 +140,17 @@ class Scene(object):
 
         #primitives.load_pot()
 
-        global cube        
+        #global cube        
 
-        cube=primitives.Collection()
+        #cube=primitives.Collection()
 
-        cube.init()
+        #cube.init()
+
+        global bsurf
+
+        bsurf=primitives.BrainSurface()
+
+        bsurf.init()
 
         #global cube2
 
@@ -363,7 +369,9 @@ class Scene(object):
 
         #Add objects
 
-        cube.display()
+        bsurf.display()
+
+        #cube.display()
         #cube2.display()
 
         #primitives.render_pot()
