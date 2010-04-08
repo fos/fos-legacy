@@ -9,9 +9,9 @@ class BrainSurface(object):
 
     def __init__(self):
 
-        #self.rname='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/rh.pial.vtk'
+        self.fname='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/rh.pial.vtk'
 
-        self.fname='/home/eg309/./Desktop/rh.pial.vtk'
+        #self.fname='/home/eg309/./Desktop/rh.pial.vtk'
         
         self.position  = [0.0, 0.0, 0.0]
 
@@ -30,6 +30,11 @@ class BrainSurface(object):
         self.list_index = None
         
         self.name_index = None
+
+        self.pts = None
+
+        self.polys = None
+        
 
 
     def load_from_disk_using_mayavi(self):
@@ -62,31 +67,52 @@ class BrainSurface(object):
 
     def load_from_disk(self):
 
-        f=open(fname,'r')
+        f=open(self.fname,'r')
+        
         lines=f.readlines()
 
-        
+        taglines=[l.startswith('POINTS') or l.startswith('POLYGONS')  for l in lines]
 
-        #iP=[si for si in lind(lines,'POINTS')]
+        pts_polys_tags=[i for i in lind(taglines,True)]
 
+        if len(pts_polys_tags)<2:
+
+            NameError('This must be the wrong file no polydata in.')
+
+        #read points
             
-        
-        st='POINTS 167501 float\n'
-        st.split()
-        st2='19.154478  -87.738876  -15.894387\n'
-        st2.split()
-        float(st2.split())
-        st
-        st.startswith('POINTS')
+        pts_index = pts_polys_tags[0]
+              
+        pts_tag = lines[pts_index].split()
 
-        open(self.rname)
+        pts_no = int(pts_tag[1])
+
+        pts=lines[pts_index+1:pts_index+pts_no+1]
+
+        self.pts=np.array([np.array(p.split(),dtype=np.float32) for p in pts])
+
+        #read triangles
+        
+        polys_index = pts_polys_tags[1]
+
+        print polys_index
+
+        polys_tag = lines[polys_index].split()
+
+        polys_no = int(polys_tag[1])
+
+        polys=lines[polys_index+1:polys_index+polys_no+1]
+
+        self.polys=np.array([np.array(pl.split(),dtype=np.int) for pl in polys])
+
         
 
     def init(self):        
 
-        pts,polys=self.load_from_disk()
+        #pts,polys=
+        self.test=self.load_from_disk()
 
-        print pts.shape, polys.shape
+        #print pts.shape, polys.shape
         
 
         pass
@@ -183,7 +209,7 @@ class Collection(object):
         
         gl.glTranslatef(x,y,z)
         
-        #gl.glRotatef(30*np.random.rand(1)[0],0.,1.,0.)
+        gl.glRotatef(30*np.random.rand(1)[0],0.,1.,0.)
     
         gl.glCallList(self.list_index)
     
@@ -221,7 +247,7 @@ class Collection(object):
 
 rsurf=BrainSurface()
 
-rsurf.init()        
+test=rsurf.init()        
        
 
     
