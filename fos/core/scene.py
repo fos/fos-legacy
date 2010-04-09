@@ -116,6 +116,7 @@ class Scene(object):
         near,far=self.depth_range
         
         gl.glDepthRange(near,far) #default z mapping
+       
         
         gl.glEnable(self.enab_light)
 
@@ -151,6 +152,12 @@ class Scene(object):
         bsurf=primitives.BrainSurface()
 
         bsurf.init()
+
+        global im2d
+
+        im2d = primitives.Image2D()
+
+        im2d.init()
 
         #global cube2
 
@@ -361,6 +368,8 @@ class Scene(object):
 
         eyex,eyey,eyez,centx,centy,centz,upx,upy,upz=self.glu_lookat
 
+        
+
         glu.gluLookAt(eyex,eyey,eyez,centx,centy,centz,upx,upy,upz)
         
         #gl.glTranslatef(0,0,-150)
@@ -370,6 +379,8 @@ class Scene(object):
         #Add objects
 
         bsurf.display()
+
+        im2d.display()
 
         #cube.display()
         #cube2.display()

@@ -3,16 +3,81 @@ import numpy as np
 import OpenGL.GL as gl
 import OpenGL.GLU as glu
 import OpenGL.GLUT as glut
-
+import Image
+import PIL.ImageOps as iops
 from fos.core.utils import list_indices as lind
+
+
+class Image2D(object):
+
+    def __init__(self):
+
+
+        self.position = [0,0,0]
+
+        self.fname = '/home/eg01/Desktop/small_latex1.png'
+
+        self.size = None
+
+        self.win_size = None
+
+        self.data = None
+
+        pass
+
+    def init(self):
+
+        gl.glPixelStorei(gl.GL_UNPACK_ALIGNMENT, 1)
+
+        #x,y,width,height = gl.glGetDoublev(gl.GL_VIEWPORT)
+        
+	#width,height = int(width),int(height)
+
+        img = Image.open(self.fname)
+
+        img = img.transpose(Image.FLIP_TOP_BOTTOM)
+
+        self.size = img.size
+
+        rgbi=iops.invert(img.convert('RGB'))
+
+        rgbai=rgbi.convert('RGBA')
+
+        rgbai.putalpha(0)        
+
+        #for x,y in 
+
+        self.data=rgbai.tostring()
+    
+
+    def display(self):
+
+        #gl.glRasterPos2i(100,0)
+
+        gl.glWindowPos3iv(self.position)
+
+        w,h=self.size
+
+        gl.glEnable(gl.GL_BLEND)
+
+        gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)
+
+        #gl.glBlendFunc(gl.GL_ONE,gl.GL_DST_COLOR)
+
+        gl.glDrawPixels(w, h,gl.GL_RGBA, gl.GL_UNSIGNED_BYTE, self.data)
+
+        gl.glDisable(gl.GL_BLEND)
+
+        
+    
 
 class BrainSurface(object):
 
     def __init__(self):
 
-        #self.fname='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/rh.pial.vtk'
+        self.fname='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/rh.pial.vtk'
 
-        self.fname='/home/eg309/Desktop/rh.pial.vtk'
+        #self.fname='/home/eg309/Desktop/rh.pial.vtk'
         
         self.position  = [0.0, 0.0, 0.0]
 
@@ -32,15 +97,30 @@ class BrainSurface(object):
 
         '''
 
+        '''
+
         self.ambient   = [0.0, 0.0, 0.2, 1.]
         
         self.diffuse   = [0.0, 0.0, 0.5, 1.]
         
-        self.specular  = [0.9, 0.0, 0., 1.]
+        self.specular  = [0.2, 0.2, 0.2, 1.]
 
         self.shininess = 10.
 
         self.emission  = [0., 0., 0.2, 0]
+
+        '''
+        
+        self.ambient   = [0.55, 0.44, 0.36, 1.]
+        
+        self.diffuse   = [0.55, 0.44, 0.36, 1.]
+        
+        self.specular  = [0.1, 0.1, 0.6, 1.]
+
+        self.shininess = 5.
+
+        self.emission  = [0.1, 0.1, 0.1, 1.]
+        
         
         
         self.list_index = None
@@ -132,7 +212,7 @@ class BrainSurface(object):
 
         gl.glBegin(gl.GL_TRIANGLES)
 
-        for l in self.polys:
+        for l in self.polys[:50000]:
 
             n(p[l[0]])
 
