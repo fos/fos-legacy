@@ -1,3 +1,4 @@
+import os
 import time
 import numpy as np
 import OpenGL.GL as gl
@@ -6,7 +7,9 @@ import OpenGL.GLUT as glut
 import Image
 import PIL.ImageOps as iops
 from fos.core.utils import list_indices as lind
+from os.path import join as pjoin
 
+data_path = pjoin(os.path.dirname(__file__), 'data')
 
 class Image2D(object):
 
@@ -15,7 +18,11 @@ class Image2D(object):
 
         self.position = [0,0,0]
 
-        self.fname = '/home/eg01/Desktop/small_latex1.png'
+        self.fname = pjoin(os.path.dirname(__file__), 'tests/data/small_latex1.png')
+
+        print self.fname
+
+        #'/home/eg01/Desktop/small_latex1.png'
 
         self.size = None
 
