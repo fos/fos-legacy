@@ -50,17 +50,33 @@ class Image2D(object):
 
         rgbai=rgbi.convert('RGBA')
 
-        rgbai.putalpha(0)        
+        rgbai.putalpha(50)        
 
         #for x,y in 
 
         self.data=rgbai.tostring()
+
+        x,y,width,height = gl.glGetDoublev(gl.GL_VIEWPORT)
+        
+	width,height = int(width),int(height)
+
+        self.win_size=(width,height)
+
+        print self.win_size
     
 
     def display(self):
 
         #gl.glRasterPos2i(100,0)
 
+        x,y,width,height = gl.glGetDoublev(gl.GL_VIEWPORT)
+        
+	width,height = int(width),int(height)
+
+        self.win_size=(width,height)
+
+        print self.win_size
+        
         gl.glWindowPos3iv(self.position)
 
         w,h=self.size
