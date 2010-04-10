@@ -141,11 +141,11 @@ class Scene(object):
 
         #primitives.load_pot()
 
-        global cube        
+        #global cube        
 
-        cube=primitives.Collection()
+        #cube=primitives.Collection()
 
-        cube.init()
+        #cube.init()
 
         #global bsurf
 
@@ -153,12 +153,18 @@ class Scene(object):
 
         #bsurf.init()
 
-        global im2d
+        #global im2d
 
-        im2d = primitives.Image2D()
+        #im2d = primitives.Image2D()
 
-        im2d.init()
+        #im2d.init()
 
+        global t3d
+
+        t3d = primitives.Tracks3D()
+
+        t3d.init()
+        
         #global cube2
 
         #cube2=primitives.Collection()
@@ -378,17 +384,19 @@ class Scene(object):
 
         #Add objects
 
-        cube.display()
+        #cube.display()
 
         #bsurf.display()
 
-        im2d.display()
+        #im2d.display()
 
         #cube.display()
         #cube2.display()
 
         #primitives.render_pot()
         #primitives.render2_pot()
+
+        t3d.display()
 
         '''
       
