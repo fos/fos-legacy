@@ -20,6 +20,11 @@ class Tracks3D(object):
 
         self.fname = '/home/eg309/Data/Eleftherios/dti_FACT.trk'
 
+        #self.fname =
+        #'/home/eg309/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
+
+        self.manycolors = True
+        
         self.bbox = None
 
         self.list_index = None
@@ -44,6 +49,8 @@ class Tracks3D(object):
 
         
 
+        
+
     def init(self):
 
         import dipy.io.trackvis as tv
@@ -60,11 +67,37 @@ class Tracks3D(object):
 
         self.data = tracks#[:10000]
 
-
-
         del lines
 
+        if self.manycolors:
+
+            self.multiple_colors()
+            #self.line_test()
+
+        else:
+
+            self.one_color()
+
                
+ 
+
+    def display(self):
+
+        gl.glPushMatrix()
+    
+        #gl.glLoadIdentity()
+
+        x,y,z=self.position
+        
+        gl.glTranslatef(x,y,z)        
+            
+        gl.glCallList(self.list_index)
+    
+        gl.glPopMatrix()
+
+
+    def one_color(self):
+
         self.list_index = gl.glGenLists(1)
 
         gl.glNewList( self.list_index,gl.GL_COMPILE)
@@ -83,25 +116,76 @@ class Tracks3D(object):
 
         gl.glMaterialfv(gl.GL_FRONT, gl.GL_EMISSION, self.emission)
 
+        #'''
+
         gl.glEnableClientState(gl.GL_VERTEX_ARRAY)
 
-        for d in self.data:
+        for d in self.data:            
 
             gl.glVertexPointerd(d)
         
-            #gl.glEnableClientState(gl.GL_VERTEX_ARRAY)
-        
             gl.glDrawArrays(gl.GL_LINE_STRIP, 0, len(d))
-
-            #gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
 
         gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
 
-        #'''
+        gl.glPopMatrix()
+
+        gl.glEndList()
+
+    
+
+
+    def multiple_colors(self):
+
+        colors=np.random.rand(1,3).astype(np.float32)
+
+        print colors
+
+        self.list_index = gl.glGenLists(1)
+
+        gl.glNewList( self.list_index,gl.GL_COMPILE)
+
+        gl.glPushMatrix()
+
+        gl.glDisable(gl.GL_LIGHTING)
+
+        gl.glEnableClientState(gl.GL_VERTEX_ARRAY)
+
+        #gl.glEnableClientState(gl.GL_COLOR_ARRAY)
+
+        for d in self.data:
+
+            gl.glColor3fv(np.random.rand(1,3))
+
+            gl.glVertexPointerd(d)
+
+            #gl.glColorPointerd(colors)
+            
+        
+            gl.glDrawArrays(gl.GL_LINE_STRIP, 0, len(d))
+
+        #gl.glDisableClientState(gl.GL_COLOR_ARRAY)
+
+        gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
+
+        gl.glEnable(gl.GL_LIGHTING)
+        
+        gl.glPopMatrix()
+
+        gl.glEndList()
+ 
+
 
         '''
 
-        colors=np.float32( np.random.rand(  10,3  ))
+
+        self.list_index = gl.glGenLists(1)
+
+        gl.glNewList( self.list_index,gl.GL_COMPILE)
+
+        gl.glPushMatrix()
+
+        colors=np.float32( np.random.rand( 10,3 ))
 
         colorsin=np.round( 10*np.random.rand( len( self.data ) ) ).astype(np.ubyte)
 
@@ -113,44 +197,149 @@ class Tracks3D(object):
 
         #gl.glColorPointerd(colors)
 
-        for i,d in enumerate(self.data):
-    
+        colorsins=colorsin.tostring()
 
+        print 
+
+        for i,d in enumerate(self.data):
+ 
             gl.glVertexPointer( 3, gl.GL_FLOAT, 0, d.tostring( ) )
 
             #gl.glVertexPointerd(d)
 
-            gl.glDrawElements(gl.GL_LINE_STRIP , len(d), gl.GL_UNSIGNED_BYTE, colorsin[i].tostring( ) )
+            gl.glDrawElements(gl.GL_LINE_STRIP , len(d), gl.GL_UNSIGNED_BYTE, colorsins[i] )
         
 
         gl.glDisableClientState(gl.GL_COLOR_ARRAY)
 
         gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
 
-        '''
-
         
         gl.glPopMatrix()
 
         gl.glEndList()
   
+        '''
 
-    def display(self):
+    def poly_test(self):
 
-        gl.glPushMatrix()
-    
-        #gl.glLoadIdentity()
+        n=50
 
-        x,y,z=self.position
+        a=np.arange(0,n)
+
+        vertices = np.transpose(
+            np.reshape(np.array((np.cos(2*np.pi*a/float(n)), np.sin(3*2*np.pi*a/float(n)))),(2, n)))
+
+        colors=np.ones((n, 3))
+
+        colors[0]=[1,0,0]
+
+        colors[25]=[1,1,0]
+
+        colors.shape = (n, 3)
+
         
-        gl.glTranslatef(x,y,z)        
-            
-        gl.glCallList(self.list_index)
-    
+
+        glClearColor(0.5, 0.5, 0.5, 0)
+        
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+	glOrtho(-1,1,-1,1,-1,1)
+        
+	glDisable(gl.GL_LIGHTING)
+        
+	glDrawArrays(gl.GL_LINE_LOOP, 0, n)
+        
+	glEnable(gl.GL_LIGHTING)
+
+        glVertexPointerd(vertices)
+        
+	glColorPointerd(colors)
+        
+	glEnableClientState(GL_VERTEX_ARRAY)
+        
+	glEnableClientState(GL_COLOR_ARRAY)
+
+        
         gl.glPopMatrix()
 
+        gl.glEndList()
 
 
+
+    def line_test(self):
+       
+        scalar=1.0
+
+        lines=self.data
+
+        colors=None
+
+
+        if colors!=None:        
+
+            lit=iter(colors)
+
+        else:
+
+            colors=np.random.rand(len(lines),3)
+
+            lit=iter(colors)
+    
+
+        self.list_index = gl.glGenLists(1)
+        
+        gl.glNewList(self.list_index, gl.GL_COMPILE)
+        
+        nol=0
+
+        gl.glDisable(gl.GL_LIGHTING)
+
+               
+
+        for Line in lines:
+        
+
+            inw=True
+
+            mit=iter(Line)
+
+            nit=iter(Line)
+
+            nit.next()
+        
+            scalar=lit.next()
+
+            gl.glBegin(gl.GL_LINE_STRIP)    
+
+            gl.glColor4f(scalar[0],scalar[1],scalar[2],1.)
+            
+
+            while(inw):            
+
+                try:
+
+                    m=mit.next()                                        
+
+                    gl.glVertex3f(m[0], m[1], m[2]) # point                   
+
+                except StopIteration:
+                    
+
+                    break
+
+
+            gl.glEnd()                                
+        
+            nol+=1
+
+            if nol%1000==0:
+                
+                print(nol,'Lines Loaded')
+        
+
+        gl.glEnable(gl.GL_LIGHTING)
+        
+        gl.glEndList()
         
 
 
