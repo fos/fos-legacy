@@ -11,6 +11,152 @@ from os.path import join as pjoin
 
 data_path = pjoin(os.path.dirname(__file__), 'data')
 
+
+class Tracks3D(object):
+
+    def __init__(self):
+
+        self.position = (-100,-100,0)
+
+        self.fname = '/home/eg309/Data/Eleftherios/dti_FACT.trk'
+
+        self.bbox = None
+
+        self.list_index = None
+
+        self.affine = None
+
+        self.data = None
+
+        self.list_index = None
+
+        self.rot_angle=0
+
+        self.ambient   = [0.0, 0.0, 0.2, 1.]
+        
+        self.diffuse   = [0.0, 0.0, 0.7, 1.]
+        
+        self.specular  = [0.2, 0.2, 0.7, 1.]
+
+        self.shininess = 50.
+
+        self.emission  = [0.2, 0.2, 0.2, 0]
+
+        
+
+    def init(self):
+
+        import dipy.io.trackvis as tv
+
+        lines,hdr = tv.read(self.fname)
+
+        ras = tv.aff_from_hdr(hdr)
+
+        self.affine=ras
+
+        tracks = [l[0] for l in lines]
+
+        print 'tracks loaded'
+
+        self.data = tracks#[:10000]
+
+
+
+        del lines
+
+               
+        self.list_index = gl.glGenLists(1)
+
+        gl.glNewList( self.list_index,gl.GL_COMPILE)
+
+        gl.glPushMatrix()
+
+        #'''
+
+        gl.glMaterialfv( gl.GL_FRONT, gl.GL_AMBIENT, self.ambient )
+
+        gl.glMaterialfv( gl.GL_FRONT, gl.GL_DIFFUSE, self.diffuse )
+
+        gl.glMaterialfv( gl.GL_FRONT, gl.GL_SPECULAR, self.specular )
+
+        gl.glMaterialf( gl.GL_FRONT, gl.GL_SHININESS, self.shininess )
+
+        gl.glMaterialfv(gl.GL_FRONT, gl.GL_EMISSION, self.emission)
+
+        gl.glEnableClientState(gl.GL_VERTEX_ARRAY)
+
+        for d in self.data:
+
+            gl.glVertexPointerd(d)
+        
+            #gl.glEnableClientState(gl.GL_VERTEX_ARRAY)
+        
+            gl.glDrawArrays(gl.GL_LINE_STRIP, 0, len(d))
+
+            #gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
+
+        gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
+
+        #'''
+
+        '''
+
+        colors=np.float32( np.random.rand(  10,3  ))
+
+        colorsin=np.round( 10*np.random.rand( len( self.data ) ) ).astype(np.ubyte)
+
+        gl.glEnableClientState(gl.GL_VERTEX_ARRAY)
+
+        gl.glEnableClientState(gl.GL_COLOR_ARRAY)
+
+        gl.glColorPointer( 3, gl.GL_FLOAT, 0, colors.tostring( ) )
+
+        #gl.glColorPointerd(colors)
+
+        for i,d in enumerate(self.data):
+    
+
+            gl.glVertexPointer( 3, gl.GL_FLOAT, 0, d.tostring( ) )
+
+            #gl.glVertexPointerd(d)
+
+            gl.glDrawElements(gl.GL_LINE_STRIP , len(d), gl.GL_UNSIGNED_BYTE, colorsin[i].tostring( ) )
+        
+
+        gl.glDisableClientState(gl.GL_COLOR_ARRAY)
+
+        gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
+
+        '''
+
+        
+        gl.glPopMatrix()
+
+        gl.glEndList()
+  
+
+    def display(self):
+
+        gl.glPushMatrix()
+    
+        #gl.glLoadIdentity()
+
+        x,y,z=self.position
+        
+        gl.glTranslatef(x,y,z)        
+            
+        gl.glCallList(self.list_index)
+    
+        gl.glPopMatrix()
+
+
+
+        
+
+
+
+
+
 class Image2D(object):
 
     def __init__(self):
@@ -29,6 +175,10 @@ class Image2D(object):
         self.win_size = None
 
         self.data = None
+
+        self.alpha = 50 #None # 0 - 255
+
+        self.rm_blackish = True
 
         pass
 
@@ -50,10 +200,25 @@ class Image2D(object):
 
         rgbai=rgbi.convert('RGBA')
 
-        rgbai.putalpha(50)        
+        if self.alpha != None:
 
-        #for x,y in 
+            rgbai.putalpha(self.alpha)
 
+        
+        if self.rm_blackish:
+
+
+            for x,y in np.ndindex(self.size[0],self.size[1]):
+
+                r,g,b,a=rgbai.getpixel((x,y))
+
+                if r<50 and g<50 and b < 50:
+
+                    rgbai.putpixel((x,y),(0,0,0,0))
+    
+        #for x,y in
+
+        
         self.data=rgbai.tostring()
 
         x,y,width,height = gl.glGetDoublev(gl.GL_VIEWPORT)
@@ -75,7 +240,7 @@ class Image2D(object):
 
         self.win_size=(width,height)
 
-        print self.win_size
+        #print self.win_size
         
         gl.glWindowPos3iv(self.position)
 
