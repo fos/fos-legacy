@@ -18,7 +18,9 @@ class Tracks3D(object):
 
         self.position = (-100,-100,0)
 
-        self.fname = '/home/eg309/Data/Eleftherios/dti_FACT.trk'
+        self.fname = '/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk'
+
+        #self.fname = '/home/eg309/Data/Eleftherios/dti_FACT.trk'
 
         #self.fname =
         #'/home/eg309/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'

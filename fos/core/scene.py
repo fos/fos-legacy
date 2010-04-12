@@ -265,7 +265,99 @@ class Scene(object):
             glut.glutPostRedisplay()
 
 
-        if key == 'p' or key == 'P': # picking       
+        if key == 'p':
+
+            modelviewmatrix=gl.glGetDoublev(gl.GL_MODELVIEW_MATRIX)
+
+            print 'ModelViewMatrix'
+            print modelviewmatrix
+
+            projectionmatrix=gl.glGetDoublev(gl.GL_PROJECTION_MATRIX)
+            print 'ProjectionMatrix'
+            print projectionmatrix
+
+            viewport=gl.glGetDoublev(gl.GL_VIEWPORT)
+
+            print 'Viewport'
+            print viewport
+
+            print float(x), viewport[3]-float(y)
+
+           
+
+            #z = gl.glReadPixels(x, y, 1, 1, gl.GL_DEPTH_COMPONENT, gl.GL_FLOAT)
+            
+            #'''
+            wx,wy,wz= glu.gluUnProject(float(x),viewport[3]-float(y),0.,
+                                              modelviewmatrix,
+                                              projectionmatrix,
+                                              viewport)
+
+            print 'World Coordinate'
+            print wx,wy,wz          
+            
+
+            #'''
+
+            '''
+
+            P=np.matrix(projectionmatrix)
+            M=np.matrix(modelviewmatrix)
+
+            px=float(x)
+            py=viewport[3]-float(y)
+            #py=float(y)
+
+            print 'px',float(px),'py',float(py)
+            
+            pz=0.
+
+            v=viewport
+
+            S=np.matrix([2*(px-v[0])/v[2]-1,2*(py-v[1])/v[3]-1,2*pz-1,1.])
+
+            print 'P',P
+
+            print 'M',M
+
+            print 'S',S
+
+            print ((P*M).I).shape
+
+            F1=((P*M).I)*S.T
+
+            print 'First',F1
+
+            
+            pz=1.
+
+            S=np.matrix([2*(px-v[0])/v[2]-1,2*(py-v[1])/v[3]-1,2*pz-1,1.])
+
+            print 'P',P
+
+            print 'M',M
+
+            print 'S',S
+
+            print ((P*M).I).shape
+
+            F2=((P*M).I)*S.T
+
+            print 'Second',F2
+
+            print 'Difference',F2-F1
+
+
+            #print 
+         
+
+            #(P*M).I)*
+
+            '''
+                    
+
+
+        if key == 'P': # picking       
 
             viewport=gl.glGetIntegerv(gl.GL_VIEWPORT)
  
