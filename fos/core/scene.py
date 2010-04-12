@@ -288,14 +288,20 @@ class Scene(object):
             #z = gl.glReadPixels(x, y, 1, 1, gl.GL_DEPTH_COMPONENT, gl.GL_FLOAT)
             
             #'''
-            wx,wy,wz= glu.gluUnProject(float(x),viewport[3]-float(y),0.,
-                                              modelviewmatrix,
-                                              projectionmatrix,
-                                              viewport)
+            #wx,wy,wz= glu.gluUnProject(double(x),viewport[3]-double(y),0.,
+            #                                  modelviewmatrix,
+            #                                  projectionmatrix,
+            #                                  viewport)
 
-            print 'World Coordinate'
-            print wx,wy,wz          
+            xn,yn,zn=glu.gluUnProject(np.double(x),viewport[3]-np.double(y),0.)
+
+            print 'World Coordinates Near'
+            print xn,yn,zn
+
+            xf,yf,zf=glu.gluUnProject(np.double(x),viewport[3]-np.double(y),1.)
             
+            print 'World Coordinates Far'
+            print xf,yf,zf            
 
             #'''
 
