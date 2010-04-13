@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-''' Installation script for dipy package '''
+''' Installation script for fos package '''
 
 
 from os.path import join as pjoin
@@ -18,20 +18,20 @@ except ImportError:
 else:
     has_cython = True
     
-per_ext, cmdclass = make_cython_ext(
-    'dipy.core.performance',
+col_ext, cmdclass = make_cython_ext(
+    'fos.core.collision',
     has_cython,
     include_dirs = [np.get_include()])
 
-setup(name='dipy',
+setup(name='fos',
       version='0.1a',
-      description='Diffusion utilities in Python',
-      author='DIPY python team',
-      author_email='matthew.brett@gmail.com',
-      url='http://github.com/matthew-brett/dipy',
-      packages=['dipy', 'dipy.io', 'dipy.core','dipy.viz'],
-      package_data={'dipy.io': ['tests/data/*', 'tests/*.py']},
-	  ext_modules = [per_ext],
+      description='Scientific 3d Engine',
+      author='Fos Team',
+      author_email='garyfallidis@gmail.com',
+      url='http://github.com/Garyfallidis/Fos',
+      packages=['fos','fos.core'],
+      #package_data={'dipy.io': ['tests/data/*', 'tests/*.py']},
+      ext_modules = [col_ext],
       cmdclass    = cmdclass,      
       scripts=glob('scripts/*.py')
       )

@@ -4,7 +4,7 @@ import sys
 import time
 import numpy as np
 import Image # PIL
-
+from fos.core import collision as cll
 
 try:
     
@@ -317,6 +317,10 @@ class Scene(object):
             pick_ray=(far-near)/np.sqrt(np.sum((far-near)**2))
 
             print pick_ray
+
+            print cll.intersect_segment_plane(near,far,[-100,100,0],[100,100,0],[100,-100,0])
+
+
 
             #'''
 

@@ -3,7 +3,7 @@
 # the setup.py file, this Makefile is just meant as a command
 # convenience/reminder while doing development.
 
-PKGDIR=dipy
+PKGDIR=fos
 DOCDIR=${PKGDIR}/doc
 TESTDIR=${PKGDIR}/tests
 
@@ -17,14 +17,14 @@ help:
 
 all: ext html test
 
-ext: performance.so
+ext: collision.so
 
 test:   ext
 	nosetests .
 
-html:  ${PKGDIR}/core/performance.html
+html:  ${PKGDIR}/core/collision.html
 
-performance.so: ${PKGDIR}/core/performance.pyx
+collision.so: ${PKGDIR}/core/collision.pyx
 	python setup.py build_ext --inplace
 
 # Phony targets for cleanup and similar uses
