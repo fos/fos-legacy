@@ -18,9 +18,9 @@ class Tracks3D(object):
 
         self.position = (-100,-100,0)
 
-        #self.fname = '/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk'
+        self.fname = '/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk'
 
-        self.fname = '/home/eg309/Data/Eleftherios/dti_FACT.trk'
+        #self.fname = '/home/eg309/Data/Eleftherios/dti_FACT.trk'
 
         #self.fname =
         #'/home/eg309/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
@@ -664,6 +664,61 @@ class BrainSurface(object):
         return pts,polys
     
 
+
+class DummyPlane(object):
+
+    def __init__(self):
+
+        self.position = (0.,0.,0.)
+
+    def init(self):
+
+        self.list_index = gl.glGenLists(1)
+
+        gl.glNewList(self.list_index, gl.GL_COMPILE)
+
+        gl.glPushMatrix()
+
+        d=np.array([[-100,100,0],[100,100,0],[100,-100,0],[-100,-100,0]]).astype(np.float32)
+
+        indices = np.array([0,1,2,3]).astype(np.ubyte)
+
+        gl.glDisable(gl.GL_LIGHTING)
+
+        gl.glEnableClientState(gl.GL_VERTEX_ARRAY)        
+
+        gl.glColor3fv([1.,0.,0.])
+
+        gl.glVertexPointerd(d)
+
+        gl.glDrawElements(gl.GL_QUADS, 4, gl.GL_UNSIGNED_BYTE, indices)
+
+        gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
+
+        gl.glEnable(gl.GL_LIGHTING)
+
+        gl.glPopMatrix()
+        
+
+        gl.glEndList()
+
+
+    def display(self):
+
+        gl.glPushMatrix()
+    
+        #gl.glLoadIdentity()
+
+        x,y,z=self.position
+        
+        gl.glTranslatef(x,y,z)        
+            
+        gl.glCallList(self.list_index)
+    
+        gl.glPopMatrix()
+
+        
+    
 class Collection(object):
     
 

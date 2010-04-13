@@ -159,11 +159,17 @@ class Scene(object):
 
         #im2d.init()
 
-        global t3d
+        #global t3d
 
-        t3d = primitives.Tracks3D()
+        #t3d = primitives.Tracks3D()
 
-        t3d.init()
+        #t3d.init()
+
+        global dp
+
+        dp = primitives.DummyPlane()
+
+        dp.init()
         
         #global cube2
 
@@ -301,7 +307,16 @@ class Scene(object):
             xf,yf,zf=glu.gluUnProject(np.double(x),viewport[3]-np.double(y),1.)
             
             print 'World Coordinates Far'
-            print xf,yf,zf            
+            print xf,yf,zf
+
+            print 'unit vector'
+
+            near=np.array([xn,yn,zn])
+            far =np.array([xf,yf,zf])
+
+            pick_ray=(far-near)/np.sqrt(np.sum((far-near)**2))
+
+            print pick_ray
 
             #'''
 
@@ -494,7 +509,9 @@ class Scene(object):
         #primitives.render_pot()
         #primitives.render2_pot()
 
-        t3d.display()
+        #t3d.display()
+
+        dp.display()
 
         '''
       
