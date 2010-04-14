@@ -1,6 +1,6 @@
 ''' A type of -*- python -*- file
 
-Performance functions for dipy
+Collision detection utilities for Fos
 
 
 '''

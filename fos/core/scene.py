@@ -318,9 +318,15 @@ class Scene(object):
 
             print pick_ray
 
-            print cll.intersect_segment_plane(near,far,[-100,100,0],[100,100,0],[100,-100,0])
+            success,t,p= cll.intersect_segment_plane(near,far,[-100,100,0],[100,100,0],[100,-100,0])
 
+            if p[0]<=100 and p[0]>=-100:
 
+                if p[1]<=100 and p[1]>=-100:
+
+                    if p[2]<=100 and p[2]>=-100:
+
+                        print 'OK'
 
             #'''
 
