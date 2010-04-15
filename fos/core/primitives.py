@@ -11,6 +11,7 @@ from os.path import join as pjoin
 
 data_path = pjoin(os.path.dirname(__file__), 'data')
 
+#=======================================================
 
 class Tracks3D(object):
 
@@ -346,7 +347,7 @@ class Tracks3D(object):
         
 
 
-
+#=========================================================================
 
 
 class Image2D(object):
@@ -444,7 +445,7 @@ class Image2D(object):
 
         gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)
 
-        #gl.glBlendFunc(gl.GL_ONE,gl.GL_DST_COLOR)
+        #gl.glBlendFunc(gl.GL_ONE,gl.GL_DST_COLOR)        
 
         gl.glDrawPixels(w, h,gl.GL_RGBA, gl.GL_UNSIGNED_BYTE, self.data)
 
@@ -666,7 +667,7 @@ class BrainSurface(object):
 
         return pts,polys
     
-
+#===============================================================
 
 class DummyPlane(object):
 
@@ -720,7 +721,8 @@ class DummyPlane(object):
     
         gl.glPopMatrix()
 
-        
+
+#===================================================================
     
 class Collection(object):
     

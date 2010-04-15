@@ -5,6 +5,7 @@ import time
 import numpy as np
 import Image # PIL
 from fos.core import collision as cll
+from fos.core import plots
 
 try:
     
@@ -73,11 +74,18 @@ class Scene(object):
         self.selection_buffer=self.selection_buffer_size*[0]
         self.selection_region=(1,1)#rectangle width, height
 
-        #Timing settings
+        #Video timing settings
         self.timer1=self.video_timer
         self.timer1Dt=33 # duraction between consecutive runs in milliseconds
         self.autostart_timer1=False
         self.timer1on=False
+
+        #World timing settings
+        self.timer2=self.world_timer
+        self.timer2Dt=33
+        self.autostart_timer2=True
+        self.timer2on=True
+        self.time2now=0 #holds current time in milliseconds
 
         #Video settings
         self.frameno=0
@@ -134,7 +142,14 @@ class Scene(object):
 
         #Load objects
 
-        self.objects()
+        #self.objects()
+
+        global plot
+
+        plot=plots.Plot()
+
+        plot.init()
+        
    
 
     def objects(self):
@@ -159,11 +174,11 @@ class Scene(object):
 
         #im2d.init()
 
-        global t3d
+        #global t3d
 
-        t3d = primitives.Tracks3D()
+        #t3d = primitives.Tracks3D()
 
-        t3d.init()
+        #t3d.init()
 
         #global dp
 
@@ -176,6 +191,8 @@ class Scene(object):
         #cube2=primitives.Collection()
 
         #cube2.init()
+
+        pass
   
 
     def save(self, filename="test.png", format="PNG" ):
@@ -406,7 +423,19 @@ class Scene(object):
         
             glut.glutTimerFunc( self.timer1Dt, self.video_timer, 1)
 
-        
+
+    def world_timer(self,value):
+
+        if self.timer2on==True:
+
+            self.time2now+=self.timer2Dt
+
+            plot.update_time(self.time2now)
+
+            glut.glutPostRedisplay()
+
+            glut.glutTimerFunc( self.timer2Dt, self.world_timer, 1)
+
 
 
     def interaction(self):
@@ -424,9 +453,11 @@ class Scene(object):
 
         #registers both glutMouseFunc and glutMotionFunc
         self.mouse.registerCallbacks()
-        
-        #glut.glutTimerFunc(self.timer1Dt,self.timer1,1)       
 
+        if self.autostart_timer2:
+
+            glut.glutTimerFunc(self.timer2Dt,self.timer2,1) 
+            
         
 
     def display(self):
@@ -438,8 +469,6 @@ class Scene(object):
         gl.glLoadIdentity()
 
         eyex,eyey,eyez,centx,centy,centz,upx,upy,upz=self.glu_lookat
-
-        
 
         glu.gluLookAt(eyex,eyey,eyez,centx,centy,centz,upx,upy,upz)
         
@@ -461,7 +490,7 @@ class Scene(object):
         #primitives.render_pot()
         #primitives.render2_pot()
 
-        t3d.display()
+        #t3d.display()
 
         #dp.display()
 
@@ -475,11 +504,12 @@ class Scene(object):
         
         for c in "hello :-)":
 
-            glut.glutBitmapCharacter( glut.GLUT_BITMAP_TIMES_ROMAN_24, ord(c) )       
-        
+            glut.glutBitmapCharacter( glut.GLUT_BITMAP_TIMES_ROMAN_24, ord(c) )               
         gl.glEnable(self.enab_light)
 
         '''
+
+        plot.display()        
         
         glut.glutSwapBuffers()        
 

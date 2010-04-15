@@ -1,1 +1,1 @@
-# Init for core dipy objects
+# Init for core fos objects
