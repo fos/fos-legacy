@@ -21,7 +21,7 @@ wrapper = r'''
 
 closing = r"\end{document}"
 
-snippet = r"\sffamily \TeX\ is Number$\displaystyle\sum_{n=1}^\infty\frac{-e^{i\pi}}{2^n}$!"
+snippet = r"\sffamily Eleftherios rocks!!\\$\displaystyle\sum_{n=1}^\infty\frac{-e^{i\pi}}{2^n}$!"
 
 document = wrapper + snippet + closing
 
@@ -45,7 +45,7 @@ os.system('latex %s' % latexfile )
 
 # Run dvipng on the generated DVI file. Use tight bounding box. 
 # Magnification is set to 1200
-cmd = "dvipng -T tight -x 1200 -z 9 -bg transparent " \
+cmd = "dvipng -T tight -x 1000 -z 9 -bg transparent " \
 + "-o %s%s.png %s" % (pngpath , label, label)
 os.system(cmd) 
 

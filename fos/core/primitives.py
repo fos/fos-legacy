@@ -18,13 +18,14 @@ class Tracks3D(object):
 
         self.position = (-100,-100,0)
 
-        self.fname = '/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk'
+        #self.fname = '/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk'
 
         #self.fname = '/home/eg309/Data/Eleftherios/dti_FACT.trk'
 
         #self.fname =
-        #'/home/eg309/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
-
+        '/home/eg309/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
+        self.fname = '/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
+        
         self.manycolors = True
         
         self.bbox = None
@@ -350,12 +351,14 @@ class Tracks3D(object):
 
 class Image2D(object):
 
-    def __init__(self):
+    def __init__(self,fname):
 
 
         self.position = [0,0,0]
 
-        self.fname = pjoin(os.path.dirname(__file__), 'tests/data/small_latex1.png')
+        self.fname = fname
+
+        #self.fname = pjoin(os.path.dirname(__file__), 'tests/data/small_latex1.png')
 
         print self.fname
 

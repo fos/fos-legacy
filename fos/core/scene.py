@@ -159,17 +159,17 @@ class Scene(object):
 
         #im2d.init()
 
-        #global t3d
+        global t3d
 
-        #t3d = primitives.Tracks3D()
+        t3d = primitives.Tracks3D()
 
-        #t3d.init()
+        t3d.init()
 
-        global dp
+        #global dp
 
-        dp = primitives.DummyPlane()
+        #dp = primitives.DummyPlane()
 
-        dp.init()
+        #dp.init()
         
         #global cube2
 
@@ -328,63 +328,6 @@ class Scene(object):
 
                         print 'OK'
 
-            #'''
-
-            '''
-
-            P=np.matrix(projectionmatrix)
-            M=np.matrix(modelviewmatrix)
-
-            px=float(x)
-            py=viewport[3]-float(y)
-            #py=float(y)
-
-            print 'px',float(px),'py',float(py)
-            
-            pz=0.
-
-            v=viewport
-
-            S=np.matrix([2*(px-v[0])/v[2]-1,2*(py-v[1])/v[3]-1,2*pz-1,1.])
-
-            print 'P',P
-
-            print 'M',M
-
-            print 'S',S
-
-            print ((P*M).I).shape
-
-            F1=((P*M).I)*S.T
-
-            print 'First',F1
-
-            
-            pz=1.
-
-            S=np.matrix([2*(px-v[0])/v[2]-1,2*(py-v[1])/v[3]-1,2*pz-1,1.])
-
-            print 'P',P
-
-            print 'M',M
-
-            print 'S',S
-
-            print ((P*M).I).shape
-
-            F2=((P*M).I)*S.T
-
-            print 'Second',F2
-
-            print 'Difference',F2-F1
-
-
-            #print 
-         
-
-            #(P*M).I)*
-
-            '''
                     
 
 
@@ -394,9 +337,8 @@ class Scene(object):
  
             w=viewport[2]-viewport[0]
 
-            h=viewport[3]-viewport[1]
-                        
-            #gl.glSelectBuffer(self.selection_buffer_size, self.selection_buffer) 
+            h=viewport[3]-viewport[1]          
+            
 
             gl.glSelectBuffer(self.selection_buffer_size)
             
@@ -519,9 +461,9 @@ class Scene(object):
         #primitives.render_pot()
         #primitives.render2_pot()
 
-        #t3d.display()
+        t3d.display()
 
-        dp.display()
+        #dp.display()
 
         '''
       
