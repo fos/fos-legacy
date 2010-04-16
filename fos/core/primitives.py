@@ -184,7 +184,7 @@ class Tracks3D(object):
 
         from dipy.viz.colormaps import boys2rgb
 
-        from dipy.core.track_metrics import mean_orientation, length
+        from dipy.core.track_metrics import mean_orientation, length, downsample
 
         colors=np.random.rand(1,3).astype(np.float32)
 
@@ -209,7 +209,11 @@ class Tracks3D(object):
             if length(d)> self.min_length:
             
 
-                mo=mean_orientation(d)
+                #mo=mean_orientation(d)
+                ds=downsample(d,6)
+                mo=ds[3]-ds[2]
+
+                mo=mo/np.sqrt(np.sum(mo**2))
 
                 mo.shape=(1,3)
             
