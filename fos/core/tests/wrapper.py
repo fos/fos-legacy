@@ -82,15 +82,15 @@ dvipng_process = subprocess.Popen(cmd_new, shell=True)
 
 dvipng_process.wait()
 
-eog_process = subprocess.Popen(['eog', pngfile], shell=True)
+eog_process = subprocess.Popen(['eog ' + pngfile], shell=True)
 
 eog_process.wait()
 
 # Remove temporary files
-#os.remove(label+'.tex')
-#os.remove(label+'.log')
-#os.remove(label+'.aux')
-#os.remove(label+'.dvi')
+os.remove(label+'.tex')
+os.remove(label+'.log')
+os.remove(label+'.aux')
+os.remove(label+'.dvi')
 
 # but don't do it too soon!
 
