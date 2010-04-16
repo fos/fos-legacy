@@ -348,7 +348,7 @@ class Scene(object):
                     
 
 
-        if key == 'P': # picking       
+        if key == 'P': # to be removed standard picking       
 
             viewport=gl.glGetIntegerv(gl.GL_VIEWPORT)
  
@@ -563,6 +563,7 @@ class Scene(object):
 if __name__ == "__main__":
 
     engine=Scene()
+    
     engine.run()
 
 

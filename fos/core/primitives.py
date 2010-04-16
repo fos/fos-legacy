@@ -15,7 +15,7 @@ data_path = pjoin(os.path.dirname(__file__), 'data')
 
 class Tracks3D(object):
 
-    def __init__(self):
+    def __init__(self,fname,colormap=None):
 
         self.position = (-100,-100,0)
 
@@ -23,9 +23,10 @@ class Tracks3D(object):
 
         #self.fname = '/home/eg309/Data/Eleftherios/dti_FACT.trk'
 
-        #self.fname =
-        '/home/eg309/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
-        self.fname = '/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
+        #self.fname = '/home/eg309/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
+        #self.fname = '/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
+
+        self.fname = fname
         
         self.manycolors = True
         
@@ -39,7 +40,9 @@ class Tracks3D(object):
 
         self.list_index = None
 
-        self.rot_angle=0
+        self.rot_angle = 0
+
+        self.colormap = None
 
         self.ambient   = [0.0, 0.0, 0.2, 1.]
         
@@ -50,6 +53,18 @@ class Tracks3D(object):
         self.shininess = 50.
 
         self.emission  = [0.2, 0.2, 0.2, 0]
+        
+        self.min = None
+         
+        self.max = None
+
+        self.mean = None
+
+        self.min_length = 20.
+
+        self.angle = 0.
+
+        self.angular_speed = 1
 
         
 
@@ -71,6 +86,17 @@ class Tracks3D(object):
 
         self.data = tracks#[:10000]
 
+
+        data_stats = np.concatenate(tracks)
+
+        self.min=np.min(data_stats,axis=0)
+         
+        self.max=np.max(data_stats,axis=0)
+
+        self.mean=np.mean(data_stats,axis=0)
+
+        del data_stats
+        
         del lines
 
         if self.manycolors:
@@ -92,8 +118,23 @@ class Tracks3D(object):
         #gl.glLoadIdentity()
 
         x,y,z=self.position
+
         
-        gl.glTranslatef(x,y,z)        
+
+        gl.glRotatef(self.angle,0,1,0)
+        
+        gl.glTranslatef(x,y,z)
+
+        #print self.affine
+
+        gl.glPushMatrix()
+        
+        gl.glMultMatrixf(self.affine)
+
+        gl.glPopMatrix()
+        
+
+        self.angle+=self.angular_speed
             
         gl.glCallList(self.list_index)
     
@@ -141,6 +182,10 @@ class Tracks3D(object):
 
     def multiple_colors(self):
 
+        from dipy.viz.colormaps import boys2rgb
+
+        from dipy.core.track_metrics import mean_orientation, length
+
         colors=np.random.rand(1,3).astype(np.float32)
 
         print colors
@@ -153,22 +198,33 @@ class Tracks3D(object):
 
         gl.glDisable(gl.GL_LIGHTING)
 
-        gl.glEnableClientState(gl.GL_VERTEX_ARRAY)
+        #gl.glDisable(gl.GL_SMOOTH)
 
-        #gl.glEnableClientState(gl.GL_COLOR_ARRAY)
+        #gl.glEnable(gl.GL_FLAT)
+
+        gl.glEnableClientState(gl.GL_VERTEX_ARRAY)        
 
         for d in self.data:
 
-            gl.glColor3fv(np.random.rand(1,3))
-
-            gl.glVertexPointerd(d)
-
-            #gl.glColorPointerd(colors)
+            if length(d)> self.min_length:
             
-        
-            gl.glDrawArrays(gl.GL_LINE_STRIP, 0, len(d))
 
-        #gl.glDisableClientState(gl.GL_COLOR_ARRAY)
+                mo=mean_orientation(d)
+
+                mo.shape=(1,3)
+            
+                color=boys2rgb(mo)
+
+                #color4=np.array([color[0][0],color[0][1],color[0][2],0.01],np.float32)
+                #gl.glColor4fv(color4)
+
+                gl.glColor3fv(color)
+
+                gl.glVertexPointerf(d)
+                               
+                gl.glDrawArrays(gl.GL_LINE_STRIP, 0, len(d))
+
+        
 
         gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
 
