@@ -86,7 +86,7 @@ latex_process.wait()
 
 cmd_original = ["dvipng -o " + pngfile + ' ' + label]
 
-cmd_new = ["dvipng -q -T tight -x 1000 -z 1 -bg 'rgb 1 0.6 0.6' -o" + pngfile + ' ' + label]
+cmd_new = ["dvipng -q -T tight  -x 2000 -z 1 -bg 'rgb 1 0.6 0.6' -o" + pngfile + ' ' + label]
 
 dvipng_process = subprocess.Popen(cmd_new, shell=True, stdout=open('/dev/null'))
 
