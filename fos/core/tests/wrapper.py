@@ -76,21 +76,29 @@ latexfilehandle.close()
 
 # compile LaTeX document. A DVI file is created
 
-latex_process = subprocess.Popen(['latex -interaction=nonstopmode '
-                                  + latexfile], shell=True, stdout=open('/dev/null'))
+latex_process = subprocess.Popen(['latex -interaction=nonstopmode ' + \
+                                      latexfile], shell=True, stdout=open('/dev/null'))
 
 latex_process.wait()
 
 # Run dvipng on the generated DVI file. Use tight bounding box. 
-# Magnification is set to 1200
+# Magnification is set to x 2
 
-cmd_original = ["dvipng -o " + pngfile + ' ' + label]
+backgroundcolour = "'rgb 0.8  0.8  1.0'"
 
-cmd_new = ["dvipng -q -T tight  -x 2000 -z 1 -bg 'rgb 1 0.6 0.6' -o" + pngfile + ' ' + label]
+dvipng_cmd = ["dvipng --depth --height -q -T tight  -x 2000 -z 1 " + \
+                  '-bg '+ backgroundcolour  + " -o " + pngfile + ' ' + label]
 
-dvipng_process = subprocess.Popen(cmd_new, shell=True, stdout=open('/dev/null'))
+dvipng_process = subprocess.Popen(dvipng_cmd, shell=True, stdout = subprocess.PIPE)
 
 dvipng_process.wait()
+
+output = dvipng_process.communicate()[0]
+dimensions = [s.split('=') for s in output.split()]
+depth  = dimensions[-2][1]
+height = dimensions[-1][1]
+
+print 'Depth', depth, 'Height', height
 
 eog_process = subprocess.Popen(['eog ' + pngfile], shell=True, stdout=open('/dev/null'))
 
@@ -101,7 +109,7 @@ os.remove(label+'.tex')
 #os.remove(label+'.log')
 os.remove(label+'.aux')
 os.remove(label+'.dvi')
-#os.remove('png/'+label+'.png')
+os.remove('png/'+label+'.png')
 
 # but don't do it too soon!
 
