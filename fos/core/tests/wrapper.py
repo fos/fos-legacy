@@ -44,10 +44,9 @@ closing = r'''
 #'''
 
 snippet = r'''
-\fontsize{24}{30}
+\fontsize{48}{54}
 \sffamily
-\resizebox{120mm}{!}{%
-  \begin{minipage}{90mm}
+  \begin{minipage}{190mm}
     \raggedright
     \begin{itemize}
       \item[\texttt{bundle}] spino-cortical tract or some such structure
@@ -55,7 +54,6 @@ snippet = r'''
       \item[\texttt{status}] provisional till \textsc{LARCH} gets to work
     \end{itemize}
   \end{minipage}
-}% end of resizebox
 '''
 
 document = wrapper_original + snippet + closing
