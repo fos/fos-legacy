@@ -1,5 +1,3 @@
-#from __future__ import print_function
-
 import os, sys
 
 import subprocess
@@ -11,11 +9,11 @@ wrapper_original = r'''
 \usepackage{helvet}
 \usepackage{courier}
 \usepackage{textcomp}
-\usepackage[papersize={72in,72in},body={70in,70in},margin={1in,1in}]{geometry}
+\usepackage[papersize={210mm,297mm},body={190mm,277in},margin={10mm,10mm}]{geometry}
+\usepackage {graphicx}
 \pagestyle{empty}
 \begin{document}
 \thispagestyle{empty}
-\fontsize{16}{20}
 '''
 
 wrapper_new = r'''
@@ -24,6 +22,7 @@ wrapper_new = r'''
 \usepackage{amsthm}
 \usepackage{amssymb}
 \usepackage{bm}
+\usepackage{fancybox}
 \newcommand{\mx}[1]{\mathbf{\bm{#1}}} 
 \newcommand{\vc}[1]{\mathbf{\bm{#1}}} 
 \newcommand{\T}{\text{T}}             
@@ -35,13 +34,25 @@ closing = r'''
 \end{document}
 '''
 
+#snippet = r'''
+#\sffamily \TeX rocks!!\\
+#\mbox{$\alpha\beta\gamma$}\\
+#$\displaystyle\sum_{n=1}^\infty\frac{-e^{i\pi}}{2^n}$!
+#'''
+
 snippet = r'''
-\sffamily \TeX rocks!!\\
-\mbox{$\alpha\beta\gamma$}\\
-$\displaystyle\sum_{n=1}^\infty\frac{-e^{i\pi}}{2^n}$!
+%\fontsize{16}{20}
+%\resizebox{120mm}{!}{%
+%\shadowbox{\parbox{60cm}{%
+\sffamily
+  \begin{itemize}
+    \item[\texttt{bundle}] spino-cortical tract
+    \item[\texttt{\#tracks}] 100,000
+    \item[\texttt{status}] provisional
+  \end{itemize}%}%}%}}
 '''
 
-document = wrapper_new + snippet + closing
+document = wrapper_original + snippet + closing
 
 label = "testfile"
 
