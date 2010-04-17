@@ -1,6 +1,6 @@
 import OpenGL.GL as gl
 import fos.core.primitives as prim
-
+import fos.core.text as text
 
 
 
@@ -14,14 +14,22 @@ class Plot():
         self.time=0
 
     def init(self):
-        
 
-        global im1
 
-        im1 = prim.Image2D('/home/eg01/Devel/Fos/fos/core/tests/data/small_latex1.png')
+        global tex1
 
-        im1.init()     
-             
+        snippet = r'''
+\begin{itemize}
+  \item[\texttt{bundle}] spino-cortical tract or some such structure
+  \item[\texttt{\#tracks}] 100,000+ or so
+  \item[\texttt{status}] provisional till \textsc{LARCH} gets to work
+\end{itemize}
+'''
+
+        tex1=text.TeX('test',snippet)
+
+        tex1.init()
+                   
         global b1
 
 
@@ -32,24 +40,36 @@ class Plot():
         #print b1.min, b1.max, b1.mean
 
         b1.position=tuple(-b1.mean)
+     
 
+        global im1
 
-        self.slots={ 0:{'actor':im1,'slot':(1000,20000) },
-                     1:{'actor':b1, 'slot':(5000,60000) }}
+        im1 = prim.Image2D('/home/eg01/Devel/Fos/fos/core/tests/data/small_latex1.png')
 
-        
+        im1.init()
+
+        im1.position=[400,400,0]
+
+        self.slots={ 0:{'actor':tex1,'slot':(1000,20000) },
+                     1:{'actor':b1, 'slot': (5000,80000) },
+                     2:{'actor':im1,'slot': (1000,20000) }}
 
           
     def display(self):
 
         now = self.time
 
+        #'''
+        
+
         for s in self.slots:
 
             if now >= self.slots[s]['slot'][0] and now <=self.slots[s]['slot'][1]:
 
                 self.slots[s]['actor'].display()
-        
+
+        #'''
+        b1.display()
 
     def update_time(self,time):
 

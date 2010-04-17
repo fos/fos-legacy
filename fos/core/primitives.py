@@ -64,7 +64,7 @@ class Tracks3D(object):
 
         self.angle = 0.
 
-        self.angular_speed = 1
+        self.angular_speed = 2
 
         
 
@@ -84,7 +84,7 @@ class Tracks3D(object):
 
         print 'tracks loaded'
 
-        self.data = tracks#[:10000]
+        self.data = tracks[:20000]
 
 
         data_stats = np.concatenate(tracks)
@@ -119,26 +119,37 @@ class Tracks3D(object):
 
         x,y,z=self.position
 
-        
+        gl.glRotatef(-90,1,0,0)
 
-        gl.glRotatef(self.angle,0,1,0)
+        gl.glRotatef(self.angle,0,0,1)
         
         gl.glTranslatef(x,y,z)
 
         #print self.affine
 
-        gl.glPushMatrix()
+        #gl.glPushMatrix()
         
-        gl.glMultMatrixf(self.affine)
-
-        gl.glPopMatrix()
+        #gl.glMultMatrixf(self.affine)
         
 
-        self.angle+=self.angular_speed
+        #gl.glPopMatrix()
+
+        if self.angle< 360.:
+
+            self.angle+=self.angular_speed
+            
+
+        else:
+
+            self.angle=0.
             
         gl.glCallList(self.list_index)
     
         gl.glPopMatrix()
+
+        
+
+   
 
 
     def one_color(self):
@@ -173,7 +184,7 @@ class Tracks3D(object):
 
         gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
 
-        gl.glPopMatrix()
+        gl.glPopMatrix()    
 
         gl.glEndList()
 

@@ -74,15 +74,18 @@ class Scene(object):
         self.selection_buffer=self.selection_buffer_size*[0]
         self.selection_region=(1,1)#rectangle width, height
 
-        #Video timing settings
-        self.timer1=self.video_timer
-        self.timer1Dt=33 # duraction between consecutive runs in milliseconds
-        self.autostart_timer1=False
-        self.timer1on=False
+        #Animation timing settings
+        self.timer1=self.animation_timer
+        self.timer1Dt=33 # duration between consecutive runs in milliseconds
+        self.autostart_timer1=True
+        self.timer1on=True
+        self.recordingon=False
+
+        
 
         #World timing settings
         self.timer2=self.world_timer
-        self.timer2Dt=33
+        self.timer2Dt=1000
         self.autostart_timer2=True
         self.timer2on=True
         self.time2now=0 #holds current time in milliseconds
@@ -233,21 +236,18 @@ class Scene(object):
 
         if key == 'v':
 
-            if self.autostart_timer1==False:
+            if self.recordingon==False:
 
-                if self.timer1on==False:
+                self.recordingon=True
 
-                    print('timer1 is on')
+                print('Recording is on')
 
-                    self.timer1on=True
+            else:
 
-                    glut.glutTimerFunc(self.timer1Dt, self.timer1,1)                    
+                self.recordingon=False
 
-                else:
-
-                    print('timer1 is off')                    
-
-                    self.timer1on=False
+                print('Recording is off')
+                
 
         if key == 'o':
             
@@ -409,33 +409,32 @@ class Scene(object):
             
             sys.exit()
 
-    def video_timer(self,value):
+    def animation_timer(self,value):
 
         #print value
 
-        if self.timer1on==True:
+        if self.timer1on:
 
-            self.save(filename=self.video_dir+'{0:010d}'.format(self.frameno)+'.png')
+            if self.recordingon:
+
+                self.save(filename=self.video_dir+'{0:010d}'.format(self.frameno)+'.png')
         
-            self.frameno+=1
+                self.frameno+=1
         
             glut.glutPostRedisplay()
         
-            glut.glutTimerFunc( self.timer1Dt, self.video_timer, 1)
+            glut.glutTimerFunc( self.timer1Dt, self.animation_timer, 1)
 
 
     def world_timer(self,value):
 
-        if self.timer2on==True:
+        if self.timer2on:
 
             self.time2now+=self.timer2Dt
 
             plot.update_time(self.time2now)
 
-            glut.glutPostRedisplay()
-
             glut.glutTimerFunc( self.timer2Dt, self.world_timer, 1)
-
 
 
     def interaction(self):
@@ -453,6 +452,10 @@ class Scene(object):
 
         #registers both glutMouseFunc and glutMotionFunc
         self.mouse.registerCallbacks()
+
+        if self.autostart_timer1:
+
+            glut.glutTimerFunc(self.timer1Dt,self.timer1,1) 
 
         if self.autostart_timer2:
 
@@ -509,7 +512,9 @@ class Scene(object):
 
         '''
 
-        plot.display()        
+        plot.display()
+
+        gl.glFlush()
         
         glut.glutSwapBuffers()        
 
