@@ -58,7 +58,7 @@ class TeX(object):
 
         self.data = None
 
-        self.alpha = 50
+        self.alpha = 255
 
         self.rm_blackish = True
 
@@ -98,6 +98,8 @@ class TeX(object):
 
         cmd_new = ["dvipng -q -T tight  -x 400 -z 1 -bg 'rgb " + bgcolor+ "' -o" + pngfile + ' ' + self.label]
 
+        #cmd_new = ["dvipng -q -T -x 500 -z 1 -o " + pngfile + ' ' + self.label]
+
         dvipng_process = subprocess.Popen(cmd_new, shell=True, stdout=open('/dev/null'))
 
         dvipng_process.wait()
@@ -123,7 +125,7 @@ class TeX(object):
 
     def load_image(self):
 
-        gl.glPixelStorei(gl.GL_UNPACK_ALIGNMENT, 1)
+        #gl.glPixelStorei(gl.GL_UNPACK_ALIGNMENT, 1)
 
         img = Image.open(self.label+'.png')
 
@@ -135,9 +137,9 @@ class TeX(object):
 
         rgbai=rgbi.convert('RGBA')
 
-        if self.alpha != None:
+        #if self.alpha != None:
 
-            rgbai.putalpha(self.alpha)
+        #    rgbai.putalpha(self.alpha)
 
         
         if self.rm_blackish:
@@ -147,11 +149,17 @@ class TeX(object):
 
                 r,g,b,a=rgbai.getpixel((x,y))
 
-                if r<50 and g<50 and b < 50:
+                #print x,y,r,g,b,a
+
+                if r < 50 and g < 50 and b < 50:
+
+                    #print x,y,r,g,b,a
 
                     rgbai.putpixel((x,y),(0,0,0,0))
     
         #for x,y in
+
+        #rgbai.save('test2.png')
         
         self.data=rgbai.tostring()
 
@@ -167,7 +175,18 @@ class TeX(object):
 
         gl.glNewList(self.list_index, gl.GL_COMPILE)
 
+        gl.glPixelStorei(gl.GL_UNPACK_ALIGNMENT, 1)
+
+        #gl.glAlphaFunc(gl.GL_GEQUAL, 0.5);
+
+        #gl.glDisable(gl.GL_ALPHA_TEST);
+
+        #gl.glEnable(gl.GL_DITHER);
+
+        
         gl.glWindowPos3iv(self.position)
+
+        #gl.glDisable(gl.GL_ALPHA_TEST)
 
         gl.glEnable(gl.GL_BLEND)
 
