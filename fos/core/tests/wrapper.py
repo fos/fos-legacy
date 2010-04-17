@@ -89,8 +89,6 @@ backgroundcolour = "'rgb 0.8  0.8  1.0'"
 dvipng_cmd = ["dvipng --depth --height -q -T tight  -x 2000 -z 1 " + \
                   '-bg '+ backgroundcolour  + " -o " + pngfile + ' ' + label]
 
-print dvipng_cmd
-
 dvipng_process = subprocess.Popen(dvipng_cmd, shell=True, stdout = subprocess.PIPE)
 
 dvipng_process.wait()
