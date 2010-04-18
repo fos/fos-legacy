@@ -41,25 +41,25 @@ class Plot():
         tex2.init()
 
         tex2.position=[400,400,0]
-        
-                   
+                           
         global b1
 
 
         b1 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
 
+        b1.opacity = 1.
+
         b1.init()
 
-        b1.angular_speed = 0       
+        b1.angular_speed = 0        
 
         #print b1.min, b1.max, b1.mean
 
         b1.position=tuple(-b1.mean)
-
-        
+       
 
         self.slots={ 0:{'actor':tex1,'slot':(1000,80000) },
-                     1:{'actor':b1, 'slot': (5000,80000) },
+                     1:{'actor':b1, 'slot': (0,80000) },
                      2:{'actor':tex2,'slot': (2000,80000) }}
 
           
@@ -67,17 +67,13 @@ class Plot():
 
         now = self.time
 
-        #'''
-        
-
         for s in self.slots:
 
             if now >= self.slots[s]['slot'][0] and now <=self.slots[s]['slot'][1]:
 
                 self.slots[s]['actor'].display()
 
-        #'''
-        b1.display()
+
 
     def update_time(self,time):
 

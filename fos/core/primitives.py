@@ -61,6 +61,8 @@ class Tracks3D(object):
 
         self.line_width = line_width
 
+        self.opacity = 1.
+
         
 
     def init(self):
@@ -107,8 +109,6 @@ class Tracks3D(object):
 
         gl.glPushMatrix()
     
-        #gl.glLoadIdentity()
-
         x,y,z=self.position
 
         gl.glRotatef(-90,1,0,0)
@@ -116,15 +116,6 @@ class Tracks3D(object):
         gl.glRotatef(self.angle,0,0,1)
         
         gl.glTranslatef(x,y,z)
-
-        #print self.affine
-
-        #gl.glPushMatrix()
-        
-        #gl.glMultMatrixf(self.affine)
-        
-
-        #gl.glPopMatrix()
 
         if self.angle< 360.:
 
@@ -154,8 +145,6 @@ class Tracks3D(object):
 
         gl.glPushMatrix()
 
-        #'''
-
         gl.glMaterialfv( gl.GL_FRONT, gl.GL_AMBIENT, self.ambient )
 
         gl.glMaterialfv( gl.GL_FRONT, gl.GL_DIFFUSE, self.diffuse )
@@ -165,8 +154,6 @@ class Tracks3D(object):
         gl.glMaterialf( gl.GL_FRONT, gl.GL_SHININESS, self.shininess )
 
         gl.glMaterialfv(gl.GL_FRONT, gl.GL_EMISSION, self.emission)
-
-        #'''
 
         gl.glEnableClientState(gl.GL_VERTEX_ARRAY)
 
@@ -213,9 +200,6 @@ class Tracks3D(object):
 
         gl.glLineWidth(self.line_width)
 
-        #gl.glDisable(gl.GL_SMOOTH)
-
-        #gl.glEnable(gl.GL_FLAT)
 
         gl.glEnableClientState(gl.GL_VERTEX_ARRAY)        
 
@@ -234,10 +218,10 @@ class Tracks3D(object):
             
                 color=boys2rgb(mo)
 
-                #color4=np.array([color[0][0],color[0][1],color[0][2],0.01],np.float32)
-                #gl.glColor4fv(color4)
+                color4=np.array([color[0][0],color[0][1],color[0][2],self.opacity],np.float32)
+                gl.glColor4fv(color4)
 
-                gl.glColor3fv(color)
+                #gl.glColor3fv(color)
 
                 gl.glVertexPointerf(d)
                                
