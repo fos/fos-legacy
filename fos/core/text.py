@@ -58,11 +58,15 @@ class TeX(object):
 
         self.data = None
 
-        self.alpha = 255
+        self.alpha = 255 # 0 - 255
 
         self.rm_blackish = True
 
         self.list_index = None
+
+        self.magnification = 400
+
+        self.compression = 1
 
 
     def init(self):
@@ -94,16 +98,19 @@ class TeX(object):
         # Run dvipng on the generated DVI file. Use tight bounding box.
         # Magnification is set to 1200
 
-        cmd_original = ["dvipng -o " + pngfile + ' ' + self.label]
+        #cmd_new = ["dvipng "+self.label+".dvi"]
 
-        cmd_new = ["dvipng -q -T tight  -x 400 -z 1 -bg 'rgb " + bgcolor+ "' -o" + pngfile + ' ' + self.label]
+        #cmd_original = ["dvipng -o " + pngfile + ' ' + self.label]
+
+        cmd_new = ["dvipng -q -T tight  -x "+str(self.magnification) \
+                       +" -z "+str(self.compression) \
+                       +" -bg 'rgb " + bgcolor+ "' -o" + pngfile + ' ' + self.label]
 
         #cmd_new = ["dvipng -q -T -x 500 -z 1 -o " + pngfile + ' ' + self.label]
 
         dvipng_process = subprocess.Popen(cmd_new, shell=True, stdout=open('/dev/null'))
 
         dvipng_process.wait()
-
 
         #eog_process = subprocess.Popen(['eog ' + pngfile], shell=True, stdout=open('/dev/null'))
 
@@ -137,10 +144,9 @@ class TeX(object):
 
         rgbai=rgbi.convert('RGBA')
 
-        #if self.alpha != None:
+        if self.alpha != None:
 
-        #    rgbai.putalpha(self.alpha)
-
+            rgbai.putalpha(self.alpha)
         
         if self.rm_blackish:
 
@@ -151,7 +157,7 @@ class TeX(object):
 
                 #print x,y,r,g,b,a
 
-                if r < 50 and g < 50 and b < 50:
+                if r < 10 and g < 10 and b < 10:
 
                     #print x,y,r,g,b,a
 
@@ -159,7 +165,7 @@ class TeX(object):
     
         #for x,y in
 
-        #rgbai.save('test2.png')
+        rgbai.save('test2.png')
         
         self.data=rgbai.tostring()
 
@@ -168,6 +174,8 @@ class TeX(object):
 	width,height = width,height
 
         self.win_size=(width,height)
+
+        '''
 
         w,h = self.size
 
@@ -202,9 +210,41 @@ class TeX(object):
 
         #print self.win_size
 
+        '''
+
     def display(self):
 
-        gl.glCallList(self.list_index)
+        #gl.glCallList(self.list_index)
+
+        #gl.glPixelStorei(gl.GL_UNPACK_ALIGNMENT, 1)
+
+        #gl.glAlphaFunc(gl.GL_GEQUAL, 0.5);
+
+        #gl.glDisable(gl.GL_ALPHA_TEST);
+
+        #gl.glEnable(gl.GL_DITHER);
+
+        w,h = self.size
+
+        gl.glEnable(gl.GL_ALPHA_TEST)
+        
+        gl.glAlphaFunc(gl.GL_GREATER,0)
+        
+        gl.glPixelStorei(gl.GL_PACK_ALIGNMENT, 1)
+        
+        gl.glPixelStorei(gl.GL_UNPACK_ALIGNMENT, 1)
+        
+        gl.glWindowPos3iv(self.position)
+
+        #gl.glEnable(gl.GL_BLEND)
+
+        #gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)
+
+        gl.glDrawPixels(w, h,gl.GL_RGBA, gl.GL_UNSIGNED_BYTE, self.data)
+
+        gl.glDisable(gl.GL_BLEND)
+
+        
 
         
 

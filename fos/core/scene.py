@@ -34,7 +34,7 @@ class Scene(object):
         
 
         #Init settings
-        self.clear_color=(0.,0.,0.,0.) #rgba
+        self.clear_color=(0.,0.,0.,1.) #rgba
         self.enab_depth=gl.GL_DEPTH_TEST
         self.shade_model=gl.GL_SMOOTH #or gl.GL_FLAT
         self.depth_range=(0.0,1.0) #default z mapping
@@ -152,50 +152,6 @@ class Scene(object):
         plot=plots.Plot()
 
         plot.init()
-        
-   
-
-    def objects(self):
-
-        #primitives.load_pot()
-
-        #global cube        
-
-        #cube=primitives.Collection()
-
-        #cube.init()
-
-        #global bsurf
-
-        #bsurf=primitives.BrainSurface()
-
-        #bsurf.init()
-
-        #global im2d
-
-        #im2d = primitives.Image2D()
-
-        #im2d.init()
-
-        #global t3d
-
-        #t3d = primitives.Tracks3D()
-
-        #t3d.init()
-
-        #global dp
-
-        #dp = primitives.DummyPlane()
-
-        #dp.init()
-        
-        #global cube2
-
-        #cube2=primitives.Collection()
-
-        #cube2.init()
-
-        pass
   
 
     def save(self, filename="test.png", format="PNG" ):
@@ -211,9 +167,9 @@ class Scene(object):
         
         gl.glPixelStorei(gl.GL_PACK_ALIGNMENT, 1)
         
-	data = gl.glReadPixels(x, y, width, height, gl.GL_RGB, gl.GL_UNSIGNED_BYTE)
+	data = gl.glReadPixels(x, y, width, height, gl.GL_RGBA, gl.GL_UNSIGNED_BYTE)
         
-	image = Image.fromstring( "RGB", (width, height), data )
+	image = Image.fromstring( "RGBA", (width, height), data )
         
 	image = image.transpose( Image.FLIP_TOP_BOTTOM)
         
@@ -290,32 +246,13 @@ class Scene(object):
 
         if key == 'p':
 
-            modelviewmatrix=gl.glGetDoublev(gl.GL_MODELVIEW_MATRIX)
-
-            print 'ModelViewMatrix'
-            print modelviewmatrix
-
-            projectionmatrix=gl.glGetDoublev(gl.GL_PROJECTION_MATRIX)
-            print 'ProjectionMatrix'
-            print projectionmatrix
-
             viewport=gl.glGetDoublev(gl.GL_VIEWPORT)
 
             print 'Viewport'
             print viewport
 
             print float(x), viewport[3]-float(y)
-
-           
-
-            #z = gl.glReadPixels(x, y, 1, 1, gl.GL_DEPTH_COMPONENT, gl.GL_FLOAT)
-            
-            #'''
-            #wx,wy,wz= glu.gluUnProject(double(x),viewport[3]-double(y),0.,
-            #                                  modelviewmatrix,
-            #                                  projectionmatrix,
-            #                                  viewport)
-
+    
             xn,yn,zn=glu.gluUnProject(np.double(x),viewport[3]-np.double(y),0.)
 
             print 'World Coordinates Near'
@@ -335,76 +272,13 @@ class Scene(object):
 
             print pick_ray
 
-            success,t,p= cll.intersect_segment_plane(near,far,[-100,100,0],[100,100,0],[100,-100,0])
-
-            if p[0]<=100 and p[0]>=-100:
-
-                if p[1]<=100 and p[1]>=-100:
-
-                    if p[2]<=100 and p[2]>=-100:
-
-                        print 'OK'
+            #success,t,p= cll.intersect_segment_plane(near,far,[-100,100,0],[100,100,0],[100,-100,0])
 
                     
 
-
-        if key == 'P': # to be removed standard picking       
-
-            viewport=gl.glGetIntegerv(gl.GL_VIEWPORT)
- 
-            w=viewport[2]-viewport[0]
-
-            h=viewport[3]-viewport[1]          
-            
-
-            gl.glSelectBuffer(self.selection_buffer_size)
-            
-            gl.glRenderMode(gl.GL_SELECT)
-
-            gl.glInitNames()
-
-            gl.glPushName(0)
-
-            gl.glMatrixMode(gl.GL_PROJECTION)
-
-            gl.glPushMatrix()
-
-            gl.glLoadIdentity()
-
-            selw,selh=self.selection_region
-
-            glu.gluPickMatrix(x,viewport[3]-y,selw, selh, viewport)
-
-            if self.isperspect:
-
-                fovy,aspect,zNear,zFar=self.glu_perspect
-        
-                glu.gluPerspective(fovy,w/float(h),zNear,zFar)
-
-            else:
-
-                left,right,bottom,top,near,far=self.gl_orthog
-            
-                gl.glOrtho(left, right, bottom, top, near, far)
-
-                    
-            cube.display(gl.GL_SELECT)
-            
-            gl.glPopMatrix()
-            
-            gl.glFlush()
-
-            buffer = gl.glRenderMode(gl.GL_RENDER)
-            
-            glut.glutPostRedisplay()
-        
-            for hit_record in buffer:
-
-                min_depth, max_depth, names = hit_record
-
-                print min_depth, max_depth, names#, self.selection_buffer
+                        
                 
-            
+           
 	if key == '\033':
             
             sys.exit()
