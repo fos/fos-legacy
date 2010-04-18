@@ -34,7 +34,7 @@ class Scene(object):
         
 
         #Init settings
-        self.clear_color=(0.,0.,0.,0.) #rgba
+        self.clear_color=(0.,0.,0.,1.) #rgba
         self.enab_depth=gl.GL_DEPTH_TEST
         self.shade_model=gl.GL_SMOOTH #or gl.GL_FLAT
         self.depth_range=(0.0,1.0) #default z mapping
@@ -211,9 +211,9 @@ class Scene(object):
         
         gl.glPixelStorei(gl.GL_PACK_ALIGNMENT, 1)
         
-	data = gl.glReadPixels(x, y, width, height, gl.GL_RGB, gl.GL_UNSIGNED_BYTE)
+	data = gl.glReadPixels(x, y, width, height, gl.GL_RGBA, gl.GL_UNSIGNED_BYTE)
         
-	image = Image.fromstring( "RGB", (width, height), data )
+	image = Image.fromstring( "RGBA", (width, height), data )
         
 	image = image.transpose( Image.FLIP_TOP_BOTTOM)
         

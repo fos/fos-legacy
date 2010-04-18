@@ -28,39 +28,39 @@ class Plot():
 
         tex1=text.TeX('test',snippet)
 
+        tex1.alpha = 255
+
         tex1.init()
+
+        tex1.position=[0,0,0]
+
+        tex2=text.TeX('test',snippet)
+
+        tex2.alpha = 255
+
+        tex2.init()
+
+        tex2.position=[400,400,0]
+        
                    
         global b1
 
 
-        #b1 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
-
-        #b1 = prim.Tracks3D('/home/eg309/Data/Eleftherios/dti_FACT.trk')
-
-        #b1 = prim.DummyPlane()
-
-        b1 = prim.Collection()
+        b1 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
 
         b1.init()
 
+        b1.angular_speed = 0       
+
         #print b1.min, b1.max, b1.mean
 
-        #b1.position=tuple(-b1.mean)
-     
+        b1.position=tuple(-b1.mean)
 
-        global im1
-
-        #im1 = prim.Image2D('/home/eg01/Devel/Fos/fos/core/tests/data/small_latex1.png')
-
-        im1 = prim.Image2D('/home/eg309/Devel/Fos/fos/core/tests/data/small_latex1.png')
         
-        im1.init()
 
-        im1.position=[400,400,0]
-
-        self.slots={ 0:{'actor':tex1,'slot':(1000,20000) },
+        self.slots={ 0:{'actor':tex1,'slot':(1000,80000) },
                      1:{'actor':b1, 'slot': (5000,80000) },
-                     2:{'actor':im1,'slot': (1000,20000) }}
+                     2:{'actor':tex2,'slot': (2000,80000) }}
 
           
     def display(self):

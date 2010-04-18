@@ -15,16 +15,9 @@ data_path = pjoin(os.path.dirname(__file__), 'data')
 
 class Tracks3D(object):
 
-    def __init__(self,fname,colormap=None):
+    def __init__(self,fname,colormap=None, line_width=3.):
 
         self.position = (-100,-100,0)
-
-        #self.fname = '/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk'
-
-        #self.fname = '/home/eg309/Data/Eleftherios/dti_FACT.trk'
-
-        #self.fname = '/home/eg309/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
-        #self.fname = '/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
 
         self.fname = fname
         
@@ -64,9 +57,9 @@ class Tracks3D(object):
 
         self.angle = 0.
 
-        self.angular_speed = 2
+        self.angular_speed = .5
 
-        
+        self.line_width = line_width
 
         
 
@@ -101,8 +94,7 @@ class Tracks3D(object):
 
         if self.manycolors:
 
-            self.multiple_colors()
-            #self.line_test()
+            self.multiple_colors()          
 
         else:
 
@@ -146,6 +138,8 @@ class Tracks3D(object):
         gl.glCallList(self.list_index)
     
         gl.glPopMatrix()
+
+        gl.glFinish()
 
         
 
@@ -208,6 +202,16 @@ class Tracks3D(object):
         gl.glPushMatrix()
 
         gl.glDisable(gl.GL_LIGHTING)
+
+        gl.glEnable(gl.GL_LINE_SMOOTH)
+
+        gl.glEnable(gl.GL_BLEND)
+
+        gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)
+
+        gl.glHint(gl.GL_LINE_SMOOTH_HINT,gl.GL_DONT_CARE)
+
+        gl.glLineWidth(self.line_width)
 
         #gl.glDisable(gl.GL_SMOOTH)
 
@@ -442,7 +446,7 @@ class Image2D(object):
 
         self.data = None
 
-        self.alpha = 50 #None # 0 - 255
+        self.alpha = 255 #None # 0 - 255
 
         self.rm_blackish = True
 
@@ -706,8 +710,6 @@ class BrainSurface(object):
         gl.glCallList(self.list_index)
     
         gl.glPopMatrix()
-
-    
 
 
     def load_polydata_using_mayavi(self):
