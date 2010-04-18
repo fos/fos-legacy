@@ -1,0 +1,272 @@
+#LyX 1.6.4 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass paper
+\begin_preamble
+\usepackage{babel}
+\usepackage{apacite}
+\end_preamble
+\use_default_options false
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\leftmargin 1cm
+\topmargin 1cm
+\rightmargin 1cm
+\bottommargin 1cm
+\headheight 1cm
+\headsep 1cm
+\footskip 1cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle empty
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Identification of Corresponding Tracks in Diffusion MRI Tractographies
+\end_layout
+
+\begin_layout Standard
+
+\size larger
+Eleftherios Garyfallidis
+\size default
+ [1, 2], 
+\size larger
+Matthew Brett
+\size default
+ [3], 
+\size larger
+Vassilis Tsiaras
+\size default
+ [3],
+\size larger
+ George Vogiatzis
+\size default
+ [2] and 
+\size larger
+Ian Nimmo-Smith
+\size default
+ [2]
+\end_layout
+
+\begin_layout Address
+1.
+ 
+\shape smallcaps
+University of Cambridge
+\shape default
+, 2.
+ 
+\shape smallcaps
+MRC Cognition and Brain Sciences Unit, Cambridge
+\shape default
+, 3.
+ U
+\shape smallcaps
+niversity of Berkeley, California,
+\shape default
+ 4.
+ 
+\shape smallcaps
+University of Crete, Greece
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename univ.gif
+	clip
+
+\end_inset
+
+ 
+\begin_inset Graphics
+	filename CBU.eps
+	clip
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename UCSeal122x122.gif
+	clip
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename University_of_crete_logo.png
+	clip
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\size larger
+Key Research Question
+\end_layout
+
+\begin_layout Standard
+
+\size larger
+How do you identify corresponding tracks between different dMR brain tractograph
+ies?
+\size default
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\size larger
+\begin_inset Newpage pagebreak
+\end_inset
+
+Tractography requirement 
+\end_layout
+
+\begin_layout Itemize
+
+\size larger
+a local diffusion model (e.g.
+ simple tensor, Q-Ball)
+\end_layout
+
+\begin_layout Itemize
+
+\size larger
+a tractography algorithm (e.g.
+ FACT, Runge-Kutta)
+\end_layout
+
+\begin_layout Standard
+
+\size larger
+Depending on the options selected, the resulting tractographies may differ
+ in quality and size (e.g.
+ FACT 100,000; RK2 150,000)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\size larger
+Comparison of tractographies
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+A
+\series default
+: Brain 1+ Simple Tensor + FACT
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+B
+\series default
+: Brain 1 + Simple Tensor + RK2
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\size larger
+\begin_inset Newpage pagebreak
+\end_inset
+
+Data reduction
+\end_layout
+
+\begin_layout Standard
+Track Metrics
+\end_layout
+
+\begin_layout Standard
+Picking - 3 brains with correpsondences 
+\end_layout
+
+\begin_layout Standard
+3 brains rotating
+\end_layout
+
+\begin_layout Standard
+Adding prior knowledge - atlases, experts, picking
+\end_layout
+
+\begin_layout Standard
+[Springs and symmetry]
+\end_layout
+
+\begin_layout Standard
+Conclusion with rotaing brains
+\end_layout
+
+\begin_layout Standard
+DiPy website
+\end_layout
+
+\begin_layout Standard
+Fos
+\end_layout
+
+\begin_layout Standard
+References and credits Demiralp - Boy's surface colormap!!!
+\end_layout
+
+\end_body
+\end_document
