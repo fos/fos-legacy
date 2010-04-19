@@ -531,6 +531,7 @@ def closest_points_2segments(p1,q1, p2, q2):
 
     d=cclosest_points_2segments(<float *> fp1.data, <float *>fq1.data, <float *> fp2.data, <float *>fq2.data,  fs, ft, <float *>fc1.data, <float *> fc2.data)
 
+    '''
     #reverse
     rd=cclosest_points_2segments(<float *> fp1.data, <float *>fq1.data, <float *> fq2.data, <float *>fp2.data,  rfs, rft, <float *>rfc1.data, <float *> rfc2.data)
 
@@ -541,11 +542,150 @@ def closest_points_2segments(p1,q1, p2, q2):
     else:
 
         return rd,rfs[0],rft[0],rfc1,rfc2
-        
+    '''
+    
+    return d, fs[0], ft[0], fc1, fc2
 
 
 
 cdef float cclosest_points_2segments(float* p1, float *q1, float *p2, float *q2,
+                              float *ss, float *tt, float *c1, float *c2):
+
+
+    ''' Computes closest points C1 and C2 of S1(s)=P1+s*(Q1-P1) and
+    S2(t)=P2+t*(Q2-P2), returning s and t. Function result is squared
+    distance between between S1(s) and S2(t). Look page 147 of Real Time
+    Collision Detection by Christer Ericson for some ideas of how we
+    implemented this.
+
+    '''
+
+        
+    #Vector d1 = q1 - p1; // Direction vector of segment S1
+
+    cdef float d1[3]
+
+    d1[0]=q1[0]-p1[0]
+    d1[1]=q1[1]-p1[1]
+    d1[2]=q1[2]-p1[2]
+    
+    #Vector d2 = q2 - p2; // Direction vector of segment S2
+
+    cdef float d2[3]
+
+    d2[0]=q2[0]-p2[0]
+    d2[1]=q2[1]-p2[1]
+    d2[2]=q2[2]-p2[2]
+    
+    #Vector r = p1 - p2; // Interconnecting vector segments S1 S2
+
+    cdef float r[3]
+
+    r[0] = p1[0] - p2[0]
+    r[1] = p1[1] - p2[1]
+    r[2] = p1[2] - p2[2]
+
+    cdef float u[3]
+
+    u[0] = p2[0] - q1[0]
+    u[1] = p2[1] - q1[1]
+    u[2] = p2[2] - q1[2]    
+
+    cdef float a,b,c,e,f,s,t,d,tmp,tmp3[3]
+
+    cdef float d1s[3], d2s[3],c1c2[3]
+
+    
+    a=cinner_3vecs(d1,d1)
+
+    b=cinner_3vecs(d2,d2)
+
+    c=cinner_3vecs(d1,r)
+
+    e=cinner_3vecs(d2,d2)
+
+    f=cinner_3vecs(d2,r)
+
+    d=a*e-b*b
+
+    print('d',d)
+
+    if d<EPSILON and d>-EPSILON:
+
+        print('Segments are parallel')
+       
+
+        s=0.
+
+        t=f/e
+
+        #use the cross product to check if the two segments are aligned
+
+        ccross_3vecs(r,u,tmp3)
+
+        #tmp=fabs(ccross_3vecs() )
+
+        print(tmp3[0],tmp3[1],tmp3[2])
+
+        #if the cross product is [0,0,0] +- epsilon then please say       
+  
+        if tmp3[0] > - EPSILON and tmp3[0] < EPSILON :
+
+            if tmp3[1] > - EPSILON and tmp3[1] < EPSILON :
+
+                if tmp3[2] > - EPSILON and tmp3[2] < EPSILON :
+
+                    print('Segments are aligned Need to be processed externaly')
+
+                    ss[0]=0.
+
+                    tt[0]=0.
+
+                    c1=p1
+
+                    c2=p2
+
+                    return -1
+
+    else:
+
+        print('Segments not parallel')
+
+        s=(b*f-c*e)/d
+
+        t=(a*f-b*c)/d
+
+
+    #find c1    
+    cmul_3vec(s,d1,d1s)    
+
+    cadd_3vecs(p1,d1s,c1)
+    
+    #find c2
+    cmul_3vec(s,d2,d2s)
+
+    cadd_3vecs(p2,d2s,c2)
+    
+    #calculate the vector connecting the closest points
+    csub_3vecs(c1,c2,c1c2)
+    
+
+    ss[0]=s
+
+    tt[0]=t
+
+    return cinner_3vecs(c1c2,c1c2)
+
+
+    
+
+                                   
+
+                                     
+
+
+
+cdef float cclosest_points_2segmentsX(float* p1, float *q1, float *p2, float *q2,
                               float *ss, float *tt, float *c1, float *c2):
 
     ''' Computes closest points C1 and C2 of S1(s)=P1+s*(Q1-P1) and
