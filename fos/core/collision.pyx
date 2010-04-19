@@ -210,6 +210,7 @@ cdef cnp.dtype f32_dt = np.dtype(np.float32)
 
 DEF biggest_double = 1.79769e+308
 
+DEF EPSILON = 5.96e-08
 
 def intersect_segment_plane(a,b,p1,p2,p3):
 
@@ -476,3 +477,292 @@ cdef inline float cpoint_segment_sq_dist(float * a, float * b, float * c):
     return cinner_3vecs(ac, ac) - e * e / f
 
     
+
+
+cdef inline float cclamp(float n, float min, float max):
+    ''' Clamp n to lie within the range [min, max]
+
+    '''
+
+    if n < min: return min;
+    
+    if n > max: return max;
+
+    return n;
+
+
+def closest_points_2segments(p1,q1, p2, q2):
+    
+    ''' Computes closest points C1 and C2 of S1(s)=P1+s*(Q1-P1) and
+    S2(t)=P2+t*(Q2-P2), returning s and t. Function result is squared
+    distance between between S1(s) and S2(t)
+
+    '''
+
+    cdef cnp.ndarray[cnp.float32_t, ndim=1] fp1 = as_float_3vec(p1)
+
+    cdef cnp.ndarray[cnp.float32_t, ndim=1] fq1 = as_float_3vec(q1)
+
+    cdef cnp.ndarray[cnp.float32_t, ndim=1] fp2 = as_float_3vec(p2)
+
+    cdef cnp.ndarray[cnp.float32_t, ndim=1] fq2 = as_float_3vec(q2)
+
+    cdef cnp.ndarray[cnp.float32_t, ndim=1] fc1 = as_float_3vec(np.array([0,0,0],np.float32))
+
+    cdef cnp.ndarray[cnp.float32_t, ndim=1] fc2 = as_float_3vec(np.array([0,0,0],np.float32))
+
+    cdef float fs[1]
+
+    cdef float ft[1]
+
+    cdef cnp.ndarray[cnp.float32_t, ndim=1] rfc1 = as_float_3vec(np.array([0,0,0],np.float32))
+
+    cdef cnp.ndarray[cnp.float32_t, ndim=1] rfc2 = as_float_3vec(np.array([0,0,0],np.float32))
+
+    cdef float rfs[1]
+
+    cdef float rft[1]
+ 
+
+    
+
+    cdef float d,rd
+
+
+    d=cclosest_points_2segments(<float *> fp1.data, <float *>fq1.data, <float *> fp2.data, <float *>fq2.data,  fs, ft, <float *>fc1.data, <float *> fc2.data)
+
+    #reverse
+    rd=cclosest_points_2segments(<float *> fp1.data, <float *>fq1.data, <float *> fq2.data, <float *>fp2.data,  rfs, rft, <float *>rfc1.data, <float *> rfc2.data)
+
+    if d<rd:
+
+        return d,fs[0],ft[0],fc1,fc2
+
+    else:
+
+        return rd,rfs[0],rft[0],rfc1,rfc2
+        
+
+
+
+cdef float cclosest_points_2segments(float* p1, float *q1, float *p2, float *q2,
+                              float *ss, float *tt, float *c1, float *c2):
+
+    ''' Computes closest points C1 and C2 of S1(s)=P1+s*(Q1-P1) and
+    S2(t)=P2+t*(Q2-P2), returning s and t. Function result is squared
+    distance between between S1(s) and S2(t).
+
+    '''
+
+    
+    #Vector d1 = q1 - p1; // Direction vector of segment S1
+
+    cdef float d1[3]
+
+    d1[0]=q1[0]-p1[0]
+    d1[1]=q1[1]-p1[1]
+    d1[2]=q1[2]-p1[2]
+    
+    #Vector d2 = q2 - p2; // Direction vector of segment S2
+
+    cdef float d2[3]
+
+    d2[0]=q2[0]-p2[0]
+    d2[1]=q2[1]-p2[1]
+    d2[2]=q2[2]-p2[2]
+    
+    #Vector r = p1 - p2;
+
+    cdef float r[3]
+
+    r[0] = p1[0] - p2[0]
+    r[1] = p1[1] - p2[1]
+    r[2] = p1[2] - p2[2]
+    
+    
+    #float a = Dot(d1, d1);// Squared length of segment S1, always nonnegative
+
+    cdef float a = cinner_3vecs(d1,d1)
+    
+    #float e = Dot(d2, d2);// Squared length of segment S2, always nonnegative
+
+    cdef float e = cinner_3vecs(d2,d2)
+    
+    #float f = Dot(d2, r);
+
+    cdef float f = cinner_3vecs(d2,r)
+
+    cdef float c,b,denom,s,t
+   
+    cdef float d1s[3], d2s[3],c1c2[3]
+
+    '''
+
+    // Check if either or both segments degenerate into points
+    if (a <= EPSILON && e <= EPSILON) {
+        // Both segments degenerate into points
+        s = t = 0.0f;
+        c1 = p1;
+        c2 = p2;
+        return Dot(c1 - c2, c1 - c2);
+    }
+    '''
+
+    if a <= EPSILON and e <= EPSILON:
+
+        s = 0.
+        
+        t = 0.
+
+        c1 = p1
+
+        c2 = p2
+
+        ss[0]=s 
+
+        tt[0]=t
+
+        return cinner_3vecs(d2,r)
+
+    '''
+    if (a <= EPSILON) {
+        // First segment degenerates into a point
+        s = 0.0f;
+        t = f / e; // s = 0 => t = (b*s + f) / e = f / e
+        t = Clamp(t, 0.0f, 1.0f);
+    } else {
+
+    '''
+
+    if a <= EPSILON :
+
+        #First segment degenerates into a point
+        
+        s = 0.
+        
+        t = f/e # s = 0 => t = (b*s + f) / e = f / e
+
+        t = cclamp(t,0.,1.)
+
+    else:
+
+        '''
+        float c = Dot(d1, r);
+        if (e <= EPSILON) {
+            // Second segment degenerates into a point
+            t = 0.0f;
+            s = Clamp(-c / a, 0.0f, 1.0f); // t = 0 => s = (b*t - c) / a = -c / a
+        } else {
+        '''
+
+        c = cinner_3vecs(d1,r)
+
+        if e <= EPSILON:
+
+            # Second segment degenerates into a point
+            t = 0.
+
+            s = cclamp(-c/a, 0., 1.) # t = 0 => s = (b*t - c) / a = -c / a
+
+        else :
+
+            '''            
+            // The general nondegenerate case starts here
+            float b = Dot(d1, d2);
+            float denom = a*e-b*b; // Always nonnegative
+
+            // If segments not parallel, compute closest point on L1 to L2, and
+            // clamp to segment S1. Else pick arbitrary s (here 0)
+            if (denom != 0.0f) {
+                s = Clamp((b*f - c*e) / denom, 0.0f, 1.0f);
+            } else s = 0.0f;
+
+            '''
+
+            # The general nondegenerate case starts here
+            b = cinner_3vecs(d1,d2)
+
+            denom = a*e - b*b # Always nonnegative
+
+            # If segments not parallel, compute closest point on L1 to L2, and
+            # clamp to segment S1. Else pick arbitrary s (here 0)
+            
+            if denom != 0.:
+
+                s = cclamp((b*f -c*e)/denom, 0., 1.)
+
+            else:
+
+                s = 0.
+
+            '''   
+
+            // Compute point on L2 closest to S1(s) using
+            // t = Dot((P1+D1*s)-P2,D2) / Dot(D2,D2) = (b*s + f) / e
+            t = (b*s + f) / e;
+
+            '''
+
+            t = (b*s +f) /e
+
+            '''
+            // If t in [0,1] done. Else clamp t, recompute s for the new value
+            // of t using s = Dot((P2+D2*t)-P1,D1) / Dot(D1,D1)= (t*b - c) / a
+            // and clamp s to [0, 1]
+            
+            if (t < 0.0f) {
+                t = 0.0f;
+                s = Clamp(-c / a, 0.0f, 1.0f);
+            } else if (t > 1.0f) {
+                t = 1.0f;
+                s = Clamp((b - c) / a, 0.0f, 1.0f);
+            }
+
+            '''
+
+            if t < 0. :
+
+                t = 0.
+
+                s = cclamp(-c/a, 0., 1.)
+
+            elif t > 1. :
+
+                t = 1.
+
+                s = cclamp( ( b-c ) / a, 0., 1.)
+
+            
+        #}
+    #}
+
+    '''
+
+    c1 = p1 + d1 * s;
+    c2 = p2 + d2 * t;
+    return Dot(c1 - c2, c1 - c2);
+
+    '''
+
+    
+
+    
+    cmul_3vec(s,d1,d1s)
+
+    cadd_3vecs(p1,d1s,c1)
+
+    
+    cmul_3vec(s,d2,d2s)
+
+    cadd_3vecs(p2,d2s,c2)
+    
+
+    csub_3vecs(c1,c2,c1c2)
+
+    ss[0]=s
+
+    tt[0]=t
+
+    return cinner_3vecs(c1c2,c1c2)
+
+

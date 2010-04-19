@@ -248,29 +248,36 @@ class Scene(object):
 
             viewport=gl.glGetDoublev(gl.GL_VIEWPORT)
 
-            print 'Viewport'
-            print viewport
+            #print 'Viewport'
+            #print viewport
 
-            print float(x), viewport[3]-float(y)
+            #print float(x), viewport[3]-float(y)
     
             xn,yn,zn=glu.gluUnProject(np.double(x),viewport[3]-np.double(y),0.)
 
-            print 'World Coordinates Near'
-            print xn,yn,zn
+            #print 'World Coordinates Near'
+            #print xn,yn,zn
 
             xf,yf,zf=glu.gluUnProject(np.double(x),viewport[3]-np.double(y),1.)
             
-            print 'World Coordinates Far'
-            print xf,yf,zf
+            #print 'World Coordinates Far'
+            #print xf,yf,zf
 
-            print 'unit vector'
+            #print 'unit vector'
 
             near=np.array([xn,yn,zn])
             far =np.array([xf,yf,zf])
 
-            pick_ray=(far-near)/np.sqrt(np.sum((far-near)**2))
+            #pick_ray=(far-near)/np.sqrt(np.sum((far-near)**2))
 
-            print pick_ray
+            #print pick_ray
+            #print'near', near
+            #print'far', far
+
+            plot.update_pick_ray(near,far)
+            
+    
+            
 
             #success,t,p= cll.intersect_segment_plane(near,far,[-100,100,0],[100,100,0],[100,-100,0])
 

@@ -17,6 +17,10 @@ class TeX(object):
         self.bgcolor = (1., 1., 1.)
 
         self.position = [0,0,0]
+
+        self.near_pick = None
+
+        self.far_pick = None
         
 
         self.begin_document= r'''

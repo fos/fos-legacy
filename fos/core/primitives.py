@@ -63,6 +63,14 @@ class Tracks3D(object):
 
         self.opacity = 1.
 
+        self.near_pick = None
+
+        self.far_pick = None
+
+        self.near_pick_prev = None
+
+        self.far_pick_prev = None
+
         
 
     def init(self):
@@ -121,7 +129,6 @@ class Tracks3D(object):
 
             self.angle+=self.angular_speed
             
-
         else:
 
             self.angle=0.
@@ -132,9 +139,22 @@ class Tracks3D(object):
 
         gl.glFinish()
 
-        
+        if self.near_pick!= None:
 
-   
+            #print self.near_pick
+
+            if np.sum(np.equal(self.near_pick, self.near_pick_prev))< 3:
+                
+                self.process_picking(self.near_pick, self.far_pick)             
+              
+                self.near_pick_prev = self.near_pick
+
+                self.far_pick_prev = self.far_pick
+
+
+    def process_picking(self,near,far):
+
+        pass
 
 
     def one_color(self):
@@ -207,7 +227,6 @@ class Tracks3D(object):
 
             if length(d)> self.min_length:
             
-
                 #mo=mean_orientation(d)
                 ds=downsample(d,6)
                 mo=ds[3]-ds[2]
