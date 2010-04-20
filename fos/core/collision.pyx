@@ -733,9 +733,7 @@ def mindistance_segment2track(p1,q1,xyz):
 
             if min > d :
 
-                min=d
-
-            
+                min=d           
        
 
         index+=1

@@ -91,10 +91,9 @@ class Tracks3D(object):
 
         print 'tracks loaded'
 
-        self.data = [100*np.array([[0,0,0],[1,0,0],[2,0,0]]).astype(np.float32) \
-                         ,100*np.array([[0,1,0],[0,2,0],[0,3,0]]).astype(np.float32)]#tracks[:20000]
+        #self.data = [100*np.array([[0,0,0],[1,0,0],[2,0,0]]).astype(np.float32) ,100*np.array([[0,1,0],[0,2,0],[0,3,0]]).astype(np.float32)]#tracks[:20000]
 
-        
+        self.data = tracks[:20000]
 
         data_stats = np.concatenate(tracks)
 
@@ -146,30 +145,27 @@ class Tracks3D(object):
         
         #gl.glTranslatef(x,y,z)
 
-        if self.angle< 360.:
+        if self.angle < 360.:
 
             self.angle+=self.angular_speed
             
         else:
 
             self.angle=0.
-            
-       
+
+
+        
+        gl.glCallList(self.list_index)           
 
         if self.picked_track != None:
 
             #print 'YoooooooY'
 
             self.display_one_track(self.picked_track)
-        else:
-
-            gl.glCallList(self.list_index)
     
         gl.glPopMatrix()
 
-        gl.glFinish()
-
-        
+        gl.glFinish()        
 
 
     def process_picking(self,near,far):
@@ -188,6 +184,8 @@ class Tracks3D(object):
 
     def display_one_track(self,track_index):
 
+        
+
         gl.glPushMatrix()
 
         gl.glDisable(gl.GL_LIGHTING)
@@ -200,21 +198,18 @@ class Tracks3D(object):
 
         gl.glHint(gl.GL_LINE_SMOOTH_HINT,gl.GL_DONT_CARE)
 
-        gl.glLineWidth(3.)
+        gl.glLineWidth(7.)
 
-        color4=np.array([1,0,0,1],dtype=np.float32)
+        gl.glEnableClientState(gl.GL_VERTEX_ARRAY)
+
+        color4=np.array([1,1,0,.5],dtype=np.float32)
 
         gl.glColor4fv(color4)
 
-        #gl.glColor3fv(color)
+        #gl.glColor3fv(color3)
 
-        #d=self.data[track_index].astype(np.float32)
+        d=self.data[track_index].astype(np.float32)
 
-        #print d
-
-        print track_index
-
-        d=np.array([[ 0., 0., 0.], [ 100., 0., 0.], [ 300., 0., 0.]],dtype=np.float32)
         gl.glVertexPointerf(d)
                                
         gl.glDrawArrays(gl.GL_LINE_STRIP, 0, len(d))        
@@ -259,9 +254,6 @@ class Tracks3D(object):
         gl.glEndList()
 
 
-
-
-
     def multiple_colors(self):
 
         from dipy.viz.colormaps import boys2rgb
@@ -298,6 +290,7 @@ class Tracks3D(object):
             if length(d)> self.min_length:
             
                 #mo=mean_orientation(d)
+                
                 ds=downsample(d,6)
                 
                 mo=ds[3]-ds[2]
