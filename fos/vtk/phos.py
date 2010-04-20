@@ -307,7 +307,24 @@ def show(trajs=None, colors=None):
 
 if __name__ == "__main__":
 
-    trajs=[100*np.random.rand(10,3),100*np.random.rand(20,3)]    
-    colors=[np.random.rand(3,),np.random.rand(3,)]
+    #trajs=[100*np.random.rand(10,3),100*np.random.rand(20,3)]    
+    #colors=[np.random.rand(3,),np.random.rand(3,)]
+
+    from dipy.io import trackvis as tv
+    from dipy.core import track_performance
+    #from enthought.mayavi import mlab
+    #from enthought.tvtk.api import tvtk
+
+    import numpy as np
+    fname='/home/eg309/Data/PBC/pbc2009icdm/brain1/brain1_scan1_fiber_track_mni.trk'
+    lines, hdr = tv.read(fname)
+
+    pts = [p[0] for p in lines]
+    pts_reduced = [track_performance.approximate_ei_trajectory(p) for p in pts]
+    red = np.array([1,0,0])
+
+    trajs=pts_reduced
+    colors=[np.array([1.,0,0]) for i in range(len(trajs))]
+
     show(trajs)
 
