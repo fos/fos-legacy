@@ -24,7 +24,7 @@
 \spacing single
 \use_hyperref false
 \papersize a4paper
-\use_geometry true
+\use_geometry false
 \use_amsmath 1
 \use_esint 1
 \cite_engine basic
@@ -53,66 +53,178 @@
 
 \begin_body
 
-\begin_layout Title
+\begin_layout Standard
+\paragraph_spacing single
+\noindent
+\align center
+
+\family sans
+\series bold
+\size largest
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "90mm"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\paragraph_spacing single
+\noindent
+\align center
+
+\family sans
+\series bold
+\shape slanted
+\size huge
+\color blue
 Identification of Corresponding Tracks in Diffusion MRI Tractographies
+\shape default
+\size largest
+\color inherit
+
+\begin_inset VSpace bigskip
+\end_inset
+
+
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
+\noindent
+\align center
 
 \size larger
 Eleftherios Garyfallidis
 \size default
- [1, 2], 
+ [1, 2]
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align center
+
 \size larger
 Matthew Brett
 \size default
- [3], 
+ [3]
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align center
+
 \size larger
 Vassilis Tsiaras
 \size default
- [3],
+ [3]
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align center
+
 \size larger
- George Vogiatzis
+George Vogiatzis
 \size default
- [2] and 
+ [1] 
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align center
+&
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align center
+
 \size larger
 Ian Nimmo-Smith
 \size default
  [2]
+\begin_inset VSpace bigskip
+\end_inset
+
+
 \end_layout
 
-\begin_layout Address
-1.
- 
+\begin_layout Plain Layout
+\noindent
+
+\lyxline
+
+\end_layout
+
+\begin_layout Enumerate
+\noindent
+
 \shape smallcaps
 University of Cambridge
-\shape default
-, 2.
- 
+\end_layout
+
+\begin_layout Enumerate
+\noindent
+
 \shape smallcaps
 MRC Cognition and Brain Sciences Unit, Cambridge
-\shape default
-, 3.
- U
+\end_layout
+
+\begin_layout Enumerate
+\noindent
+U
 \shape smallcaps
-niversity of Berkeley, California,
-\shape default
- 4.
- 
+niversity of Berkeley, California
+\end_layout
+
+\begin_layout Enumerate
+\noindent
+
 \shape smallcaps
 University of Crete, Greece
+\begin_inset VSpace bigskip
+\end_inset
+
+
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="2" columns="2">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 \begin_inset Graphics
 	filename univ.gif
+	scale 70
 	clip
 
 \end_inset
 
- 
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 \begin_inset Graphics
 	filename CBU.eps
+	scale 79
 	clip
 
 \end_inset
@@ -120,16 +232,33 @@ University of Crete, Greece
 
 \end_layout
 
-\begin_layout Standard
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 \begin_inset Graphics
 	filename UCSeal122x122.gif
+	scale 70
 	clip
 
 \end_inset
 
 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 \begin_inset Graphics
 	filename University_of_crete_logo.png
+	scale 70
 	clip
 
 \end_inset
@@ -137,40 +266,88 @@ University of Crete, Greece
 
 \end_layout
 
-\begin_layout Standard
-\begin_inset Newpage pagebreak
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
 \end_inset
 
 
 \end_layout
 
 \begin_layout Standard
+
+\series bold
+\size larger
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
 
 \series bold
 \size larger
 Key Research Question
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
+\noindent
+\align left
 
 \size larger
-How do you identify corresponding tracks between different dMR brain tractograph
-ies?
+How can we identify corresponding tracks between different diffusion MR
+ brain tractographies?
 \size default
  
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
 
 \series bold
 \size larger
-\begin_inset Newpage pagebreak
-\end_inset
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
 
-Tractography requirement 
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\series bold
+\size larger
+Requirement to Create a Tractography
 \end_layout
 
 \begin_layout Itemize
+\noindent
+\align left
 
 \size larger
 a local diffusion model (e.g.
@@ -178,13 +355,17 @@ a local diffusion model (e.g.
 \end_layout
 
 \begin_layout Itemize
+\noindent
+\align left
 
 \size larger
 a tractography algorithm (e.g.
  FACT, Runge-Kutta)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
+\noindent
+\align left
 
 \size larger
 Depending on the options selected, the resulting tractographies may differ
@@ -192,76 +373,242 @@ Depending on the options selected, the resulting tractographies may differ
  FACT 100,000; RK2 150,000)
 \end_layout
 
-\begin_layout Standard
-\begin_inset Newpage pagebreak
 \end_inset
 
 
 \end_layout
 
 \begin_layout Standard
+
+\series bold
+\size larger
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
 
 \series bold
 \size larger
 Comparison of tractographies
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
-\series bold
-A
-\series default
-: Brain 1+ Simple Tensor + FACT
+\size large
+A: Brain 1+ Simple Tensor + FACT
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
-\series bold
-B
-\series default
-: Brain 1 + Simple Tensor + RK2
+\size large
+B: Brain 1 + Simple Tensor + RK2
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
 
 \series bold
 \size larger
-\begin_inset Newpage pagebreak
-\end_inset
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
 
+\begin_layout Plain Layout
+
+\series bold
+\size larger
 Data reduction
 \end_layout
 
+\begin_layout Plain Layout
+These large datasets need 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Standard
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\series bold
+\size larger
 Track Metrics
 \end_layout
 
-\begin_layout Standard
-Picking - 3 brains with correpsondences 
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Picking - 3 brains with correspondences 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
 3 brains rotating
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
 \begin_layout Standard
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
 Adding prior knowledge - atlases, experts, picking
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
 \begin_layout Standard
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
 [Springs and symmetry]
 \end_layout
 
-\begin_layout Standard
-Conclusion with rotaing brains
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Conclusion with rotating brains
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
 DiPy website
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
 Fos
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
