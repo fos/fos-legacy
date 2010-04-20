@@ -598,7 +598,7 @@ cdef float cclosest_points_2segments(float* p1, float *q1, float *p2, float *q2,
     
     a=cinner_3vecs(d1,d1)
 
-    b=cinner_3vecs(d2,d2)
+    b=cinner_3vecs(d1,d2)
 
     c=cinner_3vecs(d1,r)
 
