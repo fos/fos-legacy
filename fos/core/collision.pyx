@@ -479,17 +479,6 @@ cdef inline float cpoint_segment_sq_dist(float * a, float * b, float * c):
     
 
 
-cdef inline float cclamp(float n, float min, float max):
-    ''' Clamp n to lie within the range [min, max]
-
-    '''
-
-    if n < min: return min;
-    
-    if n > max: return max;
-
-    return n;
-
 
 def closest_points_2segments(p1,q1, p2, q2):
     
@@ -505,58 +494,38 @@ def closest_points_2segments(p1,q1, p2, q2):
 
     cdef cnp.ndarray[cnp.float32_t, ndim=1] fp2 = as_float_3vec(p2)
 
-    cdef cnp.ndarray[cnp.float32_t, ndim=1] fq2 = as_float_3vec(q2)
-
-    cdef cnp.ndarray[cnp.float32_t, ndim=1] fc1 = as_float_3vec(np.array([0,0,0],np.float32))
-
-    cdef cnp.ndarray[cnp.float32_t, ndim=1] fc2 = as_float_3vec(np.array([0,0,0],np.float32))
+    cdef cnp.ndarray[cnp.float32_t, ndim=1] fq2 = as_float_3vec(q2)    
 
     cdef float fs[1]
 
     cdef float ft[1]
 
-    cdef cnp.ndarray[cnp.float32_t, ndim=1] rfc1 = as_float_3vec(np.array([0,0,0],np.float32))
+    cdef float d
 
-    cdef cnp.ndarray[cnp.float32_t, ndim=1] rfc2 = as_float_3vec(np.array([0,0,0],np.float32))
+    d=cclosest_points_2segments(<float *> fp1.data, <float *>fq1.data, <float *> fp2.data, <float *>fq2.data,  fs, ft)
 
-    cdef float rfs[1]
-
-    cdef float rft[1]
- 
-
-    
-
-    cdef float d,rd
-
-
-    d=cclosest_points_2segments(<float *> fp1.data, <float *>fq1.data, <float *> fp2.data, <float *>fq2.data,  fs, ft, <float *>fc1.data, <float *> fc2.data)
-
-    '''
-    #reverse
-    rd=cclosest_points_2segments(<float *> fp1.data, <float *>fq1.data, <float *> fq2.data, <float *>fp2.data,  rfs, rft, <float *>rfc1.data, <float *> rfc2.data)
-
-    if d<rd:
-
-        return d,fs[0],ft[0],fc1,fc2
-
-    else:
-
-        return rd,rfs[0],rft[0],rfc1,rfc2
-    '''
-    
-    return d, fs[0], ft[0], fc1, fc2
+        
+    return d, fs[0], ft[0]
 
 
 
 cdef float cclosest_points_2segments(float* p1, float *q1, float *p2, float *q2,
-                              float *ss, float *tt, float *c1, float *c2):
-
+                              float *ss, float *tt):
 
     ''' Computes closest points C1 and C2 of S1(s)=P1+s*(Q1-P1) and
     S2(t)=P2+t*(Q2-P2), returning s and t. Function result is squared
     distance between between S1(s) and S2(t). Look page 147 of Real Time
     Collision Detection by Christer Ericson for some ideas of how we
     implemented this.
+
+    Returns:
+    --------
+    distance: float,
+     >0 squared distance,
+     -1 parallel segments,   
+     -3 both segments degenerate to points
+     -4 first segment degenerates to point
+     -5 second segment degenerates to point    
 
     '''
 
@@ -593,6 +562,8 @@ cdef float cclosest_points_2segments(float* p1, float *q1, float *p2, float *q2,
 
     cdef float a,b,c,e,f,s,t,d,tmp,tmp3[3]
 
+    cdef float c1[3],c2[3]
+
     cdef float d1s[3], d2s[3],c1c2[3]
 
     
@@ -608,53 +579,77 @@ cdef float cclosest_points_2segments(float* p1, float *q1, float *p2, float *q2,
 
     d=a*e-b*b
 
-    print('d',d)
+    #print('d',d)
 
-    if d<EPSILON and d>-EPSILON:
+    if a<EPSILON and e<EPSILON:
+        
+        print('Error - Both Segments have infinite small length')
+        
+        ss[0]=0.
 
-        print('Segments are parallel')
-       
+        tt[0]=0.
 
-        s=0.
+        return -3
 
-        t=f/e
+    if a<EPSILON:
 
+        print('Error - First Segment has infinite small length')        
+
+        ss[0]=0.
+
+        tt[0]=0.
+
+        return -4
+
+    if e<EPSILON:
+
+        print('Error - Second Segment has infinite small length')   
+        
+        ss[0]=0.
+
+        tt[0]=0.
+
+        return -5
+        
+        
+
+    if d<EPSILON :
+
+        '''
         #use the cross product to check if the two segments are aligned
 
         ccross_3vecs(r,u,tmp3)
+        
+        #if the cross product is [0,0,0] +- epsilon then please say
 
-        #tmp=fabs(ccross_3vecs() )
+          return -1
+      
 
-        print(tmp3[0],tmp3[1],tmp3[2])
+        '''
+                
+        print('Error - Segments are parallel')
 
-        #if the cross product is [0,0,0] +- epsilon then please say       
-  
-        if tmp3[0] > - EPSILON and tmp3[0] < EPSILON :
+        ss[0]=0.
 
-            if tmp3[1] > - EPSILON and tmp3[1] < EPSILON :
+        tt[0]=0.   
 
-                if tmp3[2] > - EPSILON and tmp3[2] < EPSILON :
-
-                    print('Segments are aligned Need to be processed externaly')
-
-                    ss[0]=0.
-
-                    tt[0]=0.
-
-                    c1=p1
-
-                    c2=p2
-
-                    return -1
+        return -1                  
 
     else:
 
-        print('Segments not parallel')
+        #print('Segments not parallel')
 
         s=(b*f-c*e)/d
 
         t=(a*f-b*c)/d
 
+    if s < 0. : s=0.
+
+    if t < 0. : t=0.
+
+    if s > 1. : s=1.
+
+    if t > 1. : t=1.
 
     #find c1    
     cmul_3vec(s,d1,d1s)    
@@ -662,14 +657,13 @@ cdef float cclosest_points_2segments(float* p1, float *q1, float *p2, float *q2,
     cadd_3vecs(p1,d1s,c1)
     
     #find c2
-    cmul_3vec(s,d2,d2s)
+    cmul_3vec(t,d2,d2s)
 
     cadd_3vecs(p2,d2s,c2)
     
     #calculate the vector connecting the closest points
     csub_3vecs(c1,c2,c1c2)
     
-
     ss[0]=s
 
     tt[0]=t
@@ -677,232 +671,77 @@ cdef float cclosest_points_2segments(float* p1, float *q1, float *p2, float *q2,
     return cinner_3vecs(c1c2,c1c2)
 
 
+
+def mindistance_segment2track(p1,q1,xyz):
+    ''' Return minimum distance between segment and track of
+    interconnecting segments
     
+    Parameters
+    ------------------
+    p1: sequence, shape(3,),first point
 
-                                   
-
-                                     
-
-
-
-cdef float cclosest_points_2segmentsX(float* p1, float *q1, float *p2, float *q2,
-                              float *ss, float *tt, float *c1, float *c2):
-
-    ''' Computes closest points C1 and C2 of S1(s)=P1+s*(Q1-P1) and
-    S2(t)=P2+t*(Q2-P2), returning s and t. Function result is squared
-    distance between between S1(s) and S2(t).
-
+    p2: sequence, shape(3,),second point
+    
+    xyz: array(N,3) 
+        initial trajectory
+    
+    Returns
+    -------
+    md : minimum distance
+    
     '''
+    cdef :
 
-    
-    #Vector d1 = q1 - p1; // Direction vector of segment S1
-
-    cdef float d1[3]
-
-    d1[0]=q1[0]-p1[0]
-    d1[1]=q1[1]-p1[1]
-    d1[2]=q1[2]-p1[2]
-    
-    #Vector d2 = q2 - p2; // Direction vector of segment S2
-
-    cdef float d2[3]
-
-    d2[0]=q2[0]-p2[0]
-    d2[1]=q2[1]-p2[1]
-    d2[2]=q2[2]-p2[2]
-    
-    #Vector r = p1 - p2;
-
-    cdef float r[3]
-
-    r[0] = p1[0] - p2[0]
-    r[1] = p1[1] - p2[1]
-    r[2] = p1[2] - p2[2]
-    
-    
-    #float a = Dot(d1, d1);// Squared length of segment S1, always nonnegative
-
-    cdef float a = cinner_3vecs(d1,d1)
-    
-    #float e = Dot(d2, d2);// Squared length of segment S2, always nonnegative
-
-    cdef float e = cinner_3vecs(d2,d2)
-    
-    #float f = Dot(d2, r);
-
-    cdef float f = cinner_3vecs(d2,r)
-
-    cdef float c,b,denom,s,t
-   
-    cdef float d1s[3], d2s[3],c1c2[3]
-
-    '''
-
-    // Check if either or both segments degenerate into points
-    if (a <= EPSILON && e <= EPSILON) {
-        // Both segments degenerate into points
-        s = t = 0.0f;
-        c1 = p1;
-        c2 = p2;
-        return Dot(c1 - c2, c1 - c2);
-    }
-    '''
-
-    if a <= EPSILON and e <= EPSILON:
-
-        s = 0.
+        cnp.ndarray[cnp.float32_t, ndim=2] track 
+        float *fvec0,*fvec1,*fvec2
+        object characteristic_points
+        size_t t_len
+        int index
+        float fs[1]
+        float ft[1]
+        float d
+        float min
         
-        t = 0.
 
-        c1 = p1
+    cdef cnp.ndarray[cnp.float32_t, ndim=1] fp1 = as_float_3vec(p1)
 
-        c2 = p2
+    cdef cnp.ndarray[cnp.float32_t, ndim=1] fq1 = as_float_3vec(q1)
+    
+    track = np.ascontiguousarray(xyz, dtype=f32_dt)
 
-        ss[0]=s 
-
-        tt[0]=t
-
-        return cinner_3vecs(d2,r)
-
-    '''
-    if (a <= EPSILON) {
-        // First segment degenerates into a point
-        s = 0.0f;
-        t = f / e; // s = 0 => t = (b*s + f) / e = f / e
-        t = Clamp(t, 0.0f, 1.0f);
-    } else {
-
-    '''
-
-    if a <= EPSILON :
-
-        #First segment degenerates into a point
+    #cdef cnp.ndarray[cnp.float32_t, ndim=1] distances = np.zeros(len(track),np.float32)
         
-        s = 0.
+    t_len=len(track)
+    
+    index = 1
+
+    min = 10000000
+
         
-        t = f/e # s = 0 => t = (b*s + f) / e = f / e
+    while index < t_len:
+        
+        
+        fvec0 = asfp(track[index-1])
+        fvec1 = asfp(track[index])
+        
+        d=cclosest_points_2segments(<float *> fp1.data, <float *>fq1.data, \
+                                         fvec0, fvec1,  fs, ft)
 
-        t = cclamp(t,0.,1.)
+        #distances[index-1]=d
 
-    else:
+        if d>= 0.:
 
-        '''
-        float c = Dot(d1, r);
-        if (e <= EPSILON) {
-            // Second segment degenerates into a point
-            t = 0.0f;
-            s = Clamp(-c / a, 0.0f, 1.0f); // t = 0 => s = (b*t - c) / a = -c / a
-        } else {
-        '''
+            if min > d :
 
-        c = cinner_3vecs(d1,r)
-
-        if e <= EPSILON:
-
-            # Second segment degenerates into a point
-            t = 0.
-
-            s = cclamp(-c/a, 0., 1.) # t = 0 => s = (b*t - c) / a = -c / a
-
-        else :
-
-            '''            
-            // The general nondegenerate case starts here
-            float b = Dot(d1, d2);
-            float denom = a*e-b*b; // Always nonnegative
-
-            // If segments not parallel, compute closest point on L1 to L2, and
-            // clamp to segment S1. Else pick arbitrary s (here 0)
-            if (denom != 0.0f) {
-                s = Clamp((b*f - c*e) / denom, 0.0f, 1.0f);
-            } else s = 0.0f;
-
-            '''
-
-            # The general nondegenerate case starts here
-            b = cinner_3vecs(d1,d2)
-
-            denom = a*e - b*b # Always nonnegative
-
-            # If segments not parallel, compute closest point on L1 to L2, and
-            # clamp to segment S1. Else pick arbitrary s (here 0)
-            
-            if denom != 0.:
-
-                s = cclamp((b*f -c*e)/denom, 0., 1.)
-
-            else:
-
-                s = 0.
-
-            '''   
-
-            // Compute point on L2 closest to S1(s) using
-            // t = Dot((P1+D1*s)-P2,D2) / Dot(D2,D2) = (b*s + f) / e
-            t = (b*s + f) / e;
-
-            '''
-
-            t = (b*s +f) /e
-
-            '''
-            // If t in [0,1] done. Else clamp t, recompute s for the new value
-            // of t using s = Dot((P2+D2*t)-P1,D1) / Dot(D1,D1)= (t*b - c) / a
-            // and clamp s to [0, 1]
-            
-            if (t < 0.0f) {
-                t = 0.0f;
-                s = Clamp(-c / a, 0.0f, 1.0f);
-            } else if (t > 1.0f) {
-                t = 1.0f;
-                s = Clamp((b - c) / a, 0.0f, 1.0f);
-            }
-
-            '''
-
-            if t < 0. :
-
-                t = 0.
-
-                s = cclamp(-c/a, 0., 1.)
-
-            elif t > 1. :
-
-                t = 1.
-
-                s = cclamp( ( b-c ) / a, 0., 1.)
+                min=d
 
             
-        #}
-    #}
+       
 
-    '''
-
-    c1 = p1 + d1 * s;
-    c2 = p2 + d2 * t;
-    return Dot(c1 - c2, c1 - c2);
-
-    '''
+        index+=1
 
     
+    #distances
+    #return np.array(distances).min()#, np.array(distances).argmin()
 
-    
-    cmul_3vec(s,d1,d1s)
-
-    cadd_3vecs(p1,d1s,c1)
-
-    
-    cmul_3vec(s,d2,d2s)
-
-    cadd_3vecs(p2,d2s,c2)
-    
-
-    csub_3vecs(c1,c2,c1c2)
-
-    ss[0]=s
-
-    tt[0]=t
-
-    return cinner_3vecs(c1c2,c1c2)
-
-
+    return min
