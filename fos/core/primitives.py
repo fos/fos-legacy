@@ -125,8 +125,7 @@ class Tracks3D(object):
 
             #print self.near_pick
 
-            if np.sum(np.equal(self.near_pick, self.near_pick_prev))< 3:
-                
+            if np.sum(np.equal(self.near_pick, self.near_pick_prev))< 3:        
 
                 self.process_picking(self.near_pick, self.far_pick)             
               
@@ -141,9 +140,22 @@ class Tracks3D(object):
 
         #gl.glRotatef(-90,1,0,0)
 
-        gl.glRotatef(self.angle,0,0,1)
+        #gl.glRotatef(self.angle,0,0,1)
         
         #gl.glTranslatef(x,y,z)
+
+        #gl.glPushMatrix()
+
+        #gl.glLoadIdentity()
+        
+        #gl.glRotatef(self.angle,0,0,1)
+
+        gl.glTranslatef(-x,-y,-z)
+
+        gl.glRotatef(self.angle,0,0,1)
+
+        gl.glTranslatef(x,y,z)
+       
 
         if self.angle < 360.:
 
@@ -158,8 +170,19 @@ class Tracks3D(object):
         if self.picked_track != None:
 
             self.display_one_track(self.picked_track)
-    
+
+
+            
+        #gl.glRotatef(-self.angle,0,0,1)
+
+        
+
+
         gl.glPopMatrix()
+
+        
+    
+        #gl.glPopMatrix()
 
         gl.glFinish()        
 
