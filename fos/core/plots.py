@@ -49,9 +49,9 @@ class Plot():
         global b1
 
 
-        #b1 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
+        b1 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
 
-        b1 = prim.Tracks3D('/home/eg309/Data/Eleftherios/dti_FACT.trk')
+        #b1 = prim.Tracks3D('/home/eg309/Data/Eleftherios/dti_FACT.trk')
 
         b1.opacity = 1.
 
@@ -65,12 +65,8 @@ class Plot():
 
         
         self.slots={ 0:{'actor':tex1,'slot':(1000,80000) },
-                     1:{'actor':b1, 'slot': (0,80000) },
+                     1:{'actor':b1, 'slot': (0,800000) },
                      2:{'actor':tex2,'slot': (2000,80000) }}
-
-        
-
-       
 
           
     def display(self):

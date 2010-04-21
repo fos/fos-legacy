@@ -19,7 +19,7 @@ class Tracks3D(object):
 
     def __init__(self,fname,colormap=None, line_width=3.):
 
-        self.position = (-100,-100,0)
+        self.position = (0,0,0)
 
         self.fname = fname
         
@@ -152,14 +152,10 @@ class Tracks3D(object):
         else:
 
             self.angle=0.
-
-
         
         gl.glCallList(self.list_index)           
 
         if self.picked_track != None:
-
-            #print 'YoooooooY'
 
             self.display_one_track(self.picked_track)
     
@@ -175,7 +171,7 @@ class Tracks3D(object):
         min_dist=[cll.mindistance_segment2track(near,far,xyz) for xyz in self.data]
         min_dist=np.array(min_dist)
 
-        print min_dist
+        #print min_dist
 
         self.picked_track=min_dist.argmin()
 
