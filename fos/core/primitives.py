@@ -150,11 +150,11 @@ class Tracks3D(object):
         
         #gl.glRotatef(self.angle,0,0,1)
 
-        gl.glTranslatef(-x,-y,-z)
-
-        gl.glRotatef(self.angle,0,0,1)
-
         gl.glTranslatef(x,y,z)
+
+        gl.glRotatef(self.angle,0.,1.,0.)
+
+        #gl.glTranslatef(x,y,z)
        
 
         if self.angle < 360.:

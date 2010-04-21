@@ -37,8 +37,10 @@ class Plot():
                                     [ 8, 10853, 15572], [ 9, 13280,  8461], \
                                     [ 0, 11275,  9224]])
 
-        b13 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
+        #b13 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
 
+        b13 = prim.Tracks3D('/home/eg309/Data/Eleftherios/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
+        
         b13.opacity = .5
 
         b13.init()
@@ -48,7 +50,11 @@ class Plot():
         b13.position=(-b13.mean[0]-150.,-b13.mean[1],-b13.mean[2])
         
 
-        b23 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090134_METHODS/20090227_154122/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
+        #b23 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090134_METHODS/20090227_154122/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
+
+        b23 = prim.Tracks3D('/home/eg309/Data/Eleftherios/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
+        
+        
         b23.opacity = .5
 
         b23.init()
@@ -58,8 +64,12 @@ class Plot():
         b23.position=(-b23.mean[0],-b23.mean[1],-b23.mean[2])
 
         
-        b33 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_RK2.trk')
+        #b33 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_RK2.trk')
 
+
+        b33 = prim.Tracks3D('/home/eg309/Data/Eleftherios/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
+        
+        
         b33.opacity = .5
 
         b33.init()
