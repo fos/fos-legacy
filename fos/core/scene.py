@@ -42,7 +42,7 @@ class Scene(object):
         #Reshape settings
         self.viewport=(0,0,self.win_size[0],self.win_size[1])
         self.isperspect=1
-        self.glu_perspect=(60.,self.win_size[0]/self.win_size[1],0.1,2000.)
+        self.glu_perspect=[60.,self.win_size[0]/self.win_size[1],0.1,2000.]
         self.gl_orthog=(-300.,300.,-300.,300.,-1000,1000)       
 
         #Camera settings
@@ -79,9 +79,7 @@ class Scene(object):
         self.timer1Dt=33 # duration between consecutive runs in milliseconds
         self.autostart_timer1=True
         self.timer1on=True
-        self.recordingon=False
-
-        
+        self.recordingon=False        
 
         #World timing settings
         self.timer2=self.world_timer
@@ -167,9 +165,9 @@ class Scene(object):
         
         gl.glPixelStorei(gl.GL_PACK_ALIGNMENT, 1)
         
-	data = gl.glReadPixels(x, y, width, height, gl.GL_RGBA, gl.GL_UNSIGNED_BYTE)
+	data = gl.glReadPixels(x, y, width, height, gl.GL_RGB, gl.GL_UNSIGNED_BYTE)
         
-	image = Image.fromstring( "RGBA", (width, height), data )
+	image = Image.fromstring( "RGB", (width, height), data )
         
 	image = image.transpose( Image.FLIP_TOP_BOTTOM)
         
@@ -205,6 +203,20 @@ class Scene(object):
                 print('Recording is off')
                 
 
+        if key == '9': #zoom out
+
+            
+            self.glu_perspect[0]+=10.#self.glu_perspect[0]
+
+            glut.glutPostRedisplay()
+
+        if key == '0': #zoom in
+
+            self.glu_perspect[0]-=10. #0.5*self.glu_perspect[0]
+
+            glut.glutPostRedisplay()
+                
+
         if key == 'o':
             
             self.isperspect=int(not(self.isperspect))
@@ -224,6 +236,8 @@ class Scene(object):
             glut.glutPostRedisplay()
 
         if args[0] == 'r':
+
+            self.glu_perspect[0]=60.
 
             self.mouse.rotationMatrix.reset()
             
@@ -346,7 +360,31 @@ class Scene(object):
 
     def display(self):
 
-        gl.glClear(self.clear_bit)
+        gl.glClear(self.clear_bit)        
+
+        x,y,w,h=self.viewport
+        
+        gl.glMatrixMode (gl.GL_PROJECTION)
+        
+        gl.glLoadIdentity()
+                
+
+        if self.isperspect:
+
+            fovy,aspect,zNear,zFar=self.glu_perspect
+
+            #print fovy
+        
+            glu.gluPerspective(fovy,w/float(h),zNear,zFar)
+
+        else:
+
+            left,right,bottom,top,near,far=self.gl_orthog
+            
+            gl.glOrtho(left, right, bottom, top, near, far)
+        
+
+        
 
         gl.glMatrixMode(gl.GL_MODELVIEW)       
 

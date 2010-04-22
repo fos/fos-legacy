@@ -9,6 +9,8 @@ import PIL.ImageOps as iops
 from fos.core.utils import list_indices as lind
 from os.path import join as pjoin
 
+import fos.core.collision as cll
+
 data_path = pjoin(os.path.dirname(__file__), 'data')
 
 #=======================================================
@@ -17,7 +19,7 @@ class Tracks3D(object):
 
     def __init__(self,fname,colormap=None, line_width=3.):
 
-        self.position = (-100,-100,0)
+        self.position = (0,0,0)
 
         self.fname = fname
         
@@ -71,6 +73,8 @@ class Tracks3D(object):
 
         self.far_pick_prev = None
 
+        self.picked_track = None
+
         
 
     def init(self):
@@ -87,8 +91,9 @@ class Tracks3D(object):
 
         print 'tracks loaded'
 
-        self.data = tracks[:20000]
+        #self.data = [100*np.array([[0,0,0],[1,0,0],[2,0,0]]).astype(np.float32) ,100*np.array([[0,1,0],[0,2,0],[0,3,0]]).astype(np.float32)]#tracks[:20000]
 
+        self.data = tracks[:20000]
 
         data_stats = np.concatenate(tracks)
 
@@ -115,46 +120,124 @@ class Tracks3D(object):
 
     def display(self):
 
+
+        if self.near_pick!= None:
+
+            #print self.near_pick
+
+            if np.sum(np.equal(self.near_pick, self.near_pick_prev))< 3:        
+
+                self.process_picking(self.near_pick, self.far_pick)             
+              
+                self.near_pick_prev = self.near_pick
+
+                self.far_pick_prev = self.far_pick
+      
+
         gl.glPushMatrix()
     
         x,y,z=self.position
 
-        gl.glRotatef(-90,1,0,0)
+        #gl.glRotatef(-90,1,0,0)
 
-        gl.glRotatef(self.angle,0,0,1)
+        #gl.glRotatef(self.angle,0,0,1)
         
+        #gl.glTranslatef(x,y,z)
+
+        #gl.glPushMatrix()
+
+        #gl.glLoadIdentity()
+        
+        #gl.glRotatef(self.angle,0,0,1)
+
         gl.glTranslatef(x,y,z)
 
-        if self.angle< 360.:
+        gl.glRotatef(self.angle,0.,1.,0.)
+
+        #gl.glTranslatef(x,y,z)
+       
+
+        if self.angle < 360.:
 
             self.angle+=self.angular_speed
             
         else:
 
             self.angle=0.
+        
+        gl.glCallList(self.list_index)           
+
+        if self.picked_track != None:
+
+            self.display_one_track(self.picked_track)
+
+
             
-        gl.glCallList(self.list_index)
-    
+        #gl.glRotatef(-self.angle,0,0,1)
+
+        
+
+
         gl.glPopMatrix()
 
-        gl.glFinish()
+        
+    
+        #gl.glPopMatrix()
 
-        if self.near_pick!= None:
-
-            #print self.near_pick
-
-            if np.sum(np.equal(self.near_pick, self.near_pick_prev))< 3:
-                
-                self.process_picking(self.near_pick, self.far_pick)             
-              
-                self.near_pick_prev = self.near_pick
-
-                self.far_pick_prev = self.far_pick
+        gl.glFinish()        
 
 
     def process_picking(self,near,far):
 
-        pass
+        print('process picking')
+
+        min_dist=[cll.mindistance_segment2track(near,far,xyz) for xyz in self.data]
+        min_dist=np.array(min_dist)
+
+        #print min_dist
+
+        self.picked_track=min_dist.argmin()
+
+        print self.picked_track
+
+
+    def display_one_track(self,track_index):
+
+        
+
+        gl.glPushMatrix()
+
+        gl.glDisable(gl.GL_LIGHTING)
+
+        gl.glEnable(gl.GL_LINE_SMOOTH)
+
+        gl.glEnable(gl.GL_BLEND)
+
+        gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)
+
+        gl.glHint(gl.GL_LINE_SMOOTH_HINT,gl.GL_DONT_CARE)
+
+        gl.glLineWidth(7.)
+
+        gl.glEnableClientState(gl.GL_VERTEX_ARRAY)
+
+        color4=np.array([1,1,0,.5],dtype=np.float32)
+
+        gl.glColor4fv(color4)
+
+        #gl.glColor3fv(color3)
+
+        d=self.data[track_index].astype(np.float32)
+
+        gl.glVertexPointerf(d)
+                               
+        gl.glDrawArrays(gl.GL_LINE_STRIP, 0, len(d))        
+
+        gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
+
+        gl.glEnable(gl.GL_LIGHTING)
+        
+        gl.glPopMatrix()
 
 
     def one_color(self):
@@ -188,8 +271,6 @@ class Tracks3D(object):
         gl.glPopMatrix()    
 
         gl.glEndList()
-
-    
 
 
     def multiple_colors(self):
@@ -228,7 +309,9 @@ class Tracks3D(object):
             if length(d)> self.min_length:
             
                 #mo=mean_orientation(d)
+                
                 ds=downsample(d,6)
+                
                 mo=ds[3]-ds[2]
 
                 mo=mo/np.sqrt(np.sum(mo**2))

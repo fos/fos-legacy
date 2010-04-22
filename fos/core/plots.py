@@ -1,3 +1,4 @@
+import numpy as np
 import OpenGL.GL as gl
 import fos.core.primitives as prim
 import fos.core.text as text
@@ -5,6 +6,117 @@ import fos.core.text as text
 
 
 class Plot():
+
+
+    def __init__(self):
+
+        self.slots=None
+
+        self.time=0
+
+        self.near_pick=None
+
+        self.far_pick =None
+
+        
+
+    def init(self):
+
+
+        #Show the 3 brains together
+
+
+        global b13
+        global b23
+        global b33
+        
+
+        corr_mat_demo=np.array(    [[ 1, 10560,  3609], [2,  17872, 15377],\
+                                    [ 3,  6447,  3897],	[4,  18854,  6409],\
+                                    [ 5, 14416,  4515], [ 7,  9956, 13913],\
+                                    [ 8, 10853, 15572], [ 9, 13280,  8461], \
+                                    [ 0, 11275,  9224]])
+
+        #b13 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
+
+        b13 = prim.Tracks3D('/home/eg309/Data/Eleftherios/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
+        
+        b13.opacity = .5
+
+        b13.init()
+
+        b13.angular_speed = 0.5        
+
+        b13.position=(-b13.mean[0]-150.,-b13.mean[1],-b13.mean[2])
+        
+
+        #b23 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090134_METHODS/20090227_154122/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
+
+        b23 = prim.Tracks3D('/home/eg309/Data/Eleftherios/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
+        
+        
+        b23.opacity = .5
+
+        b23.init()
+
+        b23.angular_speed = 0.5                
+
+        b23.position=(-b23.mean[0],-b23.mean[1],-b23.mean[2])
+
+        
+        #b33 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_RK2.trk')
+
+
+        b33 = prim.Tracks3D('/home/eg309/Data/Eleftherios/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
+        
+        
+        b33.opacity = .5
+
+        b33.init()
+
+        b33.angular_speed = 0.5        
+        
+        b33.position=(-b33.mean[0]+150.,-b33.mean[1],-b33.mean[2])
+        
+         
+        self.slots={ 0:{'actor':b13,'slot':(1000,80000) },
+                     1:{'actor':b23,'slot':(1000,80000) },
+                     2:{'actor':b33,'slot':(1000,80000) }}                   
+                     
+
+        
+          
+    def display(self):
+
+        now = self.time
+
+        for s in self.slots:
+
+            if now >= self.slots[s]['slot'][0] and now <=self.slots[s]['slot'][1]:
+
+                self.slots[s]['actor'].near_pick = self.near_pick
+
+                self.slots[s]['actor'].far_pick = self.far_pick               
+                
+                self.slots[s]['actor'].display()
+
+
+
+    def update_time(self,time):
+
+        self.time=time
+
+
+    def update_pick_ray(self,near_pick, far_pick):
+
+        self.near_pick = near_pick
+
+        self.far_pick = far_pick
+
+
+
+
+class Plot_JustOne():
 
 
     def __init__(self):
@@ -51,19 +163,21 @@ class Plot():
 
         b1 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
 
+        #b1 = prim.Tracks3D('/home/eg309/Data/Eleftherios/dti_FACT.trk')
+
         b1.opacity = 1.
 
         b1.init()
 
-        b1.angular_speed = 0        
+        b1.angular_speed = 0.5        
 
         #print b1.min, b1.max, b1.mean
 
         b1.position=tuple(-b1.mean)
-       
 
+        
         self.slots={ 0:{'actor':tex1,'slot':(1000,80000) },
-                     1:{'actor':b1, 'slot': (0,80000) },
+                     1:{'actor':b1, 'slot': (0,800000) },
                      2:{'actor':tex2,'slot': (2000,80000) }}
 
           
@@ -74,7 +188,6 @@ class Plot():
         for s in self.slots:
 
             if now >= self.slots[s]['slot'][0] and now <=self.slots[s]['slot'][1]:
-
 
                 self.slots[s]['actor'].near_pick = self.near_pick
 

@@ -6,6 +6,18 @@ from numpy.testing import assert_array_equal, assert_array_almost_equal
 
 import fos.core.collision as cll
 
+
+def test_mindistance_segment2track():
+
+    print 'touching one segment only'
+
+    print cll.mindistance_segment2track([1,0,0],[0,1,0],np.array([[1,0,0],[0,1,1],[3,3,3]]))
+
+    print 'cross with the second'
+
+    print cll.mindistance_segment2track([0,0,0],[1,0,0],np.array([[3,3,3],[0.5,1,0],[0.5,-1,0]]))
+    
+
 def test_segment2segment():
 
 
@@ -15,13 +27,25 @@ def test_segment2segment():
 
     print
 
+    print '#parallel'
+    
+    print cll.closest_points_2segments([-10,0,0],[10,0,0],[0,1,0],[3,1,0])
+
+    print
+
+    print '#parallel 2'
+    
+    print cll.closest_points_2segments([-3,0,0],[-1,0,0],[0,1,0],[3,1,0])
+
+    print
+
     print '#aligned'
     
     print cll.closest_points_2segments([-10,0,0],[10,0,0],[0,0,0],[3,0,0])
 
     print
 
-    print '#nose 2 nose'
+    print '#nose 2 nose touching'
     
     print cll.closest_points_2segments([0,0,0],[1,1,0],[1,1,0],[2,0,0])
 
@@ -33,11 +57,32 @@ def test_segment2segment():
 
     print
 
-    print 'vertical in distance'
+    print '#vertical in distance'
 
     print cll.closest_points_2segments([0,0,0],[1,0,0],[0.5,-1,1],[0.5,1,1])
 
-    print 
+    print
+
+    print '#touch vertically'
+
+    print cll.closest_points_2segments([0,0,0],[1,0,0],[0.5,1,0],[0.5,0,0])
+
+    print
+
+    print '#touch vertically - opposite'
+
+    print cll.closest_points_2segments([0.5,1,0],[0.5,0,0],[0,0,0],[1,0,0])
+
+    print
+    
+
+    print '#intersect vertically - no touching'
+
+    print cll.closest_points_2segments([0.5,1,0],[0.5,0,0],[0,-1,0],[1,-1,0])
+
+    print
+    
+
 
 
     
