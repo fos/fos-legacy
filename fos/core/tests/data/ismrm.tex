@@ -1,0 +1,225 @@
+% Preview source code
+
+%% LyX 1.6.4 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[a4paper,english]{paper}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\pagestyle{empty}
+\setlength{\parskip}{\medskipamount}
+\setlength{\parindent}{0pt}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{setspace}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+\newcommand{\lyxline}[1][1pt]{%
+  \par\noindent%
+  \rule[.5ex]{\linewidth}{#1}\par}
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage{babel}
+\usepackage{apacite}
+
+\makeatother
+
+\usepackage{babel}
+
+\begin{document}
+  \begin{singlespace}
+
+    \noindent \begin{center}
+    \textsf{\textbf{\LARGE }}%
+    \begin{minipage}[t]{90mm}%
+      \begin{singlespace}
+        \noindent 
+        \begin{center}
+        \textsf{\textbf{\textsl{\textcolor{black}{\huge Identification of
+Corresponding Tracks in Diffusion MRI Tractographies}}}}\textsf{\textbf{\LARGE \bigskip{}
+}}
+        \par
+        \end{center}{\LARGE \par}
+
+      \end{singlespace}
+
+\noindent \begin{center}
+{\Large Eleftherios Garyfallidis} {[}1, 2{]}
+\par\end{center}
+
+\noindent \begin{center}
+{\Large Matthew Brett} {[}3{]}
+\par\end{center}
+
+\noindent \begin{center}
+{\Large Vassilis Tsiaras} {[}3{]}
+\par\end{center}
+
+\noindent \begin{center}
+{\Large George Vogiatzis} {[}1{]} 
+\par\end{center}
+
+\noindent \begin{center}
+\&
+\par\end{center}
+
+\noindent \begin{center}
+{\Large Ian Nimmo-Smith} {[}2{]}\bigskip{}
+
+\par\end{center}
+
+\noindent \lyxline{\normalsize}
+\begin{enumerate}
+\item \noindent \textsc{University of Cambridge}
+\item \noindent \textsc{MRC Cognition and Brain Sciences Unit, Cambridge}
+\item \noindent U\textsc{niversity of Berkeley, California}
+\item \noindent \textsc{University of Crete, Greece\bigskip{}
+}
+\end{enumerate}
+\end{minipage}
+
+\par\end{center}{\LARGE \par}
+\end{singlespace}
+
+\newpage
+
+\textbf{\Large }%
+\begin{minipage}[t]{1\columnwidth}%
+\textbf{\Large Key Research Question}{\Large \par}
+
+\noindent \begin{flushleft}
+{\Large How can we identify corresponding tracks between different
+diffusion MR brain tractographies?} 
+\par\end{flushleft}%
+\end{minipage}{\Large \par}
+
+\newpage
+
+\textbf{\Large }%
+\begin{minipage}[t]{1\columnwidth}%
+\noindent \begin{flushleft}
+\textbf{\Large Requirement to Create a Tractography}
+\par\end{flushleft}{\Large \par}
+\begin{itemize}
+\item \begin{flushleft} a local diffusion model (e.g. simple tensor, Q-Ball)
+\par\end{flushleft}
+\item \begin{flushleft} a tractography algorithm (e.g. FACT, Runge-Kutta)
+\par\end{flushleft}
+\end{itemize}
+\noindent \begin{flushleft} The quality and size of resulting tractographies may differ depending
+on the choice of these options
+\par\end{flushleft}
+\begin{itemize}
+\item \begin{flushleft} e.g. FACT 100,000; RK2 150,000)
+\par\end{flushleft}
+\end{itemize}
+%
+\end{minipage}{\Large \par}
+
+\newpage
+
+\textbf{\Large }%
+\begin{minipage}[t]{1\columnwidth}%
+\textbf{\Large Comparison of tractographies}{\Large \par}
+
+{\large A: Brain 1+ Simple Tensor + FACT}{\large \par}
+
+{\large B: Brain 1 + Simple Tensor + RK2}%
+\end{minipage}{\Large \par}
+
+\newpage
+
+\textbf{\Large }%
+\begin{minipage}[t]{1\columnwidth}%
+\textbf{\Large Data compression}{\Large \par}
+
+These large datasets take significant computational resources, in
+particular long processing times. We have developed geometric techniques
+which reduce the number of points on the tracks of a tractography
+by a factor of 8. More points are retained where the track has high
+curvatue and fewer are needed where the track has low curvature. The
+time performance exceeds that of information theory based techniques
+such as \emph{minimum description length} {[}1{]}.%
+\end{minipage}{\Large \par}
+
+\newpage
+
+%
+\begin{minipage}[t]{1\columnwidth}%
+\item \textbf{\Large Track Metrics}{\Large \par}
+
+Metrics are needed to measure that similarity of two tracks, whether
+they are in the same or different tractographies. We have used the
+mean average minimum distance metric (MAM) {[}2{]}:
+
+$$\mathrm{MAM}(A,B) = \frac{1}{2}\Big[\frac{1}{\#A}\sum_{p\in A}\min_{q\in B} |p-q| + \frac{1}{\#B}\sum_{q\in B}\min_{p\in A} |q-p|\Big]$$%
+\end{minipage}
+
+\newpage
+
+%
+\begin{minipage}[t]{1\columnwidth}%
+\textbf{\Large Corresponding Tracks}{\Large \par}
+
+We can pick tracks of interest in one brain, and use this metric to
+identify corresponding tracks in other brains quickly and accurately.%
+\end{minipage}
+
+\newpage
+
+%
+\begin{minipage}[t]{1\columnwidth}%
+\textbf{\Large Adding Prior Knowledge }{\Large \par}
+
+We can use a range of sources of prior knowledge
+\begin{itemize}
+\item white matter atlases {[}3{]}
+\item using experts to label regions of the brain e.g. {[}4{]}
+\item `picking' and expanding tracks to create ad hoc bundles 
+\end{itemize}
+%
+\end{minipage}
+
+\newpage
+
+%
+\begin{minipage}[t]{1\columnwidth}%
+\textbf{\Large Conclusion}{\Large \par}
+
+The correspondence problem has been solved in a manner which is supported
+by high speed algorithms and high quality visualisation tools.%
+\end{minipage}
+
+\newpage
+
+%
+\begin{minipage}[t]{1\columnwidth}%
+We are developing Python software
+\begin{itemize}
+\item \textsc{DiPy:} to support diffusion imaging analysis - now available
+in open source
+\item \textsc{Fos: }A 3d engine that supports multiple simultaneous visualisations 
+\end{itemize}
+%
+\end{minipage}
+
+\newpage
+
+%
+\begin{minipage}[t]{1\columnwidth}%
+\textbf{\Large References and Credits}{\Large \par}
+
+{[}1{]} Lee = Minimum description length
+
+{[}2{]} Corouge = 
+
+{[}3{]} Mori = atlas
+
+{[}4{]} PBC
+
+{[}3{]} Demiralp - Boy's surface colormap%
+\end{minipage}
+\end{document}
