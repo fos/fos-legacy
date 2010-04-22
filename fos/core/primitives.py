@@ -179,8 +179,13 @@ class Tracks3D(object):
         else:
 
             self.angle=0.
+
+            
+        #gl.glCullFace(gl.GL_FRONT)
+        gl.glCallList(self.list_index)
         
-        gl.glCallList(self.list_index)           
+        #gl.glCullFace(gl.GL_BACK)
+        #gl.glCallList(self.list_index)
 
         if self.picked_track != None:
 
@@ -279,13 +284,15 @@ class Tracks3D(object):
         gl.glPushMatrix()
 
         gl.glDisable(gl.GL_LIGHTING)
-
+        
         gl.glEnable(gl.GL_LINE_SMOOTH)
 
         gl.glEnable(gl.GL_BLEND)
 
         gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)
 
+        #gl.glBlendFunc(gl.GL_SRC_ALPHA_SATURATE,gl.GL_ONE_MINUS_SRC_ALPHA)
+        
         #gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE)
 
         gl.glHint(gl.GL_LINE_SMOOTH_HINT,gl.GL_DONT_CARE)
@@ -293,6 +300,8 @@ class Tracks3D(object):
         #gl.glHint(gl.GL_LINE_SMOOTH_HINT,gl.GL_NICEST)
 
         gl.glLineWidth(self.line_width)
+
+        #gl.glDepthMask(gl.GL_FALSE)
 
 
         gl.glEnableClientState(gl.GL_VERTEX_ARRAY)        
@@ -334,6 +343,9 @@ class Tracks3D(object):
 
         gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
 
+
+        #gl.glDisable(gl.GL_BLEND)
+        
         gl.glEnable(gl.GL_LIGHTING)
         
         gl.glPopMatrix()

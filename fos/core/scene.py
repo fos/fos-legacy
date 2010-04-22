@@ -55,9 +55,10 @@ class Scene(object):
         self.enab_light=gl.GL_LIGHTING #enable lighting
         self.enab_light0=gl.GL_LIGHT0 #enable first light
 
+        #self.light_model=gl.GL_LIGHT_MODEL_AMBIENT
+        #self.light_model_value=[0.5,0.5,0.5,1.]
         self.light_model=gl.GL_LIGHT_MODEL_TWO_SIDE
         self.light_model_value=gl.GL_FALSE
-
 
         self.light0_position=[1,1,1,0] # light position is at Inf,Inf,Inf       
         self.light0_ambient=[0.8,0.8,0.8,1.]
@@ -135,6 +136,8 @@ class Scene(object):
         gl.glEnable(self.enab_light0)
         
         gl.glLightModeli(self.light_model,self.light_model_value)
+        
+        #gl.glLightModelfv(self.light_model,self.light_model_value)
 
         gl.glLightfv(self.enab_light0,gl.GL_POSITION, self.light0_position)
 
