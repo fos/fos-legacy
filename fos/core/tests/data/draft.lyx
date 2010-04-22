@@ -82,7 +82,7 @@ status open
 \series bold
 \shape slanted
 \size huge
-\color blue
+\color black
 Identification of Corresponding Tracks in Diffusion MRI Tractographies
 \shape default
 \size largest
@@ -348,8 +348,6 @@ Requirement to Create a Tractography
 \begin_layout Itemize
 \noindent
 \align left
-
-\size larger
 a local diffusion model (e.g.
  simple tensor, Q-Ball)
 \end_layout
@@ -357,8 +355,6 @@ a local diffusion model (e.g.
 \begin_layout Itemize
 \noindent
 \align left
-
-\size larger
 a tractography algorithm (e.g.
  FACT, Runge-Kutta)
 \end_layout
@@ -366,10 +362,14 @@ a tractography algorithm (e.g.
 \begin_layout Plain Layout
 \noindent
 \align left
+The quality and size of resulting tractographies may differ depending on
+ the choice of these options
+\end_layout
 
-\size larger
-Depending on the options selected, the resulting tractographies may differ
- in quality and size (e.g.
+\begin_layout Itemize
+\noindent
+\align left
+e.g.
  FACT 100,000; RK2 150,000)
 \end_layout
 
@@ -438,11 +438,99 @@ status open
 
 \series bold
 \size larger
-Data reduction
+Data compression
 \end_layout
 
 \begin_layout Plain Layout
-These large datasets need 
+These large datasets take significant computational resources, in particular
+ long processing times.
+ We have developed geometric techniques which reduce the number of points
+ on the tracks of a tractography by a factor of 8.
+ More points are retained where the track has high curvatue and fewer are
+ needed where the track has low curvature.
+ The time performance exceeds that of information theory based techniques
+ such as 
+\emph on
+minimum description length
+\emph default
+ [1].
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Itemize
+
+\series bold
+\size larger
+Track Metrics
+\end_layout
+
+\begin_layout Plain Layout
+Metrics are needed to measure that similarity of two tracks, whether they
+ are in the same or different tractographies.
+ We have used the mean average minimum distance metric (MAM) [2]:
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+$$
+\backslash
+mathrm{MAM}(A,B) = 
+\backslash
+frac{1}{2}
+\backslash
+Big[
+\backslash
+frac{1}{
+\backslash
+#A}
+\backslash
+sum_{p
+\backslash
+in A}
+\backslash
+min_{q
+\backslash
+in B} |p-q| + 
+\backslash
+frac{1}{
+\backslash
+#B}
+\backslash
+sum_{q
+\backslash
+in B}
+\backslash
+min_{p
+\backslash
+in A} |q-p|
+\backslash
+Big]$$
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -467,7 +555,12 @@ status open
 
 \series bold
 \size larger
-Track Metrics
+Corresponding Tracks
+\end_layout
+
+\begin_layout Plain Layout
+We can pick tracks of interest in one brain, and use this metric to identify
+ corresponding tracks in other brains quickly and accurately.
 \end_layout
 
 \end_inset
@@ -489,7 +582,27 @@ height_special "totalheight"
 status open
 
 \begin_layout Plain Layout
-Picking - 3 brains with correspondences 
+
+\series bold
+\size larger
+Adding Prior Knowledge 
+\end_layout
+
+\begin_layout Plain Layout
+We can use a range of sources of prior knowledge
+\end_layout
+
+\begin_layout Itemize
+white matter atlases [3]
+\end_layout
+
+\begin_layout Itemize
+using experts to label regions of the brain e.g.
+ [4]
+\end_layout
+
+\begin_layout Itemize
+`picking' and expanding tracks to create ad hoc bundles 
 \end_layout
 
 \end_inset
@@ -511,7 +624,15 @@ height_special "totalheight"
 status open
 
 \begin_layout Plain Layout
-3 brains rotating
+
+\series bold
+\size larger
+Conclusion
+\end_layout
+
+\begin_layout Plain Layout
+The correspondence problem has been solved in a manner which is supported
+ by high speed algorithms and high quality visualisation tools.
 \end_layout
 
 \end_inset
@@ -533,7 +654,23 @@ height_special "totalheight"
 status open
 
 \begin_layout Plain Layout
-Adding prior knowledge - atlases, experts, picking
+We are developing Python software
+\end_layout
+
+\begin_layout Itemize
+
+\shape smallcaps
+DiPy:
+\shape default
+ to support diffusion imaging analysis - now available in open source
+\end_layout
+
+\begin_layout Itemize
+
+\shape smallcaps
+Fos: 
+\shape default
+A 3d engine that supports multiple simultaneous visualisations 
 \end_layout
 
 \end_inset
@@ -555,65 +692,35 @@ height_special "totalheight"
 status open
 
 \begin_layout Plain Layout
-\noindent
-[Springs and symmetry]
+
+\series bold
+\size larger
+References and Credits
+\end_layout
+
+\begin_layout Plain Layout
+[1] Lee = Minimum description length
+\end_layout
+
+\begin_layout Plain Layout
+[2] Corouge = 
+\end_layout
+
+\begin_layout Plain Layout
+[3] Mori = atlas
+\end_layout
+
+\begin_layout Plain Layout
+[4] PBC
+\end_layout
+
+\begin_layout Plain Layout
+[3] Demiralp - Boy's surface colormap
 \end_layout
 
 \end_inset
 
 
-\end_layout
-
-\begin_layout Standard
-\begin_inset Box Frameless
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-width "100col%"
-special "none"
-height "1in"
-height_special "totalheight"
-status open
-
-\begin_layout Plain Layout
-Conclusion with rotating brains
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Box Frameless
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-width "100col%"
-special "none"
-height "1in"
-height_special "totalheight"
-status open
-
-\begin_layout Plain Layout
-DiPy website
-\end_layout
-
-\begin_layout Plain Layout
-Fos
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-References and credits Demiralp - Boy's surface colormap!!!
 \end_layout
 
 \end_body
