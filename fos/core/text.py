@@ -169,7 +169,7 @@ class TeX(object):
     
         #for x,y in
 
-        rgbai.save('test2.png')
+        #rgbai.save('test2.png')
         
         self.data=rgbai.tostring()
 
@@ -249,6 +249,117 @@ class TeX(object):
         gl.glDisable(gl.GL_BLEND)
 
         
+
+
+
+class PNG(object):
+
+    def __init__(self,fname):
+
+        self.fname = fname        
+        
+        self.viewport = (0,0, 1080,800)
+
+        self.bgcolor = (1., 1., 1.)
+
+        self.position = [0,0,0]
+
+        self.near_pick = None
+
+        self.far_pick = None
+        
+        self.size = None
+
+        self.win_size = None
+
+        self.data = None
+
+        self.alpha = 255 # 0 - 255
+
+        self.rm_blackish = True
+
+        self.list_index = None
+
+        self.magnification = 400
+
+        self.compression = 1
+
+
+    def init(self):
+
+        
+        self.load_image()
+
+
+
+    def load_image(self):
+
+
+        img = Image.open(self.fname)
+
+        img = img.transpose(Image.FLIP_TOP_BOTTOM)
+
+        self.size = img.size
+
+        rgbi=iops.invert(img.convert('RGB'))
+
+        rgbai=rgbi.convert('RGBA')
+
+        if self.alpha != None:
+
+            rgbai.putalpha(self.alpha)
+        
+        if self.rm_blackish:
+
+
+            for x,y in np.ndindex(self.size[0],self.size[1]):
+
+                r,g,b,a=rgbai.getpixel((x,y))
+
+                #print x,y,r,g,b,a
+
+                if r < 10 and g < 10 and b < 10:
+
+                    #print x,y,r,g,b,a
+
+                    rgbai.putpixel((x,y),(0,0,0,0))
+    
+        #for x,y in        
+        
+        self.data=rgbai.tostring()
+
+        x,y,width,height = gl.glGetIntegerv(gl.GL_VIEWPORT)
+        
+	width,height = width,height
+
+        self.win_size=(width,height)
+
+        self.list_index = gl.glGenLists(1)
+
+        gl.glNewList( self.list_index,gl.GL_COMPILE)
+
+        w,h = self.size
+
+        gl.glEnable(gl.GL_ALPHA_TEST)
+        
+        gl.glAlphaFunc(gl.GL_GREATER,0)
+        
+        gl.glPixelStorei(gl.GL_PACK_ALIGNMENT, 1)
+        
+        gl.glPixelStorei(gl.GL_UNPACK_ALIGNMENT, 1)
+        
+        gl.glWindowPos3iv(self.position)
+
+        gl.glDrawPixels(w, h,gl.GL_RGBA, gl.GL_UNSIGNED_BYTE, self.data)
+
+        gl.glDisable(gl.GL_BLEND)
+
+        gl.glEndList()
+
+
+    def display(self):
+
+        gl.glCallList(self.list_index)
 
         
 
