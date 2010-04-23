@@ -12,6 +12,11 @@
 \usepackage{graphicx}
 \usepackage{setspace}
 
+\usepackage{type1cm}
+\renewcommand{\rmdefault}{pnc}
+\usepackage{helvet}
+\usepackage{courier}
+
 \makeatletter
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
@@ -33,6 +38,11 @@
 
 \textbf{\Large }%
 \begin{minipage}[t]{1\columnwidth}%
+
+    \sffamily
+    \raggedright
+
+
 \textbf{\Large Key Research Question}{\Large \par}
 
 \noindent \begin{flushleft}
@@ -45,6 +55,10 @@ diffusion MR brain tractographies?}
 
 \textbf{\Large }%
 \begin{minipage}[t]{1\columnwidth}%
+
+    \sffamily
+    \raggedright
+
 \noindent \begin{flushleft}
 \textbf{\Large Requirements to Produce a Tractography}
 \par\end{flushleft}{\Large \par}
@@ -71,11 +85,17 @@ produced $\sim 150,000$.
 
 \textbf{\Large }%
 \begin{minipage}[t]{1\columnwidth}%
+
+    \sffamily
+    \raggedright
+
+
+
 \textbf{\Large Comparison of Tractographies}{\Large \par}
 
 \bigskip
 
-Beacuse the datasets are so different in size and number of tracks, 
+Because the datasets are so different in size and number of tracks, 
 identifying corresponding tracks is a hard problem. 
 
 \end{minipage}{\Large \par}
@@ -84,6 +104,9 @@ identifying corresponding tracks is a hard problem.
 
 \textbf{\Large }%
 \begin{minipage}[t]{1\columnwidth}%
+    \sffamily
+    \raggedright
+
 
 \noindent \begin{flushleft}
 \textbf{\Large Track Compression}{\Large \par}
@@ -113,6 +136,9 @@ such as \emph{minimum description length} {[}1{]}.%
 
 %
 \begin{minipage}[t]{1\columnwidth}%
+    \sffamily
+    \raggedright
+
 
 \noindent \begin{flushleft}
 \textbf{\Large Track Metrics}{\Large \par}
@@ -135,6 +161,9 @@ $$\mathrm{MAM}(P,Q) = \frac{1}{2}\Big[\frac{1}{\#P}\sum_{p\in P}\min_{q\in Q} |p
 
 %
 \begin{minipage}[t]{1\columnwidth}%
+    \sffamily
+    \raggedright
+
 
 
 \noindent \begin{flushleft}
@@ -160,6 +189,9 @@ The \emph{mean average minimum distance between P and Q} is the mean of these tw
 
 %
 \begin{minipage}[t]{1\columnwidth}%
+    \sffamily
+    \raggedright
+
 \textbf{\Large Corresponding Tracks}{\Large \par}
 
 \bigskip
@@ -172,6 +204,9 @@ identify corresponding tracks in other brains quickly and accurately.%
 
 %
 \begin{minipage}[t]{1\columnwidth}%
+    \sffamily
+    \raggedright
+
 \textbf{\Large Colour Map}{\Large \par}
 
 \bigskip
@@ -196,6 +231,9 @@ whose fibers are roughly parallel across the sagittal plane.
 
 %
 \begin{minipage}[t]{1\columnwidth}%
+    \sffamily
+    \raggedright
+
 \textbf{\Large Adding Prior Knowledge }{\Large \par}
 
 \bigskip
@@ -213,6 +251,9 @@ We can use a range of sources of prior knowledge
 
 %
 \begin{minipage}[t]{1\columnwidth}%
+    \sffamily
+    \raggedright
+
 \textbf{\Large Conclusion}{\Large \par}
 
 \bigskip
@@ -227,6 +268,10 @@ by high speed algorithms and high quality visualisation tools.%
 
 
 \begin{minipage}[t]{1\columnwidth}%
+    \sffamily
+    \raggedright
+
+
 \textbf{\Large Software}{\Large \par}
 
 \bigskip
@@ -247,27 +292,103 @@ in open source at \texttt{http://nipy.sourceforge.net/dipy/}
 %
 \begin{minipage}[t]{1\columnwidth}%
 
+    \sffamily
+    \raggedright
+
 \textbf{\Large References}{\Large \par}
 
 \begin{itemize}
 
-\item {[}1{]} Lee JG, Han J, Whang KY (2007). Trajectory clustering: a partition-and-group framwork. Proc. 2007 ACM SIGMOD 
+\item {{[}1{]}} Lee JG, Han J, Whang KY (2007). Trajectory clustering: a partition-and-group framwork. Proc. 2007 ACM SIGMOD 
 
-\item {[}2{]} Corouge I, Goutthard S, Gerig G (2004). Towards a shape clustering model of white matter fiber bundles using diffusion tensor MRI.
+\item {{[}2{]}} Corouge I, Goutthard S, Gerig G (2004). Towards a shape clustering model of white matter fiber bundles using diffusion tensor MRI.
 ISBI 2004, 344--347. 
 
-\item {[}3{]} Demiralp C, Hughes JF, Laidlaw DH (2009) Coloring 3D Line Fields Using Boy's Real Projective Plane Immersion,
+\item {{[}3{]}} Demiralp C, Hughes JF, Laidlaw DH (2009) Coloring 3D Line Fields Using Boy's Real Projective Plane Immersion,
 IEEE Transactions on Visualization and Computer Graphics,
 15, 1457--1464,
 
-\item {[}4{]} Mori S, Crain BJ, Chacko VP, Van Zijl PCM (1999). 
+\item {{[}4{]}} Mori S, Crain BJ, Chacko VP, Van Zijl PCM (1999). 
 Three-dimensional tracking of axonal projections in the brain by magnetic resonance imaging. 
 Annals of Neurology, 45 (2) 265--269.
 
-\item {[}5{]} Pittsburgh Brain Connectivity Challenge (2009). \texttt{http://pbc.lrdc.pitt.edu/?q=2009b-home}
+\item {{[}5{]}} Pittsburgh Brain Connectivity Challenge (2009). \texttt{http://pbc.lrdc.pitt.edu/?q=2009b-home}
 
 \end{itemize}
 
 \end{minipage}
+
+
+\newpage
+
+\begin{minipage}[t]{1\columnwidth}%
+
+    \sffamily
+    \raggedright
+
+Picking individual tracks with the mouse is fun!!!
+
+\end{minipage}
+
+
+
+\newpage
+
+\begin{minipage}[t]{1\columnwidth}%
+
+    \sffamily
+    \raggedright
+
+Subject 1 (FACT) in \emph{red}: selected tracks in yellow \\
+
+Subject 2 (FACT) in \emph{cyan}: corresponding tracks found \\
+
+\end{minipage}
+
+
+
+
+\newpage
+
+\begin{minipage}[t]{1\columnwidth}%
+
+    \sffamily
+    \raggedright
+
+Subject 1 (FACT) in \emph{red}: selected tracks in yellow \\
+
+Subject 2 (FACT) in \emph{cyan}: corresponding tracks found \\
+
+Subject 1 (RK2): in \emph{blue}: corresponding tracks found \\
+
+\end{minipage}
+
+
+
+\newpage
+
+\begin{minipage}[t]{1\columnwidth}%
+
+    \sffamily
+    \raggedright
+
+All visualised in 3D simultaneously using modest graphics card
+
+\end{minipage}
+
+
+
+\newpage
+
+
+\begin{minipage}[t]{1\columnwidth}%
+
+    \sffamily
+    \raggedright
+
+\textsc{DiPy} -- Diffusion Imaging in Python
+
+\end{minipage}
+
 
 \end{document}
