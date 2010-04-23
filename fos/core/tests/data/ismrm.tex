@@ -71,11 +71,13 @@ produced $\sim 150,000$.
 
 \textbf{\Large }%
 \begin{minipage}[t]{1\columnwidth}%
-\textbf{\Large Comparison of tractographies}{\Large \par}
+\textbf{\Large Comparison of Tractographies}{\Large \par}
 
-{\large A: Brain 1+ Simple Tensor + FACT}{\large \par}
+\bigskip
 
-{\large B: Brain 1 + Simple Tensor + RK2}%
+Beacuse the datasets are so different in size and number of tracks, 
+identifying corresponding tracks is a hard problem. 
+
 \end{minipage}{\Large \par}
 
 \newpage
@@ -84,11 +86,11 @@ produced $\sim 150,000$.
 \begin{minipage}[t]{1\columnwidth}%
 
 \noindent \begin{flushleft}
-\textbf{\Large Data compression}{\Large \par}
+\textbf{\Large Track Compression}{\Large \par}
 \par\end{flushleft}{\Large \par}
 
 \noindent \begin{flushleft}
-These large datasets take significant computational resources, in
+Tractography datasets are large and algorithms to analyse them need significant computational resources, in
 particular long processing times. 
 \par\end{flushleft}{\Large \par}
 
@@ -160,7 +162,7 @@ The \emph{mean average minimum distance between P and Q} is the mean of these tw
 \begin{minipage}[t]{1\columnwidth}%
 \textbf{\Large Corresponding Tracks}{\Large \par}
 
-\par
+\bigskip
 
 We can pick tracks of interest in one brain, and use the MAM metric to
 identify corresponding tracks in other brains quickly and accurately.%
@@ -195,6 +197,8 @@ whose fibers are roughly parallel across the sagittal plane.
 %
 \begin{minipage}[t]{1\columnwidth}%
 \textbf{\Large Adding Prior Knowledge }{\Large \par}
+
+\bigskip
 
 We can use a range of sources of prior knowledge
 \begin{itemize}
@@ -242,16 +246,28 @@ in open source at \texttt{http://nipy.sourceforge.net/dipy/}
 
 %
 \begin{minipage}[t]{1\columnwidth}%
-\textbf{\Large References and Credits}{\Large \par}
 
-{[}1{]} Lee = Minimum description length
+\textbf{\Large References}{\Large \par}
 
-{[}2{]} Corouge = 
+\begin{itemize}
 
-{[}3{]} Mori = atlas
+\item {[}1{]} Lee JG, Han J, Whang KY (2007). Trajectory clustering: a partition-and-group framwork. Proc. 2007 ACM SIGMOD 
 
-{[}4{]} PBC
+\item {[}2{]} Corouge I, Goutthard S, Gerig G (2004). Towards a shape clustering model of white matter fiber bundles using diffusion tensor MRI.
+ISBI 2004, 344--347. 
 
-{[}3{]} Demiralp - Boy's surface colormap%
+\item {[}3{]} Demiralp C, Hughes JF, Laidlaw DH (2009) Coloring 3D Line Fields Using Boy's Real Projective Plane Immersion,
+IEEE Transactions on Visualization and Computer Graphics,
+15, 1457--1464,
+
+\item {[}4{]} Mori S, Crain BJ, Chacko VP, Van Zijl PCM (1999). 
+Three-dimensional tracking of axonal projections in the brain by magnetic resonance imaging. 
+Annals of Neurology, 45 (2) 265--269.
+
+\item {[}5{]} Pittsburgh Brain Connectivity Challenge (2009). \texttt{http://pbc.lrdc.pitt.edu/?q=2009b-home}
+
+\end{itemize}
+
 \end{minipage}
+
 \end{document}
