@@ -284,6 +284,17 @@ class PNG(object):
 
         self.compression = 1
 
+        self.invert = True
+
+
+        img = Image.open(self.fname)
+
+        img = img.transpose(Image.FLIP_TOP_BOTTOM)
+
+        self.size = img.size
+
+        self.img = img
+
 
     def init(self):
 
@@ -295,13 +306,16 @@ class PNG(object):
     def load_image(self):
 
 
-        img = Image.open(self.fname)
+        img=self.img
 
-        img = img.transpose(Image.FLIP_TOP_BOTTOM)
 
-        self.size = img.size
+        if self.invert == True:
 
-        rgbi=iops.invert(img.convert('RGB'))
+            rgbi=iops.invert(img.convert('RGB'))
+
+        else:
+
+            rgbi=img.convert('RGB')
 
         rgbai=rgbi.convert('RGBA')
 
@@ -360,6 +374,8 @@ class PNG(object):
     def display(self):
 
         gl.glCallList(self.list_index)
+
+
 
         
 

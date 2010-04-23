@@ -9,12 +9,15 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="744.09448819"
-   height="1052.3622047"
+   width="696.13873"
+   height="646.78998"
    id="svg2"
    version="1.1"
    inkscape:version="0.47pre4 r22446"
-   sodipodi:docname="MAM.svg">
+   sodipodi:docname="MAM.svg"
+   inkscape:export-filename="/home/eg01/Devel/Fos/fos/core/tests/data/MAM.png"
+   inkscape:export-xdpi="91.800003"
+   inkscape:export-ydpi="91.800003">
   <defs
      id="defs4">
     <inkscape:perspective
@@ -138,16 +141,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.1198045"
-     inkscape:cx="363.58453"
-     inkscape:cy="605.53232"
+     inkscape:cx="348.06936"
+     inkscape:cy="368.87655"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1280"
-     inkscape:window-height="968"
+     inkscape:window-height="976"
      inkscape:window-x="0"
-     inkscape:window-y="26"
-     inkscape:window-maximized="0" />
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -163,16 +166,17 @@
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     id="layer1">
+     id="layer1"
+     transform="translate(-15.515166,-126.43593)">
     <rect
-       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:3.95277046999999992;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:7.90554109999999977, 7.90554109999999977;stroke-dashoffset:0"
+       style="fill:#000000;fill-opacity:1;stroke:none"
        id="rect4098"
        width="696.13873"
        height="644.83002"
        x="15.515166"
        y="128.3961" />
     <path
-       style="fill:none;stroke:#ffffff;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:none;stroke:#ffffff;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="M 248.57143,175.21933 160,458.07647 l 97.14286,271.42857 0,0"
        id="path2816" />
     <path
@@ -183,16 +187,16 @@
        sodipodi:cy="120.93361"
        sodipodi:rx="1.4285715"
        sodipodi:ry="31.428572"
-       d="m 214.28572,120.93361 a 1.4285715,31.428572 0 0 1 -0.004,2.35362 l -1.42456,-2.35362 z"
+       d="m 214.28572,120.93361 c 0,0.78537 -0.001,1.57046 -0.004,2.35362 l -1.42456,-2.35362 z"
        sodipodi:start="0"
        sodipodi:end="0.07495811" />
     <path
-       style="fill:none;stroke:#ffffff;stroke-width:3.81172132000000019;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       style="fill:none;stroke:#ffffff;stroke-width:3.81172132;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="M 574.37985,195.12519 517.64845,479.32382 442.763,652.45633"
        id="path2833" />
     <text
        xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:#ffffff;font-family:Bitstream Vera Sans;stroke-opacity:1"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1;font-family:Bitstream Vera Sans"
        x="191.42857"
        y="166.6479"
        id="text3607"
@@ -202,7 +206,7 @@
          x="191.42857"
          y="166.6479"
          dy="0 19.999998">p<tspan
-   style="-inkscape-font-specification:Bitstream Vera Sans;font-family:Bitstream Vera Sans;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:32px;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%;stroke:#ffffff;stroke-opacity:1;fill:#ffffff"
+   style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;stroke:#ffffff;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
    id="tspan3615">1</tspan></tspan></text>
     <text
        xml:space="preserve"
@@ -231,7 +235,7 @@
          y="744.99194" /><tspan
          sodipodi:role="line"
          x="179.6423"
-         y="744.99194"
+         y="784.99194"
          dy="0"
          id="tspan3662" /></text>
     <text
@@ -245,7 +249,7 @@
          x="208.57143"
          y="746.64789"
          dy="0 20">p<tspan
-   style="font-size:32;fill:#ffffff"
+   style="font-size:32px;fill:#ffffff"
    id="tspan3668">3</tspan></tspan></text>
     <text
        xml:space="preserve"
@@ -259,7 +263,7 @@
          x="594.53772"
          y="201.7283"
          dy="0 19.999998"><tspan
-           style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans;fill:#ffffff"
+           style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
            id="tspan3615-1"><tspan
    style="font-size:40px;fill:#ffffff"
    id="tspan4071">q</tspan>1</tspan></tspan></text>
@@ -306,7 +310,7 @@
          x="138.35806"
          y="465.63281">.</tspan></text>
     <path
-       style="fill:#ff0000;stroke:#ff0000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1"
+       style="fill:#ff0000;fill-opacity:1;stroke:#ff0000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m 251.93349,174.19401 321.03525,21.5943"
        id="path3877" />
     <path
@@ -318,15 +322,15 @@
        d="m 256.85516,722.64138 182.2854,-71.98964"
        id="path3883" />
     <path
-       style="fill:none;stroke:#00ff00;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:6,6;stroke-dashoffset:30"
+       style="fill:none;stroke:#00ff00;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:6, 6;stroke-dashoffset:30"
        d="M 249.05425,172.75439 515.38394,476.5142"
        id="path3885" />
     <path
-       style="fill:none;stroke:#00ff00;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:9,9;stroke-dashoffset:30"
+       style="fill:none;stroke:#00ff00;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:9, 9;stroke-dashoffset:30"
        d="M 255.5559,183.57489 438.34091,647.08582"
        id="path3885-6" />
     <path
-       style="fill:none;stroke:#00ff00;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:6,6;stroke-dashoffset:30"
+       style="fill:none;stroke:#00ff00;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:6, 6;stroke-dashoffset:30"
        d="M 164.96592,452.07065 570.78417,195.96694"
        id="path3885-7" />
     <path
@@ -368,7 +372,7 @@
        d="m 260.13838,726.11952 182.2854,-71.98964"
        id="path3883-1" />
     <path
-       style="fill:none;stroke:#00ff00;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:6,6;stroke-dashoffset:0"
+       style="fill:none;stroke:#00ff00;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:6, 6;stroke-dashoffset:0"
        d="M 568.81962,197.8058 253.88994,730.35543"
        id="path3973" />
     <text
