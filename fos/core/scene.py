@@ -28,7 +28,7 @@ class Scene(object):
 
         #Window settings
         self.disp_mode=glut.GLUT_DOUBLE | glut.GLUT_RGBA | glut.GLUT_DEPTH
-        self.win_size=(1080,800)#width,height
+        self.win_size=(1024,768)#width,height
         self.win_pos=(100,100)#px,py
         self.win_title='F.O.S.'
         
@@ -55,12 +55,16 @@ class Scene(object):
         self.enab_light=gl.GL_LIGHTING #enable lighting
         self.enab_light0=gl.GL_LIGHT0 #enable first light
 
+        #self.light_model=gl.GL_LIGHT_MODEL_AMBIENT
+        #self.light_model_value=[0.5,0.5,0.5,1.]
         self.light_model=gl.GL_LIGHT_MODEL_TWO_SIDE
-        self.light_model_value=gl.GL_FALSE 
-        self.light0_position=[1,1,1,0] # light position is at Inf,Inf,Inf 
+        self.light_model_value=gl.GL_FALSE
+
+        self.light0_position=[1,1,1,0] # light position is at Inf,Inf,Inf       
         self.light0_ambient=[0.8,0.8,0.8,1.]
         self.light0_diffuse=[1.,1.,1.,1.]
         self.light0_specular=[1.,1.,1.,1.]
+
         
         #Interaction settings
         self.disp=self.display
@@ -132,6 +136,8 @@ class Scene(object):
         gl.glEnable(self.enab_light0)
         
         gl.glLightModeli(self.light_model,self.light_model_value)
+        
+        #gl.glLightModelfv(self.light_model,self.light_model_value)
 
         gl.glLightfv(self.enab_light0,gl.GL_POSITION, self.light0_position)
 

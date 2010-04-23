@@ -5,6 +5,7 @@ import fos.core.text as text
 
 
 
+
 class Plot():
 
 
@@ -23,65 +24,135 @@ class Plot():
     def init(self):
 
 
-        #Show the 3 brains together
+        global tex1
 
+        snippet = r'''
+Tractography Rocks
+'''
+
+        tex1=text.TeX('test',snippet)
+
+        tex1.alpha = 255
+
+        tex1.init()
+
+        tex1.position=[0,0,0]
+
+
+        global slide1
+
+        slide1=text.PNG('/home/eg01/Devel/Fos/test.png')
+
+        slide1.position=[400,400,0]
+
+        slide1.init()
+
+
+
+        global b1
+
+        b1 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
+
+        b1.opacity = 1.
+
+        b1.angular_speed = 0.
+
+        b1.manycolors = True
+
+        b1.data_subset=[0,20000]
+
+        b1.picking_example = True
+
+        b1.init()               
+
+        #Show the 3 brains together
 
         global b13
         global b23
         global b33
+
+        b13 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
+
+        #b13 = prim.Tracks3D('/home/eg309/Data/Eleftherios/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
         
+        b13.opacity = .05     
 
-        corr_mat_demo=np.array(    [[ 1, 10560,  3609], [2,  17872, 15377],\
-                                    [ 3,  6447,  3897],	[4,  18854,  6409],\
-                                    [ 5, 14416,  4515], [ 7,  9956, 13913],\
-                                    [ 8, 10853, 15572], [ 9, 13280,  8461], \
-                                    [ 0, 11275,  9224]])
+        b13.angular_speed = 0.
 
-        #b13 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
+        b13.manycolors = False
 
-        b13 = prim.Tracks3D('/home/eg309/Data/Eleftherios/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
-        
-        b13.opacity = .5
+        b13.brain_color = [1,0,0]
+
+        b13.yellow_indices = [17872, 6447, 18854, 14416, 9956, 10853, 13280, 11275, 10560]
+
 
         b13.init()
-
-        b13.angular_speed = 0.5        
-
-        b13.position=(-b13.mean[0]-150.,-b13.mean[1],-b13.mean[2])
         
+        b13.position=(-b13.mean[0]-150.,-b13.mean[1]+100,-b13.mean[2])
 
-        #b23 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090134_METHODS/20090227_154122/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
+        b23 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090134_METHODS/20090227_154122/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
 
-        b23 = prim.Tracks3D('/home/eg309/Data/Eleftherios/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
+        #b23 = prim.Tracks3D('/home/eg309/Data/Eleftherios/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
         
         
-        b23.opacity = .5
+        b23.opacity = .05
 
+        b23.angular_speed = 0.
+
+        b23.manycolors = False
+
+        b23.brain_color = [0,1,1]
+
+        b23.yellow_indices=[15377, 3897, 6409, 4515, 13913, 15572,  8461,  9224,  3609]
+        
+        
         b23.init()
 
-        b23.angular_speed = 0.5                
-
-        b23.position=(-b23.mean[0],-b23.mean[1],-b23.mean[2])
-
+        b23.position=(-b23.mean[0],-b23.mean[1]+100,-b23.mean[2])
         
-        #b33 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_RK2.trk')
+        b33 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_RK2.trk')
 
 
-        b33 = prim.Tracks3D('/home/eg309/Data/Eleftherios/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
+        #b33 = prim.Tracks3D('/home/eg309/Data/Eleftherios/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
         
         
-        b33.opacity = .5
+        b33.opacity = .05
+
+        b33.angular_speed = 0.
+
+        b33.manycolors = False
+
+        b33.brain_color = [0,1,0]
+        
+        b33.yellow_indices = [44949, 13165, 42538, 12471, 19442, 42391, 44919, 27775, 26106]
 
         b33.init()
 
-        b33.angular_speed = 0.5        
+        b33.position=(-b33.mean[0]+150.,-b33.mean[1]+100,-b33.mean[2])
+
+
+
+        global bend
+
+        bend = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
+
+        bend.opacity = 1.
+
+        bend.angular_speed = .5
+
+        bend.init()
         
-        b33.position=(-b33.mean[0]+150.,-b33.mean[1],-b33.mean[2])
+        bend.position=(-bend.mean[0],-bend.mean[1],-bend.mean[2])
         
+        
+        #when to run
          
-        self.slots={ 0:{'actor':b13,'slot':(1000,80000) },
-                     1:{'actor':b23,'slot':(1000,80000) },
-                     2:{'actor':b33,'slot':(1000,80000) }}                   
+        self.slots={0:{'actor':slide1,'slot':(0,160000) },
+                    1:{'actor':b1,'slot':(1000,10000) },
+                       2:{'actor':b13,'slot':(12000,16000) },
+                       3:{'actor':b23,'slot':(12000,16000) },
+                       4:{'actor':b33,'slot':(12000,16000) },
+                       5:{'actor':bend,'slot':(18000,200000) }}                   
                      
 
         
@@ -160,7 +231,6 @@ class Plot_JustOne():
                            
         global b1
 
-
         b1 = prim.Tracks3D('/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk')
 
         #b1 = prim.Tracks3D('/home/eg309/Data/Eleftherios/dti_FACT.trk')
@@ -175,6 +245,9 @@ class Plot_JustOne():
 
         b1.position=tuple(-b1.mean)
 
+
+
+        #Scenario ----------------------------------------
         
         self.slots={ 0:{'actor':tex1,'slot':(1000,80000) },
                      1:{'actor':b1, 'slot': (0,800000) },

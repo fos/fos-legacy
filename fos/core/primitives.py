@@ -9,6 +9,8 @@ import PIL.ImageOps as iops
 from fos.core.utils import list_indices as lind
 from os.path import join as pjoin
 
+from dipy.core import track_metrics as tm
+
 import fos.core.collision as cll
 
 data_path = pjoin(os.path.dirname(__file__), 'data')
@@ -39,11 +41,11 @@ class Tracks3D(object):
 
         self.colormap = None
 
-        self.ambient   = [0.0, 0.0, 0.2, 1.]
+        self.ambient   = [0.0, 0.0, 0.2, .1]
         
-        self.diffuse   = [0.0, 0.0, 0.7, 1.]
+        self.diffuse   = [0.0, 0.0, 0.7, .1]
         
-        self.specular  = [0.2, 0.2, 0.7, 1.]
+        self.specular  = [0.2, 0.2, 0.7, .1]
 
         self.shininess = 50.
 
@@ -75,6 +77,18 @@ class Tracks3D(object):
 
         self.picked_track = None
 
+        self.pick_color = [1,1,0]
+
+        self.brain_color = [1,0,0]
+
+        self.yellow_indices = None
+
+        self.dummy_data = False
+
+        self.data_subset = None
+
+        self.picking_example = False
+
         
 
     def init(self):
@@ -89,11 +103,25 @@ class Tracks3D(object):
 
         tracks = [l[0] for l in lines]
 
+        if self.yellow_indices != None :
+
+            tracks = [t for t in tracks if tm.length(t) > 20]
+
         print 'tracks loaded'
 
         #self.data = [100*np.array([[0,0,0],[1,0,0],[2,0,0]]).astype(np.float32) ,100*np.array([[0,1,0],[0,2,0],[0,3,0]]).astype(np.float32)]#tracks[:20000]
 
-        self.data = tracks[:20000]
+        if self.dummy_data:
+
+            self.data = [100*np.array([[0,0,0],[1,0,0],[2,0,0]]).astype(np.float32) ,100*np.array([[0,1,0],[0,2,0],[0,3,0]]).astype(np.float32)]
+
+        if self.data_subset!=None:
+
+            self.data = tracks[self.data_subset[0]:self.data_subset[1]]
+
+        else:
+
+            self.data = tracks
 
         data_stats = np.concatenate(tracks)
 
@@ -107,13 +135,9 @@ class Tracks3D(object):
         
         del lines
 
-        if self.manycolors:
+        self.multiple_colors()
 
-            self.multiple_colors()          
-
-        else:
-
-            self.one_color()
+        #self.material_color()
 
                
  
@@ -138,24 +162,15 @@ class Tracks3D(object):
     
         x,y,z=self.position
 
-        #gl.glRotatef(-90,1,0,0)
+        if self.picking_example!=True:
 
-        #gl.glRotatef(self.angle,0,0,1)
-        
-        #gl.glTranslatef(x,y,z)
 
-        #gl.glPushMatrix()
+            gl.glRotatef(-90,1,0,0)
 
-        #gl.glLoadIdentity()
-        
-        #gl.glRotatef(self.angle,0,0,1)
+            gl.glRotatef(self.angle,0,0,1)
 
-        gl.glTranslatef(x,y,z)
-
-        gl.glRotatef(self.angle,0.,1.,0.)
-
-        #gl.glTranslatef(x,y,z)
-       
+            gl.glTranslatef(x,y,z)
+    
 
         if self.angle < 360.:
 
@@ -164,25 +179,39 @@ class Tracks3D(object):
         else:
 
             self.angle=0.
+
+            
+        #gl.glCullFace(gl.GL_FRONT)
+        gl.glCallList(self.list_index)
         
-        gl.glCallList(self.list_index)           
+        #gl.glCullFace(gl.GL_BACK)
+        #gl.glCallList(self.list_index)
 
         if self.picked_track != None:
 
             self.display_one_track(self.picked_track)
 
-
-            
-        #gl.glRotatef(-self.angle,0,0,1)
-
         
 
+        if self.yellow_indices != None:
+
+            #print len(self.data)
+            #print self.data[0].shape
+
+            for i in self.yellow_indices:
+
+                #print len(self.data[i])
+
+                self.display_one_track(i)
+
+            #print
+            #print
+            #print
+            
+
+        
 
         gl.glPopMatrix()
-
-        
-    
-        #gl.glPopMatrix()
 
         gl.glFinish()        
 
@@ -201,8 +230,7 @@ class Tracks3D(object):
         print self.picked_track
 
 
-    def display_one_track(self,track_index):
-
+    def display_one_track(self,track_index,color4=np.array([1,1,0,1],dtype=np.float32)):
         
 
         gl.glPushMatrix()
@@ -219,9 +247,7 @@ class Tracks3D(object):
 
         gl.glLineWidth(7.)
 
-        gl.glEnableClientState(gl.GL_VERTEX_ARRAY)
-
-        color4=np.array([1,1,0,.5],dtype=np.float32)
+        gl.glEnableClientState(gl.GL_VERTEX_ARRAY)        
 
         gl.glColor4fv(color4)
 
@@ -240,7 +266,93 @@ class Tracks3D(object):
         gl.glPopMatrix()
 
 
-    def one_color(self):
+
+    def multiple_colors(self):
+
+        from dipy.viz.colormaps import boys2rgb
+
+        from dipy.core.track_metrics import mean_orientation, length, downsample
+
+        colors=np.random.rand(1,3).astype(np.float32)
+
+        print colors
+
+        self.list_index = gl.glGenLists(1)
+
+        gl.glNewList( self.list_index,gl.GL_COMPILE)
+
+        gl.glPushMatrix()
+
+        gl.glDisable(gl.GL_LIGHTING)
+        
+        gl.glEnable(gl.GL_LINE_SMOOTH)
+
+        gl.glEnable(gl.GL_BLEND)
+
+        gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)
+
+        #gl.glBlendFunc(gl.GL_SRC_ALPHA_SATURATE,gl.GL_ONE_MINUS_SRC_ALPHA)
+        
+        #gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE)
+
+        gl.glHint(gl.GL_LINE_SMOOTH_HINT,gl.GL_DONT_CARE)
+
+        #gl.glHint(gl.GL_LINE_SMOOTH_HINT,gl.GL_NICEST)
+
+        gl.glLineWidth(self.line_width)
+
+        #gl.glDepthMask(gl.GL_FALSE)
+
+
+        gl.glEnableClientState(gl.GL_VERTEX_ARRAY)        
+
+        for d in self.data:
+
+            if length(d)> self.min_length:
+            
+                #mo=mean_orientation(d)
+
+                if self.manycolors:
+                
+                    ds=downsample(d,6)
+
+                    mo=ds[3]-ds[2]
+
+                    mo=mo/np.sqrt(np.sum(mo**2))
+
+                    mo.shape=(1,3)
+            
+                    color=boys2rgb(mo)
+
+                    color4=np.array([color[0][0],color[0][1],color[0][2],self.opacity],np.float32)
+                    gl.glColor4fv(color4)
+
+                else:
+
+                    color4=np.array([self.brain_color[0],self.brain_color[1],\
+                                         self.brain_color[2],self.opacity],np.float32)
+
+                    gl.glColor4fv(color4)
+                    
+
+                gl.glVertexPointerf(d)
+                               
+                gl.glDrawArrays(gl.GL_LINE_STRIP, 0, len(d))
+
+        
+
+        gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
+
+
+        #gl.glDisable(gl.GL_BLEND)
+        
+        gl.glEnable(gl.GL_LIGHTING)
+        
+        gl.glPopMatrix()
+
+        gl.glEndList()
+ 
+    def material_color(self):
 
         self.list_index = gl.glGenLists(1)
 
@@ -272,239 +384,9 @@ class Tracks3D(object):
 
         gl.glEndList()
 
+   
 
-    def multiple_colors(self):
 
-        from dipy.viz.colormaps import boys2rgb
-
-        from dipy.core.track_metrics import mean_orientation, length, downsample
-
-        colors=np.random.rand(1,3).astype(np.float32)
-
-        print colors
-
-        self.list_index = gl.glGenLists(1)
-
-        gl.glNewList( self.list_index,gl.GL_COMPILE)
-
-        gl.glPushMatrix()
-
-        gl.glDisable(gl.GL_LIGHTING)
-
-        gl.glEnable(gl.GL_LINE_SMOOTH)
-
-        gl.glEnable(gl.GL_BLEND)
-
-        gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)
-
-        gl.glHint(gl.GL_LINE_SMOOTH_HINT,gl.GL_DONT_CARE)
-
-        gl.glLineWidth(self.line_width)
-
-
-        gl.glEnableClientState(gl.GL_VERTEX_ARRAY)        
-
-        for d in self.data:
-
-            if length(d)> self.min_length:
-            
-                #mo=mean_orientation(d)
-                
-                ds=downsample(d,6)
-                
-                mo=ds[3]-ds[2]
-
-                mo=mo/np.sqrt(np.sum(mo**2))
-
-                mo.shape=(1,3)
-            
-                color=boys2rgb(mo)
-
-                color4=np.array([color[0][0],color[0][1],color[0][2],self.opacity],np.float32)
-                gl.glColor4fv(color4)
-
-                #gl.glColor3fv(color)
-
-                gl.glVertexPointerf(d)
-                               
-                gl.glDrawArrays(gl.GL_LINE_STRIP, 0, len(d))
-
-        
-
-        gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
-
-        gl.glEnable(gl.GL_LIGHTING)
-        
-        gl.glPopMatrix()
-
-        gl.glEndList()
- 
-
-
-        '''
-
-
-        self.list_index = gl.glGenLists(1)
-
-        gl.glNewList( self.list_index,gl.GL_COMPILE)
-
-        gl.glPushMatrix()
-
-        colors=np.float32( np.random.rand( 10,3 ))
-
-        colorsin=np.round( 10*np.random.rand( len( self.data ) ) ).astype(np.ubyte)
-
-        gl.glEnableClientState(gl.GL_VERTEX_ARRAY)
-
-        gl.glEnableClientState(gl.GL_COLOR_ARRAY)
-
-        gl.glColorPointer( 3, gl.GL_FLOAT, 0, colors.tostring( ) )
-
-        #gl.glColorPointerd(colors)
-
-        colorsins=colorsin.tostring()
-
-        print 
-
-        for i,d in enumerate(self.data):
- 
-            gl.glVertexPointer( 3, gl.GL_FLOAT, 0, d.tostring( ) )
-
-            #gl.glVertexPointerd(d)
-
-            gl.glDrawElements(gl.GL_LINE_STRIP , len(d), gl.GL_UNSIGNED_BYTE, colorsins[i] )
-        
-
-        gl.glDisableClientState(gl.GL_COLOR_ARRAY)
-
-        gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
-
-        
-        gl.glPopMatrix()
-
-        gl.glEndList()
-  
-        '''
-
-    def poly_test(self):
-
-        n=50
-
-        a=np.arange(0,n)
-
-        vertices = np.transpose(
-            np.reshape(np.array((np.cos(2*np.pi*a/float(n)), np.sin(3*2*np.pi*a/float(n)))),(2, n)))
-
-        colors=np.ones((n, 3))
-
-        colors[0]=[1,0,0]
-
-        colors[25]=[1,1,0]
-
-        colors.shape = (n, 3)
-
-        
-
-        glClearColor(0.5, 0.5, 0.5, 0)
-        
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-	glOrtho(-1,1,-1,1,-1,1)
-        
-	glDisable(gl.GL_LIGHTING)
-        
-	glDrawArrays(gl.GL_LINE_LOOP, 0, n)
-        
-	glEnable(gl.GL_LIGHTING)
-
-        glVertexPointerd(vertices)
-        
-	glColorPointerd(colors)
-        
-	glEnableClientState(GL_VERTEX_ARRAY)
-        
-	glEnableClientState(GL_COLOR_ARRAY)
-
-        
-        gl.glPopMatrix()
-
-        gl.glEndList()
-
-
-
-    def line_test(self):
-       
-        scalar=1.0
-
-        lines=self.data
-
-        colors=None
-
-
-        if colors!=None:        
-
-            lit=iter(colors)
-
-        else:
-
-            colors=np.random.rand(len(lines),3)
-
-            lit=iter(colors)
-    
-
-        self.list_index = gl.glGenLists(1)
-        
-        gl.glNewList(self.list_index, gl.GL_COMPILE)
-        
-        nol=0
-
-        gl.glDisable(gl.GL_LIGHTING)
-
-               
-
-        for Line in lines:
-        
-
-            inw=True
-
-            mit=iter(Line)
-
-            nit=iter(Line)
-
-            nit.next()
-        
-            scalar=lit.next()
-
-            gl.glBegin(gl.GL_LINE_STRIP)    
-
-            gl.glColor4f(scalar[0],scalar[1],scalar[2],1.)
-            
-
-            while(inw):            
-
-                try:
-
-                    m=mit.next()                                        
-
-                    gl.glVertex3f(m[0], m[1], m[2]) # point                   
-
-                except StopIteration:
-                    
-
-                    break
-
-
-            gl.glEnd()                                
-        
-            nol+=1
-
-            if nol%1000==0:
-                
-                print(nol,'Lines Loaded')
-        
-
-        gl.glEnable(gl.GL_LIGHTING)
-        
-        gl.glEndList()
         
 
 
