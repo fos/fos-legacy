@@ -30,68 +30,13 @@
 \usepackage{babel}
 
 \begin{document}
-  \begin{singlespace}
-
-    \noindent \begin{center}
-    \textsf{\textbf{\LARGE }}%
-    \begin{minipage}[t]{90mm}%
-      \begin{singlespace}
-        \noindent 
-        \begin{center}
-        \textsf{\textbf{\textsl{\textcolor{black}{\huge Identification of
-Corresponding Tracks in Diffusion MRI Tractographies}}}}\textsf{\textbf{\LARGE \bigskip{}
-}}
-        \par
-        \end{center}{\LARGE \par}
-
-      \end{singlespace}
-
-\noindent \begin{center}
-{\Large Eleftherios Garyfallidis} {[}1, 2{]}
-\par\end{center}
-
-\noindent \begin{center}
-{\Large Matthew Brett} {[}3{]}
-\par\end{center}
-
-\noindent \begin{center}
-{\Large Vassilis Tsiaras} {[}3{]}
-\par\end{center}
-
-\noindent \begin{center}
-{\Large George Vogiatzis} {[}1{]} 
-\par\end{center}
-
-\noindent \begin{center}
-\&
-\par\end{center}
-
-\noindent \begin{center}
-{\Large Ian Nimmo-Smith} {[}2{]}\bigskip{}
-
-\par\end{center}
-
-\noindent \lyxline{\normalsize}
-\begin{enumerate}
-\item \noindent \textsc{University of Cambridge}
-\item \noindent \textsc{MRC Cognition and Brain Sciences Unit, Cambridge}
-\item \noindent U\textsc{niversity of Berkeley, California}
-\item \noindent \textsc{University of Crete, Greece\bigskip{}
-}
-\end{enumerate}
-\end{minipage}
-
-\par\end{center}{\LARGE \par}
-\end{singlespace}
-
-\newpage
 
 \textbf{\Large }%
 \begin{minipage}[t]{1\columnwidth}%
 \textbf{\Large Key Research Question}{\Large \par}
 
 \noindent \begin{flushleft}
-{\Large How can we identify corresponding tracks between different
+{\Large How can we identify corresponding tracks within different
 diffusion MR brain tractographies?} 
 \par\end{flushleft}%
 \end{minipage}{\Large \par}
@@ -101,21 +46,24 @@ diffusion MR brain tractographies?}
 \textbf{\Large }%
 \begin{minipage}[t]{1\columnwidth}%
 \noindent \begin{flushleft}
-\textbf{\Large Requirement to Create a Tractography}
+\textbf{\Large Requirements to Produce a Tractography}
 \par\end{flushleft}{\Large \par}
+
 \begin{itemize}
 \item \begin{flushleft} a local diffusion model (e.g. simple tensor, Q-Ball)
 \par\end{flushleft}
 \item \begin{flushleft} a tractography algorithm (e.g. FACT, Runge-Kutta)
 \par\end{flushleft}
 \end{itemize}
+
 \noindent \begin{flushleft} The quality and size of resulting tractographies may differ depending
-on the choice of these options
+on the choice of these options.
 \par\end{flushleft}
-\begin{itemize}
-\item \begin{flushleft} e.g. FACT 100,000; RK2 150,000)
+
+\begin{flushleft} For example, based on the same diffusion tensor principal direction vector field and the same sub-grid, 
+the FACT algorithm produced $\sim 100,000$ tracks, whereas the Runge-Kutta algorithm of order 2 (RK2) 
+produced $\sim 150,000$.
 \par\end{flushleft}
-\end{itemize}
 %
 \end{minipage}{\Large \par}
 
@@ -134,29 +82,77 @@ on the choice of these options
 
 \textbf{\Large }%
 \begin{minipage}[t]{1\columnwidth}%
-\textbf{\Large Data compression}{\Large \par}
 
+\noindent \begin{flushleft}
+\textbf{\Large Data compression}{\Large \par}
+\par\end{flushleft}{\Large \par}
+
+\noindent \begin{flushleft}
 These large datasets take significant computational resources, in
-particular long processing times. We have developed geometric techniques
-which reduce the number of points on the tracks of a tractography
-by a factor of 8. More points are retained where the track has high
-curvatue and fewer are needed where the track has low curvature. The
+particular long processing times. 
+\par\end{flushleft}{\Large \par}
+
+\noindent \begin{flushleft}
+We have developed a geometric technique -- \textsc{Apol} --
+which reduces the number of points on the tracks of a tractography
+by a factor of 8. 
+\par\end{flushleft}{\Large \par}
+
+\noindent \begin{flushleft}
+More points are retained where the track has high
+curvature and fewer are needed where the track has low curvature. The
 time performance exceeds that of information theory based techniques
 such as \emph{minimum description length} {[}1{]}.%
+\par\end{flushleft}{\Large \par}
+
 \end{minipage}{\Large \par}
 
 \newpage
 
 %
 \begin{minipage}[t]{1\columnwidth}%
-\item \textbf{\Large Track Metrics}{\Large \par}
 
+\noindent \begin{flushleft}
+\textbf{\Large Track Metrics}{\Large \par}
+{\Large \par}
+\par\end{flushleft}{\Large \par}
+
+\noindent \begin{flushleft}
 Metrics are needed to measure that similarity of two tracks, whether
 they are in the same or different tractographies. We have used the
 mean average minimum distance metric (MAM) {[}2{]}:
+{\Large \par}
+\par\end{flushleft}{\Large \par}
 
-$$\mathrm{MAM}(A,B) = \frac{1}{2}\Big[\frac{1}{\#A}\sum_{p\in A}\min_{q\in B} |p-q| + \frac{1}{\#B}\sum_{q\in B}\min_{p\in A} |q-p|\Big]$$%
+$$\mathrm{MAM}(P,Q) = \frac{1}{2}\Big[\frac{1}{\#P}\sum_{p\in P}\min_{q\in Q} |p-q| + \frac{1}{\#Q}\sum_{q\in Q}\min_{p\in P} |q-p|\Big]$$%
 \end{minipage}
+
+
+
+\newpage
+
+%
+\begin{minipage}[t]{1\columnwidth}%
+
+
+\noindent \begin{flushleft}
+
+The \emph{minimum distances} between point of P and points of Q are coloured Red.
+
+The \emph{average mimimum distance of P from Q} is the average length of the Red lines.
+
+The \emph{minimum distances} between point of Q and points of P are coloured Blue.
+
+The \emph{average mimimum distance of P from Q} is the average length of the Blue lines.
+
+The \emph{mean average minimum distance between P and Q} is the mean of these two average. It is symmetric.
+
+{\Large \par}
+\par\end{flushleft}{\Large \par}
+
+\end{minipage}
+
+
 
 \newpage
 
@@ -164,8 +160,34 @@ $$\mathrm{MAM}(A,B) = \frac{1}{2}\Big[\frac{1}{\#A}\sum_{p\in A}\min_{q\in B} |p
 \begin{minipage}[t]{1\columnwidth}%
 \textbf{\Large Corresponding Tracks}{\Large \par}
 
-We can pick tracks of interest in one brain, and use this metric to
+\par
+
+We can pick tracks of interest in one brain, and use the MAM metric to
 identify corresponding tracks in other brains quickly and accurately.%
+\end{minipage}
+
+\newpage
+
+%
+\begin{minipage}[t]{1\columnwidth}%
+\textbf{\Large Colour Map}{\Large \par}
+
+\bigskip
+
+We have coloured the individual tracks in our tractographies in a way which
+uses a wider range of colours than conventional colour maps.
+
+\bigskip
+
+We use the projective plane mapping of [3] by assigning
+to a track a colour that corresponds to the direction of the middle segment of a 
+5-segment approximation of the track.
+
+\bigskip
+
+This can help with recognising structures such as the \emph{corpus callosum}
+whose fibers are roughly parallel across the sagittal plane. 
+
 \end{minipage}
 
 \newpage
@@ -176,9 +198,9 @@ identify corresponding tracks in other brains quickly and accurately.%
 
 We can use a range of sources of prior knowledge
 \begin{itemize}
-\item white matter atlases {[}3{]}
-\item using experts to label regions of the brain e.g. {[}4{]}
-\item `picking' and expanding tracks to create ad hoc bundles 
+\item white matter atlases {[}4{]}
+\item using experts to label regions of the brain e.g. {[}5{]}
+\item selecting individual tracks 
 \end{itemize}
 %
 \end{minipage}
@@ -189,6 +211,8 @@ We can use a range of sources of prior knowledge
 \begin{minipage}[t]{1\columnwidth}%
 \textbf{\Large Conclusion}{\Large \par}
 
+\bigskip
+
 The correspondence problem has been solved in a manner which is supported
 by high speed algorithms and high quality visualisation tools.%
 \end{minipage}
@@ -196,12 +220,20 @@ by high speed algorithms and high quality visualisation tools.%
 \newpage
 
 %
+
+
 \begin{minipage}[t]{1\columnwidth}%
+\textbf{\Large Software}{\Large \par}
+
+\bigskip
+
 We are developing Python software
 \begin{itemize}
 \item \textsc{DiPy:} to support diffusion imaging analysis - now available
-in open source
-\item \textsc{Fos: }A 3d engine that supports multiple simultaneous visualisations 
+in open source at \texttt{http://nipy.sourceforge.net/dipy/}
+
+\item \textsc{Fos: }A 3D engine that supports multiple simultaneous visualisations, see
+\texttt{http://github.com/Garyfallidis/Fos}
 \end{itemize}
 %
 \end{minipage}
