@@ -18,7 +18,6 @@ except ImportError:
     ImportError('PyOpenGL is not installed')
 
 import mouse
-import primitives
 
 
 class Scene(object):
@@ -280,31 +279,11 @@ class Scene(object):
 
             xf,yf,zf=glu.gluUnProject(np.double(x),viewport[3]-np.double(y),1.)
             
-            #print 'World Coordinates Far'
-            #print xf,yf,zf
-
-            #print 'unit vector'
-
             near=np.array([xn,yn,zn])
             far =np.array([xf,yf,zf])
 
-            #pick_ray=(far-near)/np.sqrt(np.sum((far-near)**2))
-
-            #print pick_ray
-            #print'near', near
-            #print'far', far
-
             plot.update_pick_ray(near,far)
             
-    
-            
-
-            #success,t,p= cll.intersect_segment_plane(near,far,[-100,100,0],[100,100,0],[100,-100,0])
-
-                    
-
-                        
-                
            
 	if key == '\033':
             
