@@ -32,9 +32,6 @@ class Plot():
     def init(self):
 
 
-
-
-
         global ismrm0
 
         ismrm0=text.PNG('/home/eg01/Devel/Fos/fos/core/tests/data/firstpage.png')

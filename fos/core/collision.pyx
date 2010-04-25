@@ -715,8 +715,7 @@ def mindistance_segment2track(p1,q1,xyz):
     
     index = 1
 
-    min = 10000000
-
+    min = 3*10**38
         
     while index < t_len:
         

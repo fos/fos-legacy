@@ -60,9 +60,9 @@ class Scene(object):
         self.light_model_value=gl.GL_FALSE
 
         self.light0_position=[1,1,1,0] # light position is at Inf,Inf,Inf       
-        self.light0_ambient=[0.8,0.8,0.8,1.]
-        self.light0_diffuse=[1.,1.,1.,1.]
-        self.light0_specular=[1.,1.,1.,1.]
+        self.light0_ambient=[0.2,0.2,0.2,1.]
+        self.light0_diffuse=[.2,.2,.2,1.]
+        self.light0_specular=[.2,.2,.2,1.]
 
         
         #Interaction settings
