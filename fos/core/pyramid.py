@@ -21,7 +21,7 @@ class Pyramid(object):
 
         self.triangles=np.array([[p[0],p[1],p[2]], [p[0],p[1],p[3]], [p[1],p[2],p[3]], [p[2],p[0],p[3]] ],np.int)
 
-        
+        self.colours = np.array([[255,0,0,255],[0,255,0,255],[0,0,255,255],[127,127,127,255]],np.int)
 
     def init(self):
 
@@ -32,13 +32,17 @@ class Pyramid(object):
         gl.glBegin(gl.GL_TRIANGLES)
 
 
-        for tri in self.triangles:
+        for (num, tri) in enumerate(self.triangles):
             
-            gl.glVertex3fv(tri[0])
+            gl.glColor4iv(self.colours[num])
 
-            gl.glVertex3fv(tri[1])
+            for vert in tri:
+            
+                gl.glVertex3fv(vert)
 
-            gl.glVertex3fv(tri[2])
+            #gl.glVertex3fv(tri[1])
+
+            #gl.glVertex3fv(tri[2])
                 
 
 
