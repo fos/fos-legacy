@@ -1,10 +1,10 @@
 import numpy as np
 import OpenGL.GL as gl
-import fos.core.primitives as prim
+#import fos.core.primitives as prim
 import fos.core.text as text
 import fos.core.cortex as cortex
 
-MS=1500
+MS=1000
 
 
 def center(x,y):
@@ -31,16 +31,22 @@ class Plot():
 
         global csurf
 
-        #csurf_fname ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/rh.pial.vtk'
+        csurfr ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/rh.pial.vtk'
 
-        csurf_fname ='/home/eg309/Desktop/rh.pial.vtk'
+        #csurf_fname ='/home/eg309/Desktop/rh.pial.vtk'
         
+        csurfl ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/lh.pial.vtk'
 
-        csurf = cortex.CorticalSurface(csurf_fname)
+        csurfr = cortex.CorticalSurface(csurfr)
+        
+        csurfl = cortex.CorticalSurface(csurfl)
 
-        csurf.init()            
+        csurfr.init()
+
+        csurfl.init()
        
-        self.slots={0:{'actor':csurf,'slot':( 0,   800*MS )}}                 
+        self.slots={0:{'actor':csurfr,'slot':( 0,   800*MS )},
+                    1:{'actor':csurfl,'slot':( 0,   800*MS )}}                 
 
         
           

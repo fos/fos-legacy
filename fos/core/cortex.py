@@ -47,6 +47,8 @@ class CorticalSurface(object):
         self.pts = None
 
         self.polys = None
+
+        self.normals = None
         
 
 
@@ -90,7 +92,74 @@ class CorticalSurface(object):
 
         self.polys=np.array([np.array(pl.split(),dtype=np.int) for pl in polys])[:,1:]
 
-                
+
+    def calculate_normals(self):
+        
+        p=self.pts
+
+        normals=[]
+
+        for l in self.polys: #[:50000]:
+
+            normal=np.cross(p[l[0]]-p[l[1]],p[l[1]]-p[l[2]])
+
+            normals.append(normal)
+
+
+        self.normals=np.array(normals,np.float32)
+
+        print self.normals.shape
+        
+        
+
+    def init2(self):
+
+        self.load_polydata()
+
+        self.calculate_normals()
+
+        self.list_index = gl.glGenLists(1)
+
+        gl.glNewList( self.list_index,gl.GL_COMPILE)
+
+        gl.glMaterialfv( gl.GL_FRONT, gl.GL_AMBIENT, self.ambient )
+
+        gl.glMaterialfv( gl.GL_FRONT, gl.GL_DIFFUSE, self.diffuse )
+
+        gl.glMaterialfv( gl.GL_FRONT, gl.GL_SPECULAR, self.specular )
+
+        gl.glEnable(gl.GL_NORMALIZE)  
+
+        gl.glEnable(gl.GL_BLEND)
+      
+        gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)  
+
+        gl.glEnableClientState(gl.GL_VERTEX_ARRAY)
+        
+        gl.glEnableClientState(gl.GL_COLOR_ARRAY)
+
+        gl.glEnableClientState(gl.GL_NORMAL_ARRAY)
+
+        gl.glVertexPointerf(self.pts)
+
+        #print 'oops'
+
+        gl.glNormalPointerf(self.normals)
+
+        #print 'normals'
+
+        gl.glDrawElements(gl.GL_TRIANGLES,3*4,gl.GL_INT,np.ravel(self.polys).tostring())
+    
+
+        #print 'draw'
+
+        gl.glDisableClientState(gl.GL_NORMAL_ARRAY)
+        
+        gl.glDisableClientState(gl.GL_COLOR_ARRAY)
+
+        gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
+
+        gl.glEndList()
 
     def init(self):        
 
@@ -115,11 +184,11 @@ class CorticalSurface(object):
 
         #gl.glEnable(gl.GL_COLOR_MATERIAL)
         
-        gl.glMaterialfv( gl.GL_FRONT, gl.GL_AMBIENT, self.ambient )
+        gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_AMBIENT, self.ambient )
 
-        gl.glMaterialfv( gl.GL_FRONT, gl.GL_DIFFUSE, self.diffuse )
+        gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_DIFFUSE, self.diffuse )
 
-        gl.glMaterialfv( gl.GL_FRONT, gl.GL_SPECULAR, self.specular )
+        gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_SPECULAR, self.specular )
 
         #gl.glMaterialf( gl.GL_FRONT, gl.GL_SHININESS, self.shininess )
 

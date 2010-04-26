@@ -134,7 +134,7 @@ class Scene(object):
 
         gl.glEnable(self.enab_light0)
         
-        gl.glLightModeli(self.light_model,self.light_model_value)
+        #gl.glLightModeli(self.light_model,self.light_model_value)
         
         #gl.glLightModelfv(self.light_model,self.light_model_value)
 
