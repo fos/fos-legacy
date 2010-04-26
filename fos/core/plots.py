@@ -3,6 +3,7 @@ import OpenGL.GL as gl
 #import fos.core.primitives as prim
 import fos.core.text as text
 import fos.core.cortex as cortex
+import fos.core.pyramid as pyramid
 
 MS=1000
 
@@ -11,8 +12,67 @@ def center(x,y):
 
     return ((int(1024-x)/2),int((768-y)/2))
 
-
 class Plot():
+
+
+    def __init__(self):
+
+        self.slots = None
+
+        self.time = 0
+
+        self.near_pick = None
+
+        self.far_pick = None
+
+        
+
+    def init(self):
+
+        global pyr
+
+        pyr = pyramid.Pyramid()
+
+        pyr.init()
+
+
+       
+        self.slots={0:{'actor':pyr,'slot':( 0,   800*MS )}}                 
+
+        
+          
+    def display(self):
+
+        now = self.time
+
+        for s in self.slots:
+
+            if now >= self.slots[s]['slot'][0] and now <=self.slots[s]['slot'][1]:
+
+                self.slots[s]['actor'].near_pick = self.near_pick
+
+                self.slots[s]['actor'].far_pick = self.far_pick               
+                
+                self.slots[s]['actor'].display()
+
+
+
+    def update_time(self,time):
+
+        self.time=time
+
+
+    def update_pick_ray(self,near_pick, far_pick):
+
+        self.near_pick = near_pick
+
+        self.far_pick = far_pick
+
+
+
+
+
+class PlotElef():
 
 
     def __init__(self):
