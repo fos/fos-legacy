@@ -92,6 +92,10 @@ class CorticalSurface(object):
 
         self.polys=np.array([np.array(pl.split(),dtype=np.int) for pl in polys])[:,1:]
 
+        print 'polys.shape', self.polys.shape
+
+        print 'polys[0]', self.polys[0]
+
 
     def calculate_normals(self):
         
@@ -112,7 +116,7 @@ class CorticalSurface(object):
         
         
 
-    def init2(self):
+    def init(self):
 
         self.load_polydata()
 
@@ -136,7 +140,7 @@ class CorticalSurface(object):
 
         gl.glEnableClientState(gl.GL_VERTEX_ARRAY)
         
-        gl.glEnableClientState(gl.GL_COLOR_ARRAY)
+        #gl.glEnableClientState(gl.GL_COLOR_ARRAY)
 
         gl.glEnableClientState(gl.GL_NORMAL_ARRAY)
 
@@ -144,24 +148,28 @@ class CorticalSurface(object):
 
         #print 'oops'
 
-        gl.glNormalPointerf(self.normals)
+        #gl.glNormalPointerf(self.normals)
+
+        triangles=np.ravel(self.polys).astype(np.uint).tostring()
 
         #print 'normals'
 
-        gl.glDrawElements(gl.GL_TRIANGLES,3*4,gl.GL_INT,np.ravel(self.polys).tostring())
+        gl.glDrawElements(gl.GL_TRIANGLES,3*4,gl.GL_UNSIGNED_INT,triangles)
+
+        #gl.glDrawElementsui(gl.GL_TRIANGLES, np.ravel(self.polys).tostring())
     
 
         #print 'draw'
 
         gl.glDisableClientState(gl.GL_NORMAL_ARRAY)
         
-        gl.glDisableClientState(gl.GL_COLOR_ARRAY)
+        #gl.glDisableClientState(gl.GL_COLOR_ARRAY)
 
         gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
 
         gl.glEndList()
 
-    def init(self):        
+    def init2(self):        
 
 
         self.load_polydata()
