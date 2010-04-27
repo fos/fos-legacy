@@ -29,11 +29,11 @@ class CorticalSurface(object):
         self.scale     = None #[100., 50., 20.]
 
         
-        self.ambient   = [0.55, 0.44, 0.36, 1.]
+        self.ambient   = [1, 1, 1, 1.]
         
-        self.diffuse   = [0.55, 0.44, 0.36, 1.]
+        self.diffuse   = [1, 1, 1, 1.]
         
-        self.specular  = [0.55, 0.44, 0.36, 1.]
+        self.specular  = [1, 1, 1, 1.]
 
         #self.shininess = 5.
 
