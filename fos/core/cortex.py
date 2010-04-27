@@ -101,42 +101,100 @@ class CorticalSurface(object):
         
         p=self.pts
 
-        normals=[]
+        print 'pts.shape',p.shape
+        
 
-        for l in self.polys: #[:50000]:
+        normals=np.zeros((len(self.pts),3),np.float32)
 
-            normal=np.cross(p[l[0]]-p[l[1]],p[l[1]]-p[l[2]])
+        normalscnt=np.zeros((len(self.pts),1),np.float32)
+        
 
-            normals.append(normal)
+        l=self.polys
+
+        
+
+        '''
+        normals=np.cross(p[l[:,0]]-p[l[:,1]],p[l[:,1]]-p[l[:,2]],axisa=1,axisb=1)
+
+        #print 'normals.shape', normals.shape
+
+        #print normals[:20]
+
+        div=np.sqrt(np.sum(normals**2,axis=1))
+
+        div=div.reshape(len(div),1)
+
+        normals=normals/div
+
+        '''
 
 
-        self.normals=np.array(normals,np.float32)
+        '''
+        trnormal=np.cross(p[l[:,0]]-p[l[:,1]],p[l[:,1]]-p[l[:,2]],axisa=1,axisb=1)
 
-        print self.normals.shape
+        div=np.sqrt(np.sum(trnormals**2,axis=1))
+
+        div=div.reshape(len(div),1)
+
+        trnormals = trnormals/div
+
+        trnormals[l] = 
+
+        for tr in trnormals:
+
+            normals[l] += normal
+
+           
+
+        '''
+        for l in self.polys:
+
+            normal = np.cross( p[l[0]] - p[l[1]], p[l[1]] - p[l[2]] )
+
+            normal = normal/np.linalg.norm(normal)
+
+            normals[l] += normal
+            
+            normalscnt[l] += 1
+
+        #'''
+
+        self.normals=(normals/normalscnt).astype(np.float32)
+
+        print 'normals.shape', self.normals.shape
+        #print 'normals.dtype', self.normals.dtype
+        
+        print self.normals[:20]
         
         
 
     def init(self):
 
+        time1=time.clock()
+
         self.load_polydata()
 
+        print 'load disk',time.clock() - time1
+
         self.calculate_normals()
+
+        print 'calc normals', time.clock() - time1
 
         self.list_index = gl.glGenLists(1)
 
         gl.glNewList( self.list_index,gl.GL_COMPILE)
 
-        gl.glMaterialfv( gl.GL_FRONT, gl.GL_AMBIENT, self.ambient )
-
-        gl.glMaterialfv( gl.GL_FRONT, gl.GL_DIFFUSE, self.diffuse )
-
-        gl.glMaterialfv( gl.GL_FRONT, gl.GL_SPECULAR, self.specular )
-
-        gl.glEnable(gl.GL_NORMALIZE)  
+       
+        #gl.glEnable(gl.GL_NORMALIZE)  
 
         gl.glEnable(gl.GL_BLEND)
       
-        gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)  
+        gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)
+
+        #gl.glDisable(gl.GL_LIGHTING)        
+
+        #gl.glPolygonMode(gl.GL_FRONT_AND_BACK, gl.GL_LINE)
+        
 
         gl.glEnableClientState(gl.GL_VERTEX_ARRAY)
         
@@ -148,16 +206,14 @@ class CorticalSurface(object):
 
         #print 'oops'
 
-        #gl.glNormalPointerf(self.normals)
+        gl.glNormalPointerf(self.normals)
 
-        triangles=np.ravel(self.polys).astype(np.uint).tostring()
+        triangles=np.ravel(self.polys).astype(np.uint)
 
         #print 'normals'
-
-        gl.glDrawElements(gl.GL_TRIANGLES,3*4,gl.GL_UNSIGNED_INT,triangles)
-
-        #gl.glDrawElementsui(gl.GL_TRIANGLES, np.ravel(self.polys).tostring())
-    
+                
+        gl.glDrawElementsui(gl.GL_TRIANGLES,triangles)
+            
 
         #print 'draw'
 
@@ -169,88 +225,30 @@ class CorticalSurface(object):
 
         gl.glEndList()
 
-    def init2(self):        
 
+        print 'time ',time.clock()-time1
 
-        self.load_polydata()
-
-        n=gl.glNormal3fv
+    
+    def display(self):
         
-        v=gl.glVertex3fv
-
-        p=self.pts
-
-        print 'adding triangles'
-
-        time1=time.clock()
+        #self.ambient[3]-=0.001
         
-        #print pts.shape, polys.shape
+        #self.diffuse[3]-=0.001
         
-        self.list_index = gl.glGenLists(1)
+        #self.specular[3]-=0.001        
 
-        gl.glNewList( self.list_index,gl.GL_COMPILE)
 
-        #gl.glEnable(gl.GL_COLOR_MATERIAL)
-        
         gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_AMBIENT, self.ambient )
 
         gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_DIFFUSE, self.diffuse )
 
         gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_SPECULAR, self.specular )
 
-        #gl.glMaterialf( gl.GL_FRONT, gl.GL_SHININESS, self.shininess )
 
-        #gl.glMaterialfv(gl.GL_FRONT, gl.GL_EMISSION, self.emission)
-
-
-        gl.glEnable(gl.GL_BLEND)
-      
-        gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)
-
-        
-
-        gl.glEnable(gl.GL_NORMALIZE)
-
-        gl.glBegin(gl.GL_TRIANGLES)
-
-        for l in self.polys: #[:50000]:
-
-            normal=np.cross(p[l[0]]-p[l[1]],p[l[1]]-p[l[2]])                
-
-            #n(p[l[0]])
-            
-            n(normal)
-
-            v(p[l[0]])
-
-            #n(p[l[1]])
-
-            n(normal)
-            
-            v(p[l[1]])
-
-            #n(p[l[2]])
-
-            n(normal)
-
-            v(p[l[2]])        
-
-        gl.glEnd()        
-       
-        gl.glEndList()
-
-        print 'triangles ready in', time.clock()-time1, 'secs'
-
-
-    
-    def display(self,mode=gl.GL_RENDER):
-
-
-        #gl.glPushMatrix()
 
         gl.glCallList(self.list_index)
     
-        #gl.glPopMatrix()
+
 
 
 

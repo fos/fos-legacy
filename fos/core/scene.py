@@ -23,11 +23,11 @@ import mouse
 class Scene(object):
 
     
-    def __init__(self):
+    def __init__(self,plot=plots.Plot()):
 
         #Window settings
         self.disp_mode=glut.GLUT_DOUBLE | glut.GLUT_RGBA | glut.GLUT_DEPTH
-        self.win_size=(1024,768)#width,height
+        self.win_size=(1280,1024)#width,height
         self.win_pos=(100,100)#px,py
         self.win_title='F.O.S.'
         
@@ -95,7 +95,9 @@ class Scene(object):
         self.frameno=0
         self.video_dir='/tmp/'
 
-        #Extra Testing settings        
+        #Extra Testing settings
+
+        self.plot=plot
 
     
     def window(self):
@@ -150,11 +152,11 @@ class Scene(object):
 
         #self.objects()
 
-        global plot
+        #!global plot
 
-        plot=plots.Plot()
+        #!plot=plots.Plot()
 
-        plot.init()
+        self.plot.init()
   
 
     def save(self, filename="test.png", format="PNG" ):
@@ -282,7 +284,7 @@ class Scene(object):
             near=np.array([xn,yn,zn])
             far =np.array([xf,yf,zf])
 
-            plot.update_pick_ray(near,far)
+            self.plot.update_pick_ray(near,far)
             
            
 	if key == '\033':
@@ -312,7 +314,7 @@ class Scene(object):
 
             self.time2now+=self.timer2Dt
 
-            plot.update_time(self.time2now)
+            self.plot.update_time(self.time2now)
 
             glut.glutTimerFunc( self.timer2Dt, self.world_timer, 1)
 
@@ -416,7 +418,7 @@ class Scene(object):
 
         '''
 
-        plot.display()
+        self.plot.display()
 
         gl.glFlush()
         
