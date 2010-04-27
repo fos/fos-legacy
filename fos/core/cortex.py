@@ -155,11 +155,15 @@ class CorticalSurface(object):
 
             normals[l] += normal
             
-            normalscnt[l] += 1
+            #normalscnt[l] += 1
 
         #'''
 
-        self.normals=(normals/normalscnt).astype(np.float32)
+        div=np.sqrt(np.sum(normals**2,axis=1))
+        
+        div=div.reshape(len(div),1)        
+
+        self.normals=(normals/div).astype(np.float32)
 
         print 'normals.shape', self.normals.shape
         #print 'normals.dtype', self.normals.dtype
@@ -230,19 +234,26 @@ class CorticalSurface(object):
 
     
     def display(self):
+
+        if self.ambient[0]>0:
         
-        #self.ambient[3]-=0.001
+            self.ambient[3]-=0.001
         
-        #self.diffuse[3]-=0.001
+            self.diffuse[3]-=0.001
         
-        #self.specular[3]-=0.001        
+            self.specular[3]-=0.001
+            
+
+        
+
+    
 
 
-        gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_AMBIENT, self.ambient )
+        #gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_AMBIENT, self.ambient )
 
         gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_DIFFUSE, self.diffuse )
 
-        gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_SPECULAR, self.specular )
+        #gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_SPECULAR, self.specular )
 
 
 
