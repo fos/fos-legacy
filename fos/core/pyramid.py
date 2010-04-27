@@ -29,12 +29,18 @@ class Pyramid(object):
 
         gl.glNewList( self.list_index,gl.GL_COMPILE)
 
+        gl.glDisable(gl.GL_LIGHTING)
+
+        gl.glColor3fv([1,0,0])
+        
         gl.glBegin(gl.GL_TRIANGLES)
+
+        #
 
 
         for (num, tri) in enumerate(self.triangles):
             
-            gl.glColor4iv(self.colours[num])
+            #gl.glColor4iv(self.colours[num])
 
             for vert in tri:
             
@@ -46,7 +52,10 @@ class Pyramid(object):
                 
 
 
+        #
         gl.glEnd()
+
+        gl.glEnable(gl.GL_LIGHTING)
 
         gl.glEndList()
 
