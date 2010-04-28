@@ -15,7 +15,7 @@ class Pyramid(object):
 
         self.far_pick = None
 
-        self.pts = 100*np.array([[0,0,-1],[1,1,-1],[2,0,-1],[1,0.5,-2]],np.float32)
+        self.pts = 100*np.array([[0,0,-1],[1,1,-1],[2,0,-1],[1,0.5,-2]],np.float32) -100*np.array([0,0,5],np.float32)
 
         p=self.pts
 
@@ -30,6 +30,7 @@ class Pyramid(object):
         self.specular  = [0.55, 0.44, 0.36, 1.]
 
 
+        
         
     def init(self):
 
@@ -78,8 +79,39 @@ class Pyramid(object):
 
 
     def display(self):
+
+        #glu.gluLookAt(camera[0], camera[1], camera[2], # look from camera XYZ
+                  #0, 0, 0, # look at the origin 
+                  #0, 1, 0) # positive Y up vector
         
+        #gl.glRotatef(orbitDegrees, 0., 1., 0.)
+        # orbit the Y axis
+        # ...where orbitDegrees is derived from mouse motion  
+
+        self.position[0]+=1
+
+        x,y,z=self.position
+
+        current=gl.glGetFloatv(gl.GL_MODELVIEW_MATRIX )
+
+        gl.glPushMatrix()
+
+        gl.glLoadIdentity()
+                
+        gl.glTranslatef(x,y,z)
+
+        gl.glRotatef(30.,0,1,0)
+
         gl.glCallList(self.list_index)
+
+        gl.glPopMatrix()
+
+        gl.glMultMatrixf(current)
+
+             
+        
+        
+        
 
 
 
