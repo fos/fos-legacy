@@ -8,6 +8,7 @@ import OpenGL.GLUT as glut
 import fos.core.text as text
 import fos.core.cortex as cortex
 import fos.core.pyramid as pyramid
+import fos.core.tracks as tracks
 
 import mouse 
 
@@ -45,17 +46,39 @@ class Plot():
         
         csurfl ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/lh.pial.vtk'
 
-        csurfr = cortex.CorticalSurface(csurfr)
+        #csurfr = cortex.CorticalSurface(csurfr)
         
-        csurfl = cortex.CorticalSurface(csurfl)
+        #csurfl = cortex.CorticalSurface(csurfl)
 
-        csurfr.init()
+        #csurfr.init()
 
-        csurfl.init()
+        #csurfl.init()
+
+
+        global b1
+
+        b1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
+
+        b1=tracks.Tracks(b1_fname)
+
+        b1.angular_speed = 0.
+
+        b1.picking_example = True
+
+        b1.init()
+
+
+
+        self.slots={0:{'actor':b1,'slot':( 0,   800*MS )}}
+
+        '''
        
         self.slots={0:{'actor':csurfr,'slot':( 0,   800*MS )},
                     1:{'actor':csurfl,'slot':( 0,   800*MS )}}                 
 
+        '''
+
+        
         
           
     def display(self):

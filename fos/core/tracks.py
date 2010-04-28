@@ -75,7 +75,7 @@ class Tracks(object):
 
         self.dummy_data = False
 
-        self.data_subset = None
+        self.data_subset = [0,20000]#None
 
         self.picking_example = False
 
@@ -152,7 +152,7 @@ class Tracks(object):
     
         x,y,z=self.position
 
-        if self.picking_example!=True:
+        if self.picking_example==False:
 
 
             gl.glRotatef(-90,1,0,0)
@@ -205,7 +205,16 @@ class Tracks(object):
 
         self.picked_track=min_dist.argmin()
 
-        print self.picked_track
+        print 'min ',self.picked_track
+
+        min_dist_info=[cll.mindistance_segment2track_info(near,far,xyz) for xyz in self.data]
+
+        min_dist_info = np.array(min_dist_info)
+
+        print 'min info',min_dist_info
+
+        print 'min info extra',min_dist.min(), min_dist_info[self.picked_track]
+        
 
 
     def display_one_track(self,track_index,color4=np.array([1,1,0,1],dtype=np.float32)):

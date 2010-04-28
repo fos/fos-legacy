@@ -624,7 +624,6 @@ cdef float cclosest_points_2segments(float* p1, float *q1, float *p2, float *q2,
 
           return -1
       
-
         '''
                 
         print('Error - Segments are parallel')
@@ -732,7 +731,9 @@ def mindistance_segment2track(p1,q1,xyz):
 
             if min > d :
 
-                min=d           
+                min=d
+
+                
        
 
         index+=1
@@ -742,3 +743,79 @@ def mindistance_segment2track(p1,q1,xyz):
     #return np.array(distances).min()#, np.array(distances).argmin()
 
     return min
+
+
+def mindistance_segment2track_info(p1,q1,xyz):
+    ''' Return minimum distance between segment and track of
+    interconnecting segments
+    
+    Parameters
+    ------------------
+    p1: sequence, shape(3,),first point
+
+    p2: sequence, shape(3,),second point
+    
+    xyz: array(N,3) 
+        initial trajectory
+    
+    Returns
+    -------
+    md : minimum distance
+    
+    '''
+    cdef :
+
+        cnp.ndarray[cnp.float32_t, ndim=2] track 
+        float *fvec0,*fvec1,*fvec2
+        object characteristic_points
+        size_t t_len
+        int index
+        float fs[1]
+        float ft[1]
+        float d
+        float min,mins
+        
+
+    cdef cnp.ndarray[cnp.float32_t, ndim=1] fp1 = as_float_3vec(p1)
+
+    cdef cnp.ndarray[cnp.float32_t, ndim=1] fq1 = as_float_3vec(q1)
+    
+    track = np.ascontiguousarray(xyz, dtype=f32_dt)
+
+    #cdef cnp.ndarray[cnp.float32_t, ndim=1] distances = np.zeros(len(track),np.float32)
+        
+    t_len=len(track)
+    
+    index = 1
+
+    min = 3*10**38
+        
+    while index < t_len:
+        
+        
+        fvec0 = asfp(track[index-1])
+        fvec1 = asfp(track[index])
+        
+        d=cclosest_points_2segments(<float *> fp1.data, <float *>fq1.data, \
+                                         fvec0, fvec1,  fs, ft)
+
+        #distances[index-1]=d
+
+        if d>= 0.:
+
+            if min > d :
+
+                min = d
+
+                mins = fs[0]
+       
+
+        index+=1
+
+    
+    #distances
+    #return np.array(distances).min()#, np.array(distances).argmin()
+
+    return min, mins
+
+

@@ -29,15 +29,15 @@ class CorticalSurface(object):
         self.scale     = None #[100., 50., 20.]
 
         
-        self.ambient   = [1, 1, 1, 1.]
+        self.ambient   = [0.58, 0.46, 0.38, 1.]
         
-        self.diffuse   = [1, 1, 1, 1.]
+        self.diffuse   = [0.58, 0.46, 0.38, 1.]
         
-        self.specular  = [1, 1, 1, 1.]
+        self.specular  = [0.58, 0.46, 0.38, 1.]
 
-        #self.shininess = 5.
+        self.shininess = 5.
 
-        #self.emission  = [0.1, 0.1, 0.1, 1.]
+        self.emission  = [0.1, 0.1, 0.1, 1.]
        
         
         self.list_index = None
@@ -127,26 +127,7 @@ class CorticalSurface(object):
         normals=normals/div
 
         '''
-
-
-        '''
-        trnormal=np.cross(p[l[:,0]]-p[l[:,1]],p[l[:,1]]-p[l[:,2]],axisa=1,axisb=1)
-
-        div=np.sqrt(np.sum(trnormals**2,axis=1))
-
-        div=div.reshape(len(div),1)
-
-        trnormals = trnormals/div
-
-        trnormals[l] = 
-
-        for tr in trnormals:
-
-            normals[l] += normal
-
-           
-
-        '''
+  
         for l in self.polys:
 
             normal = np.cross( p[l[0]] - p[l[1]], p[l[1]] - p[l[2]] )
@@ -244,18 +225,18 @@ class CorticalSurface(object):
             self.specular[3]-=0.001
             
 
-        
-
-    
+           
 
 
-        #gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_AMBIENT, self.ambient )
+        gl.glMaterialfv( gl.GL_FRONT, gl.GL_AMBIENT, self.ambient )
 
-        gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_DIFFUSE, self.diffuse )
+        gl.glMaterialfv( gl.GL_FRONT, gl.GL_DIFFUSE, self.diffuse )
 
-        #gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_SPECULAR, self.specular )
+        gl.glMaterialfv( gl.GL_FRONT, gl.GL_SPECULAR, self.specular )
 
+        gl.glMaterialfv( gl.GL_FRONT, gl.GL_SHININESS, self.shininess )
 
+        gl.glMaterialfv( gl.GL_FRONT, gl.GL_EMISSION, self.emission )
 
         gl.glCallList(self.list_index)
     
