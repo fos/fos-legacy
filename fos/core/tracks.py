@@ -47,6 +47,14 @@ class Tracks(object):
 
         self.mean = None
 
+        self.fadeout = False
+
+        self.fadein = False
+
+        self.fadeout_speed = 0.
+
+        self.fadein_speed = 0.
+
         self.min_length = 20.
 
         self.angle = 0.
@@ -69,7 +77,7 @@ class Tracks(object):
 
         self.pick_color = [1,1,0]
 
-        self.brain_color = [1,0,0]
+        self.brain_color = [1,1,1]
 
         self.yellow_indices = None
 
@@ -78,10 +86,6 @@ class Tracks(object):
         self.data_subset = [0,20000]#None
 
         self.picking_example = False
-
-        
-
-    def init(self):
 
         import dipy.io.trackvis as tv
 
@@ -124,6 +128,10 @@ class Tracks(object):
         del data_stats
         
         del lines
+        
+        
+
+    def init(self):
 
         self.multiple_colors()
 
@@ -155,7 +163,7 @@ class Tracks(object):
         if self.picking_example==False:
 
 
-            gl.glRotatef(-90,1,0,0)
+            #gl.glRotatef(-90,1,0,0)
 
             gl.glRotatef(self.angle,0,0,1)
 
@@ -205,15 +213,30 @@ class Tracks(object):
 
         self.picked_track=min_dist.argmin()
 
-        print 'min ',self.picked_track
+        print 'min index',self.picked_track
 
         min_dist_info=[cll.mindistance_segment2track_info(near,far,xyz) for xyz in self.data]
 
-        min_dist_info = np.array(min_dist_info)
+        A = np.array(min_dist_info)
 
-        print 'min info',min_dist_info
+        dist=10**(-3)
 
-        print 'min info extra',min_dist.min(), min_dist_info[self.picked_track]
+        iA=np.where(A[:,0]<dist)
+
+        minA=A[iA]
+
+        print 'minA ', minA
+
+        miniA=minA[:,1].argmin()
+
+        print 'final min index ',iA[0][miniA]
+
+        self.picked_track=iA[0][miniA]
+
+   
+        
+
+        
         
 
 
@@ -267,7 +290,7 @@ class Tracks(object):
 
         gl.glNewList( self.list_index,gl.GL_COMPILE)
 
-        gl.glPushMatrix()
+        #gl.glPushMatrix()
 
         gl.glDisable(gl.GL_LIGHTING)
         
@@ -311,15 +334,23 @@ class Tracks(object):
                     color=boys2rgb(mo)
 
                     color4=np.array([color[0][0],color[0][1],color[0][2],self.opacity],np.float32)
-                    gl.glColor4fv(color4)
+                    
 
                 else:
 
                     color4=np.array([self.brain_color[0],self.brain_color[1],\
                                          self.brain_color[2],self.opacity],np.float32)
 
-                    gl.glColor4fv(color4)
-                    
+
+                if self.fadein == True:
+
+                    color4[3] += self.fadein_speed
+
+                if self.fadeout == True:
+
+                    color4[3] -= self.fadeout_speed
+
+                gl.glColor4fv(color4)                
 
                 gl.glVertexPointerf(d)
                                
@@ -333,7 +364,7 @@ class Tracks(object):
         
         gl.glEnable(gl.GL_LIGHTING)
         
-        gl.glPopMatrix()
+        #gl.glPopMatrix()
 
         gl.glEndList()
  

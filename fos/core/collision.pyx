@@ -184,7 +184,19 @@ cdef inline void cmul_3vec(float a, float *vec, float *vec_out):
     cdef int i
     for i in range(3):
         vec_out[i] = a*vec[i]
+        
+def div_3vec(a, vec):
+    cdef cnp.ndarray[cnp.float32_t, ndim=1] fvec = as_float_3vec(vec)    
+    cdef cnp.ndarray[cnp.float32_t, ndim=1] vec_out = np.zeros((3,), np.float32)    
+    cdiv_3vec(a,<float *>fvec.data, <float *>vec_out.data)
+    return vec_out        
 
+cdef inline void cdiv_3vec(float a, float *vec, float *vec_out):
+    cdef int i
+    for i in range(3):
+        vec_out[i] = vec[i]/a
+
+        
 
 def cross_3vecs(a,b):
     
@@ -206,6 +218,8 @@ cdef inline void ccross_3vecs(float *a, float *b, float *c):
 
 # float 32 dtype for casting
 cdef cnp.dtype f32_dt = np.dtype(np.float32)
+# int 32
+cdef cnp.dtype int_dt = np.dtype(np.int)
 
 
 DEF biggest_double = 1.79769e+308
@@ -761,6 +775,8 @@ def mindistance_segment2track_info(p1,q1,xyz):
     Returns
     -------
     md : minimum distance
+
+    ms : how close to the near plane.
     
     '''
     cdef :
@@ -819,3 +835,88 @@ def mindistance_segment2track_info(p1,q1,xyz):
     return min, mins
 
 
+def calculate_triangle_normals(vertices,triangles):
+
+    ''' Deprecated - Very slow to be removed
+
+    '''
+
+
+
+    cdef :
+
+        cnp.ndarray[cnp.float32_t, ndim=2] pts
+
+        cnp.ndarray[cnp.int_t, ndim=2] tri
+
+        cnp.ndarray[cnp.float32_t, ndim=2] normals
+        
+        size_t tri_len
+
+        int i,j
+
+        float c1[3], c2[3], cs[3], p1[3], p2[3], p3[3]
+
+        float normal[3],ncs
+
+        
+       
+    pts = np.ascontiguousarray(vertices, dtype=f32_dt)
+
+    tri = np.ascontiguousarray(triangles, dtype=int_dt)
+    
+    normals = np.ascontiguousarray(np.zeros((len(vertices),3),dtype=np.float32), dtype=f32_dt)
+    
+    tri_len = len(tri)
+
+    t1=time.clock()
+   
+    for i in range(tri_len):
+
+        for j in range(3):
+
+            p1[j]=pts[tri[i][0]][j]
+
+            p2[j]=pts[tri[i][1]][j]
+
+            p3[j]=pts[tri[i][2]][j]
+
+
+        csub_3vecs(p1,p2,c1)
+
+        csub_3vecs(p2,p3,c2)
+
+        ccross_3vecs(c1,c2,cs)
+
+        ncs=cnorm_3vec(cs)
+
+        cdiv_3vec(ncs,cs,normal)
+
+        for j in range(3):
+
+            normals[tri[i][0]][j] += normal[j]
+
+            normals[tri[i][1]][j] += normal[j]
+
+            normals[tri[i][2]][j] += normal[j]
+
+
+    print(time.clock()-t1)    
+
+    Normals=np.array(normals,np.float32)
+
+    div=np.sqrt(np.sum(Normals**2,axis=1))
+        
+    div=div.reshape(len(div),1)
+
+    print('yo',time.clock()-t1)
+
+    return (Normals/div).astype(np.float32)
+
+        
+
+
+
+        
+
+        
