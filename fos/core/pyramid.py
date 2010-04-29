@@ -15,13 +15,17 @@ class Pyramid(object):
 
         self.far_pick = None
 
-        self.pts = 100*np.array([[0,0,-1],[1,1,-1],[2,0,-1],[1,0.5,-2]],np.float32) -100*np.array([0,0,5],np.float32)
+        hr3 = np.sqrt(0.75)
+
+        #self.pts = 100*np.array([[0,0,-1],[1,1,-1],[2,0,-1],[1,0.5,-2]],np.float32) -100*np.array([0,0,5],np.float32)
+
+        self.pts = 100*np.array([[0,1,0],[0,-0.5,hr3],[-0.75,-0.5,-hr3/2],[0.75,-0.5,-hr3/2]],np.float32)
 
         p=self.pts
 
         self.triangles=np.array([[p[0],p[1],p[2]], [p[0],p[1],p[3]], [p[1],p[2],p[3]], [p[2],p[0],p[3]] ],np.int)
 
-        self.colours = np.array([[1,0,0,0.2],[0,1,0,0.2],[0,0,1,0.2],[0.75,0.6,0,0.2]],np.float32)
+        self.colours = np.array([[1,0,0,0.6],[0,1,0,0.6],[0,0,1,0.6],[1,1,0,0.6]],np.float32)
 
         self.ambient   = [0.55, 0.44, 0.36, 1.]
         
@@ -29,7 +33,11 @@ class Pyramid(object):
         
         self.specular  = [0.55, 0.44, 0.36, 1.]
 
+        self.angle = 10.
 
+        #self.rate = 10.
+
+        
         
         
     def init(self):
@@ -80,40 +88,34 @@ class Pyramid(object):
 
     def display(self):
 
-        #glu.gluLookAt(camera[0], camera[1], camera[2], # look from camera XYZ
-                  #0, 0, 0, # look at the origin 
-                  #0, 1, 0) # positive Y up vector
+        #rate = 10.
+
+        #angle = 0.
         
-        #gl.glRotatef(orbitDegrees, 0., 1., 0.)
-        # orbit the Y axis
-        # ...where orbitDegrees is derived from mouse motion  
-
-        self.position[0]+=1
-
-        x,y,z=self.position
-
-        current=gl.glGetFloatv(gl.GL_MODELVIEW_MATRIX )
-
         gl.glPushMatrix()
 
-        gl.glLoadIdentity()
-                
-        gl.glTranslatef(x,y,z)
+        gl.glTranslatef(0,0,-1000)
 
-        gl.glRotatef(30.,0,1,0)
+        #self.position[0]+=1
+
+        #x,y,z=self.position
+
+        #current=gl.glGetFloatv(gl.GL_MODELVIEW_MATRIX )
+
+        #gl.glLoadIdentity()
+                
+        #gl.glTranslatef(x,y,z)
+
+        gl.glRotatef(self.angle,0,1,0)
 
         gl.glCallList(self.list_index)
 
         gl.glPopMatrix()
 
-        gl.glMultMatrixf(current)
+        #self.angle += self.rate
+
+        #print self.angle
+
+        #gl.glMultMatrixf(current)
 
              
-        
-        
-        
-
-
-
-
-        
