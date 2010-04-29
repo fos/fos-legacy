@@ -46,6 +46,113 @@ class Plot():
         
         csurfl ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/lh.pial.vtk'
 
+        csurfr = cortex.CorticalSurface(csurfr)
+        
+        csurfl = cortex.CorticalSurface(csurfl)
+
+        csurfr.fadeout = True
+
+        csurfl.fadeout = True
+       
+        csurfr.fadeout_speed = 0.001        
+
+        csurfl.fadeout_speed = 0.001        
+
+        csurfr.init()
+
+        csurfl.init()
+
+
+        global tb1
+
+        tb1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
+
+        tb1=tracks.Tracks(tb1_fname)
+
+        tb1.angular_speed = 0.
+
+        tb1.opacity = 0.1
+
+        #tb1.fadeout = True
+
+        #tb1.fadeout_speed = 0.001
+
+        tb1.position = -tb1.mean
+
+        tb1.position[0] += 5.
+
+        tb1.manycolors = False
+
+
+
+        tb1.init()
+
+        
+
+        self.slots={00:{'actor':tb1,'slot':( 0,   800*MS )},
+                    01:{'actor':csurfl,'slot':( 0,   800*MS )},
+                    02:{'actor':csurfr,'slot':( 0,   800*MS )}}
+        
+        
+          
+    def display(self):
+
+        now = self.time
+
+        for s in self.slots:
+
+            if now >= self.slots[s]['slot'][0] and now <=self.slots[s]['slot'][1]:
+
+                self.slots[s]['actor'].near_pick = self.near_pick
+
+                self.slots[s]['actor'].far_pick = self.far_pick               
+                
+                self.slots[s]['actor'].display()
+
+
+
+    def update_time(self,time):
+
+        self.time=time
+
+
+    def update_pick_ray(self,near_pick, far_pick):
+
+        self.near_pick = near_pick
+
+        self.far_pick = far_pick
+
+
+
+
+
+
+
+class PlotPickingExample():
+
+
+    def __init__(self):
+
+        self.slots = None
+
+        self.time = 0
+
+        self.near_pick = None
+
+        self.far_pick = None
+
+        
+
+    def init(self):
+
+        global csurf
+
+        csurfr ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/rh.pial.vtk'
+
+        #csurf_fname ='/home/eg309/Desktop/rh.pial.vtk'
+        
+        csurfl ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/lh.pial.vtk'
+
         #csurfr = cortex.CorticalSurface(csurfr)
         
         #csurfl = cortex.CorticalSurface(csurfl)

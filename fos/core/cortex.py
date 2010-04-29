@@ -49,6 +49,14 @@ class CorticalSurface(object):
         self.polys = None
 
         self.normals = None
+
+        self.fadein = False
+
+        self.fadeout = False
+
+        self.fadein_speed = 0.0
+
+        self.fadeout_speed = 0.0
         
 
 
@@ -97,7 +105,40 @@ class CorticalSurface(object):
         print 'polys[0]', self.polys[0]
 
 
+
+
+
     def calculate_normals(self):
+
+
+        p=self.pts
+
+        print 'pts.shape',p.shape
+        
+
+        normals=np.zeros((len(self.pts),3),np.float32)
+
+
+        l=self.polys
+        
+        trinormals=np.cross(p[l[:,0]]-p[l[:,1]],p[l[:,1]]-p[l[:,2]],axisa=1,axisb=1)
+        
+
+        for (i,lp) in enumerate(self.polys):
+
+            normals[lp]+=trinormals[i]
+           
+            
+        div=np.sqrt(np.sum(normals**2,axis=1))
+        
+        div=div.reshape(len(div),1)        
+
+        self.normals=(normals/div).astype(np.float32)
+
+
+        
+
+    def calculate_normals2(self):
         
         p=self.pts
 
@@ -110,23 +151,7 @@ class CorticalSurface(object):
         
 
         l=self.polys
-
         
-
-        '''
-        normals=np.cross(p[l[:,0]]-p[l[:,1]],p[l[:,1]]-p[l[:,2]],axisa=1,axisb=1)
-
-        #print 'normals.shape', normals.shape
-
-        #print normals[:20]
-
-        div=np.sqrt(np.sum(normals**2,axis=1))
-
-        div=div.reshape(len(div),1)
-
-        normals=normals/div
-
-        '''
   
         for l in self.polys:
 
@@ -136,9 +161,6 @@ class CorticalSurface(object):
 
             normals[l] += normal
             
-            #normalscnt[l] += 1
-
-        #'''
 
         div=np.sqrt(np.sum(normals**2,axis=1))
         
@@ -146,11 +168,12 @@ class CorticalSurface(object):
 
         self.normals=(normals/div).astype(np.float32)
 
-        print 'normals.shape', self.normals.shape
-        #print 'normals.dtype', self.normals.dtype
-        
-        print self.normals[:20]
-        
+
+
+    def calculate_normals3(self):
+    
+
+        self.normals=cll.calculate_triangle_normals(self.pts,self.polys)
         
 
     def init(self):
@@ -169,7 +192,6 @@ class CorticalSurface(object):
 
         gl.glNewList( self.list_index,gl.GL_COMPILE)
 
-       
         #gl.glEnable(gl.GL_NORMALIZE)  
 
         gl.glEnable(gl.GL_BLEND)
@@ -179,33 +201,21 @@ class CorticalSurface(object):
         #gl.glDisable(gl.GL_LIGHTING)        
 
         #gl.glPolygonMode(gl.GL_FRONT_AND_BACK, gl.GL_LINE)
-        
 
         gl.glEnableClientState(gl.GL_VERTEX_ARRAY)
         
-        #gl.glEnableClientState(gl.GL_COLOR_ARRAY)
-
         gl.glEnableClientState(gl.GL_NORMAL_ARRAY)
 
         gl.glVertexPointerf(self.pts)
-
-        #print 'oops'
 
         gl.glNormalPointerf(self.normals)
 
         triangles=np.ravel(self.polys).astype(np.uint)
 
-        #print 'normals'
-                
         gl.glDrawElementsui(gl.GL_TRIANGLES,triangles)
             
-
-        #print 'draw'
-
         gl.glDisableClientState(gl.GL_NORMAL_ARRAY)
-        
-        #gl.glDisableClientState(gl.GL_COLOR_ARRAY)
-
+  
         gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
 
         gl.glEndList()
@@ -216,17 +226,29 @@ class CorticalSurface(object):
     
     def display(self):
 
-        if self.ambient[0]>0:
+        #print self.fadeout
         
-            self.ambient[3]-=0.001
-        
-            self.diffuse[3]-=0.001
-        
-            self.specular[3]-=0.001
+
+        if self.fadein :
             
+            self.ambient[3]+=self.fadein_speed
+        
+            self.diffuse[3]+=self.fadein_speed
+        
+            self.specular[3]+=self.fadein_speed
 
-           
+        
+        if self.fadeout :
 
+            self.ambient[3]-=self.fadeout_speed
+        
+            self.diffuse[3]-=self.fadeout_speed
+        
+            self.specular[3]-=self.fadeout_speed
+                
+
+
+        #print self.ambient[3]
 
         gl.glMaterialfv( gl.GL_FRONT, gl.GL_AMBIENT, self.ambient )
 
