@@ -67,12 +67,12 @@ class Plot():
 
         tb1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
 
-        tb1=tracks.Tracks(tb1_fname)
+        tb1=tracks.Tracks(tb1_fname,shrink=0.99)
 
         tb1.angular_speed = 0.
 
-        tb1.opacity = 0.1
-
+        tb1.opacity = 1.
+        
         #tb1.fadeout = True
 
         #tb1.fadeout_speed = 0.001
@@ -81,7 +81,9 @@ class Plot():
 
         tb1.position[0] += 5.
 
-        tb1.manycolors = False
+        tb1.manycolors = False#True
+
+        #tb1.material_color = True
 
 
 
@@ -89,9 +91,9 @@ class Plot():
 
         
 
-        self.slots={00:{'actor':tb1,'slot':( 0,   800*MS )},
-                    01:{'actor':csurfl,'slot':( 0,   800*MS )},
-                    02:{'actor':csurfr,'slot':( 0,   800*MS )}}
+        self.slots={00:{'actor':tb1,'slot':( 0, 800*MS )},
+                    01:{'actor':csurfl,'slot':( 0, 800*MS )},
+                    02:{'actor':csurfr,'slot':( 0, 800*MS )}}
         
         
           

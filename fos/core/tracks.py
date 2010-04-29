@@ -19,7 +19,7 @@ data_path = pjoin(os.path.dirname(__file__), 'data')
 
 class Tracks(object):
 
-    def __init__(self,fname,colormap=None, line_width=3.):
+    def __init__(self,fname,colormap=None, line_width=3., shrink=None):
 
         self.position = (0,0,0)
 
@@ -46,6 +46,8 @@ class Tracks(object):
         self.max = None
 
         self.mean = None
+
+        self.material_color = False
 
         self.fadeout = False
 
@@ -85,6 +87,9 @@ class Tracks(object):
 
         self.data_subset = [0,20000]#None
 
+
+        self.shrink = shrink
+
         self.picking_example = False
 
         import dipy.io.trackvis as tv
@@ -117,6 +122,11 @@ class Tracks(object):
 
             self.data = tracks
 
+        if self.shrink != None:
+
+            self.data = [ self.shrink*t  for t in self.data]
+            
+
         data_stats = np.concatenate(tracks)
 
         self.min=np.min(data_stats,axis=0)
@@ -133,9 +143,15 @@ class Tracks(object):
 
     def init(self):
 
-        self.multiple_colors()
+        if self.material_color:
 
-        #self.material_color()
+            self.material_colors()
+
+        else:
+
+            self.multiple_colors()
+
+
 
                
  
@@ -373,7 +389,49 @@ class Tracks(object):
    
 
 
+    def material_colors(self):
         
+
+        self.list_index = gl.glGenLists(1)
+
+        gl.glNewList( self.list_index,gl.GL_COMPILE)
+
+        gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_AMBIENT, [1,1,1,.1] )
+
+        gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_DIFFUSE, [1,1,1,.1] )
+        
+        
+        #gl.glMaterialf( gl.GL_FRONT_AND_BACK, gl.GL_SHININESS, 50. )
+
+        #gl.glMaterialfv(gl.GL_FRONT_AND_BACK, gl.GL_EMISSION, [1,1,1,1.])
+
+
+        gl.glEnable(gl.GL_LINE_SMOOTH)
+               
+        gl.glEnable(gl.GL_BLEND)
+
+        gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)
+
+
+        #gl.glMaterialfv( gl.GL_FRONT, gl.GL_SPECULAR, self.specular )
+
+        #gl.glMaterialf( gl.GL_FRONT, gl.GL_SHININESS, self.shininess )
+
+        #gl.glMaterialfv(gl.GL_FRONT, gl.GL_EMISSION, self.emission)
+
+        gl.glEnableClientState(gl.GL_VERTEX_ARRAY)
+
+        for d in self.data:            
+
+            gl.glVertexPointerd(d)
+        
+            gl.glDrawArrays(gl.GL_LINE_STRIP, 0, len(d))
+
+        gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
+
+        gl.glEndList()
+
+
 
 
 
