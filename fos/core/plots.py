@@ -53,10 +53,27 @@ class Plot():
         csurfr.fadeout = True
 
         csurfl.fadeout = True
-       
+
+        
         csurfr.fadeout_speed = 0.001        
 
-        csurfl.fadeout_speed = 0.001        
+        csurfl.fadeout_speed = 0.001
+
+        
+        csurfr.orbit_demo = True          
+
+        csurfr.orbit_anglez_rate = 1.
+        
+        
+        csurfl.orbit_demo = True
+        
+        csurfl.orbit_anglez_rate = 1.
+        
+        csurfr.orbit_anglex_rate = -.1
+        
+        csurfl.orbit_anglex_rate = -.1
+        
+        
 
         csurfr.init()
 
@@ -71,7 +88,7 @@ class Plot():
 
         tb1.angular_speed = 0.
 
-        tb1.opacity = 1.
+        tb1.opacity = .1
         
         #tb1.fadeout = True
 
@@ -81,21 +98,31 @@ class Plot():
 
         tb1.position[0] += 5.
 
-        tb1.manycolors = False#True
+        tb1.manycolors = True
 
         #tb1.material_color = True
 
+        tb1.orbit_demo = True          
 
+        tb1.orbit_anglez_rate = 1.
+                
+        tb1.orbit_anglex_rate = -.1
+        
+
+        
+        
+        
 
         tb1.init()
 
-        
+
 
         self.slots={00:{'actor':tb1,'slot':( 0, 800*MS )},
                     01:{'actor':csurfl,'slot':( 0, 800*MS )},
                     02:{'actor':csurfr,'slot':( 0, 800*MS )}}
         
-        
+
+
           
     def display(self):
 

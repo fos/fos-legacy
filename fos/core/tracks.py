@@ -88,6 +88,19 @@ class Tracks(object):
         self.data_subset = [0,20000]#None
 
 
+        self.orbit_demo = False          
+
+        self.orbit_anglez =0.
+
+        self.orbit_anglez_rate = 10.
+        
+
+        self.orbit_anglex = 0.
+
+        self.orbit_anglex_rate = 2.
+
+        
+
         self.shrink = shrink
 
         self.picking_example = False
@@ -172,47 +185,65 @@ class Tracks(object):
                 self.far_pick_prev = self.far_pick
       
 
-        gl.glPushMatrix()
+                
+        
     
         x,y,z=self.position
 
-        if self.picking_example==False:
+        if self.orbit_demo:
+
+            gl.glPushMatrix()
+
+            self.orbit_anglex+=self.orbit_anglex_rate
+            
+            gl.glRotatef(self.orbit_anglex,1,0,0)
+
+            gl.glPushMatrix()
+
+            self.orbit_anglez+=self.orbit_anglez_rate
+
+            x,y,z=self.position
+
+           
+
+            gl.glRotatef(self.orbit_anglez,0,0,1)
+
+            gl.glTranslatef(x,y,z) 
 
 
-            #gl.glRotatef(-90,1,0,0)
+            #gl.glPolygonMode(gl.GL_FRONT_AND_BACK, gl.GL_LINE)
 
-            gl.glRotatef(self.angle,0,0,1)
+            gl.glCallList(self.list_index)
 
-            gl.glTranslatef(x,y,z)
-    
+            gl.glFinish()
 
-        if self.angle < 360.:
+            gl.glPopMatrix()
 
-            self.angle+=self.angular_speed
+            gl.glPopMatrix()
+
             
         else:
 
-            self.angle=0.
+            gl.glCallList(self.list_index)
 
 
-        gl.glCallList(self.list_index)
+
+
+            if self.picked_track != None:
+
+                self.display_one_track(self.picked_track)
+
+
+
+            if self.yellow_indices != None:
+
+                for i in self.yellow_indices:
+
+
+                    self.display_one_track(i)
+
+
         
-
-        if self.picked_track != None:
-
-            self.display_one_track(self.picked_track)
-
-        
-
-        if self.yellow_indices != None:
-
-            for i in self.yellow_indices:
-
-
-                self.display_one_track(i)
-
-
-        gl.glPopMatrix()
 
         gl.glFinish()        
 
@@ -310,7 +341,11 @@ class Tracks(object):
 
         gl.glDisable(gl.GL_LIGHTING)
         
-        gl.glEnable(gl.GL_LINE_SMOOTH)
+        #!!!gl.glEnable(gl.GL_LINE_SMOOTH)
+
+        gl.glDisable(gl.GL_DEPTH_TEST)
+
+        gl.glDepthFunc(gl.GL_NEVER)
 
         gl.glEnable(gl.GL_BLEND)
 
@@ -320,7 +355,7 @@ class Tracks(object):
         
         #gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE)
 
-        gl.glHint(gl.GL_LINE_SMOOTH_HINT,gl.GL_DONT_CARE)
+        #!!!gl.glHint(gl.GL_LINE_SMOOTH_HINT,gl.GL_DONT_CARE)
 
         #gl.glHint(gl.GL_LINE_SMOOTH_HINT,gl.GL_NICEST)
 

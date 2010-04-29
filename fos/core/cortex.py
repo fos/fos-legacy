@@ -57,6 +57,18 @@ class CorticalSurface(object):
         self.fadein_speed = 0.0
 
         self.fadeout_speed = 0.0
+
+        self.orbit_demo = True
+
+        self.orbit_anglez = 0.
+
+        self.orbit_anglez_rate = 10.
+
+
+        self.orbit_anglex = 0.
+
+        self.orbit_anglex_rate = 2.
+        
         
 
 
@@ -260,7 +272,34 @@ class CorticalSurface(object):
 
         gl.glMaterialfv( gl.GL_FRONT, gl.GL_EMISSION, self.emission )
 
+
+        gl.glPushMatrix()
+
+        self.orbit_anglex+=self.orbit_anglex_rate
+        
+        gl.glRotatef(self.orbit_anglex,1,0,0)
+        
+
+        gl.glPushMatrix()
+
+        if self.orbit_demo:
+            
+
+            self.orbit_anglez+=self.orbit_anglez_rate
+
+
+            gl.glRotatef(self.orbit_anglez,0,0,1)
+
+            
+        
+
         gl.glCallList(self.list_index)
+
+
+        gl.glPopMatrix()
+
+
+        gl.glPopMatrix()
     
 
 
