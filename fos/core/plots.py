@@ -243,7 +243,21 @@ class PlotIan():
 
         pyr.init()
 
-        self.slots={0:{'actor':pyr,'slot':( 0,   800*MS )}}                 
+        global pyr2
+
+        pyr2 = pyramid.Pyramid()
+
+        pyr2.init()
+
+        pyr.position=[100,0,0]
+
+        pyr2.position=[-100,0,0]
+
+
+        self.slots={0:{'actor':pyr,'slot':( 0,   800*MS )},
+
+                    1:{'actor':pyr2,'slot':( 0,   800*MS )}
+                    }                 
 
 
     def display(self):

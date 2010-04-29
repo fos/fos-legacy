@@ -33,14 +33,18 @@ class Pyramid(object):
         
         self.specular  = [0.55, 0.44, 0.36, 1.]
 
-        self.angle = 10.
+        self.angle = 0.
 
-        #self.rate = 10.
+        self.rate = 10.
 
         
         
         
     def init(self):
+
+        self.angle = 0.
+
+        self.rate = 10.
 
         self.list_index = gl.glGenLists(1)
 
@@ -73,8 +77,6 @@ class Pyramid(object):
 
             #gl.glVertex3fv(tri[2])
                 
-
-
         #
         gl.glEnd()
 
@@ -92,9 +94,9 @@ class Pyramid(object):
 
         #angle = 0.
         
-        gl.glPushMatrix()
+        #gl.glPushMatrix()
 
-        gl.glTranslatef(0,0,-1000)
+        #gl.glTranslatef(0,0,1000)
 
         #self.position[0]+=1
 
@@ -106,16 +108,63 @@ class Pyramid(object):
                 
         #gl.glTranslatef(x,y,z)
 
+        #gl.glRotatef(self.angle,0,1,0)
+
+        #gl.glCallList(self.list_index)
+
+        #gl.glPopMatrix()
+
+        self.angle += self.rate
+
+        #print self.angle
+
+        #gl.glMultMatrixf(current)
+
+        #gl.glRotatef(self.angle,0,1,0)
+
+        gl.glPushMatrix()
+
+        x,y,z =self.position
+                
+        gl.glTranslatef(x,y,z)
+
         gl.glRotatef(self.angle,0,1,0)
 
         gl.glCallList(self.list_index)
 
         gl.glPopMatrix()
 
-        #self.angle += self.rate
 
-        #print self.angle
+        
+        
 
-        #gl.glMultMatrixf(current)
+        '''
 
-             
+        gl.glPushMatrix()
+
+        gl.glTranslatef(100,0,0)
+
+        gl.glRotatef(0.5*self.angle,0,1,0)
+
+        gl.glCallList(self.list_index)
+
+        gl.glPopMatrix()
+
+        
+
+        gl.glPushMatrix()
+        
+        gl.glTranslatef(-100,0,0)
+
+        gl.glRotatef(2*self.angle,0,1,0)
+
+        gl.glCallList(self.list_index)
+
+        gl.glPopMatrix()
+      
+        '''
+
+        
+
+
+        
