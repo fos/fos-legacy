@@ -224,6 +224,8 @@ class PlotPickingExample():
 
         b1.picking_example = True
 
+        b1.min_length = 0.
+
         b1.init()
 
 
