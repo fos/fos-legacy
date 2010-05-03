@@ -517,6 +517,8 @@ class ChromoTracks(object):
 
         self.opacity = 1.
 
+        self.opacity_rate = 0.
+
         self.near_pick = None
 
         self.far_pick = None
@@ -672,6 +674,28 @@ class ChromoTracks(object):
             gl.glPopMatrix()
 
             
+        elif self.fade_demo:
+
+            #gl.glPushMatrix()
+
+            self.opacity += self.opacity_rate
+
+            if self.opacity <= 0.0:
+                self.opacity = 0.0
+                self.opacity_rate = -self.opacity_rate
+            elif self.opacity >= 1.0:
+                self.opacity = 1.0
+                self.opacity_rate = -self.opacity_rate
+            
+            #print self.opacity
+
+            gl.glCallList(self.list_index)
+
+            gl.glFinish()
+
+            #gl.glPopMatrix()
+
+            
         else:
 
             gl.glCallList(self.list_index)
@@ -691,9 +715,6 @@ class ChromoTracks(object):
 
 
                     self.display_one_track(i)
-
-
-        
 
         gl.glFinish()        
 
@@ -785,6 +806,28 @@ class ChromoTracks(object):
 
         self.list_index = gl.glGenLists(1)
 
+        if self.fade_demo:
+
+            #gl.glPushMatrix()
+
+            self.opacity += self.opacity_rate
+
+            if self.opacity <= 0.0:
+                self.opacity = 0.0
+                self.opacity_rate = -self.opacity_rate
+            elif self.opacity >= 1.0:
+                self.opacity = 1.0
+                self.opacity_rate = -self.opacity_rate
+            
+            #print self.opacity
+
+            gl.glCallList(self.list_index)
+
+            gl.glFinish()
+
+            #gl.glPopMatrix()
+
+            
         gl.glNewList( self.list_index,gl.GL_COMPILE_AND_EXECUTE)
 
         #gl.glPushMatrix()

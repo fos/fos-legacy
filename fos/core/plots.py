@@ -40,6 +40,7 @@ class Plot():
 
     def init(self):
 
+        '''
         global csurf
 
         #devel07
@@ -71,7 +72,7 @@ class Plot():
         csurfr.orbit_anglez_rate = 1.
         
         
-        csurfl.orbit_demo = True
+        csurfl.orbit_demo = False
         
         csurfl.orbit_anglez_rate = 1.
         
@@ -84,21 +85,26 @@ class Plot():
         csurfr.init()
 
         csurfl.init()
-
+        '''
+        
 
         global tb1
 
         #devel07
-        #tb1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
+        tb1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
 
         #elfthin
-        tb1_fname='/home/eg309/Desktop/DataNew/garyfallidis/brain2/brain2_scan1_fiber_track_mni.trk'
+        #tb1_fname='/home/eg309/Desktop/DataNew/garyfallidis/brain2/brain2_scan1_fiber_track_mni.trk'
 
-        tb1=tracks.Tracks(tb1_fname,shrink=0.99)
+        tb1=tracks.ChromoTracks(tb1_fname,shrink=0.99)
 
         tb1.angular_speed = 0.
 
-        tb1.opacity = .1
+        tb1.fade_demo = True
+        
+        tb1.opacity = 1.0
+
+        tb1.opacity_rate = -0.01
         
         #tb1.fadeout = True
 
@@ -112,7 +118,7 @@ class Plot():
 
         #tb1.material_color = True
 
-        tb1.orbit_demo = True          
+        tb1.orbit_demo = False          
 
         tb1.orbit_anglez_rate = 1.
                 
@@ -127,9 +133,9 @@ class Plot():
 
 
 
-        self.slots={00:{'actor':tb1,'slot':( 0, 800*MS )},
-                    01:{'actor':csurfl,'slot':( 0, 800*MS )},
-                    02:{'actor':csurfr,'slot':( 0, 800*MS )}}
+        self.slots={00:{'actor':tb1,'slot':( 0, 800*MS )}}
+                    #01:{'actor':csurfl,'slot':( 0, 800*MS )},
+                    #02:{'actor':csurfr,'slot':( 0, 800*MS )}
         
 
 
