@@ -363,15 +363,48 @@ class PlotTextureExample():
     def init(self):
 
 
+        global b1
+
+        #devel07
+
+        #b1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
+
+        #elfthin
+
+        b1_fname='/home/eg309/Desktop/DataNew/garyfallidis/brain2/brain2_scan1_fiber_track_mni.trk'
+
+        
+        
+        b1=tracks.Tracks(b1_fname)
+
+        b1.angular_speed = 0.
+
+        b1.picking_example = True
+
+        b1.min_length = 20.
+
+        b1.opacity=0.1
+
+
+        b1.init()
+
+
+
+
         global texim
 
         fname = '/home/eg309/Devel/Fos/fos/core/tests/data/Streaks4.bmp'
 
         texim = texture.Texture(fname)
 
+        texim.position = [60,60,60]
+
+        texim.orbit = b1.data[4246]
+
         texim.init()
 
-        self.slots={0:{'actor':texim,'slot':( 0,   800*MS )}}
+        self.slots={0:{'actor':texim,'slot':( 0,   800*MS )},
+                    1:{'actor':b1,'slot':(0, 800*MS)}}
 
         
           

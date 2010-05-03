@@ -23,6 +23,12 @@ class Texture(object):
 
         self.rotation_angle_speed = 2.
 
+        self.position=(0,0,0)
+
+        self.orbit=None
+
+        self.orbit_index=0
+
 
     def init_texture(self):
 
@@ -100,22 +106,22 @@ class Texture(object):
 
         gl.glTexCoord2f(0.0, 0.0)
 
-        gl.glVertex3f(-100.0, -100.0, 0.0)
+        gl.glVertex3f(-10.0, -10.0, 0.0)
 
 
         gl.glTexCoord2f(0.0, 1.0)
 
-        gl.glVertex3f(-100.0, 100.0, 0.0)
+        gl.glVertex3f(-10.0, 10.0, 0.0)
 
 
         gl.glTexCoord2f(1.0, 1.0)
 
-        gl.glVertex3f(100.0, 100.0, 0.0)
+        gl.glVertex3f(10.0, 10.0, 0.0)
 
 
         gl.glTexCoord2f(1.0, 0.0)
 
-        gl.glVertex3f(100.0, -100.0, 0.0)
+        gl.glVertex3f(10.0, -10.0, 0.0)
         
 
         gl.glEnd()
@@ -151,10 +157,18 @@ class Texture(object):
 
 
 
+        if self.orbit != None:
+            
+            x,y,z=self.position
+
+        else:
+
+            x,y,z=self.next_orbit_point()
+
         
         gl.glPushMatrix()
 
-        gl.glTranslatef(0,0.,0.)               
+        gl.glTranslatef(x,y,z)               
 
 
         gl.glRotatef(self.rotation_angle,0,0,1)
@@ -172,7 +186,7 @@ class Texture(object):
         gl.glPushMatrix()
 
 
-        gl.glTranslatef(0,0.,0.)               
+        gl.glTranslatef(x,y,z)               
 
         #gl.glColor4f(1,1,0,0.4)
 
@@ -184,6 +198,11 @@ class Texture(object):
         gl.glPopMatrix()
         
 
-        
+
+    def next_orbit_point(self):
+
+        L
+
+        return orbit
 
         
