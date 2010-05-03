@@ -365,7 +365,7 @@ class PlotTextureExample():
 
         global texim
 
-        fname = '/home/eg309/Downloads/ztv121/Art/Streaks4.bmp'
+        fname = '/home/eg309/Devel/Fos/fos/core/tests/data/Streaks4.bmp'
 
         texim = texture.Texture(fname)
 
