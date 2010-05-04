@@ -401,7 +401,13 @@ class PlotTextureExample():
 
         global texim
 
+        #elfthin
+
         fname = '/home/eg309/Devel/Fos/fos/core/tests/data/Streaks4.bmp'
+
+        #devel07
+
+        #fname = '/home/eg01/Devel/Fos/fos/core/tests/data/Streaks4.bmp'
 
         texim = texture.Texture_Demo(fname)
 
