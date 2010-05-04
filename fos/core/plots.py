@@ -11,6 +11,8 @@ import fos.core.pyramid as pyramid
 import fos.core.tracks as tracks
 import fos.core.texture as texture
 
+import dipy.core.track_metrics as tm
+
 
 import mouse 
 
@@ -401,15 +403,32 @@ class PlotTextureExample():
 
         fname = '/home/eg309/Devel/Fos/fos/core/tests/data/Streaks4.bmp'
 
-        texim = texture.Texture(fname)
+        texim = texture.Texture_Demo(fname)
 
-        texim.position = [60,60,60]
+        #texim.orbit = b1.data[4246]
 
-        texim.orbit = b1.data[4246]
+        random_inx=np.round(19000*np.random.rand(30)).astype(np.int)
+        
 
+        #texim.orbits = [b1.data[4246],b1.data[3000],b1.data[2000],b1.data[1000]]
+
+        texim.orbits =[]
+        for i in random_inx:
+
+            if tm.length(b1.data[i]) > 20.:
+
+                print i
+
+                texim.orbits.append(b1.data[i])
+
+                
+        
+
+        texim.orbits_index = np.zeros((20,),np.int)
+        
         texim.init()
 
-        self.slots={0:{'actor':texim,'slot':( 0,   800*MS )},
+        self.slots={0:{'actor':texim,'slot':( 0, 800*MS )},
                     1:{'actor':b1,'slot':(0, 800*MS)}}
 
         
