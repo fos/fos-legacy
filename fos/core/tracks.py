@@ -296,6 +296,11 @@ class Tracks(object):
 
         gl.glEnable(gl.GL_LINE_SMOOTH)
 
+        gl.glDisable(gl.GL_DEPTH_TEST)
+
+        #gl.glDepthFunc(gl.GL_NEVER)
+
+
         gl.glEnable(gl.GL_BLEND)
 
         gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)
@@ -318,6 +323,8 @@ class Tracks(object):
         gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
 
         gl.glEnable(gl.GL_LIGHTING)
+
+        gl.glEnable(gl.GL_DEPTH_TEST)
         
         gl.glPopMatrix()
 
@@ -345,7 +352,7 @@ class Tracks(object):
 
         gl.glDisable(gl.GL_DEPTH_TEST)
 
-        gl.glDepthFunc(gl.GL_NEVER)
+        #gl.glDepthFunc(gl.GL_NEVER)
 
         gl.glEnable(gl.GL_BLEND)
 
@@ -414,6 +421,8 @@ class Tracks(object):
         #gl.glDisable(gl.GL_BLEND)
         
         gl.glEnable(gl.GL_LIGHTING)
+
+        gl.glEnable(gl.GL_DEPTH_TEST)
         
         #gl.glPopMatrix()
 
