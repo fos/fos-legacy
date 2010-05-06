@@ -559,8 +559,17 @@ class PlotLabelExample():
 
         '''
 
-        lab = label.Label([[0.,0.,0.]],['test'],[[1.,0.,0.]])
+        points = np.array([[0.,0.,0.],[100.,0.,0],[-100.,0.,0.],[100.,100.,100.]]).astype(np.float32)
 
+        labels = ['testa','testb','testc','testd']
+        
+
+        colors = np.array([[1.,0,0],[1.,0.,0.],[0.,1.,0],[0.,0.,1.]]).astype(np.float32)
+
+        #lab = label.Label([[0.,0.,0.],[100.,]],['test'],[[1.,0.,0.]])
+
+        lab = label.Label(points,labels,colors)
+        
         lab.init()
 
         self.slots={#0:{'actor':texim,'slot':( 0, 800*MS ) },
