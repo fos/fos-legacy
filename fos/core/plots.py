@@ -129,9 +129,6 @@ class Plot():
                 
         tb1.orbit_anglex_rate = -.1
         
-
-        
-        
         
 
         tb1.init()
@@ -446,6 +443,8 @@ class PlotTextureExample():
 
         now = self.time
 
+        #'''
+
         for s in self.slots:
 
             if now >= self.slots[s]['slot'][0] and now <=self.slots[s]['slot'][1]:
@@ -457,6 +456,28 @@ class PlotTextureExample():
                 self.slots[s]['actor'].display()
 
 
+
+        #'''
+        gl.glDisable(gl.GL_LIGHTING)
+        
+        gl.glColor3f(1.,0.,0.)
+
+        gl.glRasterPos3f(0.,0.,0.)
+
+        label = 'HELLO'
+
+        #print label
+
+        for c in label:
+
+            #print c
+
+            glut.glutBitmapCharacter(glut.GLUT_BITMAP_TIMES_ROMAN_24, ord(c))
+
+        gl.glEnable(gl.GL_LIGHTING)
+
+        #'''
+        
 
     def update_time(self,time):
 

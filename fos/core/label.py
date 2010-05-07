@@ -25,8 +25,15 @@ class Label(object):
 
         gl.glNewList( self.list_index, gl.GL_COMPILE)
 
+        gl.glPixelStorei(gl.GL_UNPACK_ALIGNMENT, 1)
+
+        #gl.glPixelStorei(gl.GL_PACK_ALIGNMENT, 1)
 
         gl.glDisable(gl.GL_LIGHTING)
+
+        gl.glColor3f(1,1,0)
+        
+        glut.glutSolidSphere(50.,50,50)
         
         for i in range(len(self.points)):
 
@@ -60,11 +67,15 @@ class Label(object):
 
     def display(self):
 
-        gl.glPushMatrix()
+        #gl.glPushMatrix()
+
+        print self.list_index
+
+        #gl.glLoadIdentity()
 
         gl.glCallList(self.list_index)
 
-        gl.glPopMatrix()
+        #gl.glPopMatrix()
 
 
 
