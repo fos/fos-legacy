@@ -19,7 +19,7 @@ data_path = pjoin(os.path.dirname(__file__), 'data')
 
 class CorticalSurface(object):
 
-    def __init__(self,fname):
+    def __init__(self,fname,angle_table=None):
 
        
         self.fname = fname
@@ -69,9 +69,11 @@ class CorticalSurface(object):
 
         self.orbit_anglex_rate = 0.
         
+        self.angle_table = angle_table
+
+        self.angle_table_index = 0
+
         
-
-
     def load_polydata(self):
 
         f=open(self.fname,'r')
@@ -273,11 +275,14 @@ class CorticalSurface(object):
         gl.glMaterialfv( gl.GL_FRONT, gl.GL_EMISSION, self.emission )
 
 
+
+        ''' WORKING
+        
         gl.glPushMatrix()
 
         if self.orbit_demo:
 
-            #self.orbit_anglex+=self.orbit_anglex_rate
+            self.orbit_anglex+=self.orbit_anglex_rate
         
             gl.glRotatef(self.orbit_anglex,1,0,0)
         
@@ -287,12 +292,9 @@ class CorticalSurface(object):
         if self.orbit_demo:
             
 
-            #self.orbit_anglez+=self.orbit_anglez_rate
-
+            self.orbit_anglez+=self.orbit_anglez_rate
 
             gl.glRotatef(self.orbit_anglez,0,0,1)
-
-            
         
 
         gl.glCallList(self.list_index)
@@ -302,8 +304,78 @@ class CorticalSurface(object):
 
 
         gl.glPopMatrix()
-    
 
+        '''
+        
+        x,y,z=self.position
+
+        if self.orbit_demo and self.angle_table == None:
+
+            gl.glPushMatrix()
+
+            self.orbit_anglex+=self.orbit_anglex_rate
+            
+            gl.glRotatef(self.orbit_anglex,1,0,0)
+
+            gl.glPushMatrix()
+
+            self.orbit_anglez+=self.orbit_anglez_rate
+
+            #x,y,z=self.position
+
+
+            gl.glRotatef(self.orbit_anglez,0,0,1)
+
+            gl.glTranslatef(x,y,z) 
+
+
+            #gl.glPolygonMode(gl.GL_FRONT_AND_BACK, gl.GL_LINE)
+
+            gl.glCallList(self.list_index)
+
+            gl.glFinish()
+
+            gl.glPopMatrix()
+
+            gl.glPopMatrix()
+
+        elif self.orbit_demo == True and self.angle_table != None:
+
+            gl.glPushMatrix()
+
+            gl.glRotatef(self.angle_table[self.angle_table_index,0],1,0,0)
+
+            #x,y,z = self.position
+            
+            gl.glPushMatrix()
+
+            gl.glRotatef(self.angle_table[self.angle_table_index,1],0,1,0)
+
+            gl.glPushMatrix()
+
+            gl.glRotatef(self.angle_table[self.angle_table_index,2],0,0,1)
+
+            gl.glTranslate(x,y,z)
+            
+            gl.glCallList(self.list_index)
+
+            gl.glFinish()
+
+            gl.glPopMatrix()
+
+            gl.glPopMatrix()
+
+            gl.glPopMatrix()
+
+            self.angle_table_index += 1
+
+            if self.angle_table_index >= self.angle_table.shape[0]:
+                
+                self.angle_table_index = self.angle_table.shape[0] - 1
+
+        
+
+        
 
 class CorticalSurfaceStuff(object):
 
@@ -631,6 +703,7 @@ class CorticalSurfaceStuff(object):
             self.angle_table_index += 1
 
             if self.angle_table_index >= self.angle_table.shape[0]:
+                
                 self.angle_table_index = self.angle_table.shape[0] - 1
 
             #print 'self.angle_table_index = %d' % self.angle_table_index

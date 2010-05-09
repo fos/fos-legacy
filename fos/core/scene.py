@@ -921,7 +921,8 @@ class SceneStuff(object):
 
 if __name__ == "__main__":
 
-    engine=SceneStuff()
+
+    engine = Scene()
     
     engine.run()
 

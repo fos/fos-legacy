@@ -13,13 +13,54 @@ from dipy.core import track_metrics as tm
 
 import fos.core.collision as cll
 
+#import fos.core.plots as plots
+
+def make_angle_table(lists):
+
+    #angle_table = make_angle_table([[[0,0,0],[90,0,0],30],[[90,0,0],[90,90,0],30]])
+
+    table = []
+    for list in lists:
+        start,finish,n = list
+        sx,sy,sz = start
+        fx,fy,fz = finish
+        cx = np.linspace(sx,fx,n)
+        cy = np.linspace(sy,fy,n)
+        cz = np.linspace(sz,fz,n)
+        if table == []:
+            table = np.column_stack((cx,cy,cz))
+        else:
+            table = np.vstack((table,np.column_stack((cx,cy,cz))))
+    print 'angle table has length %d' % table.shape[0]
+    return table
+
+
+#global angle_table, anglex, angley, anglez, angle_table_index
+
+angle_table = make_angle_table([[[0,0,0],[-90,0,0],200],
+                                        [[-90,0,0],[-90,-90,0],200],
+                                        [[-90,-90,0],[-90,-90,90],200],
+                                        [[-90,-90,90],[0,-90,-90],400]])
+
+anglex = 0.
+
+angley = 0.
+
+anglez = 0.
+
+angle_table_index = 0
+
+
+
+
+
 data_path = pjoin(os.path.dirname(__file__), 'data')
 
 #=======================================================
 
 class Tracks(object):
 
-    def __init__(self,fname,colormap=None, line_width=3., shrink=None):
+    def __init__(self,fname,ang_table=None,colormap=None, line_width=3., shrink=None,subset=None):
 
         self.position = (0,0,0)
 
@@ -85,12 +126,17 @@ class Tracks(object):
 
         self.dummy_data = False
 
-        self.data_subset = [0,20000]#None
+        if subset != None:
 
+            self.data_subset = subset#[0,20000]#None
+
+        else:
+
+            self.data_subset = None
 
         self.orbit_demo = False          
 
-        self.orbit_anglez =0.
+        self.orbit_anglez = 0.
 
         self.orbit_anglez_rate = 10.
         
@@ -99,11 +145,21 @@ class Tracks(object):
 
         self.orbit_anglex_rate = 2.
 
+
+        self.angle_table = ang_table
+
+        
+        self.angle_table_index = 0
+
+
+
         
 
         self.shrink = shrink
 
         self.picking_example = False
+
+          
 
         import dipy.io.trackvis as tv
 
@@ -135,11 +191,15 @@ class Tracks(object):
 
             self.data = tracks
 
+
+        
+
         if self.shrink != None:
 
             self.data = [ self.shrink*t  for t in self.data]
             
 
+            
         data_stats = np.concatenate(tracks)
 
         self.min=np.min(data_stats,axis=0)
@@ -190,7 +250,7 @@ class Tracks(object):
     
         x,y,z=self.position
 
-        if self.orbit_demo:
+        if self.orbit_demo and self.angle_table == None:
 
             gl.glPushMatrix()
 
@@ -221,6 +281,93 @@ class Tracks(object):
 
             gl.glPopMatrix()
 
+
+        elif self.orbit_demo == True and self.angle_table != None:
+            
+            gl.glPushMatrix()
+
+            #print angle_table
+
+            #print table_ind
+
+            table_ind=angle_table_index
+
+            anglex=angle_table[table_ind,0]
+
+            print anglex
+
+            gl.glRotatef(anglex,1,0,0)
+            
+            
+            gl.glPushMatrix()
+
+            angley=angle_table[table_ind,1]
+
+            gl.glRotatef(angley,0,1,0)
+            
+
+            gl.glPushMatrix()
+
+            anglez=angle_table[table_ind,2]
+
+            gl.glRotatef(anglez,0,0,1)
+
+
+            gl.glTranslate(x,y,z)
+            
+            gl.glCallList(self.list_index)
+
+            gl.glFinish()
+
+            gl.glPopMatrix()
+
+            gl.glPopMatrix()
+
+            gl.glPopMatrix()
+
+            angle_table_index += 1
+
+            if angle_table_index >= angle_table.shape[0]:
+                
+                angle_table_index = angle_table.shape[0] - 1
+
+            
+
+            '''
+
+            gl.glPushMatrix()
+
+            gl.glRotatef(self.angle_table[self.angle_table_index,0],1,0,0)
+
+            #x,y,z = self.position
+            
+            gl.glPushMatrix()
+
+            gl.glRotatef(self.angle_table[self.angle_table_index,1],0,1,0)
+
+            gl.glPushMatrix()
+
+            gl.glRotatef(self.angle_table[self.angle_table_index,2],0,0,1)
+
+            gl.glTranslate(x,y,z)
+            
+            gl.glCallList(self.list_index)
+
+            gl.glFinish()
+
+            gl.glPopMatrix()
+
+            gl.glPopMatrix()
+
+            gl.glPopMatrix()
+
+            self.angle_table_index += 1
+
+            if self.angle_table_index >= self.angle_table.shape[0]:
+                
+                self.angle_table_index = self.angle_table.shape[0] - 1
+
+            '''
             
         else:
 
@@ -478,13 +625,16 @@ class Tracks(object):
 
 class ChromoTracks(object):
 
-    def __init__(self,fname,colormap=None, line_width=1., shrink=None, thinning = 0, angle_table = None):
+    def __init__(self,fname,colormap=None, line_width=1., shrink=None, thinning = 0,
+                 angle_table = None, manycolors = False, brain_color=[1,1,1]):
 
         self.position = (0,0,0)
 
         self.fname = fname
         
-        self.manycolors = True
+        self.manycolors = manycolors
+
+        #self.color = monocolor
         
         self.bbox = None
 
@@ -541,8 +691,9 @@ class ChromoTracks(object):
         self.pick_color = [1,1,0]
 
         #self.brain_color = [1,1,1] # white
-        self.brain_color = [.941,.862,.510] # buff
-
+        #self.brain_color = [.941,.862,.510] # buff
+        self.brain_color = brain_color
+        
         self.yellow_indices = None
 
         self.dummy_data = False
@@ -565,11 +716,11 @@ class ChromoTracks(object):
         self.angle_table = angle_table
 
         if angle_table != None:
-            print 'angle_table shape %s' % str(self.angle_table.shape)
+            print 'Tracks angle_table shape %s' % str(self.angle_table.shape)
 
         self.angle_table_index = 0
 
-        print 'angle_table_index %d' % self.angle_table_index
+        #print 'angle_table_index %d' % self.angle_table_index
 
         self.shrink = shrink
 

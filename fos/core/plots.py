@@ -26,6 +26,34 @@ def center(x,y):
 
     return ((int(1024-x)/2),int((768-y)/2))
 
+'''
+def make_angle_table(lists):
+
+    #angle_table = make_angle_table([[[0,0,0],[90,0,0],30],[[90,0,0],[90,90,0],30]])
+
+    table = []
+    for list in lists:
+        start,finish,n = list
+        sx,sy,sz = start
+        fx,fy,fz = finish
+        cx = np.linspace(sx,fx,n)
+        cy = np.linspace(sy,fy,n)
+        cz = np.linspace(sz,fz,n)
+        if table == []:
+            table = np.column_stack((cx,cy,cz))
+        else:
+            table = np.vstack((table,np.column_stack((cx,cy,cz))))
+    print 'angle table has length %d' % table.shape[0]
+    return table
+
+
+angle_table = make_angle_table([[[0,0,0],[-90,0,0],200],
+                                        [[-90,0,0],[-90,-90,0],200],
+                                        [[-90,-90,0],[-90,-90,90],200],
+                                        [[-90,-90,90],[0,-90,-90],400]])
+
+
+'''
 
 
 class Plot():
@@ -45,22 +73,26 @@ class Plot():
 
     def init(self):
 
-        '''
+  
+        tracks.angle_table_index=0
+
+        tracks.anglex = 0.
+
+        tracks.angley = 0.
+
+        tracks.anglez = 0.
+
         global csurf
 
         #devel07
-        #csurfr ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/rh.pial.vtk'
+        csurfr ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/rh.pial.vtk'
        
-        #csurfl ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/lh.pial.vtk'
+        csurfl ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/lh.pial.vtk'
 
-        #elfthin
-        csurfr = '/home/eg309/Desktop/DataNew/rh.pial.vtk'
-       
-        csurfl = '/home/eg309/Desktop/DataNew/lh.pial.vtk'
 
-        csurfr = cortex.CorticalSurface(csurfr)
+        csurfr = cortex.CorticalSurface(csurfr, angle_table=tracks.angle_table)
         
-        csurfl = cortex.CorticalSurface(csurfl)
+        csurfl = cortex.CorticalSurface(csurfl, angle_table=tracks.angle_table)
 
         csurfr.fadeout = True
 
@@ -77,20 +109,20 @@ class Plot():
         csurfr.orbit_anglez_rate = 1.
         
         
-        csurfl.orbit_demo = False
+        csurfl.orbit_demo = True
         
         csurfl.orbit_anglez_rate = 1.
+        
         
         csurfr.orbit_anglex_rate = -.1
         
         csurfl.orbit_anglex_rate = -.1
-        
-        
+
 
         csurfr.init()
 
         csurfl.init()
-        '''
+        #'''
         
 
         global tb1
@@ -98,17 +130,15 @@ class Plot():
         #devel07
         tb1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
 
-        #elfthin
-        #tb1_fname='/home/eg309/Desktop/DataNew/garyfallidis/brain2/brain2_scan1_fiber_track_mni.trk'
+        #tb1=tracks.ChromoTracks(tb1_fname,shrink=0.99)
 
-        tb1=tracks.ChromoTracks(tb1_fname,shrink=0.99)
-        #tb1=tracks.Tracks(tb1_fname,shrink=0.99)
+        tb1=tracks.Tracks(tb1_fname,ang_table=True,shrink=0.99,subset=[0,20000])
 
         tb1.angular_speed = 0.
 
         tb1.fade_demo = True
         
-        tb1.opacity = 1.0
+        tb1.opacity = 0.1
 
         tb1.opacity_rate = -0.01
         
@@ -118,29 +148,122 @@ class Plot():
 
         tb1.position = -tb1.mean
 
-        tb1.position[0] += 250.
+        tb1.position[0] += 5.
 
-        tb1.manycolors = True
+        tb1.manycolors = False #True
 
         #tb1.material_color = True
 
-        tb1.orbit_demo = False          
+        tb1.orbit_demo = True #False          
 
         tb1.orbit_anglez_rate = 1.
                 
-        tb1.orbit_anglex_rate = -.1
-        
+        tb1.orbit_anglex_rate = -.1   
         
 
         tb1.init()
 
 
+        global t1; t1 = self.hidden_tracks(tb1_fname,1*0.1,angle_table=True)
 
-        self.slots={00:{'actor':tb1,'slot':( 0, 800*MS )}}
-                    #01:{'actor':csurfl,'slot':( 0, 800*MS )},
-                    #02:{'actor':csurfr,'slot':( 0, 800*MS )}
+        '''
+
+        global t2; t2 = self.hidden_tracks(tb1_fname,.1*0.1,angle_table=True)
+
+        global t3; t3 = self.hidden_tracks(tb1_fname,.05*0.1,angle_table=True)
+        
+        global t4; t4 = self.hidden_tracks(tb1_fname,.001*0.1,angle_table=True)
+
+        global t5; t5 = self.hidden_tracks(tb1_fname,.0005*0.1,angle_table=True)
         
 
+        global ct1; ct1 = self.hidden_tracks(tb1_fname,.0005*0.1,angle_table=True,many_colors=True)
+
+        global ct2; ct2 = self.hidden_tracks(tb1_fname,.001*0.1,angle_table=True,many_colors=True)
+
+        global ct3; ct3 = self.hidden_tracks(tb1_fname,.05*0.1,angle_table=True,many_colors=True)
+        
+        global ct4; ct4 = self.hidden_tracks(tb1_fname,.1*0.1,angle_table=True,many_colors=True)
+
+        global ct5; ct5 = self.hidden_tracks(tb1_fname,.5*0.1,angle_table=True,many_colors=True)
+
+        global ct6; ct6 = self.hidden_tracks(tb1_fname,1*0.1,angle_table=True,many_colors=True)
+
+        '''
+
+
+        self.slots={10:{'actor':tb1,'slot':( 0, 60*MS )},
+
+                    
+                    11:{'actor':csurfl,'slot':( 0, 800*MS )},
+                    
+                    12:{'actor':csurfr,'slot':( 0, 800*MS )},
+                    
+                    
+                    21:{'actor':t1,'slot':( 60*MS, 65*MS )}}
+
+        '''
+                    
+                    22:{'actor':t2,'slot':( 65*MS, 66*MS )},
+
+                    23:{'actor':t3,'slot':( 66*MS, 67*MS )},
+
+                    24:{'actor':t4,'slot':( 67*MS, 68*MS )},
+
+                    25:{'actor':t5,'slot':( 68*MS, 69*MS )},
+                    
+
+                    31:{'actor':ct1,'slot':( 69*MS, 70*MS )},
+                    
+                    32:{'actor':ct2,'slot':( 71*MS, 72*MS )},
+
+                    33:{'actor':ct3,'slot':( 72*MS, 73*MS )},
+
+                    34:{'actor':ct4,'slot':( 73*MS, 74*MS )},
+
+                    35:{'actor':ct5,'slot':( 74*MS, 75*MS )},
+
+    
+                    36:{'actor':ct6,'slot':( 75*MS, 800*MS )}               
+        '''
+                    
+        #}
+        
+
+    def hidden_tracks(self,t1_fname,opacity,angle_table,many_colors=False):
+
+
+        t1=tracks.Tracks(t1_fname,ang_table=angle_table,shrink=0.99,subset=[0,20000])
+
+        t1.angular_speed = 0.
+
+        t1.fade_demo = True
+        
+        t1.opacity = opacity #0.1
+
+        #t1.opacity_rate = -0.01
+        
+        #tb1.fadeout = True
+
+        #tb1.fadeout_speed = 0.001
+
+        t1.position = -tb1.mean
+
+        t1.position[0] += 5.
+
+        t1.manycolors = many_colors #False #True
+
+        #tb1.material_color = True
+
+        t1.orbit_demo = True#False          
+
+        t1.orbit_anglez_rate = 0.#1.
+                
+        t1.orbit_anglex_rate = 0.#-.1        
+        
+        t1.init()
+
+        return t1
 
           
     def display(self):
@@ -204,10 +327,6 @@ class PlotStuff():
        
         csurfl ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/lh.pial.vtk'
 
-        #elfthin
-        #csurfr = '/home/eg309/Desktop/DataNew/rh.pial.vtk'
-       
-        #csurfl = '/home/eg309/Desktop/DataNew/lh.pial.vtk'
 
         csurfr = cortex.CorticalSurfaceStuff(csurfr,angle_table)
         
@@ -248,27 +367,45 @@ class PlotStuff():
 
         #devel07
         tb1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
-
-        #elfthin
-        #tb1_fname='/home/eg309/Desktop/DataNew/garyfallidis/brain2/brain2_scan1_fiber_track_mni.trk'
+       
 
         #tb1=tracks.ChromoTracks(tb1_fname,shrink=0.99,thinning=100,angle_table=angle_table)
 
-        tb1=tracks.ChromoTracks(tb1_fname,shrink=0.99,thinning=100,angle_table=angle_table)
+        colored=tracks.ChromoTracks(tb1_fname,shrink=0.99,thinning=100,angle_table=angle_table,
+                                    manycolors=True)
+        buff=tracks.ChromoTracks(tb1_fname,shrink=0.99,thinning=100,angle_table=angle_table,
+                                 manycolors=False,brain_color=[.941,.862,.510])
+        white=tracks.ChromoTracks(tb1_fname,shrink=0.99,thinning=100,angle_table=angle_table,
+                                  manycolors=False)
 
-        tb1.angular_speed = 0.
-
-        tb1.fade_demo = True
+        colored.fade_demo = True
+        colored.orbit_demo = True
+        colored.opacity = 1.0
+        colored.opacity_rate = -0.02
+        colored.angular_speed = 0.
+        colored.position = -colored.mean
         
+        buff.fade_demo = False
+        buff.orbit_demo = False
+        buff.opacity = 1.0
+        buff.opacity_rate = -0.02
+        buff.angular_speed = 0.
+        buff.position = -buff.mean
+        
+        tb1 = colored
+        tb1.angular_speed = 0.
+        tb1.fade_demo = True
         tb1.opacity = 1.0
-
         tb1.opacity_rate = -0.01
+        tb1.position = -tb1.mean
         
         #tb1.fadeout = True
 
         #tb1.fadeout_speed = 0.001
 
-        tb1.position = -tb1.mean
+        #white.position = tb1.position
+        
+        #buff.position = tb1.position
 
         tb1.position[0] += 0.
 
@@ -276,7 +413,7 @@ class PlotStuff():
 
         #tb1.position[0] += 150.
 
-        tb1.manycolors = True
+        tb1.manycolors = False
 
         #tb1.material_color = True
 
@@ -296,9 +433,10 @@ class PlotStuff():
         
 
         
-        self.slots={00:{'actor':tb1,'slot':( 0, 800*MS )},
-                    01:{'actor':csurfl,'slot':( 0, 800*MS )},
-                    02:{'actor':csurfr,'slot':( 0, 800*MS )}}
+        self.slots={000:{'actor':tb1,'slot':( 0, 800*MS )},
+                    010:{'actor':csurfl,'slot':( 0, 800*MS )},
+                    020:{'actor':csurfr,'slot':( 0, 800*MS )}}#,
+                    #030:{'actor':buff, 'slot':( 0,800*MS )}}
         
 
 
@@ -379,11 +517,11 @@ class PlotPickingExample():
 
         #devel07
 
-        #b1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
+        b1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
 
         #elfthin
 
-        b1_fname='/home/eg309/Desktop/DataNew/garyfallidis/brain2/brain2_scan1_fiber_track_mni.trk'
+        #b1_fname='/home/eg309/Desktop/DataNew/garyfallidis/brain2/brain2_scan1_fiber_track_mni.trk'
 
         
         
@@ -536,15 +674,15 @@ class PlotTextureExample():
 
         #devel07
 
-        #b1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
+        b1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
 
         #elfthin
 
-        b1_fname='/home/eg309/Desktop/DataNew/garyfallidis/brain2/brain2_scan1_fiber_track_mni.trk'
+        #b1_fname='/home/eg309/Desktop/DataNew/garyfallidis/brain2/brain2_scan1_fiber_track_mni.trk'
 
         
         
-        b1=tracks.Tracks(b1_fname)
+        b1=tracks.Tracks(b1_fname,subset=[0,20000])
 
         b1.angular_speed = 0.
 
@@ -564,11 +702,11 @@ class PlotTextureExample():
 
         #elfthin
 
-        fname = '/home/eg309/Devel/Fos/fos/core/tests/data/Streaks4.bmp'
+        #fname = '/home/eg309/Devel/Fos/fos/core/tests/data/Streaks4.bmp'
 
         #devel07
 
-        #fname = '/home/eg01/Devel/Fos/fos/core/tests/data/Streaks4.bmp'
+        fname = '/home/eg01/Devel/Fos/fos/core/tests/data/Streaks4.bmp'
 
         texim = texture.Texture_Demo(fname)
 
@@ -581,6 +719,8 @@ class PlotTextureExample():
 
         texim.orbits =[]
         for i in random_inx:
+
+            print i
 
             if tm.length(b1.data[i]) > 20.:
 
@@ -789,24 +929,7 @@ class PlotLabelExample():
                  
 
         
-def make_angle_table(lists):
 
-    #angle_table = make_angle_table([[[0,0,0],[90,0,0],30],[[90,0,0],[90,90,0],30]])
-
-    table = []
-    for list in lists:
-        start,finish,n = list
-        sx,sy,sz = start
-        fx,fy,fz = finish
-        cx = np.linspace(sx,fx,n)
-        cy = np.linspace(sy,fy,n)
-        cz = np.linspace(sz,fz,n)
-        if table == []:
-            table = np.column_stack((cx,cy,cz))
-        else:
-            table = np.vstack((table,np.column_stack((cx,cy,cz))))
-    print 'angle table has length %d' % table.shape[0]
-    return table
 
     
 
