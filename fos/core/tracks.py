@@ -15,6 +15,16 @@ import fos.core.collision as cll
 
 #import fos.core.plots as plots
 
+global angle_table
+
+global anglex
+
+global angley
+
+global anglez
+
+global angle_table_index
+
 def make_angle_table(lists):
 
     #angle_table = make_angle_table([[[0,0,0],[90,0,0],30],[[90,0,0],[90,90,0],30]])
@@ -35,12 +45,14 @@ def make_angle_table(lists):
     return table
 
 
-#global angle_table, anglex, angley, anglez, angle_table_index
+
 
 angle_table = make_angle_table([[[0,0,0],[-90,0,0],200],
                                         [[-90,0,0],[-90,-90,0],200],
                                         [[-90,-90,0],[-90,-90,90],200],
                                         [[-90,-90,90],[0,-90,-90],400]])
+
+angle_table_index = 0
 
 anglex = 0.
 
@@ -48,7 +60,8 @@ angley = 0.
 
 anglez = 0.
 
-angle_table_index = 0
+
+
 
 
 
@@ -283,6 +296,8 @@ class Tracks(object):
 
 
         elif self.orbit_demo == True and self.angle_table != None:
+
+            
             
             gl.glPushMatrix()
 
@@ -290,11 +305,13 @@ class Tracks(object):
 
             #print table_ind
 
+            global angle_table_index
+
             table_ind=angle_table_index
 
             anglex=angle_table[table_ind,0]
 
-            print anglex
+            #print anglex
 
             gl.glRotatef(anglex,1,0,0)
             

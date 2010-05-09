@@ -166,7 +166,7 @@ class Plot():
 
         global t1; t1 = self.hidden_tracks(tb1_fname,1*0.1,angle_table=True)
 
-        '''
+        #'''
 
         global t2; t2 = self.hidden_tracks(tb1_fname,.1*0.1,angle_table=True)
 
@@ -189,7 +189,7 @@ class Plot():
 
         global ct6; ct6 = self.hidden_tracks(tb1_fname,1*0.1,angle_table=True,many_colors=True)
 
-        '''
+        #'''
 
 
         self.slots={10:{'actor':tb1,'slot':( 0, 60*MS )},
@@ -200,9 +200,8 @@ class Plot():
                     12:{'actor':csurfr,'slot':( 0, 800*MS )},
                     
                     
-                    21:{'actor':t1,'slot':( 60*MS, 65*MS )}}
+                    21:{'actor':t1,'slot':( 60*MS, 65*MS )},
 
-        '''
                     
                     22:{'actor':t2,'slot':( 65*MS, 66*MS )},
 
@@ -224,10 +223,9 @@ class Plot():
                     35:{'actor':ct5,'slot':( 74*MS, 75*MS )},
 
     
-                    36:{'actor':ct6,'slot':( 75*MS, 800*MS )}               
-        '''
+                    36:{'actor':ct6,'slot':( 75*MS, 800*MS )}}               
                     
-        #}
+
         
 
     def hidden_tracks(self,t1_fname,opacity,angle_table,many_colors=False):
