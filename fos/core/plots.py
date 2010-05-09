@@ -172,14 +172,14 @@ class Plot():
 
         global t3; t3 = self.hidden_tracks(tb1_fname,.05*0.1,angle_table=True)
         
-        global t4; t4 = self.hidden_tracks(tb1_fname,.001*0.1,angle_table=True)
+        global t4; t4 = self.hidden_tracks(tb1_fname,.01*0.1,angle_table=True)
 
-        global t5; t5 = self.hidden_tracks(tb1_fname,.0005*0.1,angle_table=True)
+        global t5; t5 = self.hidden_tracks(tb1_fname,.005*0.1,angle_table=True)
         
 
-        global ct1; ct1 = self.hidden_tracks(tb1_fname,.0005*0.1,angle_table=True,many_colors=True)
+        global ct1; ct1 = self.hidden_tracks(tb1_fname,.005*0.1,angle_table=True,many_colors=True)
 
-        global ct2; ct2 = self.hidden_tracks(tb1_fname,.001*0.1,angle_table=True,many_colors=True)
+        global ct2; ct2 = self.hidden_tracks(tb1_fname,.01*0.1,angle_table=True,many_colors=True)
 
         global ct3; ct3 = self.hidden_tracks(tb1_fname,.05*0.1,angle_table=True,many_colors=True)
         
