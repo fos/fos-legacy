@@ -674,11 +674,7 @@ class PlotTextureExample():
 
         b1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
 
-        #elfthin
-
-        #b1_fname='/home/eg309/Desktop/DataNew/garyfallidis/brain2/brain2_scan1_fiber_track_mni.trk'
-
-        
+         
         
         b1=tracks.Tracks(b1_fname,subset=[0,20000])
 
@@ -688,7 +684,11 @@ class PlotTextureExample():
 
         b1.min_length = 20.
 
-        b1.opacity=0.1
+        b1.opacity = 0.1
+
+        b1.manycolors = False
+
+        b1.brain_color = [0, 0, 1]
 
 
         b1.init()
@@ -698,15 +698,12 @@ class PlotTextureExample():
 
         global texim
 
-        #elfthin
-
-        #fname = '/home/eg309/Devel/Fos/fos/core/tests/data/Streaks4.bmp'
 
         #devel07
 
         fname = '/home/eg01/Devel/Fos/fos/core/tests/data/Streaks4.bmp'
 
-        texim = texture.Texture_Demo(fname)
+        texim = texture.Texture_Demo(fname,red=False,green=True, blue=False)
 
         #texim.orbit = b1.data[4246]
 
@@ -716,20 +713,21 @@ class PlotTextureExample():
         #texim.orbits = [b1.data[4246],b1.data[3000],b1.data[2000],b1.data[1000]]
 
         texim.orbits =[]
+        
         for i in random_inx:
 
-            print i
+            #print i
 
             if tm.length(b1.data[i]) > 20.:
 
-                print i
+                #print i
 
                 texim.orbits.append(b1.data[i])
 
                 
         
 
-        texim.orbits_index = np.zeros((20,),np.int)
+        texim.orbits_index = np.zeros((len(texim.orbits),),np.int)
         
         texim.init()
 

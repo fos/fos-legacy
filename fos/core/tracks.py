@@ -141,7 +141,7 @@ class Tracks(object):
 
         if subset != None:
 
-            self.data_subset = subset#[0,20000]#None
+            self.data_subset = subset #[0,20000]#None
 
         else:
 

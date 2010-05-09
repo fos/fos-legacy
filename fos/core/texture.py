@@ -39,10 +39,18 @@ class Texture(object):
         image = image.convert('RGB')
 
         image = image.convert('RGBA')
-
-        #image.putalpha(50)
+        
 
         self.size = image.size
+        
+
+
+        
+
+
+        
+
+
 
         image=image.tostring("raw",image.mode, 0, -1)
 
@@ -214,7 +222,7 @@ class Texture(object):
 class Texture_Demo(object):
 
 
-    def __init__(self,fname):
+    def __init__(self,fname,red=True,green=True,blue=True):
 
         self.fname = fname
 
@@ -241,6 +249,13 @@ class Texture_Demo(object):
         self.orbits=[]
 
         self.orbits_index=None
+
+        self.red = red
+
+        self.green = green
+
+        self.blue = blue
+        
 
 
     def init_texture(self,image):
@@ -334,6 +349,44 @@ class Texture_Demo(object):
 
         self.size = image.size
 
+        col = [self.red,self.green, self.blue]
+
+        for x,y in np.ndindex(self.size[0],self.size[1]):
+
+            r,g,b,a=image.getpixel((x,y))
+
+            #print x,y,r,g,b,a
+
+            if self.red:
+
+                ra=1
+
+            else:
+
+                ra=0
+
+            if self.green:
+
+                ga=1
+                
+            else:
+
+                ga=0
+
+            if self.blue:
+
+                ba=1
+
+            else:
+
+                ba=0
+                  
+
+            image.putpixel((x,y),(r*ra,g*ga,b*ba,a))
+
+            #image.putpixel((x,y),(r,g,b,a))
+                
+
         image=image.tostring("raw",image.mode, 0, -1)
 
         self.texture_index = gl.glGenTextures(1)
@@ -384,7 +437,7 @@ class Texture_Demo(object):
 
     def display_textures(self,i):
 
-        print i, len(self.orbits), len(self.orbits_index)
+        #print i, len(self.orbits), len(self.orbits_index)
 
         x,y,z=self.orbits[i][self.orbits_index[i]]
 
