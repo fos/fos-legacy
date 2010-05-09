@@ -384,7 +384,7 @@ class Texture_Demo(object):
 
     def display_textures(self,i):
 
-        
+        print i, len(self.orbits), len(self.orbits_index)
 
         x,y,z=self.orbits[i][self.orbits_index[i]]
 

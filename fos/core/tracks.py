@@ -478,7 +478,7 @@ class Tracks(object):
 
 class ChromoTracks(object):
 
-    def __init__(self,fname,colormap=None, line_width=3., shrink=None):
+    def __init__(self,fname,colormap=None, line_width=1., shrink=None, thinning = 0, angle_table = None):
 
         self.position = (0,0,0)
 
@@ -540,7 +540,8 @@ class ChromoTracks(object):
 
         self.pick_color = [1,1,0]
 
-        self.brain_color = [1,1,1]
+        #self.brain_color = [1,1,1] # white
+        self.brain_color = [.941,.862,.510] # buff
 
         self.yellow_indices = None
 
@@ -560,7 +561,15 @@ class ChromoTracks(object):
 
         self.orbit_anglex_rate = 2.
 
-        
+
+        self.angle_table = angle_table
+
+        if angle_table != None:
+            print 'angle_table shape %s' % str(self.angle_table.shape)
+
+        self.angle_table_index = 0
+
+        print 'angle_table_index %d' % self.angle_table_index
 
         self.shrink = shrink
 
@@ -570,17 +579,25 @@ class ChromoTracks(object):
 
         lines,hdr = tv.read(self.fname)
 
-        ras = tv.aff_from_hdr(hdr)
-
+        ras = tv.aff_from_hdr(hdr
+)
         self.affine=ras
 
         tracks = [l[0] for l in lines]
+
+        print 'tracks %d loaded' % len(tracks)
+
+        self.thinning = thinning
 
         if self.yellow_indices != None :
 
             tracks = [t for t in tracks if tm.length(t) > 20]
 
-        print 'tracks loaded'
+        if self.thinning != 0:
+
+            tracks = [tracks[k] for k in range(0,len(tracks),self.thinning)]
+
+        print '%d tracks active' % len(tracks)
 
         #self.data = [100*np.array([[0,0,0],[1,0,0],[2,0,0]]).astype(np.float32) ,100*np.array([[0,1,0],[0,2,0],[0,3,0]]).astype(np.float32)]#tracks[:20000]
 
@@ -651,7 +668,7 @@ class ChromoTracks(object):
     
         x,y,z=self.position
 
-        if self.orbit_demo:
+        if self.orbit_demo and self.angle_table == None:
 
             gl.glPushMatrix()
 
@@ -663,9 +680,8 @@ class ChromoTracks(object):
 
             self.orbit_anglez+=self.orbit_anglez_rate
 
-            x,y,z=self.position
+            #x,y,z=self.position
 
-           
 
             gl.glRotatef(self.orbit_anglez,0,0,1)
 
@@ -682,7 +698,41 @@ class ChromoTracks(object):
 
             gl.glPopMatrix()
 
+        elif self.orbit_demo == True and self.angle_table != None:
+
+            gl.glPushMatrix()
+
+            gl.glRotatef(self.angle_table[self.angle_table_index,0],1,0,0)
+
+            #x,y,z = self.position
             
+            gl.glPushMatrix()
+
+            gl.glRotatef(self.angle_table[self.angle_table_index,1],0,1,0)
+
+            gl.glPushMatrix()
+
+            gl.glRotatef(self.angle_table[self.angle_table_index,2],0,0,1)
+
+            gl.glTranslate(x,y,z)
+            
+            gl.glCallList(self.list_index)
+
+            gl.glFinish()
+
+            gl.glPopMatrix()
+
+            gl.glPopMatrix()
+
+            gl.glPopMatrix()
+
+            self.angle_table_index += 1
+
+            if self.angle_table_index >= self.angle_table.shape[0]:
+                self.angle_table_index = self.angle_table.shape[0] - 1
+
+            #print 'self.angle_table_index = %d' % self.angle_table_index
+
         elif self.fade_demo:
 
             #gl.glPushMatrix()

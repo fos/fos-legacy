@@ -102,6 +102,7 @@ class Plot():
         #tb1_fname='/home/eg309/Desktop/DataNew/garyfallidis/brain2/brain2_scan1_fiber_track_mni.trk'
 
         tb1=tracks.ChromoTracks(tb1_fname,shrink=0.99)
+        #tb1=tracks.Tracks(tb1_fname,shrink=0.99)
 
         tb1.angular_speed = 0.
 
@@ -117,7 +118,7 @@ class Plot():
 
         tb1.position = -tb1.mean
 
-        tb1.position[0] += 5.
+        tb1.position[0] += 250.
 
         tb1.manycolors = True
 
@@ -138,6 +139,166 @@ class Plot():
         self.slots={00:{'actor':tb1,'slot':( 0, 800*MS )}}
                     #01:{'actor':csurfl,'slot':( 0, 800*MS )},
                     #02:{'actor':csurfr,'slot':( 0, 800*MS )}
+        
+
+
+          
+    def display(self):
+
+        now = self.time
+
+        for s in self.slots:
+
+            if now >= self.slots[s]['slot'][0] and now <=self.slots[s]['slot'][1]:
+
+                self.slots[s]['actor'].near_pick = self.near_pick
+
+                self.slots[s]['actor'].far_pick = self.far_pick               
+                
+                self.slots[s]['actor'].display()
+
+
+
+    def update_time(self,time):
+
+        self.time=time
+
+
+    def update_pick_ray(self,near_pick, far_pick):
+
+        self.near_pick = near_pick
+
+        self.far_pick = far_pick
+
+
+
+
+
+class PlotStuff():
+
+
+    def __init__(self):
+
+        self.slots = None
+
+        self.time = 0
+
+        self.near_pick = None
+
+        self.far_pick = None
+
+
+    def init(self):
+
+
+        angle_table = make_angle_table([[[0,0,0],[-90,0,0],200],
+                                        [[-90,0,0],[-90,-90,0],200],
+                                        [[-90,-90,0],[-90,-90,90],200],
+                                        [[-90,-90,90],[0,-90,-90],400]])
+
+        global csurfr
+        global csurfl
+
+        #devel07
+        csurfr ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/rh.pial.vtk'
+       
+        csurfl ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/lh.pial.vtk'
+
+        #elfthin
+        #csurfr = '/home/eg309/Desktop/DataNew/rh.pial.vtk'
+       
+        #csurfl = '/home/eg309/Desktop/DataNew/lh.pial.vtk'
+
+        csurfr = cortex.CorticalSurfaceStuff(csurfr,angle_table)
+        
+        csurfl = cortex.CorticalSurfaceStuff(csurfl,angle_table)
+
+        csurfr.fadeout = True
+
+        csurfl.fadeout = True
+
+        
+        csurfr.fadeout_speed = 0.001        
+
+        csurfl.fadeout_speed = 0.001
+
+        
+        csurfr.orbit_demo = True         
+
+        csurfr.orbit_anglez_rate = 1.
+        
+        
+        csurfl.orbit_demo = True
+        
+        csurfl.orbit_anglez_rate = 1.
+        
+        
+        csurfr.orbit_anglex_rate = -.1
+        
+        csurfl.orbit_anglex_rate = -.1
+        
+        
+
+        csurfr.init()
+
+        csurfl.init()
+        
+
+        global tb1
+
+        #devel07
+        tb1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
+
+        #elfthin
+        #tb1_fname='/home/eg309/Desktop/DataNew/garyfallidis/brain2/brain2_scan1_fiber_track_mni.trk'
+
+        #tb1=tracks.ChromoTracks(tb1_fname,shrink=0.99,thinning=100,angle_table=angle_table)
+
+        tb1=tracks.ChromoTracks(tb1_fname,shrink=0.99,thinning=100,angle_table=angle_table)
+
+        tb1.angular_speed = 0.
+
+        tb1.fade_demo = True
+        
+        tb1.opacity = 1.0
+
+        tb1.opacity_rate = -0.01
+        
+        #tb1.fadeout = True
+
+        #tb1.fadeout_speed = 0.001
+
+        tb1.position = -tb1.mean
+
+        tb1.position[0] += 0.
+
+        #tb1.position[0] += 250.
+
+        #tb1.position[0] += 150.
+
+        tb1.manycolors = True
+
+        #tb1.material_color = True
+
+        tb1.orbit_demo = True          
+
+        tb1.orbit_anglez_rate = 0.
+                
+        tb1.orbit_anglex_rate = 0.
+        
+        
+
+        tb1.init()
+
+#        self.slots={00:{'actor':tb1,'slot':( 0, 800*MS )}}
+#                    #01:{'actor':csurfl,'slot':( 0, 800*MS )},
+#                    #02:{'actor':csurfr,'slot':( 0, 800*MS )}
+        
+
+        
+        self.slots={00:{'actor':tb1,'slot':( 0, 800*MS )},
+                    01:{'actor':csurfl,'slot':( 0, 800*MS )},
+                    02:{'actor':csurfr,'slot':( 0, 800*MS )}}
         
 
 
@@ -293,7 +454,7 @@ class PlotIan():
         self.near_pick = None
 
         self.far_pick = None
-
+        
 
     def init(self):
 
@@ -628,7 +789,26 @@ class PlotLabelExample():
                  
 
         
+def make_angle_table(lists):
 
+    #angle_table = make_angle_table([[[0,0,0],[90,0,0],30],[[90,0,0],[90,90,0],30]])
+
+    table = []
+    for list in lists:
+        start,finish,n = list
+        sx,sy,sz = start
+        fx,fy,fz = finish
+        cx = np.linspace(sx,fx,n)
+        cy = np.linspace(sy,fy,n)
+        cz = np.linspace(sz,fz,n)
+        if table == []:
+            table = np.column_stack((cx,cy,cz))
+        else:
+            table = np.vstack((table,np.column_stack((cx,cy,cz))))
+    print 'angle table has length %d' % table.shape[0]
+    return table
+
+    
 
 
         
