@@ -8,6 +8,7 @@ import Image
 import PIL.ImageOps as iops
 from fos.core.utils import list_indices as lind
 from os.path import join as pjoin
+import fos.core.pyramid as pyramid
 
 from dipy.core import track_metrics as tm
 
@@ -24,6 +25,9 @@ global angley
 global anglez
 
 global angle_table_index
+
+
+MS=1000
 
 def make_angle_table(lists):
 
@@ -109,8 +113,52 @@ class Ghost(object):
         if angle_table_index >= angle_table.shape[0]:
                 
             angle_table_index = angle_table.shape[0] - 1
+
+
+
+class Empty(object):
+
+    def __init__(self):
+
+        self.slots = None
+
+        self.time = 0
+
+        self.near_pick = None
+
+        self.far_pick = None
         
 
+    def init(self):
+
+        global pyr
+
+        pyr = pyramid.Pyramid()
+
+        pyr.init()
+
+        #self.slots={0:{'actor':pyr,'slot':( 0,   5*MS )}}                 
+
+
+    def display(self):
+
+        pass
+    
+        '''
+        now = self.time
+
+        for s in self.slots:
+
+            if now >= self.slots[s]['slot'][0] and now <=self.slots[s]['slot'][1]:
+
+                self.slots[s]['actor'].near_pick = self.near_pick
+
+                self.slots[s]['actor'].far_pick = self.far_pick               
+                
+                self.slots[s]['actor'].display()
+
+        '''
+        
 #=======================================================
 
 class Tracks(object):

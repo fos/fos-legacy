@@ -205,22 +205,27 @@ class Plot():
 
         '''
 
+        empty = tracks.Empty()
+
+        empty.init()
+        
         ghost = tracks.Ghost()
 
         ghost.init()
         
 
-
         #'''
 
-        self.slots={0:{'actor':ghost,'slot':( 0, 800*MS )},
+        self.slots={#00:{'actor':empty, 'slot':(0,5*MS)},
 
-                    10:{'actor':tb1,'slot':( 0, 40*MS )},                   
+                    05:{'actor':ghost,'slot':( 0*MS, 800*MS )},
+
+                    10:{'actor':tb1,'slot':( 0*MS, 40*MS )},                   
 
                     
-                    11:{'actor':csurfl,'slot':( 0, 40*MS )},
+                    11:{'actor':csurfl,'slot':( 0*MS, 40*MS )},
                     
-                    12:{'actor':csurfr,'slot':( 0, 40*MS )},
+                    12:{'actor':csurfr,'slot':( 0*MS, 40*MS )},
                     
                     
                     21:{'actor':t1,'slot':( 40*MS, 41*MS )},
