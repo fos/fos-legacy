@@ -44,13 +44,32 @@ def make_angle_table(lists):
     print 'angle table has length %d' % table.shape[0]
     return table
 
+'''
+angle_table = make_angle_table([
+                [[0,0,90],[90,0,90],200],
+                [[90,0,90],[90,90,90],200],
+                [[90,90,90],[90,90,360],200]
+                ])
+'''
 
+angle_table = make_angle_table([
 
+        #[[0,0,0],[0,0,0],50],
+        
 
+        [[0,0,0],[-90,0,1800],900],
+
+        [[-90,0,1800],[-90,0,36000],17100]
+
+        ])
+
+                
+'''
 angle_table = make_angle_table([[[0,0,0],[-90,0,0],200],
                                         [[-90,0,0],[-90,-90,0],200],
                                         [[-90,-90,0],[-90,-90,90],200],
                                         [[-90,-90,90],[0,-90,-90],400]])
+'''
 
 angle_table_index = 0
 
@@ -69,11 +88,34 @@ anglez = 0.
 
 data_path = pjoin(os.path.dirname(__file__), 'data')
 
+class Ghost(object):
+
+    def __init__(self):
+
+        pass
+
+    def init(self):
+
+        pass
+
+    def display(self):
+
+        global angle_table_index
+
+        global angle_table
+
+        angle_table_index += 1
+
+        if angle_table_index >= angle_table.shape[0]:
+                
+            angle_table_index = angle_table.shape[0] - 1
+        
+
 #=======================================================
 
 class Tracks(object):
 
-    def __init__(self,fname,ang_table=None,colormap=None, line_width=3., shrink=None,subset=None):
+    def __init__(self,fname,ang_table=None,colormap=None, line_width=3., shrink=None,subset=None,data_ext=None):
 
         self.position = (0,0,0)
 
@@ -112,6 +154,8 @@ class Tracks(object):
         self.fadein_speed = 0.
 
         self.min_length = 20.
+
+        self.data_ext = data_ext
 
         self.angle = 0.
 
@@ -172,58 +216,59 @@ class Tracks(object):
 
         self.picking_example = False
 
-          
+        if self.data_ext!=None:
 
-        import dipy.io.trackvis as tv
-
-        lines,hdr = tv.read(self.fname)
-
-        ras = tv.aff_from_hdr(hdr)
-
-        self.affine=ras
-
-        tracks = [l[0] for l in lines]
-
-        if self.yellow_indices != None :
-
-            tracks = [t for t in tracks if tm.length(t) > 20]
-
-        print 'tracks loaded'
-
-        #self.data = [100*np.array([[0,0,0],[1,0,0],[2,0,0]]).astype(np.float32) ,100*np.array([[0,1,0],[0,2,0],[0,3,0]]).astype(np.float32)]#tracks[:20000]
-
-        if self.dummy_data:
-
-            self.data = [100*np.array([[0,0,0],[1,0,0],[2,0,0]]).astype(np.float32) ,100*np.array([[0,1,0],[0,2,0],[0,3,0]]).astype(np.float32)]
-
-        if self.data_subset!=None:
-
-            self.data = tracks[self.data_subset[0]:self.data_subset[1]]
+            self.data=self.data_ext
 
         else:
 
-            self.data = tracks
+            import dipy.io.trackvis as tv
+
+            lines,hdr = tv.read(self.fname)
+
+            ras = tv.aff_from_hdr(hdr)
+
+            self.affine=ras
+
+            tracks = [l[0] for l in lines]
+
+            if self.yellow_indices != None :
+
+                tracks = [t for t in tracks if tm.length(t) > 20]
+
+            print 'tracks loaded'
+
+            #self.data = [100*np.array([[0,0,0],[1,0,0],[2,0,0]]).astype(np.float32) ,100*np.array([[0,1,0],[0,2,0],[0,3,0]]).astype(np.float32)]#tracks[:20000]
+
+            if self.dummy_data:
+
+                self.data = [100*np.array([[0,0,0],[1,0,0],[2,0,0]]).astype(np.float32) ,100*np.array([[0,1,0],[0,2,0],[0,3,0]]).astype(np.float32)]
+
+            if self.data_subset!=None:
+
+                self.data = tracks[self.data_subset[0]:self.data_subset[1]]
+
+            else:
+
+                self.data = tracks
 
 
-        
 
-        if self.shrink != None:
+            data_stats = np.concatenate(tracks)
 
-            self.data = [ self.shrink*t  for t in self.data]
-            
+            self.min=np.min(data_stats,axis=0)
 
-            
-        data_stats = np.concatenate(tracks)
+            self.max=np.max(data_stats,axis=0)
 
-        self.min=np.min(data_stats,axis=0)
-         
-        self.max=np.max(data_stats,axis=0)
+            self.mean=np.mean(data_stats,axis=0)
 
-        self.mean=np.mean(data_stats,axis=0)
+            if self.shrink != None:
 
-        del data_stats
-        
-        del lines
+                self.data = [ self.shrink*t  for t in self.data]
+
+            del data_stats
+
+            del lines
         
         
 
@@ -307,7 +352,11 @@ class Tracks(object):
 
             global angle_table_index
 
+            global angle_table
+
             table_ind=angle_table_index
+
+            #print 'ti',table_ind
 
             anglex=angle_table[table_ind,0]
 
@@ -342,12 +391,15 @@ class Tracks(object):
 
             gl.glPopMatrix()
 
+            '''
+
             angle_table_index += 1
 
             if angle_table_index >= angle_table.shape[0]:
                 
                 angle_table_index = angle_table.shape[0] - 1
 
+            '''
             
 
             '''

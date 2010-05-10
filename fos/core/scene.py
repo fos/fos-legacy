@@ -45,7 +45,7 @@ class Scene(object):
         self.gl_orthog=(-300.,300.,-300.,300.,-1000,1000)       
 
         #Camera settings
-        self.glu_lookat=(0.,0.,150., 0.,0.,0., 0.,1.,0.) 
+        self.glu_lookat=(0.,0.,170., 0.,0.,0., 0.,1.,0.) 
 
         #Display settings
         self.clear_bit=gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT

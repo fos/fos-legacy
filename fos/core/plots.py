@@ -118,6 +118,11 @@ class Plot():
         
         csurfl.orbit_anglex_rate = -.1
 
+        
+        csurfr.position[2]+=20
+        
+        csurfl.position[2]+=20
+        
 
         csurfr.init()
 
@@ -150,6 +155,8 @@ class Plot():
 
         tb1.position[0] += 5.
 
+        tb1.position[2] += 20.
+
         tb1.manycolors = False #True
 
         #tb1.material_color = True
@@ -164,74 +171,128 @@ class Plot():
         tb1.init()
 
 
-        global t1; t1 = self.hidden_tracks(tb1_fname,1*0.1,angle_table=True)
+        global t1; t1 = self.hidden_tracks(tb1_fname,0.1*0.1,angle_table=True, data_ext=tb1.data)
+        
+        global ct1; ct1 = self.hidden_tracks(tb1_fname,0.1*0.1,angle_table=True,many_colors=True, data_ext=tb1.data)
+
+        global ct6; ct6 = self.hidden_tracks(tb1_fname,1*0.1,angle_table=True,many_colors=True, data_ext=tb1.data)
+
+        #global ct7; ct7 = self.hidden_tracks(tb1_fname,0.7,angle_table=True,many_colors=True, data_ext=tb1.data)
+
+        '''
+        global t1; t1 = self.hidden_tracks(tb1_fname,1*0.1,angle_table=True, data_ext=tb1.data)
+
+        global t2; t2 = self.hidden_tracks(tb1_fname,.1*0.1,angle_table=True, data_ext=tb1.data)
+
+        global t3; t3 = self.hidden_tracks(tb1_fname,.05*0.1,angle_table=True, data_ext=tb1.data)
+        
+        global t4; t4 = self.hidden_tracks(tb1_fname,.01*0.1,angle_table=True, data_ext=tb1.data)
+
+        #global t5; t5 = self.hidden_tracks(tb1_fname,.005*0.1,angle_table=True, data_ext=tb1.data)
+        
+
+        #global ct1; ct1 = self.hidden_tracks(tb1_fname,.005*0.1,angle_table=True,many_colors=True, data_ext=tb1.data)
+
+        global ct2; ct2 = self.hidden_tracks(tb1_fname,.01*0.1,angle_table=True,many_colors=True, data_ext=tb1.data)
+
+        global ct3; ct3 = self.hidden_tracks(tb1_fname,.05*0.1,angle_table=True,many_colors=True, data_ext=tb1.data)
+        
+        global ct4; ct4 = self.hidden_tracks(tb1_fname,.1*0.1,angle_table=True,many_colors=True, data_ext=tb1.data)
+
+        global ct5; ct5 = self.hidden_tracks(tb1_fname,.5*0.1,angle_table=True,many_colors=True, data_ext=tb1.data)
+
+        global ct6; ct6 = self.hidden_tracks(tb1_fname,1*0.1,angle_table=True,many_colors=True, data_ext=tb1.data)
+
+        '''
+
+        ghost = tracks.Ghost()
+
+        ghost.init()
+        
+
 
         #'''
 
-        global t2; t2 = self.hidden_tracks(tb1_fname,.1*0.1,angle_table=True)
+        self.slots={0:{'actor':ghost,'slot':( 0, 800*MS )},
 
-        global t3; t3 = self.hidden_tracks(tb1_fname,.05*0.1,angle_table=True)
-        
-        global t4; t4 = self.hidden_tracks(tb1_fname,.01*0.1,angle_table=True)
+                    10:{'actor':tb1,'slot':( 0, 40*MS )},                   
 
-        global t5; t5 = self.hidden_tracks(tb1_fname,.005*0.1,angle_table=True)
-        
+                    
+                    11:{'actor':csurfl,'slot':( 0, 40*MS )},
+                    
+                    12:{'actor':csurfr,'slot':( 0, 40*MS )},
+                    
+                    
+                    21:{'actor':t1,'slot':( 40*MS, 41*MS )},
 
-        global ct1; ct1 = self.hidden_tracks(tb1_fname,.005*0.1,angle_table=True,many_colors=True)
+                    22:{'actor':t1,'slot':( 40*MS, 42*MS )},
 
-        global ct2; ct2 = self.hidden_tracks(tb1_fname,.01*0.1,angle_table=True,many_colors=True)
+                    23:{'actor':t1,'slot':( 40*MS, 43*MS )},
 
-        global ct3; ct3 = self.hidden_tracks(tb1_fname,.05*0.1,angle_table=True,many_colors=True)
-        
-        global ct4; ct4 = self.hidden_tracks(tb1_fname,.1*0.1,angle_table=True,many_colors=True)
+                                
+                    31:{'actor':ct1,'slot':( 42*MS, 47*MS )},
 
-        global ct5; ct5 = self.hidden_tracks(tb1_fname,.5*0.1,angle_table=True,many_colors=True)
+                    32:{'actor':ct1,'slot':( 42*MS, 46*MS )},
 
-        global ct6; ct6 = self.hidden_tracks(tb1_fname,1*0.1,angle_table=True,many_colors=True)
+                    33:{'actor':ct1,'slot':( 42*MS, 45*MS )},
+                    
 
+                    34:{'actor':ct6,'slot':( 47*MS, 800*MS )}
+
+                    #35:{'actor':ct7,'slot':( 48*MS, 800*MS )}
+
+
+                    }
         #'''
 
+        '''
 
-        self.slots={10:{'actor':tb1,'slot':( 0, 60*MS )},
-
-                    
-                    11:{'actor':csurfl,'slot':( 0, 800*MS )},
-                    
-                    12:{'actor':csurfr,'slot':( 0, 800*MS )},
-                    
-                    
-                    21:{'actor':t1,'slot':( 60*MS, 65*MS )},
+        self.slots={10:{'actor':tb1,'slot':( 0, 3*40*MS )},
 
                     
-                    22:{'actor':t2,'slot':( 65*MS, 66*MS )},
+                    11:{'actor':csurfl,'slot':( 0,3*40*MS )},
+                    
+                    12:{'actor':csurfr,'slot':( 0,3*40*MS )},
+                    
+                    
+                    21:{'actor':t1,'slot':( 3*40*MS,  3*41*MS )},
 
-                    23:{'actor':t3,'slot':( 66*MS, 67*MS )},
+                    22:{'actor':t1,'slot':( 3*40*MS,  3*42*MS )},
 
-                    24:{'actor':t4,'slot':( 67*MS, 68*MS )},
+                    23:{'actor':t1,'slot':(  3*40*MS,  3*43*MS )},
 
-                    25:{'actor':t5,'slot':( 68*MS, 69*MS )},
+                                
+                    31:{'actor':ct1,'slot':( 3*42*MS, 3*47*MS )},
+
+                    32:{'actor':ct1,'slot':( 3*42*MS, 3*46*MS )},
+
+                    33:{'actor':ct1,'slot':(  3*42*MS,3*45*MS )},
                     
 
-                    31:{'actor':ct1,'slot':( 69*MS, 70*MS )},
-                    
-                    32:{'actor':ct2,'slot':( 71*MS, 72*MS )},
+                    34:{'actor':ct6,'slot':(  3*47*MS, 3*48*MS )},
 
-                    33:{'actor':ct3,'slot':( 72*MS, 73*MS )},
+                    35:{'actor':ct7,'slot':(  3*48*MS, 800*MS )}
 
-                    34:{'actor':ct4,'slot':( 73*MS, 74*MS )},
 
-                    35:{'actor':ct5,'slot':( 74*MS, 75*MS )},
+                    }
 
-    
-                    36:{'actor':ct6,'slot':( 75*MS, 800*MS )}}               
+
+        '''            
+        global last_time
+
+        last_time = glut.glutGet(glut.GLUT_ELAPSED_TIME)
+
+
+
+
                     
 
         
 
-    def hidden_tracks(self,t1_fname,opacity,angle_table,many_colors=False):
+    def hidden_tracks(self,t1_fname,opacity,angle_table,many_colors=False,data_ext=None):
 
 
-        t1=tracks.Tracks(t1_fname,ang_table=angle_table,shrink=0.99,subset=[0,20000])
+        t1=tracks.Tracks(t1_fname,ang_table=angle_table,shrink=0.99,subset=[0,20000],data_ext=data_ext)
 
         t1.angular_speed = 0.
 
@@ -248,6 +309,8 @@ class Plot():
         t1.position = -tb1.mean
 
         t1.position[0] += 5.
+
+        t1.position[2] += 20.
 
         t1.manycolors = many_colors #False #True
 
@@ -266,7 +329,17 @@ class Plot():
           
     def display(self):
 
+        global last_time
+
+        current_time = glut.glutGet(glut.GLUT_ELAPSED_TIME)
+
+        Dt = current_time - last_time
+
+        #print Dt
+        
         now = self.time
+
+        #if Dt < 40:
 
         for s in self.slots:
 
@@ -277,6 +350,10 @@ class Plot():
                 self.slots[s]['actor'].far_pick = self.far_pick               
                 
                 self.slots[s]['actor'].display()
+
+                
+
+        last_time = current_time
 
 
 
@@ -312,11 +389,18 @@ class PlotStuff():
     def init(self):
 
 
+        angle_table = make_angle_table([
+                [[0,0,90],[90,0,90],200],
+                [[90,0,90],[90,90,90],200],
+                [[90,90,90],[90,90,360],200]
+                ])
+        '''
         angle_table = make_angle_table([[[0,0,0],[-90,0,0],200],
                                         [[-90,0,0],[-90,-90,0],200],
                                         [[-90,-90,0],[-90,-90,90],200],
                                         [[-90,-90,90],[0,-90,-90],400]])
-
+        '''
+        
         global csurfr
         global csurfl
 
@@ -371,10 +455,12 @@ class PlotStuff():
 
         colored=tracks.ChromoTracks(tb1_fname,shrink=0.99,thinning=100,angle_table=angle_table,
                                     manycolors=True)
+        '''
         buff=tracks.ChromoTracks(tb1_fname,shrink=0.99,thinning=100,angle_table=angle_table,
                                  manycolors=False,brain_color=[.941,.862,.510])
         white=tracks.ChromoTracks(tb1_fname,shrink=0.99,thinning=100,angle_table=angle_table,
                                   manycolors=False)
+        '''
 
         colored.fade_demo = True
         colored.orbit_demo = True
@@ -383,12 +469,14 @@ class PlotStuff():
         colored.angular_speed = 0.
         colored.position = -colored.mean
         
+        '''
         buff.fade_demo = False
         buff.orbit_demo = False
         buff.opacity = 1.0
         buff.opacity_rate = -0.02
         buff.angular_speed = 0.
         buff.position = -buff.mean
+        '''
         
         tb1 = colored
         tb1.angular_speed = 0.
