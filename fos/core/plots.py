@@ -216,33 +216,35 @@ class Plot():
 
         #'''
 
-        self.slots={#00:{'actor':empty, 'slot':(0,5*MS)},
+        delay = 5*MS
 
-                    05:{'actor':ghost,'slot':( 0*MS, 800*MS )},
+        self.slots={00:{'actor':empty, 'slot':(0, delay)},
 
-                    10:{'actor':tb1,'slot':( 0*MS, 40*MS )},                   
+                    05:{'actor':ghost,'slot':( 0*MS+delay, 800*MS+delay )},
+
+                    10:{'actor':tb1,'slot':( 0*MS+delay, 40*MS+delay )},                   
 
                     
-                    11:{'actor':csurfl,'slot':( 0*MS, 40*MS )},
+                    11:{'actor':csurfl,'slot':( 0*MS+delay, 40*MS+delay )},
                     
-                    12:{'actor':csurfr,'slot':( 0*MS, 40*MS )},
+                    12:{'actor':csurfr,'slot':( 0*MS+delay, 40*MS+delay )},
                     
                     
-                    21:{'actor':t1,'slot':( 40*MS, 41*MS )},
+                    21:{'actor':t1,'slot':( 40*MS+delay, 41*MS+delay )},
 
-                    22:{'actor':t1,'slot':( 40*MS, 42*MS )},
+                    22:{'actor':t1,'slot':( 40*MS+delay, 42*MS+delay )},
 
-                    23:{'actor':t1,'slot':( 40*MS, 43*MS )},
+                    23:{'actor':t1,'slot':( 40*MS+delay, 43*MS+delay )},
 
                                 
-                    31:{'actor':ct1,'slot':( 42*MS, 47*MS )},
+                    31:{'actor':ct1,'slot':( 42*MS+delay, 47*MS+delay )},
 
-                    32:{'actor':ct1,'slot':( 42*MS, 46*MS )},
+                    32:{'actor':ct1,'slot':( 42*MS+delay, 46*MS+delay )},
 
-                    33:{'actor':ct1,'slot':( 42*MS, 45*MS )},
+                    33:{'actor':ct1,'slot':( 42*MS+delay, 45*MS+delay )},
                     
 
-                    34:{'actor':ct6,'slot':( 47*MS, 800*MS )}
+                    34:{'actor':ct6,'slot':( 47*MS+delay, 800*MS+delay )}
 
                     #35:{'actor':ct7,'slot':( 48*MS, 800*MS )}
 
@@ -769,7 +771,7 @@ class PlotTextureExample():
 
          
         
-        b1=tracks.Tracks(b1_fname,subset=[0,20000])
+        b1=tracks.Tracks(b1_fname,subset=[0,200])
 
         b1.angular_speed = 0.
 
@@ -777,11 +779,11 @@ class PlotTextureExample():
 
         b1.min_length = 20.
 
-        b1.opacity = 0.1
+        b1.opacity = 0.8
 
         b1.manycolors = False
 
-        b1.brain_color = [0, 0, 1]
+        b1.brain_color = [0, 0, 0]
 
 
         b1.init()
@@ -796,12 +798,14 @@ class PlotTextureExample():
 
         fname = '/home/eg01/Devel/Fos/fos/core/tests/data/Streaks4.bmp'
 
-        texim = texture.Texture_Demo(fname,red=False,green=True, blue=False)
+        texim = texture.Texture_Demo(fname,red=False,green=False, blue=True)
 
         #texim.orbit = b1.data[4246]
 
-        random_inx=np.round(19000*np.random.rand(30)).astype(np.int)
-        
+        #print 'len(b1.data)', len(b1.data)
+
+        random_inx=np.trunc(len(b1.data)*np.random.rand(1000)).astype(np.int)
+        #print random_inx
 
         #texim.orbits = [b1.data[4246],b1.data[3000],b1.data[2000],b1.data[1000]]
 
@@ -811,7 +815,7 @@ class PlotTextureExample():
 
             #print i
 
-            if tm.length(b1.data[i]) > 20.:
+            if tm.length(b1.data[i]) > 50.:
 
                 #print i
 
@@ -824,8 +828,8 @@ class PlotTextureExample():
         
         texim.init()
 
-        self.slots={0:{'actor':texim,'slot':( 0, 800*MS )},
-                    1:{'actor':b1,'slot':(0, 800*MS)}}
+        self.slots={0:{'actor':texim,'slot':( 0, 800*MS )}}#,
+                    #1:{'actor':b1,'slot':(0, 800*MS)}}
 
         
           
@@ -854,6 +858,7 @@ class PlotTextureExample():
 
         gl.glRasterPos3f(0.,0.,0.)
 
+        '''
         label = 'HELLO'
 
         #print label
@@ -865,6 +870,8 @@ class PlotTextureExample():
             glut.glutBitmapCharacter(glut.GLUT_BITMAP_TIMES_ROMAN_24, ord(c))
 
         gl.glEnable(gl.GL_LIGHTING)
+
+        '''
 
         #'''
         

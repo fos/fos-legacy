@@ -131,14 +131,7 @@ class Empty(object):
 
     def init(self):
 
-        global pyr
-
-        pyr = pyramid.Pyramid()
-
-        pyr.init()
-
-        #self.slots={0:{'actor':pyr,'slot':( 0,   5*MS )}}                 
-
+        pass
 
     def display(self):
 
@@ -1285,14 +1278,4 @@ class ChromoTracks(object):
         gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
 
         gl.glEndList()
-
-
-
-
-            
-
-       
-
-    
-
 
