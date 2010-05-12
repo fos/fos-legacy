@@ -804,7 +804,7 @@ class PlotTextureExample():
 
         #print 'len(b1.data)', len(b1.data)
 
-        random_inx=np.trunc(len(b1.data)*np.random.rand(1000)).astype(np.int)
+        random_inx=np.trunc(len(b1.data)*np.random.rand(200)).astype(np.int)
         #print random_inx
 
         #texim.orbits = [b1.data[4246],b1.data[3000],b1.data[2000],b1.data[1000]]
@@ -815,7 +815,7 @@ class PlotTextureExample():
 
             #print i
 
-            if tm.length(b1.data[i]) > 50.:
+            if tm.length(b1.data[i]) > 20.:
 
                 #print i
 
