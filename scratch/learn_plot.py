@@ -3,6 +3,6 @@ import fos.core.plots as plots
 
 #world=scene.SceneStuff(plot=plots.PlotStuff())
 
-world = scene.Scene(plot=plots.PlotStuff())
+world = scene.Scene(plot=plots.Plot())
 
 world.run()

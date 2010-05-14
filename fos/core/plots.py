@@ -13,7 +13,9 @@ import fos.core.texture as texture
 import fos.core.label as label
 
 import dipy.core.track_metrics as tm
-
+from dipy.core import track_learning as tl
+from dipy.io import trackvis as tv
+import dipy.core.track_performance as pf
 
 
 
@@ -26,34 +28,7 @@ def center(x,y):
 
     return ((int(1024-x)/2),int((768-y)/2))
 
-'''
-def make_angle_table(lists):
 
-    #angle_table = make_angle_table([[[0,0,0],[90,0,0],30],[[90,0,0],[90,90,0],30]])
-
-    table = []
-    for list in lists:
-        start,finish,n = list
-        sx,sy,sz = start
-        fx,fy,fz = finish
-        cx = np.linspace(sx,fx,n)
-        cy = np.linspace(sy,fy,n)
-        cz = np.linspace(sz,fz,n)
-        if table == []:
-            table = np.column_stack((cx,cy,cz))
-        else:
-            table = np.vstack((table,np.column_stack((cx,cy,cz))))
-    print 'angle table has length %d' % table.shape[0]
-    return table
-
-
-angle_table = make_angle_table([[[0,0,0],[-90,0,0],200],
-                                        [[-90,0,0],[-90,-90,0],200],
-                                        [[-90,-90,0],[-90,-90,90],200],
-                                        [[-90,-90,90],[0,-90,-90],400]])
-
-
-'''
 
 
 class Plot():
@@ -706,7 +681,7 @@ class PlotIan():
         pyr2.position=[-100,0,0]
 
 
-        self.slots={0:{'actor':pyr,'slot':( 0,   800*MS )},
+        self.slots={0:{'actor':pyr,'slot':( 0,  8000*MS )},
 
                     1:{'actor':pyr2,'slot':( 0,   800*MS )}
                     }                 
@@ -1025,8 +1000,347 @@ class PlotLabelExample():
                  
 
         
+class PlotMultipleBrains():
 
 
+    def __init__(self):
+
+        self.slots = None
+
+        self.time = 0
+
+        self.near_pick = None
+
+        self.far_pick = None
+
+        #self.fname = fname
+
+        
+
+    def init(self):
+
+
+        br1path='/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk'
+
+        br2path='/home/eg01/Data_Backup/Data/Eleftherios/CBU090134_METHODS/20090227_154122/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_FACT.trk'
+
+        br3path='/home/eg01/Data_Backup/Data/Eleftherios/CBU090133_METHODS/20090227_145404/Series_003_CBU_DTI_64D_iso_1000/dtk_dti_out/dti_RK2.trk'
+
+
+        min_len=20
+
+        down=20
+
+        rand_tracks=-1 #default 10 min_search_len=70
+        
+        min_search_len=70
+        
+        max_search_len=140
+
+
+        corr_mat_demo=np.array([[ 1, 10560,  3609],[ 2, 17872, 15377],[ 3,  6447,  3897], [4, 18854,  6409], [ 5, 14416,  4515], [ 7,  9956, 13913], [8, 10853, 15572], [ 9, 13280,  8461], [ 0, 11275,  9224]])
+
+
+        print 'Minimum track length', min_len, 'mm'
+        print 'Number of segments for downsampling',down
+        print 'Number of tracks for detection',rand_tracks
+        print 'Minimum searched track length', min_search_len, 'mm'
+        print 'Maximum searched track length', max_search_len, 'mm'
+
+        tracks1,hdr1=tv.read(br1path)
+
+        tracks2,hdr2=tv.read(br2path)
+
+        tracks3,hdr3=tv.read(br3path)
+
+        #Load only track points, no scalars or parameters.
+
+        tracks1=[t[0] for t in tracks1]
+
+        tracks2=[t[0] for t in tracks2]
+
+        tracks3=[t[0] for t in tracks3]
+
+        print 'Before thresholding'
+
+        print len(tracks1)
+
+        print len(tracks2)
+
+        print len(tracks3)
+
+        print hdr1['dim']
+
+        print hdr2['dim']
+
+        print hdr3['dim']
+
+        #Apply thresholds
+
+        tracks1=[t for t in tracks1 if tm.length(t) > min_len]
+
+        tracks2=[t for t in tracks2 if tm.length(t) > min_len]
+
+        tracks3=[t for t in tracks3 if tm.length(t) > min_len]
+
+        print 'After thresholding'
+
+        print len(tracks1)
+        print len(tracks2)
+        print len(tracks3)
+
+        print 'Downsampling'
+
+        tracks1z=[tm.downsample(t,down) for t in tracks1]
+
+        tracks2z=[tm.downsample(t,down) for t in tracks2]
+
+        tracks3z=[tm.downsample(t,down) for t in tracks3] 
+
+        print 'Detecting random tracks'
+
+        lt1=len(tracks1)
+
+        lt2=len(tracks2)
+
+        lt3=len(tracks3)
+
+        if rand_tracks==-1:
+            
+	    #use already stored indices
+            t_ind=corr_mat_demo[:,1]
+            
+				
+	t_ind=np.array(t_ind)
+
+        print 'Indices of tracks for detection', t_ind
+
+        print 'Finding corresponding tracks'
+
+        global track2track        
+        track2track= self.corresponding_tracks(t_ind,tracks1z,tracks2z)
+
+        global track2track2
+        track2track2=self.corresponding_tracks(t_ind,tracks1z,tracks3z)
+
+        print 'First Correspondance Matrix'
+        print track2track
+
+        print 'Second Correspondance Matrix'
+        print track2track2
+
+        print 'first brain'
+        print track2track[:,1].T
+
+        print 'second brain'
+        print track2track[:,2].T
+
+        print 'third brain'
+        print track2track2[:,2].T
+
+
+        #fos.add(r,fos.line(tracks1,fos.red,opacity=0.01))
+        #fos.add(r,fos.line(tracks2,fos.cyan,opacity=0.01))
+
+        tracks1zshift = tracks1z
+        tracks2zshift = tracks2z
+        tracks3zshift = tracks3z
+
+        m3z=np.concatenate(tracks3zshift).mean(axis=0)
+
+        #tracks1zshift=[t+np.array([-70,0,0]) for t in tracks1z]
+
+        #tracks2zshift=[t+np.array([70,0,0]) for t in tracks2z]
+
+        tracks3zshift=[t-m3z for t in tracks3z]
+
+
+        global t1
+
+        #devel07
+
+        t1=tracks.Tracks(None,data_ext=tracks1zshift)
+
+        t1.angular_speed = 0.1
+
+        t1.brain_color=[1,0,0]
+
+        t1.manycolors=False
+
+        t1.opacity = 0.01
+
+        t1.orbit_demo=True
+
+        t1.orbit_anglez_rate = 0.
+                
+        t1.orbit_anglex_rate = 20.
+
+        t1.orbit_angley_rate = 20.
+
+        
+
+        t1.init()
+
+        t1.position = - np.concatenate(tracks1zshift).mean(axis=0)+np.array([-70,0,0])
+
+        print 't1p',t1.position
+
+        
+
+        global t2
+
+        #devel07
+
+        t2=tracks.Tracks(None,data_ext=tracks2zshift)
+
+        t2.angular_speed = 0.1
+
+        t2.brain_color=[0,1,1]
+
+        t2.manycolors=False
+
+        t2.opacity = 0.01
+
+        t2.orbit_demo=True
+
+        t2.orbit_anglez_rate = 0.
+                
+        t2.orbit_anglex_rate = 20.
+
+        t2.orbit_angley_rate = 20.
+
+        t2.init()
+        
+        t2.position = - np.concatenate(tracks2zshift).mean(axis=0)+np.array([0,0,0])
+
+        print 't2p', t2.position
+        
+        
+
+        global t3
+
+        #devel07
+
+        t3=tracks.Tracks(None,data_ext=tracks3zshift)
+
+        t3.angular_speed = 0.1
+
+        t3.manycolors=False
+
+        t3.brain_color=[0,0,1]
+
+        t3.opacity = 0.01
+
+        t3.orbit_demo=True
+
+        t3.orbit_anglez_rate = 0.
+                
+        t3.orbit_anglex_rate = 20.
+
+        t3.orbit_angley_rate = 20.        
+
+        t3.init()
+        
+        #t3.position = -
+        #np.concatenate(tracks3zshift).mean(axis=0)+np.array([70,0,0])
+
+        t3.position = np.array([70,0,0])
+
+        print 't3p', t3.position
+        
+        
+
+        self.slots={0:{'actor':t1,'slot':( 0, 800*MS ) },
+                    1:{'actor':t2,'slot':( 0, 800*MS ) },
+                    2:{'actor':t3,'slot':( 0, 800*MS ) }}
+                   
+                   
+
+        
+          
+    def display(self):
+
+        now = self.time
+
+        for s in self.slots:
+
+            if now >= self.slots[s]['slot'][0] and now <=self.slots[s]['slot'][1]:
+
+                self.slots[s]['actor'].near_pick = self.near_pick
+
+                self.slots[s]['actor'].far_pick = self.far_pick               
+                
+                self.slots[s]['actor'].display()
+
+
+        global track2track
+
+        global track2track2
+
+        '''
+
+        for i in track2track:
+
+            t1.display_one_track(i[1], np.array([1,1,0,1],np.float32))
+            t2.display_one_track(i[2], np.array([1,1,0,1],np.float32))
+
+        for i in track2track2:                                     
+
+            t3.display_one_track(i[2], np.array([1,1,0,1],np.float32))                      
+
+        '''
+                                                         
+
+        gl.glDisable(gl.GL_LIGHTING)
+        
+        gl.glColor3f(1.,0.,0.)
+
+        gl.glRasterPos3f(0.,0.,0.)
+
+        #'''
+        label = 'HELLO'
+
+        #print label
+
+        for c in label:
+
+            #print c
+
+            glut.glutBitmapCharacter(glut.GLUT_BITMAP_TIMES_ROMAN_24, ord(c))
+
+        gl.glEnable(gl.GL_LIGHTING)
+                                 
+
+
+
+    def update_time(self,time):
+
+        self.time=time
+
+
+    def update_pick_ray(self,near_pick, far_pick):
+
+        self.near_pick = near_pick
+
+        self.far_pick = far_pick
+                 
+
+    def corresponding_tracks(self,indices,tracks1,tracks2):
+	''' Detect similar tracks in different brains
+	'''
+    
+	li=len(indices)
+	track2track=np.zeros((li,3))
+	cnt=0
+	for i in indices:        
+        
+		rt=[pf.zhang_distances(tracks1[i],t,'avg') for t in tracks2]
+		rt=np.array(rt)               
+
+		track2track[cnt-1]=np.array([cnt,i,rt.argmin()])        
+		cnt+=1
+        
+	return track2track.astype(int)
     
 
 

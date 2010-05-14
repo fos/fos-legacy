@@ -236,12 +236,17 @@ class Tracks(object):
 
         self.orbit_anglez = 0.
 
-        self.orbit_anglez_rate = 10.
+        self.orbit_anglez_rate = 0.
         
 
         self.orbit_anglex = 0.
 
-        self.orbit_anglex_rate = 2.
+        self.orbit_anglex_rate = 0.
+
+
+        self.orbit_angley = 0.
+
+        self.orbit_angley_rate = 0.
 
 
         self.angle_table = ang_table
@@ -337,8 +342,7 @@ class Tracks(object):
 
             if np.sum(np.equal(self.near_pick, self.near_pick_prev))< 3:        
 
-                self.process_picking(self.near_pick, self.far_pick)             
-              
+                self.process_picking(self.near_pick, self.far_pick)                
                 self.near_pick_prev = self.near_pick
 
                 self.far_pick_prev = self.far_pick
@@ -351,23 +355,39 @@ class Tracks(object):
 
         if self.orbit_demo and self.angle_table == None:
 
+            print('Yo%f',self.position[0])
+
             gl.glPushMatrix()
+
+            gl.glTranslatef(x,y,z)
+
+            gl.glPushMatrix()
+
+            #gl.glTranslatef(x,y,z)
 
             self.orbit_anglex+=self.orbit_anglex_rate
             
             gl.glRotatef(self.orbit_anglex,1,0,0)
+            
+            '''
+            gl.glPushMatrix()
+
+            self.orbit_angley+=self.orbit_angley_rate
+            
+            gl.glRotatef(self.orbit_angley,0,1,0)
 
             gl.glPushMatrix()
 
             self.orbit_anglez+=self.orbit_anglez_rate
 
-            x,y,z=self.position
-
-           
+            #x,y,z=self.position
+            
 
             gl.glRotatef(self.orbit_anglez,0,0,1)
 
-            gl.glTranslatef(x,y,z) 
+            #gl.glTranslatef(x,y,z)
+
+            '''
 
 
             #gl.glPolygonMode(gl.GL_FRONT_AND_BACK, gl.GL_LINE)
@@ -379,6 +399,12 @@ class Tracks(object):
             gl.glPopMatrix()
 
             gl.glPopMatrix()
+
+            #gl.glPopMatrix()
+
+            #gl.glPopMatrix()
+
+            
 
 
         elif self.orbit_demo == True and self.angle_table != None:
@@ -547,7 +573,7 @@ class Tracks(object):
     def display_one_track(self,track_index,color4=np.array([1,1,0,1],dtype=np.float32)):
         
 
-        gl.glPushMatrix()
+        #gl.glPushMatrix()
 
         gl.glDisable(gl.GL_LIGHTING)
 
@@ -583,7 +609,7 @@ class Tracks(object):
 
         gl.glEnable(gl.GL_DEPTH_TEST)
         
-        gl.glPopMatrix()
+        #gl.glPopMatrix()
 
 
 
