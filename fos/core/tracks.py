@@ -8,6 +8,7 @@ import Image
 import PIL.ImageOps as iops
 from fos.core.utils import list_indices as lind
 from os.path import join as pjoin
+import fos.core.pyramid as pyramid
 
 from dipy.core import track_metrics as tm
 
@@ -24,6 +25,9 @@ global angley
 global anglez
 
 global angle_table_index
+
+
+MS=1000
 
 def make_angle_table(lists):
 
@@ -44,13 +48,32 @@ def make_angle_table(lists):
     print 'angle table has length %d' % table.shape[0]
     return table
 
+'''
+angle_table = make_angle_table([
+                [[0,0,90],[90,0,90],200],
+                [[90,0,90],[90,90,90],200],
+                [[90,90,90],[90,90,360],200]
+                ])
+'''
 
+angle_table = make_angle_table([
 
+        #[[0,0,0],[0,0,0],50],
+        
 
+        [[0,0,0],[-90,0,1800],900],
+
+        [[-90,0,1800],[-90,0,36000],17100]
+
+        ])
+
+                
+'''
 angle_table = make_angle_table([[[0,0,0],[-90,0,0],200],
                                         [[-90,0,0],[-90,-90,0],200],
                                         [[-90,-90,0],[-90,-90,90],200],
                                         [[-90,-90,90],[0,-90,-90],400]])
+'''
 
 angle_table_index = 0
 
@@ -69,583 +92,71 @@ anglez = 0.
 
 data_path = pjoin(os.path.dirname(__file__), 'data')
 
-#=======================================================
+class Ghost(object):
 
-class Tracks(object):
+    def __init__(self):
 
-    def __init__(self,fname,ang_table=None,colormap=None, line_width=3., shrink=None,subset=None):
+        pass
 
-        self.position = (0,0,0)
+    def init(self):
 
-        self.fname = fname
-        
-        self.manycolors = True
-        
-        self.bbox = None
+        pass
 
-        self.list_index = None
+    def display(self):
 
-        self.affine = None
+        global angle_table_index
 
-        self.data = None
+        global angle_table
 
-        self.list_index = None
+        angle_table_index += 1
 
-        self.rot_angle = 0
-
-        self.colormap = None
+        if angle_table_index >= angle_table.shape[0]:
                 
-        self.min = None
-         
-        self.max = None
+            angle_table_index = angle_table.shape[0] - 1
 
-        self.mean = None
 
-        self.material_color = False
 
-        self.fadeout = False
+class Empty(object):
 
-        self.fadein = False
+    def __init__(self):
 
-        self.fadeout_speed = 0.
+        self.slots = None
 
-        self.fadein_speed = 0.
-
-        self.min_length = 20.
-
-        self.angle = 0.
-
-        self.angular_speed = .5
-
-        self.line_width = line_width
-
-        self.opacity = 1.
+        self.time = 0
 
         self.near_pick = None
 
         self.far_pick = None
-
-        self.near_pick_prev = None
-
-        self.far_pick_prev = None
-
-        self.picked_track = None
-
-        self.pick_color = [1,1,0]
-
-        self.brain_color = [1,1,1]
-
-        self.yellow_indices = None
-
-        self.dummy_data = False
-
-        if subset != None:
-
-            self.data_subset = subset #[0,20000]#None
-
-        else:
-
-            self.data_subset = None
-
-        self.orbit_demo = False          
-
-        self.orbit_anglez = 0.
-
-        self.orbit_anglez_rate = 10.
-        
-
-        self.orbit_anglex = 0.
-
-        self.orbit_anglex_rate = 2.
-
-
-        self.angle_table = ang_table
-
-        
-        self.angle_table_index = 0
-
-
-
-        
-
-        self.shrink = shrink
-
-        self.picking_example = False
-
-
-        self.partial_colors = False
-        self.coloured_subset = None
-        
-
-        import dipy.io.trackvis as tv
-
-        lines,hdr = tv.read(self.fname)
-
-        ras = tv.aff_from_hdr(hdr)
-
-        self.affine=ras
-
-        tracks = [l[0] for l in lines]
-
-        if self.yellow_indices != None :
-
-            tracks = [t for t in tracks if tm.length(t) > 20]
-
-        print 'tracks loaded'
-
-        #self.data = [100*np.array([[0,0,0],[1,0,0],[2,0,0]]).astype(np.float32) ,100*np.array([[0,1,0],[0,2,0],[0,3,0]]).astype(np.float32)]#tracks[:20000]
-
-        if self.dummy_data:
-
-            self.data = [100*np.array([[0,0,0],[1,0,0],[2,0,0]]).astype(np.float32) ,100*np.array([[0,1,0],[0,2,0],[0,3,0]]).astype(np.float32)]
-
-        if self.data_subset!=None:
-
-            self.data = tracks[self.data_subset[0]:self.data_subset[1]]
-
-        else:
-
-            self.data = tracks
-
-
-        
-
-        if self.shrink != None:
-
-            self.data = [ self.shrink*t  for t in self.data]
-            
-
-            
-        data_stats = np.concatenate(tracks)
-
-        self.min=np.min(data_stats,axis=0)
-         
-        self.max=np.max(data_stats,axis=0)
-
-        self.mean=np.mean(data_stats,axis=0)
-
-        del data_stats
-        
-        del lines
-        
         
 
     def init(self):
 
-        if self.material_color:
-
-            self.material_colors()
-
-        else:
-
-            self.multiple_colors()
-
-
-
-               
- 
+        pass
 
     def display(self):
 
-
-        if self.near_pick!= None:
-
-            #print self.near_pick
-
-            if np.sum(np.equal(self.near_pick, self.near_pick_prev))< 3:        
-
-                self.process_picking(self.near_pick, self.far_pick)             
-              
-                self.near_pick_prev = self.near_pick
-
-                self.far_pick_prev = self.far_pick
-      
-
-                
-        
+        pass
     
-        x,y,z=self.position
+        '''
+        now = self.time
 
-        if self.orbit_demo and self.angle_table == None:
+        for s in self.slots:
 
-            gl.glPushMatrix()
+            if now >= self.slots[s]['slot'][0] and now <=self.slots[s]['slot'][1]:
 
-            self.orbit_anglex+=self.orbit_anglex_rate
-            
-            gl.glRotatef(self.orbit_anglex,1,0,0)
+                self.slots[s]['actor'].near_pick = self.near_pick
 
-            gl.glPushMatrix()
-
-            self.orbit_anglez+=self.orbit_anglez_rate
-
-            x,y,z=self.position
-
-           
-
-            gl.glRotatef(self.orbit_anglez,0,0,1)
-
-            gl.glTranslatef(x,y,z) 
-
-
-            #gl.glPolygonMode(gl.GL_FRONT_AND_BACK, gl.GL_LINE)
-
-            gl.glCallList(self.list_index)
-
-            gl.glFinish()
-
-            gl.glPopMatrix()
-
-            gl.glPopMatrix()
-
-
-        elif self.orbit_demo == True and self.angle_table != None:
-
-            
-            
-            gl.glPushMatrix()
-
-            #print angle_table
-
-            #print table_ind
-
-            global angle_table_index
-
-            table_ind=angle_table_index
-
-            anglex=angle_table[table_ind,0]
-
-            #print anglex
-
-            gl.glRotatef(anglex,1,0,0)
-            
-            
-            gl.glPushMatrix()
-
-            angley=angle_table[table_ind,1]
-
-            gl.glRotatef(angley,0,1,0)
-            
-
-            gl.glPushMatrix()
-
-            anglez=angle_table[table_ind,2]
-
-            gl.glRotatef(anglez,0,0,1)
-
-
-            gl.glTranslate(x,y,z)
-            
-            gl.glCallList(self.list_index)
-
-            gl.glFinish()
-
-            gl.glPopMatrix()
-
-            gl.glPopMatrix()
-
-            gl.glPopMatrix()
-
-            angle_table_index += 1
-
-            if angle_table_index >= angle_table.shape[0]:
+                self.slots[s]['actor'].far_pick = self.far_pick               
                 
-                angle_table_index = angle_table.shape[0] - 1
+                self.slots[s]['actor'].display()
 
-            
-
-            '''
-
-            gl.glPushMatrix()
-
-            gl.glRotatef(self.angle_table[self.angle_table_index,0],1,0,0)
-
-            #x,y,z = self.position
-            
-            gl.glPushMatrix()
-
-            gl.glRotatef(self.angle_table[self.angle_table_index,1],0,1,0)
-
-            gl.glPushMatrix()
-
-            gl.glRotatef(self.angle_table[self.angle_table_index,2],0,0,1)
-
-            gl.glTranslate(x,y,z)
-            
-            gl.glCallList(self.list_index)
-
-            gl.glFinish()
-
-            gl.glPopMatrix()
-
-            gl.glPopMatrix()
-
-            gl.glPopMatrix()
-
-            self.angle_table_index += 1
-
-            if self.angle_table_index >= self.angle_table.shape[0]:
-                
-                self.angle_table_index = self.angle_table.shape[0] - 1
-
-            '''
-            
-        else:
-
-            gl.glCallList(self.list_index)
-
-
-
-
-            if self.picked_track != None:
-
-                self.display_one_track(self.picked_track)
-
-
-
-            if self.yellow_indices != None:
-
-                for i in self.yellow_indices:
-
-
-                    self.display_one_track(i)
-
-
+        '''
         
+#=======================================================
 
-        gl.glFinish()        
+class Tracks(object):
 
-
-    def process_picking(self,near,far):
-
-        print('process picking')
-
-        min_dist=[cll.mindistance_segment2track(near,far,xyz) for xyz in self.data]
-
-        min_dist=np.array(min_dist)
-
-        #print min_dist
-
-        self.picked_track=min_dist.argmin()
-
-        print 'min index',self.picked_track
-
-        min_dist_info=[cll.mindistance_segment2track_info(near,far,xyz) for xyz in self.data]
-
-        A = np.array(min_dist_info)
-
-        dist=10**(-3)
-
-        iA=np.where(A[:,0]<dist)
-
-        minA=A[iA]
-
-        print 'minA ', minA
-
-        miniA=minA[:,1].argmin()
-
-        print 'final min index ',iA[0][miniA]
-
-        self.picked_track=iA[0][miniA]
-
-   
-        
-
-        
-        
-
-
-    def display_one_track(self,track_index,color4=np.array([1,1,0,1],dtype=np.float32)):
-        
-
-        gl.glPushMatrix()
-
-        gl.glDisable(gl.GL_LIGHTING)
-
-        gl.glEnable(gl.GL_LINE_SMOOTH)
-
-        gl.glDisable(gl.GL_DEPTH_TEST)
-
-        #gl.glDepthFunc(gl.GL_NEVER)
-
-
-        gl.glEnable(gl.GL_BLEND)
-
-        gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)
-
-        gl.glHint(gl.GL_LINE_SMOOTH_HINT,gl.GL_DONT_CARE)
-
-        gl.glLineWidth(7.)
-
-        gl.glEnableClientState(gl.GL_VERTEX_ARRAY)        
-
-        gl.glColor4fv(color4)
-
-
-        d=self.data[track_index].astype(np.float32)
-
-        gl.glVertexPointerf(d)
-                               
-        gl.glDrawArrays(gl.GL_LINE_STRIP, 0, len(d))        
-
-        gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
-
-        gl.glEnable(gl.GL_LIGHTING)
-
-        gl.glEnable(gl.GL_DEPTH_TEST)
-        
-        gl.glPopMatrix()
-
-
-
-    def multiple_colors(self):
-
-        from dipy.viz.colormaps import boys2rgb
-
-        from dipy.core.track_metrics import mean_orientation, length, downsample
-
-        colors=np.random.rand(1,3).astype(np.float32)
-
-        print colors
-
-        self.list_index = gl.glGenLists(1)
-
-        gl.glNewList( self.list_index,gl.GL_COMPILE)
-
-        #gl.glPushMatrix()
-
-        gl.glDisable(gl.GL_LIGHTING)
-        
-        #!!!gl.glEnable(gl.GL_LINE_SMOOTH)
-
-        gl.glDisable(gl.GL_DEPTH_TEST)
-
-        #gl.glDepthFunc(gl.GL_NEVER)
-
-        gl.glEnable(gl.GL_BLEND)
-
-        gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)
-
-        #gl.glBlendFunc(gl.GL_SRC_ALPHA_SATURATE,gl.GL_ONE_MINUS_SRC_ALPHA)
-        
-        #gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE)
-
-        #!!!gl.glHint(gl.GL_LINE_SMOOTH_HINT,gl.GL_DONT_CARE)
-
-        #gl.glHint(gl.GL_LINE_SMOOTH_HINT,gl.GL_NICEST)
-
-        gl.glLineWidth(self.line_width)
-
-        #gl.glDepthMask(gl.GL_FALSE)
-
-
-        gl.glEnableClientState(gl.GL_VERTEX_ARRAY)        
-
-        for d in self.data:
-
-            if length(d)> self.min_length:
-            
-                #mo=mean_orientation(d)
-
-                if self.manycolors:
-                
-                    ds=downsample(d,6)
-
-                    mo=ds[3]-ds[2]
-
-                    mo=mo/np.sqrt(np.sum(mo**2))
-
-                    mo.shape=(1,3)
-            
-                    color=boys2rgb(mo)
-
-                    color4=np.array([color[0][0],color[0][1],color[0][2],self.opacity],np.float32)
-                    
-
-                else:
-
-                    color4=np.array([self.brain_color[0],self.brain_color[1],\
-                                         self.brain_color[2],self.opacity],np.float32)
-
-
-                if self.fadein == True:
-
-                    color4[3] += self.fadein_speed
-
-                if self.fadeout == True:
-
-                    color4[3] -= self.fadeout_speed
-
-                gl.glColor4fv(color4)                
-
-                gl.glVertexPointerf(d)
-                               
-                gl.glDrawArrays(gl.GL_LINE_STRIP, 0, len(d))
-
-        
-
-        gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
-
-        #gl.glDisable(gl.GL_BLEND)
-        
-        gl.glEnable(gl.GL_LIGHTING)
-
-        gl.glEnable(gl.GL_DEPTH_TEST)
-        
-        #gl.glPopMatrix()
-
-        gl.glEndList()
- 
-    
-
-   
-
-
-    def material_colors(self):
-        
-
-        self.list_index = gl.glGenLists(1)
-
-        gl.glNewList( self.list_index,gl.GL_COMPILE)
-
-        gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_AMBIENT, [1,1,1,.1] )
-
-        gl.glMaterialfv( gl.GL_FRONT_AND_BACK, gl.GL_DIFFUSE, [1,1,1,.1] )
-        
-        
-        #gl.glMaterialf( gl.GL_FRONT_AND_BACK, gl.GL_SHININESS, 50. )
-
-        #gl.glMaterialfv(gl.GL_FRONT_AND_BACK, gl.GL_EMISSION, [1,1,1,1.])
-
-
-        gl.glEnable(gl.GL_LINE_SMOOTH)
-               
-        gl.glEnable(gl.GL_BLEND)
-
-        gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)
-
-
-        #gl.glMaterialfv( gl.GL_FRONT, gl.GL_SPECULAR, self.specular )
-
-        #gl.glMaterialf( gl.GL_FRONT, gl.GL_SHININESS, self.shininess )
-
-        #gl.glMaterialfv(gl.GL_FRONT, gl.GL_EMISSION, self.emission)
-
-        gl.glEnableClientState(gl.GL_VERTEX_ARRAY)
-
-        for d in self.data:            
-
-            gl.glVertexPointerd(d)
-        
-            gl.glDrawArrays(gl.GL_LINE_STRIP, 0, len(d))
-
-        gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
-
-        gl.glEndList()
-
-
-class TracksModified(object):
-
-    def __init__(self,fname,ang_table=None,colormap=None, line_width=3., shrink=None,subset=None,tracks=None):
+    def __init__(self,fname,ang_table=None,colormap=None, line_width=3., shrink=None,subset=None,data_ext=None):
 
         self.position = (0,0,0)
 
@@ -685,6 +196,8 @@ class TracksModified(object):
 
         self.min_length = 20.
 
+        self.data_ext = data_ext
+
         self.angle = 0.
 
         self.angular_speed = .5
@@ -710,8 +223,6 @@ class TracksModified(object):
         self.yellow_indices = None
 
         self.dummy_data = False
-
-        self.tracks = tracks
 
         if subset != None:
 
@@ -746,14 +257,13 @@ class TracksModified(object):
 
         self.picking_example = False
 
+        if self.data_ext!=None:
 
-        self.partial_colors = False
-        
+            self.data=self.data_ext
 
-        import dipy.io.trackvis as tv
+        else:
 
-
-        if self.tracks == None:
+            import dipy.io.trackvis as tv
 
             lines,hdr = tv.read(self.fname)
 
@@ -763,53 +273,43 @@ class TracksModified(object):
 
             tracks = [l[0] for l in lines]
 
+            if self.yellow_indices != None :
+
+                tracks = [t for t in tracks if tm.length(t) > 20]
+
+            print 'tracks loaded'
+
+            #self.data = [100*np.array([[0,0,0],[1,0,0],[2,0,0]]).astype(np.float32) ,100*np.array([[0,1,0],[0,2,0],[0,3,0]]).astype(np.float32)]#tracks[:20000]
+
+            if self.dummy_data:
+
+                self.data = [100*np.array([[0,0,0],[1,0,0],[2,0,0]]).astype(np.float32) ,100*np.array([[0,1,0],[0,2,0],[0,3,0]]).astype(np.float32)]
+
+            if self.data_subset!=None:
+
+                self.data = tracks[self.data_subset[0]:self.data_subset[1]]
+
+            else:
+
+                self.data = tracks
+
+
+
+            data_stats = np.concatenate(tracks)
+
+            self.min=np.min(data_stats,axis=0)
+
+            self.max=np.max(data_stats,axis=0)
+
+            self.mean=np.mean(data_stats,axis=0)
+
+            if self.shrink != None:
+
+                self.data = [ self.shrink*t  for t in self.data]
+
+            del data_stats
+
             del lines
-        
-
-
-        else:
-
-            tracks = self.tracks
-
-
-        if self.yellow_indices != None :
-
-            tracks = [t for t in tracks if tm.length(t) > 20]
-
-        print '%d tracks loaded' % len(tracks)
-
-        #self.data = [100*np.array([[0,0,0],[1,0,0],[2,0,0]]).astype(np.float32) ,100*np.array([[0,1,0],[0,2,0],[0,3,0]]).astype(np.float32)]#tracks[:20000]
-
-        if self.dummy_data:
-
-            self.data = [100*np.array([[0,0,0],[1,0,0],[2,0,0]]).astype(np.float32) ,100*np.array([[0,1,0],[0,2,0],[0,3,0]]).astype(np.float32)]
-
-        if self.data_subset!=None:
-
-            self.data = tracks[self.data_subset[0]:self.data_subset[1]]
-
-        else:
-
-            self.data = tracks
-
-
-        
-
-        if self.shrink != None:
-
-            self.data = [ self.shrink*t  for t in self.data]
-            
-
-            
-        data_stats = np.concatenate(tracks)
-
-        self.min=np.min(data_stats,axis=0)
-         
-        self.max=np.max(data_stats,axis=0)
-
-        self.mean=np.mean(data_stats,axis=0)
-
-        del data_stats
         
         
 
@@ -893,7 +393,11 @@ class TracksModified(object):
 
             global angle_table_index
 
+            global angle_table
+
             table_ind=angle_table_index
+
+            #print 'ti',table_ind
 
             anglex=angle_table[table_ind,0]
 
@@ -928,12 +432,15 @@ class TracksModified(object):
 
             gl.glPopMatrix()
 
+            '''
+
             angle_table_index += 1
 
             if angle_table_index >= angle_table.shape[0]:
                 
                 angle_table_index = angle_table.shape[0] - 1
 
+            '''
             
 
             '''
@@ -1224,7 +731,6 @@ class TracksModified(object):
         gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
 
         gl.glEndList()
-
 
 
 class ChromoTracks(object):
@@ -1772,14 +1278,4 @@ class ChromoTracks(object):
         gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
 
         gl.glEndList()
-
-
-
-
-            
-
-       
-
-    
-
 
