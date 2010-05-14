@@ -1,6 +1,6 @@
 import fos.core.scene as scene
 import fos.core.plots as plots
 
-world=scene.Scene(plot=plots.PlotTextureExample())
+world=scene.Scene(plot=plots.PlotTextureIan())
 
 world.run()

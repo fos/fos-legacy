@@ -84,10 +84,15 @@ class Plot():
 
         global csurf
 
-        #devel07
-        csurfr ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/rh.pial.vtk'
+        #devel06
+        csurfr ='/home/ian/Data/dipy/rh.pial.vtk'
        
-        csurfl ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/lh.pial.vtk'
+        csurfl ='/home/ian/Data/dipy/lh.pial.vtk'
+
+        #devel07
+        #csurfr ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/rh.pial.vtk'
+       
+        #csurfl ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/lh.pial.vtk'
 
 
         csurfr = cortex.CorticalSurface(csurfr, angle_table=tracks.angle_table)
@@ -127,8 +132,11 @@ class Plot():
 
         global tb1
 
+        #devel06
+        tb1_fname='/home/ian/Data/dipy/brain2_scan1_fiber_track_mni.trk'
+
         #devel07
-        tb1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
+        #tb1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
 
         #tb1=tracks.ChromoTracks(tb1_fname,shrink=0.99)
 
@@ -320,10 +328,15 @@ class PlotStuff():
         global csurfr
         global csurfl
 
-        #devel07
-        csurfr ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/rh.pial.vtk'
+        #devel06
+        csurfr ='/home/ian/Data/dipy/rh.pial.vtk'
        
-        csurfl ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/lh.pial.vtk'
+        csurfl ='/home/ian/Data/dipygr/lh.pial.vtk'
+
+        #devel07
+        #csurfr ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/rh.pial.vtk'
+       
+        #csurfl ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/lh.pial.vtk'
 
 
         csurfr = cortex.CorticalSurfaceStuff(csurfr,angle_table)
@@ -363,8 +376,11 @@ class PlotStuff():
 
         global tb1
 
+        #devel06
+        tb1_fname='/home/ian/Data/dipy/brain2_scan1_fiber_track_mni.trk'
+       
         #devel07
-        tb1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
+        #tb1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
        
 
         #tb1=tracks.ChromoTracks(tb1_fname,shrink=0.99,thinning=100,angle_table=angle_table)
@@ -513,9 +529,13 @@ class PlotPickingExample():
 
         global b1
 
+        #devel06
+
+        b1_fname='/home/ian/Data/dipy/brain2_scan1_fiber_track_mni.trk'
+
         #devel07
 
-        b1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
+        #b1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
 
         #elfthin
 
@@ -648,6 +668,181 @@ class PlotIan():
 
         
      
+class PlotTextureIan():
+
+
+    def __init__(self):
+
+        self.slots = None
+
+        self.time = 0
+
+        self.near_pick = None
+
+        self.far_pick = None
+
+        #self.fname = fname
+
+        self.offset = None
+        
+
+    def init(self, given_tracks=None):
+
+
+        global b1
+
+        global b2
+
+        #devel06
+
+        b1_fname='/home/ian/Data/dipy/brain2_scan1_fiber_track_mni.trk'
+
+        #devel07
+
+        #b1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
+
+         
+        
+        b1=tracks.TracksModified(b1_fname,subset=[0,1000])
+
+        b1.angular_speed = 0.
+
+        b1.picking_example = True
+
+        b1.min_length = 15.
+
+        b1.opacity = 0.1
+
+        b1.manycolors = False
+
+        b1.brain_color = [1, 1, 1]
+
+        b1.init()
+
+
+        global texim
+
+
+        #devel06
+
+        fname = '/home/ian/Data/dipy/Streaks4.bmp'
+
+        #devel07
+
+        #fname = '/home/eg01/Devel/Fos/fos/core/tests/data/Streaks4.bmp'
+
+        texim = texture.Texture_Demo(fname,red=False,green=True, blue=False)
+
+        #texim.orbit = b1.data[4246]
+
+
+        number_of_spritetracks = 30
+        random_inx=np.floor(len(b1.data)*np.random.rand(number_of_spritetracks)).astype(np.int)
+        systematic_inx = range(0,len(b1.data),len(b1.data)/number_of_spritetracks)
+
+        #texim.orbits = [b1.data[4246],b1.data[3000],b1.data[2000],b1.data[1000]]
+
+        texim.orbits =[]
+
+        #indices = random_inx
+        indices = systematic_inx
+        
+        for i in indices:
+
+            #print i
+
+            if tm.length(b1.data[i]) > 20.:
+
+                #print i
+
+                texim.orbits.append(b1.data[i])
+
+        global b2
+
+
+        b2=tracks.TracksModified(None,line_width=1.5,tracks=[b1.data[i] for i in indices],colormap=True)
+
+        b2.angular_speed = 0.
+
+        b2.picking_example = True
+
+        b2.min_length = 15.
+
+        b2.opacity = 0.9
+
+        b2.manycolors = False
+
+        b2.brain_color = [0.2, 0.8, 0.4]
+
+
+        b2.init()
+
+
+        
+        
+
+        texim.orbits_index = np.zeros((len(texim.orbits),),np.int)
+        
+        texim.init()
+
+        self.slots={0:{'actor':texim,'slot':( 15, 2000*MS )},
+                    1:{'actor':b1,'slot':(0, 2000*MS)},
+                    2:{'actor':b2,'slot':(15*MS, 2000*MS)}}
+
+        
+          
+    def display(self):
+
+        now = self.time
+
+        #'''
+
+        for s in self.slots:
+
+            if now >= self.slots[s]['slot'][0] and now <=self.slots[s]['slot'][1]:
+
+                self.slots[s]['actor'].near_pick = self.near_pick
+
+                self.slots[s]['actor'].far_pick = self.far_pick               
+                
+                self.slots[s]['actor'].display()
+
+
+
+        #'''
+        gl.glDisable(gl.GL_LIGHTING)
+        
+        gl.glColor3f(1.,0.,0.)
+
+        gl.glRasterPos3f(0.,0.,0.)
+
+        label = 'HELLO'
+
+        #print label
+
+        for c in label:
+
+            #print c
+
+            glut.glutBitmapCharacter(glut.GLUT_BITMAP_TIMES_ROMAN_24, ord(c))
+
+        gl.glEnable(gl.GL_LIGHTING)
+
+        #'''
+        
+
+    def update_time(self,time):
+
+        self.time=time
+
+
+    def update_pick_ray(self,near_pick, far_pick):
+
+        self.near_pick = near_pick
+
+        self.far_pick = far_pick
+
+
 class PlotTextureExample():
 
 
@@ -670,9 +865,13 @@ class PlotTextureExample():
 
         global b1
 
+        #devel06
+
+        b1_fname='/home/ian/Data/dipy/brain2_scan1_fiber_track_mni.trk'
+
         #devel07
 
-        b1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
+        #b1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
 
          
         
@@ -699,9 +898,13 @@ class PlotTextureExample():
         global texim
 
 
+        #devel06
+
+        fname = '/home/ian/Data/dipy/Streaks4.bmp'
+
         #devel07
 
-        fname = '/home/eg01/Devel/Fos/fos/core/tests/data/Streaks4.bmp'
+        #fname = '/home/eg01/Devel/Fos/fos/core/tests/data/Streaks4.bmp'
 
         texim = texture.Texture_Demo(fname,red=False,green=True, blue=False)
 
