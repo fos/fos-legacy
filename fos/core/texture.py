@@ -3,47 +3,6 @@ import OpenGL.GL as gl
 import OpenGL.GLU as glu
 import Image
 
-#==============================
-def display_just_one_track(track,color4=np.array([1,1,0,1],dtype=np.float32),linewidth=np.float32(1.)):
-
-    gl.glPushMatrix()
-
-    gl.glDisable(gl.GL_LIGHTING)
-
-    gl.glEnable(gl.GL_LINE_SMOOTH)
-
-    gl.glDisable(gl.GL_DEPTH_TEST)
-
-    #gl.glDepthFunc(gl.GL_NEVER)
-
-    gl.glEnable(gl.GL_BLEND)
-
-    gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)
-
-    gl.glHint(gl.GL_LINE_SMOOTH_HINT,gl.GL_DONT_CARE)
-
-    gl.glLineWidth(linewidth)
-
-    gl.glEnableClientState(gl.GL_VERTEX_ARRAY)        
-
-    gl.glColor4fv(color4)
-
-    d=track.astype(np.float32)
-
-    gl.glVertexPointerf(d)
-
-    gl.glDrawArrays(gl.GL_LINE_STRIP, 0, len(d))        
-
-    gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
-
-    gl.glEnable(gl.GL_LIGHTING)
-
-    gl.glEnable(gl.GL_DEPTH_TEST)
-
-    gl.glPopMatrix()
-
-#=============================
-
 
 class Texture(object):
 
@@ -196,7 +155,7 @@ class Texture(object):
 
         self.rotation_angle += self.rotation_angle_speed
 
-        gl.glEnable(gl.GL_DEPTH_TEST)
+        gl.glDisable(gl.GL_DEPTH_TEST)
 
         gl.glEnable(gl.GL_BLEND)
         
@@ -296,14 +255,9 @@ class Texture_Demo(object):
         self.green = green
 
         self.blue = blue
-
-        self.reveal_count = None
-
-        self.reveal = False
-
-        self.track_colors = None
-
         
+
+
     def init_texture(self,image):
 
 
@@ -382,11 +336,6 @@ class Texture_Demo(object):
 
     def init(self):
 
-        from dipy.viz.colormaps import boys2rgb
-
-        from dipy.core.track_metrics import mean_orientation, length, downsample
-
-        self.reveal = True
         
         image = Image.open(self.fname,'r')
 
@@ -398,11 +347,9 @@ class Texture_Demo(object):
 
         #image.putalpha(50)
 
-        self.light_up = 0
-
         self.size = image.size
 
-        col = [self.red, self.green, self.blue]
+        col = [self.red,self.green, self.blue]
 
         for x,y in np.ndindex(self.size[0],self.size[1]):
 
@@ -437,8 +384,6 @@ class Texture_Demo(object):
 
             image.putpixel((x,y),(r*ra,g*ga,b*ba,a))
 
-            #image.putpixel((x,y),(0,0,255,255))
-
             #image.putpixel((x,y),(r,g,b,a))
                 
 
@@ -460,27 +405,8 @@ class Texture_Demo(object):
 
         gl.glTexParameteri(gl.GL_TEXTURE_2D, gl.GL_TEXTURE_MIN_FILTER, gl.GL_NEAREST)
 
-
-        self.count = np.zeros(len(self.orbits),dtype=np.int)
-
-        self.reveal_count = 10
-
-        self.track_colors = []
-
-        for (i,d) in enumerate(self.orbits):
         
-            ds=downsample(d,6)
 
-            mo=ds[3]-ds[2]
-
-            mo=mo/np.sqrt(np.sum(mo**2))
-
-            mo.shape=(1,3)
-            
-            color=boys2rgb(mo)
-
-            self.track_colors.append(np.array([color[0][0],color[0][1],color[0][2],0.6],np.float32))
-                    
         for o in self.orbits:
 
             self.init_texture(image)
@@ -494,9 +420,7 @@ class Texture_Demo(object):
 
         self.rotation_angle += self.rotation_angle_speed
 
-        gl.glEnable(gl.GL_DEPTH_TEST)
-
-        #gl.glDepthFunc(gl.GL_NEVER)
+        gl.glDisable(gl.GL_DEPTH_TEST)
 
         gl.glEnable(gl.GL_BLEND)
         
@@ -504,44 +428,12 @@ class Texture_Demo(object):
 
         gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE)
 
-
         for (i,o) in enumerate(self.orbits):
 
-            '''
-            if self.reveal:
+            self.display_textures(i)
 
-                if i < self.light_up:
 
-                    #self.count[i] += 1
 
-                    #print self.count
-
-                    self.display_textures_count(i,False)
-
-                elif i == self.light_up:
-
-                    #self.count[i] += 1
-
-                    self.display_textures_count(i,True)
-
-                    #print self.count
-
-                else:
-                
-                    self.display_textures(i)
-
-            else:
-
-                self.display_textures(i)
-            '''
-
-            self.display_textures_count(i,True)
-
-        #self.light_up = sum(self.count > self.reveal_count)
-
-        #print self.light_up    
-
-        
 
     def display_textures(self,i):
 
@@ -588,67 +480,7 @@ class Texture_Demo(object):
 
         gl.glPopMatrix()
         
-        
 
-        
-    def display_textures_count(self,i, with_sprite=False):
-
-        #print i, len(self.orbits), len(self.orbits_index)
-
-        x,y,z=self.orbits[i][self.orbits_index[i]]
-
-        if with_sprite:
-
-
-        #if self.count[i] > self.reveal_count:
-
-            #print i,self.count[i]
-
-            display_just_one_track(self.orbits[i],color4=self.track_colors[i],linewidth=4.)
-            #pass
-
-            if self.orbits_index[i] < len(self.orbits[i])-1:
-
-                self.orbits_index[i]+=1
-
-            else:
-
-                self.orbits_index[i]=0
-
-            gl.glPushMatrix()
-
-            gl.glTranslatef(x,y,z)               
-
-
-            gl.glRotatef(self.rotation_angle,0,0,1)
-
-            #gl.glColor4f(1,0,0,0.5)
-
-            gl.glCallList(self.lists[i])
-
-
-            gl.glPopMatrix()
-
-            #gl.glTranslatef(100,0.,0.)               
-
-            gl.glPushMatrix()
-
-
-            gl.glTranslatef(x,y,z)               
-
-            gl.glColor4f(1,1,0,0.4)
-
-            gl.glRotatef(2*self.rotation_angle,0,0,1)
-
-
-            gl.glCallList(self.lists[i])
-
-            gl.glPopMatrix()
-        
-
-        self.count[i] += 1
-
-        
         
 
 

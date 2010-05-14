@@ -830,7 +830,7 @@ class PlotTextureIan():
         global b2
 
 
-        b2=tracks.TracksModified(None,line_width=1.5,tracks=[b1.data[i] for i in indices],colormap=True)
+        b2=tracks.TracksModified(None,line_width=1.5,tracks=[b1.data[i] for i in indices],colormap=False)
 
         b2.angular_speed = 0.
 
@@ -855,8 +855,8 @@ class PlotTextureIan():
         
         texim.init()
 
-        self.slots={0:{'actor':texim,'slot':( 15, 2000*MS )},
-                    1:{'actor':b1,'slot':(0, 2000*MS)},
+        self.slots={0:{'actor':texim,'slot':( 0*MS, 20*MS )},
+                    1:{'actor':b1,'slot':(0*MS, 200*MS)},
                     2:{'actor':b2,'slot':(15*MS, 2000*MS)}}
 
         
