@@ -355,7 +355,7 @@ class Tracks(object):
 
         if self.orbit_demo and self.angle_table == None:
 
-            print('Yo%f',self.position[0])
+            #print('Yo%f',self.position[0])
 
             gl.glPushMatrix()
 
@@ -369,7 +369,7 @@ class Tracks(object):
             
             gl.glRotatef(self.orbit_anglex,1,0,0)
             
-            '''
+            #'''
             gl.glPushMatrix()
 
             self.orbit_angley+=self.orbit_angley_rate
@@ -387,7 +387,7 @@ class Tracks(object):
 
             #gl.glTranslatef(x,y,z)
 
-            '''
+            #'''
 
 
             #gl.glPolygonMode(gl.GL_FRONT_AND_BACK, gl.GL_LINE)
@@ -400,9 +400,9 @@ class Tracks(object):
 
             gl.glPopMatrix()
 
-            #gl.glPopMatrix()
+            gl.glPopMatrix()
 
-            #gl.glPopMatrix()
+            gl.glPopMatrix()
 
             
 
@@ -571,45 +571,99 @@ class Tracks(object):
 
 
     def display_one_track(self,track_index,color4=np.array([1,1,0,1],dtype=np.float32)):
-        
 
-        #gl.glPushMatrix()
+        x,y,z = self.position
 
-        gl.glDisable(gl.GL_LIGHTING)
+        if self.orbit_demo and self.angle_table == None:
 
-        gl.glEnable(gl.GL_LINE_SMOOTH)
+            #print('Yo%f',self.position[0])
 
-        gl.glDisable(gl.GL_DEPTH_TEST)
+            gl.glPushMatrix()
 
-        #gl.glDepthFunc(gl.GL_NEVER)
+            gl.glTranslatef(x,y,z)
+
+            gl.glPushMatrix()
+
+            #gl.glTranslatef(x,y,z)
+
+            self.orbit_anglex+=self.orbit_anglex_rate
+            
+            gl.glRotatef(self.orbit_anglex,1,0,0)
+            
+            #'''
+            gl.glPushMatrix()
+
+            self.orbit_angley+=self.orbit_angley_rate
+            
+            gl.glRotatef(self.orbit_angley,0,1,0)
+
+            gl.glPushMatrix()
+
+            self.orbit_anglez+=self.orbit_anglez_rate
+
+            #x,y,z=self.position
+            
+
+            gl.glRotatef(self.orbit_anglez,0,0,1)
+
+            #gl.glTranslatef(x,y,z)
+
+            #'''
 
 
-        gl.glEnable(gl.GL_BLEND)
-
-        gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)
-
-        gl.glHint(gl.GL_LINE_SMOOTH_HINT,gl.GL_DONT_CARE)
-
-        gl.glLineWidth(7.)
-
-        gl.glEnableClientState(gl.GL_VERTEX_ARRAY)        
-
-        gl.glColor4fv(color4)
+            #gl.glPolygonMode(gl.GL_FRONT_AND_BACK, gl.GL_LINE)
 
 
-        d=self.data[track_index].astype(np.float32)
+            #gl.glPushMatrix()
 
-        gl.glVertexPointerf(d)
-                               
-        gl.glDrawArrays(gl.GL_LINE_STRIP, 0, len(d))        
+            gl.glDisable(gl.GL_LIGHTING)
 
-        gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
+            gl.glEnable(gl.GL_LINE_SMOOTH)
 
-        gl.glEnable(gl.GL_LIGHTING)
+            gl.glDisable(gl.GL_DEPTH_TEST)
 
-        gl.glEnable(gl.GL_DEPTH_TEST)
-        
-        #gl.glPopMatrix()
+            #gl.glDepthFunc(gl.GL_NEVER)
+
+
+            gl.glEnable(gl.GL_BLEND)
+
+            gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)
+
+            gl.glHint(gl.GL_LINE_SMOOTH_HINT,gl.GL_DONT_CARE)
+
+            gl.glLineWidth(3.)
+
+            gl.glEnableClientState(gl.GL_VERTEX_ARRAY)        
+
+            gl.glColor4fv(color4)
+
+
+            d=self.data[track_index].astype(np.float32)
+
+            gl.glVertexPointerf(d)
+
+            gl.glDrawArrays(gl.GL_LINE_STRIP, 0, len(d))        
+
+            gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
+
+            gl.glEnable(gl.GL_LIGHTING)
+
+            gl.glEnable(gl.GL_DEPTH_TEST)
+
+            #gl.glPopMatrix()
+
+            
+
+            gl.glFinish()
+
+            gl.glPopMatrix()
+
+            gl.glPopMatrix()
+
+            gl.glPopMatrix()
+
+            gl.glPopMatrix()
+
 
 
 
@@ -761,7 +815,7 @@ class Tracks(object):
 
 class TracksModified(object):
 
-    def __init__(self,fname,ang_table=None,colormap=None, line_width=3., shrink=None,subset=None,tracks=None):
+    def __init__(self,fname,ang_table=None,colormap=None, line_width=3., shrink=None,subset=None,tracks=None,text=None,text_color=np.array([1,0,0])):
 
         self.position = (0,0,0)
 
@@ -782,7 +836,9 @@ class TracksModified(object):
         self.rot_angle = 0
 
         self.colormap = None
-                
+
+        self.text = text
+        
         self.min = None
          
         self.max = None
@@ -1109,7 +1165,66 @@ class TracksModified(object):
                     self.display_one_track(i)
 
 
-        
+        if self.text != None:
+
+            gl.glDisable(gl.GL_LIGHTING)
+            
+            gl.glColor3f(1.,0.,0.)
+
+            for (i,t) in enumerate(self.data):
+
+                #gl.glRasterPos3f(t[0][0],t[0][1],t[0][2])
+            
+                label = str(i)
+
+                if i == 22: #cortico spinal track
+
+                    gl.glRasterPos3f(t[0][0],t[0][1],t[0][2])
+
+
+                    label='spine'
+
+                    for c in label:
+
+                        glut.glutBitmapCharacter(glut.GLUT_BITMAP_TIMES_ROMAN_24, ord(c))
+
+                    gl.glRasterPos3f(t[-1][0],t[-1][1],t[-1][2])
+
+
+                    label='motor'
+
+                    for c in label:
+
+                        glut.glutBitmapCharacter(glut.GLUT_BITMAP_TIMES_ROMAN_24, ord(c))
+
+                    
+
+                    label='corticospinal highway'
+
+                    t2=tm.downsample(t,len(label)+3)
+
+                    for (ci,c) in enumerate(label[::-1]):
+                        
+                        gl.glRasterPos3f(t2[ci+2][0],t2[ci+2][1],t2[ci+2][2])
+
+                        glut.glutBitmapCharacter(glut.GLUT_BITMAP_TIMES_ROMAN_24, ord(c))
+
+                else:
+
+                    pass
+
+
+                '''
+
+                    gl.glRasterPos3f(t[0][0],t[0][1],t[0][2])
+
+                    for c in label:
+
+                        glut.glutBitmapCharacter(glut.GLUT_BITMAP_TIMES_ROMAN_24, ord(c))
+
+                '''
+                
+            gl.glEnable(gl.GL_LIGHTING)
 
         gl.glFinish()        
 

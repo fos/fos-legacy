@@ -765,11 +765,11 @@ class PlotTextureIan():
 
         #devel06
 
-        b1_fname='/home/ian/Data/dipy/brain2_scan1_fiber_track_mni.trk'
+        #b1_fname='/home/ian/Data/dipy/brain2_scan1_fiber_track_mni.trk'
 
         #devel07
 
-        #b1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
+        b1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
 
          
         
@@ -795,11 +795,11 @@ class PlotTextureIan():
 
         #devel06
 
-        fname = '/home/ian/Data/dipy/Streaks4.bmp'
+        #fname = '/home/ian/Data/dipy/Streaks4.bmp'
 
         #devel07
 
-        #fname = '/home/eg01/Devel/Fos/fos/core/tests/data/Streaks4.bmp'
+        fname = '/home/eg01/Devel/Fos/fos/core/tests/data/Streaks4.bmp'
 
         texim = texture.Texture_Demo(fname,red=False,green=True, blue=False)
 
@@ -830,7 +830,7 @@ class PlotTextureIan():
         global b2
 
 
-        b2=tracks.TracksModified(None,line_width=1.5,tracks=[b1.data[i] for i in indices],colormap=False)
+        b2=tracks.TracksModified(None,line_width=4.5,tracks=[b1.data[i] for i in indices],colormap=False,text='Test')
 
         b2.angular_speed = 0.
 
@@ -846,19 +846,24 @@ class PlotTextureIan():
 
 
         b2.init()
-
-
-        
         
 
         texim.orbits_index = np.zeros((len(texim.orbits),),np.int)
         
         texim.init()
 
+        '''
+
         self.slots={0:{'actor':texim,'slot':( 0*MS, 20*MS )},
                     1:{'actor':b1,'slot':(0*MS, 200*MS)},
                     2:{'actor':b2,'slot':(15*MS, 2000*MS)}}
 
+        '''
+        
+        self.slots={0:{'actor':texim,'slot':( 0*MS, 20*MS )},
+                    #1:{'actor':b1,'slot':(0*MS, 200*MS)},
+                    2:{'actor':b2,'slot':(0*MS, 2000*MS)}}
+        
         
           
     def display(self):
@@ -879,7 +884,7 @@ class PlotTextureIan():
 
 
 
-        #'''
+        '''
         gl.glDisable(gl.GL_LIGHTING)
         
         gl.glColor3f(1.,0.,0.)
@@ -898,7 +903,7 @@ class PlotTextureIan():
 
         gl.glEnable(gl.GL_LIGHTING)
 
-        #'''
+        '''
         
 
     def update_time(self,time):
@@ -1349,12 +1354,20 @@ class PlotMultipleBrains():
         tracks2zshift = tracks2z
         tracks3zshift = tracks3z
 
+        m1z=np.concatenate(tracks1zshift).mean(axis=0)
+        
+        m2z=np.concatenate(tracks2zshift).mean(axis=0)
+
         m3z=np.concatenate(tracks3zshift).mean(axis=0)
 
         #tracks1zshift=[t+np.array([-70,0,0]) for t in tracks1z]
 
         #tracks2zshift=[t+np.array([70,0,0]) for t in tracks2z]
 
+        tracks1zshift=[t-m1z for t in tracks1z]
+        
+        tracks2zshift=[t-m2z for t in tracks2z]
+          
         tracks3zshift=[t-m3z for t in tracks3z]
 
 
@@ -1376,15 +1389,15 @@ class PlotMultipleBrains():
 
         t1.orbit_anglez_rate = 0.
                 
-        t1.orbit_anglex_rate = 20.
+        t1.orbit_anglex_rate = 0.
 
-        t1.orbit_angley_rate = 20.
+        t1.orbit_angley_rate = .2
 
         
 
         t1.init()
 
-        t1.position = - np.concatenate(tracks1zshift).mean(axis=0)+np.array([-70,0,0])
+        t1.position = np.array([-120,0,-30])
 
         print 't1p',t1.position
 
@@ -1408,13 +1421,13 @@ class PlotMultipleBrains():
 
         t2.orbit_anglez_rate = 0.
                 
-        t2.orbit_anglex_rate = 20.
+        t2.orbit_anglex_rate = 0.
 
-        t2.orbit_angley_rate = 20.
+        t2.orbit_angley_rate = .2
 
         t2.init()
         
-        t2.position = - np.concatenate(tracks2zshift).mean(axis=0)+np.array([0,0,0])
+        t2.position = np.array([0,0,-30])
 
         print 't2p', t2.position
         
@@ -1438,16 +1451,16 @@ class PlotMultipleBrains():
 
         t3.orbit_anglez_rate = 0.
                 
-        t3.orbit_anglex_rate = 20.
+        t3.orbit_anglex_rate = 0.
 
-        t3.orbit_angley_rate = 20.        
+        t3.orbit_angley_rate = .2        
 
         t3.init()
         
         #t3.position = -
         #np.concatenate(tracks3zshift).mean(axis=0)+np.array([70,0,0])
 
-        t3.position = np.array([70,0,0])
+        t3.position = np.array([120,0,-30])
 
         print 't3p', t3.position
         
@@ -1480,8 +1493,7 @@ class PlotMultipleBrains():
 
         global track2track2
 
-        '''
-
+ 
         for i in track2track:
 
             t1.display_one_track(i[1], np.array([1,1,0,1],np.float32))
@@ -1491,16 +1503,17 @@ class PlotMultipleBrains():
 
             t3.display_one_track(i[2], np.array([1,1,0,1],np.float32))                      
 
-        '''
-                                                         
+                                                          
 
+        '''    
+            
         gl.glDisable(gl.GL_LIGHTING)
         
         gl.glColor3f(1.,0.,0.)
 
         gl.glRasterPos3f(0.,0.,0.)
 
-        #'''
+        
         label = 'HELLO'
 
         #print label
@@ -1512,7 +1525,8 @@ class PlotMultipleBrains():
             glut.glutBitmapCharacter(glut.GLUT_BITMAP_TIMES_ROMAN_24, ord(c))
 
         gl.glEnable(gl.GL_LIGHTING)
-                                 
+
+        '''
 
 
 
