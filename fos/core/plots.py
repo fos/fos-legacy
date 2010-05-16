@@ -830,7 +830,7 @@ class PlotTextureIan():
         global b2
 
 
-        b2=tracks.TracksModified(None,line_width=4.5,tracks=[b1.data[i] for i in indices],colormap=False,text='Test')
+        b2=tracks.TracksModified(None,line_width=2,tracks=[b1.data[i] for i in indices],colormap=False,text='M')
 
         b2.angular_speed = 0.
 
@@ -852,18 +852,19 @@ class PlotTextureIan():
         
         texim.init()
 
-        '''
+        #'''
 
         self.slots={0:{'actor':texim,'slot':( 0*MS, 20*MS )},
                     1:{'actor':b1,'slot':(0*MS, 200*MS)},
                     2:{'actor':b2,'slot':(15*MS, 2000*MS)}}
 
+        #'''
+
         '''
-        
         self.slots={0:{'actor':texim,'slot':( 0*MS, 20*MS )},
                     #1:{'actor':b1,'slot':(0*MS, 200*MS)},
                     2:{'actor':b2,'slot':(0*MS, 2000*MS)}}
-        
+        '''
         
           
     def display(self):
@@ -1560,5 +1561,274 @@ class PlotMultipleBrains():
 	return track2track.astype(int)
     
 
+class PlotBundlesExample():
+
+
+    def __init__(self):
+
+        self.slots = None
+
+        self.time = 0
+
+        self.near_pick = None
+
+        self.far_pick = None
+
+        #self.fname = fname
 
         
+
+    def init(self):
+
+        import pbc
+
+        G,hdr,R = pbc.load_approximate_training_set('/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/')
+
+        tl=[]
+
+        self.slots={}
+
+        colors=np.array([[1.,1.,1.],
+                         [0.5, 0, 0],
+                         [0.29411765, 0., 0.50980392],
+                         [0, 0.5, 0],
+                         [0., 0.49, 1.],
+                         [ 0.498, 1., 0.83 ],
+                         [1.  ,  0.84,  0. ],
+                         [0.74901961, 1., 0.],
+                         [0.49803922, 1. , 0. ]])
+
+        data=G[0]['tracks']
+
+        d1z=np.concatenate(data).mean(axis=0)
+        
+        
+        for g in [0,1,2,3,4,5,6,7,8]:
+
+            data=G[g]['tracks']
+
+            print g, G[g]['label_name']
+
+            global t
+
+            #d1z=np.concatenate(data).mean(axis=0)
+        
+            data=[t-d1z for t in data]
+              
+            t=tracks.Tracks(None,data_ext=data)
+
+            t.angular_speed = 0.1
+
+            t.brain_color=colors[g]
+
+            t.manycolors = False
+
+            t.opacity = 0.1
+
+            t.orbit_demo = True
+
+            t.orbit_anglez_rate = 0.
+                
+            t.orbit_anglex_rate = 0.
+
+            t.orbit_angley_rate = 1.
+
+            t.init()
+        
+            t.position = np.array([0,0,10])
+
+            print 'tp', t.position
+
+            tl.append(t)
+
+            if g==0:
+
+                self.slots[g]={'actor':tl[g],'slot':( 0, 5*MS ) }
+
+            else:
+
+                self.slots[g]={'actor':tl[g],'slot':( 0, 10*MS ) }
+       
+                   
+
+        #full arcuate
+                
+        arcuate=G[1]['tracks']
+
+        amean=np.concatenate(arcuate).mean(axis=0)
+        
+        data=[t-amean for t in arcuate]
+        
+
+        t=tracks.Tracks(None,data_ext=data)
+
+        t.angular_speed = 0.1
+
+        t.brain_color=colors[1]
+
+        t.manycolors = False
+
+        t.opacity = 0.1
+
+        t.orbit_demo = True
+
+        t.orbit_anglez_rate = 0.
+                
+        t.orbit_anglex_rate = 0.
+
+        t.orbit_angley_rate = -1.
+
+        t.init()
+        
+        t.position = np.array([-20,0,60])
+        
+        self.slots[g+1]={'actor':t,'slot':( 12*MS, 800*MS ) }
+
+        #broken arcuate - injury
+
+        dataa,datab=self.break_bundle(data, [-3000,3000,0], [-3000,-3000,0], [3000, -3000,0])
+
+
+        #dataa=[t+np.array([100,0,0],np.float32) for t in dataa]
+        
+        #datab=[t+np.array([100,0,0],np.float32) for t in datab]
+        
+        
+        t1=tracks.Tracks(None,data_ext=dataa)
+
+        t1.angular_speed = 0.1
+
+        t1.brain_color=[1.,0.,0.]
+
+        t1.manycolors = False
+
+        t1.opacity = 0.1
+
+        t1.orbit_demo = True
+
+        t1.orbit_anglez_rate = 0.
+                
+        t1.orbit_anglex_rate = 0.
+
+        t1.orbit_angley_rate = -1.
+
+        t1.init()
+        
+        t1.position = np.array([20,0,60])
+        
+
+        #datab=[t+np.array([0,20,0]) for t in datab]
+        
+        t2=tracks.Tracks(None,data_ext=datab)
+
+        t2.angular_speed = 0.1
+
+        t2.brain_color=[1.,0.,0.]
+
+        t2.manycolors = False
+
+        t2.opacity = 0.1
+
+        t2.orbit_demo = True
+
+        t2.orbit_anglez_rate = 0.
+                
+        t2.orbit_anglex_rate = 0.
+
+        t2.orbit_angley_rate = -1.
+
+        t2.init()
+        
+        t2.position = np.array([20,0,60])
+        
+        
+        self.slots[g+2]={'actor':t1,'slot':( 12*MS, 800*MS ) }
+
+        self.slots[g+3]={'actor':t2,'slot':( 12*MS, 800*MS ) }
+        
+
+        
+          
+    def display(self):
+
+        now = self.time
+
+        for s in self.slots:
+
+            if now >= self.slots[s]['slot'][0] and now <=self.slots[s]['slot'][1]:
+
+                self.slots[s]['actor'].near_pick = self.near_pick
+
+                self.slots[s]['actor'].far_pick = self.far_pick               
+                
+                self.slots[s]['actor'].display()
+
+                                                         
+
+        '''    
+            
+        gl.glDisable(gl.GL_LIGHTING)
+        
+        gl.glColor3f(1.,0.,0.)
+
+        gl.glRasterPos3f(0.,0.,0.)
+
+        
+        label = 'HELLO'
+
+        #print label
+
+        for c in label:
+
+            #print c
+
+            glut.glutBitmapCharacter(glut.GLUT_BITMAP_TIMES_ROMAN_24, ord(c))
+
+        gl.glEnable(gl.GL_LIGHTING)
+
+        '''
+
+
+
+    def update_time(self,time):
+
+        self.time=time
+
+
+    def update_pick_ray(self,near_pick, far_pick):
+
+        self.near_pick = near_pick
+
+        self.far_pick = far_pick
+                 
+
+    def break_bundle(self,tracks, p1, p2, p3):
+
+
+        import fos.core.collision as cll
+
+        tracksa=[]
+
+        tracksb=[]
+
+        for t in tracks:
+
+            for i in range(len(t)-1):
+
+                success, per, p = cll.intersect_segment_plane(t[i],t[i+1], p1, p2, p3)
+
+                if success:
+
+                    #print t, i
+
+                    tracksa.append(t[:i-1])
+
+                    tracksb.append(t[i+1:-1])
+
+        return tracksa, tracksb
+
+        
+        
+
+
+

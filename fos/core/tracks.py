@@ -1175,7 +1175,18 @@ class TracksModified(object):
 
                 #gl.glRasterPos3f(t[0][0],t[0][1],t[0][2])
             
-                label = str(i)
+                label = self.text+str(i)
+
+                t2=tm.downsample(t,3)
+
+                gl.glRasterPos3f(t2[1][0],t2[1][1],t2[1][2])
+                
+                for c in label:
+
+                    glut.glutBitmapCharacter(glut.GLUT_BITMAP_TIMES_ROMAN_24, ord(c))
+                
+
+                '''
 
                 if i == 22: #cortico spinal track
 
@@ -1199,7 +1210,7 @@ class TracksModified(object):
 
                     
 
-                    label='corticospinal highway'
+                    label='corticospinal'
 
                     t2=tm.downsample(t,len(label)+3)
 
@@ -1213,6 +1224,8 @@ class TracksModified(object):
 
                     pass
 
+                '''
+                
 
                 '''
 
