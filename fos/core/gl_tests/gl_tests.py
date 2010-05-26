@@ -1,5 +1,4 @@
 import numpy as np
-import OpenGL.GL as gl
 
 from fos.core.scene  import Scene
 from fos.core.actors import Actor
