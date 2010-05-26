@@ -10,6 +10,7 @@ from fos.core.utils import list_indices as lind
 from os.path import join as pjoin
 
 from dipy.core import track_metrics as tm
+import fos.core.tracks as tracks
 
 import fos.core.collision as cll
 
@@ -341,7 +342,49 @@ class CorticalSurface(object):
 
         elif self.orbit_demo == True and self.angle_table != None:
 
+
             gl.glPushMatrix()
+
+            #global angle_table_index
+
+            #global angle_table
+
+            #print 'ati ',tracks.angle_table_index
+
+            
+
+            gl.glRotatef(tracks.angle_table[tracks.angle_table_index,0],1,0,0)
+
+            #x,y,z = self.position
+            
+            gl.glPushMatrix()
+
+            gl.glRotatef(tracks.angle_table[tracks.angle_table_index,1],0,1,0)
+
+            gl.glPushMatrix()
+
+            gl.glRotatef(tracks.angle_table[tracks.angle_table_index,2],0,0,1)
+
+            gl.glTranslate(x,y,z)
+            
+            gl.glCallList(self.list_index)
+
+            gl.glFinish()
+
+            gl.glPopMatrix()
+
+            gl.glPopMatrix()
+
+            gl.glPopMatrix()
+
+            #angle_table_index += 1
+
+            #if self.angle_table_index >= self.angle_table.shape[0]:
+                
+            #    self.angle_table_index = self.angle_table.shape[0] - 1
+            
+
+            '''
 
             gl.glRotatef(self.angle_table[self.angle_table_index,0],1,0,0)
 
@@ -372,6 +415,10 @@ class CorticalSurface(object):
             if self.angle_table_index >= self.angle_table.shape[0]:
                 
                 self.angle_table_index = self.angle_table.shape[0] - 1
+
+            '''
+
+            
 
         
 

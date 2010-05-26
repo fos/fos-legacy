@@ -58,6 +58,34 @@ angle_table = make_angle_table([
 
 angle_table = make_angle_table([
 
+        [[-90,0,180],[-90,0,180],130],
+
+        [[-90,0,180],[-90,0,180+360],260],        
+
+        [[-90,0,180+360],[-90,0,180+360],900],
+
+        [[-90,0,1800],[-90,0,36000],17100]
+
+        ])
+
+'''
+angle_table = make_angle_table([
+
+        [[-90,0,180],[-90,0,180],130],
+
+        [[-90,0,180],[0,0,0],260],        
+
+        [[0,0,0],[-90,0,1800],900],
+
+        [[-90,0,1800],[-90,0,36000],17100]
+
+        ])
+'''
+
+
+'''
+angle_table = make_angle_table([
+
         #[[0,0,0],[0,0,0],50],
         
 
@@ -66,7 +94,7 @@ angle_table = make_angle_table([
         [[-90,0,1800],[-90,0,36000],17100]
 
         ])
-
+'''
                 
 '''
 angle_table = make_angle_table([[[0,0,0],[-90,0,0],200],
@@ -1169,7 +1197,7 @@ class TracksModified(object):
 
             gl.glDisable(gl.GL_LIGHTING)
             
-            gl.glColor3f(1.,0.,0.)
+            gl.glColor3f(0.,0.47,.76)
 
             for (i,t) in enumerate(self.data):
 

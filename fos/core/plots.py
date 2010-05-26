@@ -57,23 +57,36 @@ class Plot():
 
         tracks.anglez = 0.
 
+        empty = tracks.Empty()
+
+        empty.init()
+        
+        ghost = tracks.Ghost()
+
+        ghost.init()
+        
+
+        
+
         global csurf
 
         #devel06
-        csurfr ='/home/ian/Data/dipy/rh.pial.vtk'
+        #csurfr ='/home/ian/Data/dipy/rh.pial.vtk'
        
-        csurfl ='/home/ian/Data/dipy/lh.pial.vtk'
+        #csurfl ='/home/ian/Data/dipy/lh.pial.vtk'
 
         #devel07
-        #csurfr ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/rh.pial.vtk'
+        csurfr ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/rh.pial.vtk'
        
-        #csurfl ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/lh.pial.vtk'
+        csurfl ='/home/eg01/Data_Backup/Data/Adam/multiple_transp_volumes/freesurfer_trich/lh.pial.vtk'
 
 
         csurfr = cortex.CorticalSurface(csurfr, angle_table=tracks.angle_table)
         
         csurfl = cortex.CorticalSurface(csurfl, angle_table=tracks.angle_table)
 
+
+       
         csurfr.fadeout = True
 
         csurfl.fadeout = True
@@ -99,24 +112,46 @@ class Plot():
         csurfl.orbit_anglex_rate = -.1
 
         
-        csurfr.position[2]+=20
+        csurfr.position[2]+=10
         
-        csurfl.position[2]+=20
-        
+        csurfl.position[2]+=10
+
+
 
         csurfr.init()
 
         csurfl.init()
         #'''
+
+
+        import copy
+
+        global csurfR
+
+        global csurfL
+        
+        csurfR = copy.copy(csurfr)
+
+        csurfL = copy.copy(csurfl)
+        
+
+        csurfR.fadeout = False
+
+        csurfL.fadeout = False
+                
+        
+        csurfR.init()
+
+        csurfL.init()
         
 
         global tb1
 
         #devel06
-        tb1_fname='/home/ian/Data/dipy/brain2_scan1_fiber_track_mni.trk'
+        #tb1_fname='/home/ian/Data/dipy/brain2_scan1_fiber_track_mni.trk'
 
         #devel07
-        #tb1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
+        tb1_fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain2/brain2_scan1_fiber_track_mni.trk'
 
         #tb1=tracks.ChromoTracks(tb1_fname,shrink=0.99)
 
@@ -138,7 +173,7 @@ class Plot():
 
         tb1.position[0] += 5.
 
-        tb1.position[2] += 20.
+        tb1.position[2] += 10.#20.
 
         tb1.manycolors = False #True
 
@@ -188,23 +223,72 @@ class Plot():
 
         '''
 
-        empty = tracks.Empty()
-
-        empty.init()
-        
-        ghost = tracks.Ghost()
-
-        ghost.init()
-        
+       
 
         #'''
 
-        delay = 5*MS
+        initial = 10*MS
+
+        delayt = 5*MS
+
+        delay = initial +delayt
+
+
+        self.slots={00:{'actor':empty, 'slot':(0, delayt)},
+
+                    05:{'actor':ghost,'slot':( 0*MS+delayt, 800*MS+delayt )},
+                    
+                    80:{'actor':csurfL,'slot':( 0*MS+delayt, 800*MS )},
+                    
+                    90:{'actor':csurfR,'slot':( 0*MS+delayt, 800*MS )}}
+                    
+
+        '''
+
+                    #05:{'actor':ghost,'slot':(39*MS+delay, 800*MS+delay )},
+                    10:{'actor':tb1,'slot':( 0*MS+delay, 40*MS+delay )},                   
+
+                    
+                    11:{'actor':csurfl,'slot':( 0*MS+delay, 40*MS+delay )},
+                    
+                    12:{'actor':csurfr,'slot':( 0*MS+delay, 40*MS+delay )},
+                    
+                    
+                    21:{'actor':t1,'slot':( 40*MS+delay, 41*MS+delay )},
+
+                    22:{'actor':t1,'slot':( 40*MS+delay, 42*MS+delay )},
+
+                    23:{'actor':t1,'slot':( 40*MS+delay, 43*MS+delay )},
+
+                                
+                    31:{'actor':ct1,'slot':( 42*MS+delay, 47*MS+delay )},
+
+                    32:{'actor':ct1,'slot':( 42*MS+delay, 46*MS+delay )},
+
+                    33:{'actor':ct1,'slot':( 42*MS+delay, 45*MS+delay )},
+                    
+
+                    34:{'actor':ct6,'slot':( 47*MS+delay, 800*MS+delay )}
+
+                    #35:{'actor':ct7,'slot':( 48*MS, 800*MS )}
+
+        '''
+
+
+
+
+
+        
+
+
+
+        '''
 
         self.slots={00:{'actor':empty, 'slot':(0, delay)},
 
                     05:{'actor':ghost,'slot':( 0*MS+delay, 800*MS+delay )},
 
+                    #05:{'actor':ghost,'slot':(39*MS+delay, 800*MS+delay )},
                     10:{'actor':tb1,'slot':( 0*MS+delay, 40*MS+delay )},                   
 
                     
@@ -233,7 +317,7 @@ class Plot():
 
 
                     }
-        #'''
+        '''
 
         '''
 
@@ -300,7 +384,7 @@ class Plot():
 
         t1.position[0] += 5.
 
-        t1.position[2] += 20.
+        t1.position[2] += 10.
 
         t1.manycolors = many_colors #False #True
 
@@ -854,9 +938,9 @@ class PlotTextureIan():
 
         #'''
 
-        self.slots={0:{'actor':texim,'slot':( 0*MS, 20*MS )},
-                    1:{'actor':b1,'slot':(0*MS, 200*MS)},
-                    2:{'actor':b2,'slot':(15*MS, 2000*MS)}}
+        self.slots={0:{'actor':texim,'slot':( 0*MS, 55*MS )},
+                    1:{'actor':b1,'slot':(0*MS, 40*MS)},
+                    2:{'actor':b2,'slot':(35*MS, 200*MS)}}
 
         #'''
 
@@ -1643,11 +1727,11 @@ class PlotBundlesExample():
 
             if g==0:
 
-                self.slots[g]={'actor':tl[g],'slot':( 0, 5*MS ) }
+                self.slots[g]={'actor':tl[g],'slot':( 0, 15*MS ) }
 
             else:
 
-                self.slots[g]={'actor':tl[g],'slot':( 0, 10*MS ) }
+                self.slots[g]={'actor':tl[g],'slot':( 0, 25*MS ) }
        
                    
 
@@ -1655,10 +1739,13 @@ class PlotBundlesExample():
                 
         arcuate=G[1]['tracks']
 
+        #arcuate2=self.bloat_bundle(arcuate)
+
         amean=np.concatenate(arcuate).mean(axis=0)
         
         data=[t-amean for t in arcuate]
         
+        #data2=self.bloat_bundle(data)
 
         t=tracks.Tracks(None,data_ext=data)
 
@@ -1680,9 +1767,9 @@ class PlotBundlesExample():
 
         t.init()
         
-        t.position = np.array([-20,0,60])
+        t.position = np.array([-40,0,60])
         
-        self.slots[g+1]={'actor':t,'slot':( 12*MS, 800*MS ) }
+        self.slots[g+1]={'actor':t,'slot':( 27*MS, 800*MS ) }
 
         #broken arcuate - injury
 
@@ -1714,7 +1801,7 @@ class PlotBundlesExample():
 
         t1.init()
         
-        t1.position = np.array([20,0,60])
+        t1.position = np.array([0,0,60])
         
 
         #datab=[t+np.array([0,20,0]) for t in datab]
@@ -1739,14 +1826,47 @@ class PlotBundlesExample():
 
         t2.init()
         
-        t2.position = np.array([20,0,60])
+        t2.position = np.array([0,0,60])
         
         
-        self.slots[g+2]={'actor':t1,'slot':( 12*MS, 800*MS ) }
+        self.slots[g+2]={'actor':t1,'slot':( 27*MS, 800*MS ) }
 
-        self.slots[g+3]={'actor':t2,'slot':( 12*MS, 800*MS ) }
+        self.slots[g+3]={'actor':t2,'slot':( 27*MS, 800*MS ) }
         
 
+        #bloated arcuate
+                        
+        data2=self.bloat_bundle(data)
+
+        t3=tracks.Tracks(None,data_ext=data2)
+
+        t3.angular_speed = 0.1
+
+        t3.brain_color=colors[1]
+
+        t3.manycolors = False
+
+        t3.opacity = 0.1
+
+        t3.orbit_demo = True
+
+        t3.orbit_anglez_rate = 0.
+                
+        t3.orbit_anglex_rate = 0.
+
+        t3.orbit_angley_rate = -1.
+
+        t3.init()
+        
+        t3.position = np.array([40,0,60])
+        
+        self.slots[g+4]={'actor':t3,'slot':( 27*MS, 800*MS ) }
+
+
+
+        
+
+        
         
           
     def display(self):
@@ -1827,6 +1947,42 @@ class PlotBundlesExample():
 
         return tracksa, tracksb
 
+
+    def bloat_bundle(self,tracks):
+
+        tracksn=[]
+
+        #c=np.array([0,0,0],np.float32)
+
+        import dipy.core.track_performance as pf
+
+        #c=tracks[0][-4]
+
+        ct=tracks[pf.most_similar_track_zhang(tracks,'avg')[0]]
+        
+        c=ct[len(ct)/2]
+
+        #tracks2=[tm.downsample(t,200) for t in tracks]
+
+        for X in tracks2:
+
+            Xn = X + np.multiply(10/np.sum((X-c)**2,axis=1).reshape(len(X),1),X-c)
+            #Xn = X + 2*(X-c)
+
+            tracksn.append(Xn)
+
+
+        from dipy.io import pickles as pkl
+
+        pkl.save_pickle('bundles.pkl',{'init':tracks[10],'after':tracksn[10]})
+
+        
+        
+        
+
+        return tracksn
+    
+                                                  
         
         
 
