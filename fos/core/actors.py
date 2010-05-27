@@ -16,7 +16,8 @@ class Actor(object):
         self.data = None
 
         self.colors = None
-        
+
+        self.position = (0,0,0)
 
     def init(self):
 

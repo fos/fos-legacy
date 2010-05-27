@@ -812,8 +812,7 @@ def mindistance_segment2track_info(p1,q1,xyz):
         fvec0 = asfp(track[index-1])
         fvec1 = asfp(track[index])
         
-        d=cclosest_points_2segments(<float *> fp1.data, <float *>fq1.data, \
-                                         fvec0, fvec1,  fs, ft)
+        d=cclosest_points_2segments(<float *> fp1.data, <float *>fq1.data, fvec0, fvec1,  fs, ft)
 
         #distances[index-1]=d
 

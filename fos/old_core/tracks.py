@@ -375,8 +375,6 @@ class Tracks(object):
 
                 self.far_pick_prev = self.far_pick
       
-
-                
         
     
         x,y,z=self.position
