@@ -1,5 +1,6 @@
 import numpy as np
 import OpenGL.GL as gl
+from OpenGL.arrays import vbo
 
 
 from fos.core.scene  import Scene
@@ -36,6 +37,11 @@ class Tracks(Actor):
         
         self.picked_track = None
 
+        self.picked_tracks = []
+
+        self.vbo = None
+
+        
     def init(self):
 
         self.init_default()
@@ -65,6 +71,9 @@ class Tracks(Actor):
 
         self.cdata = cdata
 
+        self.vbo = vbo.VBO(np.hstack((cdata,ccolors)))
+        
+
         self.list_index = gl.glGenLists(1)
  
         gl.glNewList( self.list_index,gl.GL_COMPILE)
@@ -80,20 +89,29 @@ class Tracks(Actor):
         gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)
 
         gl.glLineWidth(self.line_width)
+
+
+        self.vbo.bind()
         
         gl.glEnableClientState(gl.GL_VERTEX_ARRAY)
         
         gl.glEnableClientState(gl.GL_COLOR_ARRAY)
        
         
-        gl.glVertexPointerf(cdata)
+        #gl.glVertexPointerf(cdata)
 
-        gl.glColorPointerf(ccolors)
-       
+        gl.glVertexPointer(3, gl.GL_FLOAT, 28, self.vbo )
+
+        #gl.glColorPointerf(ccolors)
+
+        gl.glColorPointer(4, gl.GL_FLOAT, 28, self.vbo+12 )
 
         gl.glMultiDrawArrays(gl.GL_LINE_STRIP,first,counts,len(counts)) 
 
 
+        self.vbo.unbind()
+
+                        
         gl.glDisableClientState(gl.GL_COLOR_ARRAY)
 
         gl.glDisableClientState(gl.GL_VERTEX_ARRAY)
@@ -106,6 +124,7 @@ class Tracks(Actor):
         gl.glEnable(gl.GL_DEPTH_TEST)
 
         gl.glEndList()
+        
 
     def init_vbos(self):
 
@@ -115,7 +134,7 @@ class Tracks(Actor):
     def display(self):
 
 
-        '''
+        
         if self.near_pick!= None:
 
             #print self.near_pick
@@ -126,14 +145,7 @@ class Tracks(Actor):
                 self.near_pick_prev = self.near_pick
 
                 self.far_pick_prev = self.far_pick
-        '''
-
-        print self.near_pick
-
-        print self.far_pick
-
-
-        self.process_picking(self.near_pick, self.far_pick)                
+        
         self.near_pick_prev = self.near_pick
 
         self.far_pick_prev = self.far_pick
@@ -153,51 +165,43 @@ class Tracks(Actor):
 
     def process_picking(self,near,far):
 
-        print('process picking')
-
-        #min_dist=[cll.mindistance_segment2track(near,far,xyz) for xyz in self.data]
-
-        #min_dist=np.array(min_dist)
-
-        #print min_dist
-
-        #self.picked_track=min_dist.argmin()
-
-        #print 'min index',self.picked_track
-
         
-        print 'near',near
-        print 'far', far
+        shift=np.array(self.position)-self.mean
         
-
-        if near!=None:
-
-            print cll.mindistance_segment2track_info(near,far,self.data[0]-self.mean)
-
-            print cll.mindistance_segment2track_info(near,far,self.data[1]-self.mean)
-
-        '''
-
-        min_dist_info=[cll.mindistance_segment2track_info(near,far,xyz) for xyz in self.data]
+        min_dist_info=[ \
+            cll.mindistance_segment2track_info(near,far,xyz+shift) \
+                for xyz in self.data]
 
         A = np.array(min_dist_info)
 
         dist=10**(-3)
 
+        np.where(A[:,0]<dist)
+
         iA=np.where(A[:,0]<dist)
 
         minA=A[iA]
 
-        print 'minA ', minA
+        if len(minA)==0:
 
+            #print 'IN'
+
+            iA=np.where(A[:,0]==A[:,0].min())
+            
+            minA = A[iA]
+            
+        #print 'A','minA next',minA, iA
+            
         miniA=minA[:,1].argmin()
 
-        print 'final min index ',iA[0][miniA]
+        print 'track_center',self.position, 'selected index ',iA[0][miniA]
 
         self.picked_track=iA[0][miniA]
 
-        '''
-    
+        self.picked_tracks.append(self.picked_track)
+
+
+        
 
 
     
