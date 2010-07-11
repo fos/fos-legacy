@@ -2,10 +2,10 @@ import numpy as np
 import OpenGL.GL as gl
 from OpenGL.arrays import vbo
 
-from fos.core.scene  import Scene
+#from fos.core.scene  import Scene
 from fos.core.actors import Actor
-from fos.core.plots  import Plot
-from fos.core.primitives import Empty
+#from fos.core.plots  import Plot
+#from fos.core.primitives import Empty
 
 import fos.core.collision as cll
 
