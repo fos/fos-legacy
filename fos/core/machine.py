@@ -15,9 +15,10 @@ batch = pyglet.graphics.Batch()
 actors=[]
 
 
-#rx=ry=rz=0
 
 '''
+
+
 class Urchine(object):
 
     def __init__(self,batch,group=None):
@@ -129,7 +130,10 @@ def on_resize(width, height):
 def update(dt):    
     #urch.update()
     for a in actors:
-        a.update()
+        try:
+            a.update()
+        except:
+            pass
 
 def on_draw():   
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -139,6 +143,12 @@ def on_draw():
     glMultMatrixf(cam_trans.matrix)
     glMultMatrixf(cam_rot.matrix)
     batch.draw()
+    
+    for a in actors:
+        try:
+            a.draw()
+        except:
+            pass
 
     #trk.display()    
     #print pyglet.clock.get_fps()
@@ -194,5 +204,7 @@ def schedule(update,dt=None):
         pyglet.clock.schedule_interval(update,dt)
     
 
-if __name__ == "__main__":    
+if __name__ == "__main__":
+
     Machine().run()
+
