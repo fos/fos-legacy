@@ -836,7 +836,7 @@ def mindistance_segment2track_info(p1,q1,xyz):
 
 def calculate_triangle_normals(vertices,triangles):
 
-    ''' Deprecated - Very slow to be removed
+    ''' Deprecated - Very slow to be removed or further optimized properly
 
     '''
 

@@ -61,7 +61,7 @@ class Interaction(object):
 
     def __init__(self):
         self.matrix=None
-        self.lookat=[0,0,40,0,0,0,0,1,0]
+        self.lookat=[0,0,170,0,0,0,0,1,0]
         self.scroll_speed=10
         self.mouse_speed=0.1        
         self.reset()
@@ -123,7 +123,7 @@ def on_resize(width, height):
     glViewport(0, 0, width, height)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluPerspective(60., width / float(height), .1, 1000.)
+    gluPerspective(60., width / float(height), .1, 2000.)
     glMatrixMode(GL_MODELVIEW)
     return pyglet.event.EVENT_HANDLED
 
@@ -144,7 +144,7 @@ def on_draw():
     glMultMatrixf(cam_rot.matrix)
     batch.draw()
     
-    for a in actors:
+    for a in actors:        
         try:
             a.draw()
         except:
@@ -159,14 +159,20 @@ def on_key_press(symbol,modifiers):
         cam_rot.reset()
         cam_trans.reset()
     
-    if symbol == key.P:        
-        vp=get_viewport()
+    if symbol == key.P:                
+        global mouse_x, mouse_y
         x,y=mouse_x,mouse_y
-        nx,ny,nz=screen_to_model(x,vp[3]-y,0)
-        fx,fy,fz=screen_to_model(x,vp[3]-y,1)
+        nx,ny,nz=screen_to_model(x,y,0)
+        fx,fy,fz=screen_to_model(x,y,1)        
         near=(nx,ny,nz)
         far=(fx,fy,fz)
-        print near,far
+        #print near,far
+        #print'x',x,'y',y
+        for a in actors:
+            try:
+                a.process_pickray(near,far)
+            except:
+                pass
     
 def on_mouse_motion(x,y,dx,dy):
     #print('mouse moved')

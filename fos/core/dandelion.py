@@ -27,6 +27,7 @@ import pyglet
 from pyglet.gl import *
 from pyglet.image import Animation, AnimationFrame
 import os
+from fos.core import collision as cll
 
 ang=0
 
@@ -41,7 +42,7 @@ class SmoothLineGroup(pyglet.graphics.Group):
          glEnable(GL_LINE_SMOOTH)
          #glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE)
          glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
-         glLineWidth(3.)
+         glLineWidth(1.2)
          
      def unset_state(self):
          glDisable(GL_DEPTH_TEST)
@@ -52,21 +53,91 @@ class SmoothLineGroup(pyglet.graphics.Group):
 
 class InteractiveCurves(object):
 
-    def __init__(self,curves,colors,batch,group=None):
+    def __init__(self,curves,colors=None,line_width=2.,centered=True,batch=batch,group=None):
+        self.vertex_list =len(curves)*[None]
+        self.len_vl=len(curves)
+        self.range_vl=range(len(curves))
+        self.selected=[]
+        self.prev_selected=[]
+        self.main_color=None
 
-        self.vertex_list=lno*[None]
+        ccurves=np.concatenate(curves)
+        self.min=np.min(ccurves,axis=0)
+        self.max=np.max(ccurves,axis=0)
+        self.mean=np.mean(ccurves,axis=0)
+        self.position=(0,0,0)
 
-        for curve in curves:            
-            curve=curve.astype('f')            
-            vertices=lines.ravel().tolist()
-            self.vertex_list[i] = batch.add(len(curve),GL_LINE_STRIP,group,\
-                                         ('v3f/static',vertices))
-            
+        if colors==None:
+            self.main_color=np.array([1,1,1,1])
+            #np.tile(len(ccurves),
+
+        self.curves=curves
+        self.centered=centered
+        
+        for i,curve in enumerate(curves):
+            if centered:
+                curve=curve-self.mean
+            curve=curve.astype('f')
+            vertices=curve.ravel().tolist()
+
+            colors=np.tile(self.main_color,(len(curve),1)).astype('f')
+            colors=colors.ravel().tolist()
+                           
+            self.vertex_list[i]= \
+                pyglet.graphics.vertex_list(len(curve),('v3f/static',vertices),\
+                                                ('c4f/static',colors))
+
+    def draw(self):
+         [self.vertex_list[i].draw(GL_LINE_STRIP) for i in self.range_vl]
+                  
     def update(self):
-        pass
+        if len(self.selected)>0:
+            if len(set(self.selected))!=len(set(self.prev_selected)):              
+                print self.selected
+                for s in self.selected:                
+                    for c in range(4*len(self.curves[s])):
+                        self.vertex_list[s].colors[c]=0.5
+
+                self.prev_selected=list(set(self.selected))
+               
+
+    def process_pickray(self,near,far):
+        if self.centered:
+            shift=np.array(self.position)-self.mean
+            print shift
+        else:
+            shift=np.array([0,0,0])
+        
+        min_dist_info=[ \
+            cll.mindistance_segment2track_info(near,far,xyz+shift) \
+                for xyz in self.curves]
+
+        #print'Min distance info'        
+        #print min_dist_info
+        A = np.array(min_dist_info)
+        #print A
+        dist=10**(-3)
+        np.where(A[:,0]<dist)
+        iA=np.where(A[:,0]<dist)
+        minA=A[iA]
+
+        if len(minA)==0: 
+            #print 'IN'
+            iA=np.where(A[:,0]==A[:,0].min())
+            minA = A[iA]
+            
+        #print 'A','minA next',minA, iA
+        miniA=minA[:,1].argmin()
+        print 'track_center',self.position, 'selected index ',iA[0][miniA]
+        self.selected_track=iA[0][miniA]
+        self.selected.append(self.selected_track)
+        self.selected=list(set(self.selected))
+        #pass
+       
 
     def delete(self):
-        pass
+        for i in range(len(self.vertex_list)):
+            self.vertex_list[i].delete()
 
 def load_animation(image_name,columns,rows):
  
@@ -79,8 +150,7 @@ def load_animation(image_name,columns,rows):
         for effect_frame in effect_seq[start:end:1]:
             effect_frames.append(AnimationFrame(effect_frame, 0.1))
     
-    effect_frames[(rows * columns) -1].duration = None
-        
+    effect_frames[(rows * columns) -1].duration = None        
     return Animation(effect_frames)
     
          
@@ -219,7 +289,7 @@ class Surface(object):
 
 class ODF_Slice(object):
 
-    def __init__(self,odfs,vertices,faces,batch,group=None):
+    def __init__(self,odfs,vertices,faces,noiso,batch,group=None):
 
 
         J=0
@@ -229,12 +299,14 @@ class ODF_Slice(object):
         
         for index in np.ndindex(odfs.shape[:2]):
 
-            values=odfs[index]        
+            values=odfs[index]
+            if noiso:
+                values=np.interp(values,[values.min(),values.max()],[0,.5])
+                
             inds=faces.ravel().tolist()
             shift=index+(0,)
 
-            print J,odfs.shape[0]*odfs.shape[1]
-            
+            print J,odfs.shape[0]*odfs.shape[1]            
             points=np.dot(np.diag(values),vertices)
             
             points=points+np.array(shift)            
@@ -269,7 +341,6 @@ class ODF_Slice(object):
 
             J+=1
             
-            
     def update(self):
         pass
     
@@ -277,9 +348,6 @@ class ODF_Slice(object):
         for i in range(self.odfs_no):
             self.vertex_list.delete()
 
-        
-
-#'''
             
 import dipy.core
 import nibabel as ni
@@ -327,25 +395,37 @@ print 'odfs_nbytes', odfs.nbytes
 print odfs.shape
 
 odfs=odfs/gqs.normal_param
-
-odf_slice=ODF_Slice(odfs,directions,faces,batch=batch,group=csg)
-
+odf_slice=ODF_Slice(odfs,directions,faces,noiso=True,batch=batch,group=csg)
 actors.append(odf_slice)
 
 '''
 
 
-#'''
+'''
 signals=data[48,48,28]
 slg=SmoothLineGroup()
 actors.append(Dandelion(signals,gradients,batch=batch,group=slg))
+'''
 
-anim=load_animation('effects/_LPE__Healing_Circle_by_LexusX2.png', 5, 10)
 #'''
+anim=load_animation('effects/_LPE__Healing_Circle_by_LexusX2.png', 5, 10)
 sprite=pyglet.sprite.Sprite(anim)
 sprite.position = (-sprite.width/2, - sprite.height/2)
-
 actors.append(sprite)
+#'''
+
+
+import dipy.io.trackvis as tv
+T_, _ = tv.read('/home/eg01/Devel/dipy/dipy/core/bench/data/tracks300.trk.gz')
+T=[t[0] for t in T_]
+print len(T)
+
+T=T[:4]
+
+slg=SmoothLineGroup()
+ic=InteractiveCurves(T,batch=batch,group=slg)
+actors.append(ic)
+#'''
 
 Machine().run()
 #'''
