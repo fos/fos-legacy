@@ -1,6 +1,8 @@
 from math import sin, cos,sqrt
 import numpy as np
 import pyglet
+#pyglet.options['debug_gl']=False
+
 from pyglet.gl import *
 from pyglet.window import key,mouse
 from fos.core.utils import get_model_matrix,screen_to_model,get_viewport

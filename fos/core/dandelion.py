@@ -20,52 +20,60 @@ More Examples
 
 '''
 
-
+#import OpenGL.GL as GL
 import numpy as np
 from fos.core.machine import Machine, batch, mouse_x,mouse_y,actors
 import pyglet
+#pyglet.options['debug_gl']=False
 from pyglet.gl import *
 from pyglet.image import Animation, AnimationFrame
 import os
 from fos.core import collision as cll
+import time
 
 ang=0
 
+
+def vec(*args):
+    return (GLfloat * len(args))(*args)
+
 class SmoothLineGroup(pyglet.graphics.Group):
-
-     def set_state(self):
-         #glClearColor(1,0.1,0.9,1)
-         glEnable(GL_DEPTH_TEST)
-         glEnable(GL_BLEND)
-         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-
-         glEnable(GL_LINE_SMOOTH)
-         #glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE)
-         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
-         glLineWidth(1.2)
-         
-     def unset_state(self):
-         glDisable(GL_DEPTH_TEST)
-         glDisable(GL_BLEND)
-         glDisable(GL_LINE_SMOOTH)
-         glLineWidth(1.)
+    def set_state(self):
+        #glClearColor(1,0.1,0.9,1)
+        glEnable(GL_DEPTH_TEST)
+        glEnable(GL_BLEND)
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+        glEnable(GL_LINE_SMOOTH)
+        #glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE)
+        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
+        glLineWidth(1.2)
+        
+    def unset_state(self):
+        glDisable(GL_DEPTH_TEST)
+        glDisable(GL_BLEND)
+        glDisable(GL_LINE_SMOOTH)
+        glLineWidth(1.)
 
 
 class InteractiveCurves(object):
 
-    def __init__(self,curves,colors=None,line_width=2.,centered=True,batch=batch,group=None):
+    def __init__(self,curves,colors=None,line_width=2.,centered=True):
         self.vertex_list =len(curves)*[None]
         self.len_vl=len(curves)
         self.range_vl=range(len(curves))
         self.selected=[]
-        self.prev_selected=[]
+        self.current=None        
         self.main_color=None
+        self.updated=False
 
         ccurves=np.concatenate(curves)
         self.min=np.min(ccurves,axis=0)
         self.max=np.max(ccurves,axis=0)
         self.mean=np.mean(ccurves,axis=0)
         self.position=(0,0,0)
+
+        print 'MBytes',ccurves.nbytes/2**20
+        self.curves_nbytes=ccurves.nbytes
 
         if colors==None:
             self.main_color=np.array([1,1,1,1])
@@ -78,36 +86,90 @@ class InteractiveCurves(object):
             if centered:
                 curve=curve-self.mean
             curve=curve.astype('f')
-            vertices=curve.ravel().tolist()
+            vertices=tuple(curve.ravel().tolist())
 
             colors=np.tile(self.main_color,(len(curve),1)).astype('f')
-            colors=colors.ravel().tolist()
+            colors=255*colors
+            colors=np.round(colors).astype('ubyte')
+            colors=tuple(colors.ravel().tolist())
                            
             self.vertex_list[i]= \
                 pyglet.graphics.vertex_list(len(curve),('v3f/static',vertices),\
-                                                ('c4f/static',colors))
+                                            ('c4B/static',colors))
+
+        self.compile_gl()
+        
+    def compile_gl(self):            
+        index=glGenLists(1)
+        glNewList( index,GL_COMPILE)
+        [self.vertex_list[i].draw(GL_LINE_STRIP) for i in self.range_vl]
+        glEndList()
+        self.list_index=index
+        
 
     def draw(self):
-         [self.vertex_list[i].draw(GL_LINE_STRIP) for i in self.range_vl]
+        if self.curves_nbytes < 1500000:
+            [self.vertex_list[i].draw(GL_LINE_STRIP) for i in self.range_vl]
+        else:        
+            if self.updated:
+                print('Updating...')
+                self.updated=False
+                t1=time.clock()
+                prev=self.list_index
+                self.compile_gl()                
+                glCallList(self.list_index)
+                print('Updated')
+                #print('Updated in %d secs' % time.clock()-t1)
+                #glDeleteList(prev)
+            else:
+                glCallList(self.list_index)     
+        
                   
     def update(self):
-        if len(self.selected)>0:
-            if len(set(self.selected))!=len(set(self.prev_selected)):              
-                print self.selected
-                for s in self.selected:                
-                    for c in range(4*len(self.curves[s])):
-                        self.vertex_list[s].colors[c]=0.5
+        
+        cr=self.current
+        if cr!=None:
+            self.current=None
+            #change colors of selected curve
+            if self.selected.count(cr)==0:
+                self.selected.append(cr)
+                color=self.vertex_list[cr].colors[:4]                
+                r,g,b,a=color
+                
+                background=(c_float*4)()
+                glGetFloatv(GL_COLOR_CLEAR_VALUE,background)
+                br,bg,bb,ba=background
 
-                self.prev_selected=list(set(self.selected))
-               
+                br,bg,bb,ba=int(round(255*br)),int(round(255*bg)),\
+                    int(round(255*bb)),int(round(255*ba))
+                
+                ncolors=len(self.curves[cr])*((r+br)/2,(g+bg)/2,(b+bb)/2,a)
+                self.vertex_list[cr].colors=ncolors
+            
+            elif self.selected.count(cr)>0:
+                self.selected.remove(cr)
+                color=self.vertex_list[cr].colors[:4]
+                r,g,b,a=color
+                
+                background=(c_float*4)()
+                glGetFloatv(GL_COLOR_CLEAR_VALUE,background)
+                br,bg,bb,ba=background
+
+                br,bg,bb,ba=int(round(255*br)),int(round(255*bg)),\
+                    int(round(255*bb)),int(round(255*ba))
+                
+                ncolors=len(self.curves[cr])*(2*r-br,2*g-bg,2*b-bb,a)
+                self.vertex_list[cr].colors=ncolors
+
+
+            self.updated=True 
 
     def process_pickray(self,near,far):
         if self.centered:
             shift=np.array(self.position)-self.mean
             print shift
         else:
-            shift=np.array([0,0,0])
-        
+            shift=np.array([0,0,0])        
         min_dist_info=[ \
             cll.mindistance_segment2track_info(near,far,xyz+shift) \
                 for xyz in self.curves]
@@ -128,10 +190,10 @@ class InteractiveCurves(object):
             
         #print 'A','minA next',minA, iA
         miniA=minA[:,1].argmin()
-        print 'track_center',self.position, 'selected index ',iA[0][miniA]
-        self.selected_track=iA[0][miniA]
-        self.selected.append(self.selected_track)
-        self.selected=list(set(self.selected))
+        print 'track_center',self.position, 'selected',iA[0][miniA]
+        self.current=iA[0][miniA]
+        #self.selected.append(self.current)
+        #self.selected=list(set(self.selected))
         #pass
        
 
@@ -224,8 +286,7 @@ class IlluminatedSurfaceGroup(pyglet.graphics.Group):
         glEnable(GL_LIGHT0)
         glEnable(GL_LIGHT1)
         #Define a simple function to create ctypes arrays of floats:
-        def vec(*args):
-            return (GLfloat * len(args))(*args)
+
         glLightfv(GL_LIGHT0, GL_POSITION, vec(.5, .5, 1, 0))
         glLightfv(GL_LIGHT0, GL_SPECULAR, vec(.5, .5, 1, 1))
         glLightfv(GL_LIGHT0, GL_DIFFUSE, vec(1, 1, 1, 1))
@@ -416,14 +477,36 @@ actors.append(sprite)
 
 
 import dipy.io.trackvis as tv
+
+'''
 T_, _ = tv.read('/home/eg01/Devel/dipy/dipy/core/bench/data/tracks300.trk.gz')
 T=[t[0] for t in T_]
 print len(T)
 
 T=T[:4]
+'''
 
-slg=SmoothLineGroup()
-ic=InteractiveCurves(T,batch=batch,group=slg)
+fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain1/brain1_scan1_fiber_track_mni.trk'
+#fname='/home/eg309/Data/PBC/pbc2009icdm/brain1/brain1_scan1_fiber_track_mni.trk'
+
+print 'Loading file...'
+streams,hdr=tv.read(fname)
+
+print 'Copying tracks...'
+T=[i[0] for i in streams]
+
+del streams
+
+#T=T[:2000]
+
+#'''
+import dipy.core.track_performance as pf
+
+#T=[pf.approximate_ei_trajectory(t) for t in T]
+
+#slg=SmoothLineGroup()
+#'''
+ic=InteractiveCurves(T)
 actors.append(ic)
 #'''
 
