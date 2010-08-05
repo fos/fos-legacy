@@ -77,3 +77,4 @@ Comments:
   or "transformations" ?
 * Using 2D sprites to create the impression of 3D, or use truly 3D. Scaling up?
 * Support for multi-touch screens and audio/video/camera is also important so we can create immersive environments.
+* Multithreading and scheduling is also something important. We need very fast threads.

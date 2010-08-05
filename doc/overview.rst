@@ -1,4 +1,15 @@
 Our aim is to collect knowledge, references and feature requests...
+
+===
+New
+===
+
+
+* MedX3D: Standards enabled medical 3D http://www.web3d.org/x3d/workgroups/medical/
+* http://cgkit.sourceforge.net/doc2/index.html
+* http://www.h3dapi.org/
+
+
  
 =========
 Libraries
@@ -12,6 +23,19 @@ Engines
 * soya3d - http://home.gna.org/oomadness/en/soya3d/index.html
 * http://www.panda3d.org/
 * visvis
+
+Wrappers
+--------
+* http://pyopengl.sourceforge.net/context/
+
+Web
+---
+* x3dom : http://www.x3dom.org/?page_id=5
+* web3d : http://www.web3d.org/about/overview/
+* (http://www.smartclient.com/smartgwt/showcase/#main)
+* WebGLU : http://blog.one-geek.com/
+* X3D and HTML5 Summary : http://www.web3d.org/x3d/wiki/index.php/X3D_and_HTML5_Summary
+* Examples : http://www.web3d.org/x3d/content/examples/Basic/
 
 Windowing API
 -------------
@@ -46,6 +70,7 @@ Computational Geometry
 * www.cgal.org
 * ghull
 * Applied Geometry Group ETH :http://www.agg.ethz.ch/
+* bounding volume code http://copythatfloppy.net/bzr/xyzzy/
 
 GUI Backends
 ------------
@@ -56,6 +81,7 @@ Physics library/engine
 ----------------------
 * http://code.google.com/p/pymunk/
 * collision.pyx 
+* http://www.magic.ubc.ca/artisynth/pmwiki.php?n=Demo.Demo
 
 Computer Vision
 ---------------

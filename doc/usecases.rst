@@ -49,4 +49,5 @@ different data types we would need for a neuroscience visualization engine. Plea
  results through distance visualization and collaboration is very important to us and I think is going to be
  important to the community at large."
  
+ * pyglet in a background thread http://groups.google.com/group/pyglet-users/browse_thread/thread/a6a1e63ef242ffcb/577355f5af037bac
  
