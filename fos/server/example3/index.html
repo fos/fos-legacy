@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Web Socket Example</title>
+    <meta charset="UTF-8">
+    <script>
+
+
+var ws = new WebSocket("ws://localhost:9997/");
+
+
+console.log(ws);
+
+ws.onopen = function() {
+      alert('blub');
+  ws.send("Hello Mr. Server!");
+};
+ws.onmessage = function (e) { console.log(e.data); };
+ws.onclose = function() { console.log("close"); };
+ws.onerror = function(e) { console.log(e); };
+    </script>
+  </head>
+    <body>
+      <div id="holder" style="width:600px; height:300px"></div>
+    </body>
+</html>

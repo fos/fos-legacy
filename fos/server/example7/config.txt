@@ -1,0 +1,7 @@
+[Server]
+Port=5678
+ConnectionQueueSize=1
+
+[Applications]
+tictactoe=TicTacToeManagerApplication
+

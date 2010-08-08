@@ -1,0 +1,11 @@
+An extremely simple implementation of a websocket server
+
+handler.py is where you handle sent data
+
+tick.py is where you put the code that you want to happen on each tick.
+
+Examples to come
+
+It seems that, as of now, messages can only be 1022 bytes
+
+seems like you must be connected to the internet for it to work

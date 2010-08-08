@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script> 
+<script>
+$(document).ready(function(){
+if ("WebSocket" in window) {
+  var ws = new WebSocket("ws://192.168.1.2:5555/");
+  ws.onopen = function() {
+    $('#wait').html("you can type and hit enter. look at your console.")
+    $('#form').submit(function(){
+        ws.send($('#message').val())
+        $('#message').val('')
+        return false;
+    })
+    ws.send("message to send");
+  };
+  ws.onmessage = function (evt) { 
+    var m = evt.data;
+    $('#message').after("<div class='message'>"+m+"</div>")
+  };
+  ws.onclose = function() { 
+    alert("closed")
+  };
+} else {
+  alert("No web socket support"); //flash alternative ?
+}
+})
+</script>
+</head>
+<body>
+<div id="wait">Waiting...</div>
+Web socket
+<form id="form" action="http://www.google.com">
+<input id="message">
+</form>
+</body>
+</html>

@@ -1,0 +1,11 @@
+See /example7-modified (only working example so far for me) how to create
+a pyglet windows with a button in the the webbrowser! :)
+(code from https://code.google.com/p/standalonewebsocketserver/ )
+
+Examples
+http://bohuco.net/blog/2010/07/html5-websockets-example/
+http://bohuco.net/dev/websocket/
+http://popdevelop.com/2010/03/a-minimal-python-websocket-server/
+http://yz.mit.edu/wp/web-sockets-tutorial-with-simple-python-server/
+http://dev.enekoalonso.com/2010/05/22/more-websockets-now-with-python/
+http://www.slideshare.net/rmoriz/pushing-the-web-websockets

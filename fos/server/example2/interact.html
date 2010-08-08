@@ -1,0 +1,82 @@
+<html>
+<head>
+<script type="text/javascript" src="include/jquery-1.3.2.min.js"></script>
+<script>
+$(document).ready(function()
+{
+    var ws;
+    
+    if ("WebSocket" in window)
+    {
+        debug("Hooray you have web sockets Trying to connect...");
+        ws = new WebSocket("ws://localhost:1233/websession");
+        
+        ws.onopen = function()
+        {
+            //Web Socket is connect, You can send data by send() method.
+            debug("connected...");
+            ws.send("hello from the browser");
+            ws.send("more from browser");
+        };
+        
+        run = function()
+        {
+            var val=$("#i1").val(); //read the entry
+            $("#i1").val("");       //and clear it
+            ws.send(val)            //tell erlang
+            return true;            //must do this
+        };
+        
+        ws.onmessage = function(evt)
+        {
+            var data = evt.data;
+            var i = data.indexOf("!");
+            var tag = data.slice(0, i);
+            var val = data.slice(i+1);
+            $("#" + tag).html(val);
+        };
+        
+        ws.onclose = function()
+        {
+            debug(" socket closed");
+        };
+    }        
+    else
+    {
+        alert("You have no web sockets");
+    }
+        
+    function debug(str)
+    {
+        $("#debug").append("<p>" + str);
+    };
+    });
+</script>
+</head>
+<body> 
+<h1>Interfaction Experiment</h1>
+
+
+<h2>Debug</h2>
+<div id="debug">Debug will appear here</div>
+
+
+<fieldset>
+<legend>Clock</legend>
+<div id="clock">I am a clock</div>
+</fieldset>
+
+<fieldset>
+<legend>out</legend>
+<div id="out">Output should appear here</div>
+</fieldset>
+
+<p>Enter something in the entry below, the server will reverse the string and send it out above</p>
+
+<fieldset>
+<legend>entry</legend>
+<p>Enter: <input id="i1" onchange="run()" size="42"></p>
+</input>
+</fieldset>
+</body>
+</html>

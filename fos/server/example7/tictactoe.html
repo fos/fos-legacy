@@ -1,0 +1,284 @@
+<html>
+	<head>
+	<title>Test</title>      
+	
+<script language="javascript" src="./cake.js"></script>
+
+<script type="text/javascript">
+	TTTBoard = Klass(Drawable, 
+	{
+		initialize : function(posX, posY, tileW, tileH ) 
+		{
+			Drawable.initialize.call(this)
+
+			this.x = posX
+			this.y = posY
+
+			this.TileW = tileW
+			this.TileH = tileH
+
+			this.VTiles = 3
+			this.HTiles = 3
+
+			this.Width = this.HTiles * this.TileW
+			this.Height = this.VTiles * this.TileH
+
+			this.Cells = []
+
+			this.createRectangles()
+			this.createLines()
+			this.createBorder()
+		},
+
+		createLines: function()
+		{
+
+			for(x = 1; x < this.HTiles; x++)
+			{
+				startX = this.x + (x * this.TileW)
+				startY = this.y
+				endX = startX
+				endY = startY + this.VTiles * this.TileH
+				
+				line = new Line(startX, startY, endX, endY)
+				this.append(line)
+			}
+
+			for(x = 1; x < this.VTiles; x++)
+			{
+				startX = this.x
+				startY =  this.y + (x * this.TileH)
+				endX = startX + this.HTiles * this.TileW
+				endY = startY
+				
+				line = new Line(startX, startY, endX, endY)
+				this.append(line)
+			}
+		},
+
+		createRectangles: function()
+		{
+			for(x = 0; x <=8; x++)
+			{
+				column = x % 3
+				row = Math.floor(x / 3)
+				rect = new Rectangle(this.TileW, this.TileH)
+				rect.id = x
+				rect.colorFill = 'white'
+				rect.x = this.x + (column * this.TileW)
+				rect.y = this.y + (row * this.TileH)
+				rect.fill='white'
+				
+				rect.when('mouseover', function(ev){this.fill='red'}, true)
+				rect.when('mouseout', function(ev){this.fill=this.colorFill}, true)
+				rect.when('mousedown', function(ev){Action_PlacePieceClick(this.id)}, true)
+				this.Cells[x] = rect
+				this.append(rect)
+			}
+		},
+
+		createBorder: function()
+		{
+			rect = new Rectangle(this.TileW*3, this.TileH*3)
+			rect.x = this.x
+			rect.y = this.y
+			rect.stroke='black'
+			rect.catchMouse=false
+			this.append(rect)
+		},
+
+		placePiece: function(position, player)
+		{
+			if(position >= 0 && position <= 8)
+			{
+				if (player == 1)
+				{
+					this.Cells[position].fill='blue'
+					this.Cells[position].colorFill='blue'
+				}
+				else
+				{
+					this.Cells[position].fill='lime'
+					this.Cells[position].colorFill='lime'
+				}
+			}
+		}
+
+	})
+
+	HandleRandom = 
+	function()
+	{
+		$("output").textContent = arguments[0]
+		webSocket.send("time")
+	}
+
+	HandleTime = 
+	function()
+	{
+		$("time").textContent = arguments[0]
+	}
+
+	Log = 
+	function(msg)
+	{
+		logNode = document.createElement('div')
+		logNode.setAttribute("class", "entry")
+		logNode.textContent = msg
+		$("log").appendChild(logNode)
+	}
+
+	GameStarted =
+	function()
+	{
+		Log("Game Started: " + arguments[0])
+		webSocket.send("joinGame|" + arguments[0])
+	}
+
+	JoinedGame =
+	function()
+	{
+		Log("Joined Game " + arguments[0][0] + " as player " + arguments[0][1])
+	}
+
+	BoardUpdate = 
+	function()
+	{
+		Log("Board " + arguments[0][0])
+	}
+
+	PiecePlaced  =
+	function()
+	{
+		tttBoard.placePiece(arguments[0][0], arguments[0][1])
+	}
+
+	GameOver=
+	function()
+	{
+		result = arguments[0][0]
+		if (result != null)
+		{
+			if(result == '1')
+			{
+				Log("Player 1 Won!")
+			}
+			else if(result == '2')
+			{
+				Log("Player 2 Won!")
+			}
+			else if(result == '0')
+			{
+				Log("It was a draw!")
+			}
+		}
+		Log("Game Over!")
+	}
+
+	var canvas
+	var webSocket = null;
+	var tttBoard = null;
+	var callbacks = new Object();
+	callbacks.random = HandleRandom
+	callbacks.time = HandleTime
+	callbacks.log = Log
+	callbacks.gameGUID = GameStarted
+	callbacks.joinedGame = JoinedGame
+	callbacks.board = BoardUpdate
+	callbacks.placed = PiecePlaced
+	callbacks.gameOver = GameOver
+	
+	window.onload = 
+		function() 
+		{
+			canvas = new Canvas($('canvasDiv'), 800, 600)
+			tttBoard = new TTTBoard(20,20, 100, 100)
+			canvas.append( tttBoard )
+
+			webSocket = new WebSocket("ws://localhost:5678/tictactoe");
+	        
+			webSocket.onopen = 
+			function(e) 
+			{ 
+				callbacks.log('Connected'); 
+				this.send("login|user|user")
+			}
+
+			webSocket.onclose = 
+			function(e) 
+			{ 
+				callbacks.log('Closed')
+			}
+
+			webSocket.onmessage = 
+			function(e) 
+			{
+				parts = e.data.split('|')
+
+				if(parts.length > 0)
+				{
+					if(callbacks[parts[0]] != undefined)
+					{
+						if(parts.length > 1)
+						{
+							callbacks[parts[0]]( parts.slice(1) )
+						}
+						else
+						{
+							callbacks[parts[0]]()							
+						}
+					}
+				}
+			}
+		}
+
+	Action_StartGame =
+	function()
+	{
+		webSocket.send("startGame") 
+	}
+
+	Action_JoinGame =
+	function()
+	{
+		gameID = $('gameIDTextBox').value
+		Log("Trying to join game: " + gameID)
+		webSocket.send("joinGame|" + gameID + "|2")
+	}
+
+	Action_PlacePiece =
+	function()
+	{
+		position = $('boardPositionTextBox').value
+		webSocket.send("place|" + position)
+	}
+
+	Action_PlacePieceClick =
+	function(position)
+	{
+		Log("Trying to place piece at " + position)
+		webSocket.send("place|" + position)
+	}
+</script>
+
+</head>
+
+<body>
+	<div style="float:left;width:55%;">
+		<button type="button" onclick="Action_StartGame();">Start</button>
+		<button type="button" onclick="Action_JoinGame();">Join</button>
+		<input type="text" id="gameIDTextBox" cols="50"/>
+
+		<button type="button" onclick="Action_PlacePiece();">Place</button>
+		<input type="text" id="boardPositionTextBox" cols="5"/>
+
+		<div id="canvasDiv"></div>
+	</div>
+
+	<div style="float:right; border:1px solid black;width:35%;padding:5px;">
+		<div id="time"></div>
+		<div id="output"></div>
+		<div id="log" class="log"></div>
+	</div>
+</body>
+</html>
