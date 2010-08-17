@@ -45,7 +45,7 @@ Windowing API
 Onscreen UIs
 ------------
 1. simplui http://code.google.com/p/simplui/
-2. kytten-read-only
+2. kytten-read-only http://code.google.com/p/kytten/
 3. http://www.antisphere.com/Wiki/tools:anttweakbar (C++)
 
 Fonts
