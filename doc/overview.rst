@@ -8,7 +8,7 @@ New
 * MedX3D: Standards enabled medical 3D http://www.web3d.org/x3d/workgroups/medical/
 * http://cgkit.sourceforge.net/doc2/index.html
 * http://www.h3dapi.org/
-
+* In a similar vain, but dead now. Why? http://www.opendx.org/
 
  
 =========
