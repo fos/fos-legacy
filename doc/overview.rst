@@ -7,9 +7,9 @@ New
 * MedX3D: Standards enabled medical 3D http://www.web3d.org/x3d/workgroups/medical/
 * http://cgkit.sourceforge.net/doc2/index.html
 * http://www.h3dapi.org/
-
 * SciGL (Scientific OpenGL Visualization ToolKit) http://www.loria.fr/~rougier/coding/scigl/index.html
 * http://www.loria.fr/~rougier/coding/index.html
+* In a similar vain, but dead now. Why? http://www.opendx.org/
  
 =========
 Libraries
@@ -45,7 +45,7 @@ Windowing API
 Onscreen UIs
 ------------
 1. simplui http://code.google.com/p/simplui/
-2. kytten-read-only
+2. kytten-read-only http://code.google.com/p/kytten/
 3. http://www.antisphere.com/Wiki/tools:anttweakbar (C++)
 
 Fonts
