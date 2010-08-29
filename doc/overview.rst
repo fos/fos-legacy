@@ -4,12 +4,12 @@ Our aim is to collect knowledge, references and feature requests...
 New
 ===
 
-
 * MedX3D: Standards enabled medical 3D http://www.web3d.org/x3d/workgroups/medical/
 * http://cgkit.sourceforge.net/doc2/index.html
 * http://www.h3dapi.org/
 
-
+* SciGL (Scientific OpenGL Visualization ToolKit) http://www.loria.fr/~rougier/coding/scigl/index.html
+* http://www.loria.fr/~rougier/coding/index.html
  
 =========
 Libraries
@@ -139,9 +139,12 @@ Other
 
 People
 ------
-* gordon kindlmann teem nrrd http://lmi.bwh.harvard.edu/~gk/ http://people.cs.uchicago.edu/~glk/
+* Gordon Kindlemann, teem nrrd http://lmi.bwh.harvard.edu/~gk/ http://people.cs.uchicago.edu/~glk/
 * cool ideas, bumptop http://www.ted.com/talks/anand_agarawala_demos_his_bumptop_desktop.html
-* Almar Klein (visvis)
+* Almar Klein http://code.google.com/p/visvis/
+* Jonathan Hartley http://tartley.com/
+* Werner Benger http://www.cct.lsu.edu/~werner/
+* Nicolas Rouger http://code.google.com/p/glumpy/
 
 Conferences
 -----------
