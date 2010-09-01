@@ -10,7 +10,23 @@ New
 * SciGL (Scientific OpenGL Visualization ToolKit) http://www.loria.fr/~rougier/coding/scigl/index.html
 * http://www.loria.fr/~rougier/coding/index.html
 * In a similar vain, but dead now. Why? http://www.opendx.org/
- 
+* SVG for pyglet http://www.supereffective.org/pages/Squirtle-SVG-Library
+* The Vish Project http://vish.origo.ethz.ch/
+* YT http://yt.enzotools.org/doc/index.html
+** http://yt.enzotools.org/video_gallery.html
+** http://yt.enzotools.org/doc/extensions/volume_rendering.html
+* VISIT https://wci.llnl.gov/codes/visit/home.html
+
+* 3/4 D Planetarium
+http://www.haydenplanetarium.org/universe/download/
+http://www.ted.com/talks/carter_emmart_demos_a_3d_atlas_of_the_universe.html
+http://virdir.ncsa.illinois.edu/partiview/
+
+* Gephi discussion about 3D in web: http://forum.gephi.org/viewtopic.php?f=9&t=89
+* web image authoring tipps: http://www.web3d.org/x3d/content/examples/X3dSceneAuthoringHints.html#Images
+* Gary Flake: is Pivot a turning point for web exploration? http://www.ted.com/talks/gary_flake_is_pivot_a_turning_point_for_web_exploration.html
+* fiber bundle, F5 format! http://www.fiberbundle.net/
+
 =========
 Libraries
 =========
@@ -36,6 +52,7 @@ Web
 * WebGLU : http://blog.one-geek.com/
 * X3D and HTML5 Summary : http://www.web3d.org/x3d/wiki/index.php/X3D_and_HTML5_Summary
 * Examples : http://www.web3d.org/x3d/content/examples/Basic/
+* Processing.js : http://processingjs.org/exhibition
 
 Windowing API
 -------------
