@@ -4,6 +4,9 @@ Our aim is to collect knowledge, references and feature requests...
 New
 ===
 
+* checkout this: http://invizian.loni.ucla.edu/
+* http://www.mevislab.de/
+* conference: http://vis.computer.org/VisWeek2010/
 * Interactive Pyglet usage with cocos2d http://www.examplelab.com.ar/python/interactive_cocos2d/python_interactive_session_with_cocos_2d_pyglet.rst
 * MedX3D: Standards enabled medical 3D http://www.web3d.org/x3d/workgroups/medical/
 * http://cgkit.sourceforge.net/doc2/index.html
