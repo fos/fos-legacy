@@ -12,7 +12,6 @@
 * efficiently convert mesh to a graph
 * highlight streamlines "active" in time based on connecting roi activation
 
-
 * progress bar
 * slice viewer
 * command menu
