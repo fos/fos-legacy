@@ -203,17 +203,17 @@ class InteractiveCurves(object):
 
 def load_animation(image_name,columns,rows):
  
-    effect_seq = pyglet.image.ImageGrid(pyglet.image.load(image_name), rows, columns)
+    frame_seq = pyglet.image.ImageGrid(pyglet.image.load(image_name), rows, columns)
     
-    effect_frames = []
+    frame_list = []
     for row in range(rows, 0, -1):
         end = row * columns
         start = end - (columns -1) -1
-        for effect_frame in effect_seq[start:end:1]:
-            effect_frames.append(AnimationFrame(effect_frame, 0.1))
+        for frame in frame_seq[start:end:1]:
+            frame_list.append(AnimationFrame(frame, .1))
     
-    effect_frames[(rows * columns) -1].duration = None        
-    return Animation(effect_frames)
+    #frame_list[(rows * columns) -1].duration = None        
+    return Animation(frame_list)
     
          
 
@@ -412,11 +412,12 @@ class ODF_Slice(object):
             
 import dipy.core
 import nibabel as ni
-from dipy.io import dicomreaders as dcm
+from dipy import load_dcm_dir
 import dipy.core.generalized_q_sampling as gq
 
+'''#############
 
-mat_path='/home/eg01/Devel/dipy/dipy/core/matrices/evenly_distributed_sphere_362.npz'
+mat_path='/home/eg309/Devel/dipy/dipy/core/matrices/evenly_distributed_sphere_362.npz'
 
 eds=np.load(mat_path)
 directions=eds['vertices']
@@ -425,9 +426,10 @@ values=np.random.rand(len(directions))
 
 dname =  '/home/eg01/Data_Backup/Data/Frank_Eleftherios/frank/20100511_m030y_cbu100624/08_ep2d_advdiff_101dir_DSI'
 
-data,affine,bvals,gradients=dcm.read_mosaic_dir(dname)
+data,affine,bvals,gradients=load_dcm_dir(dname)
 print data.shape
 
+'''
 
 '''
 gqs=gq.GeneralizedQSampling(data,bvals,gradients)
@@ -476,7 +478,7 @@ actors.append(sprite)
 #'''
 
 
-import dipy.io.trackvis as tv
+import nibabel.trackvis as tv
 
 '''
 T_, _ = tv.read('/home/eg01/Devel/dipy/dipy/core/bench/data/tracks300.trk.gz')
@@ -486,8 +488,11 @@ print len(T)
 T=T[:4]
 '''
 
-fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain1/brain1_scan1_fiber_track_mni.trk'
+#fname='/home/eg01/Data_Backup/Data/PBC/pbc2009icdm/brain1/brain1_scan1_fiber_track_mni.trk'
 #fname='/home/eg309/Data/PBC/pbc2009icdm/brain1/brain1_scan1_fiber_track_mni.trk'
+fname='/home/eg309/Data/PROC_MR10032/subj_04/101/1312211075232351192010092217591167666934589ep2dadvdiffDSI10125x25x25STs003a001_FA_warp.trk'
+
+'''
 
 print 'Loading file...'
 streams,hdr=tv.read(fname)
@@ -497,19 +502,18 @@ T=[i[0] for i in streams]
 
 del streams
 
-#T=T[:2000]
+T2=T[:20000]
 
-#'''
 import dipy.core.track_performance as pf
 
-#T=[pf.approximate_ei_trajectory(t) for t in T]
+T=[pf.approximate_ei_trajectory(t) for t in T]
 
 #slg=SmoothLineGroup()
-#'''
-ic=InteractiveCurves(T)
-actors.append(ic)
-#'''
 
+ic=InteractiveCurves(T2)
+actors.append(ic)
+'''
 Machine().run()
-#'''
+
+
 

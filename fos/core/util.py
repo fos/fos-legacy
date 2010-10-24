@@ -1,4 +1,5 @@
-from pyglet.gl import *
+from pyglet.gl.gl import *
+#from pyglet.gl.gl import c_float,c_double,
 
 def get_model_matrix(array_type=c_float, glGetMethod=glGetFloatv):
     """

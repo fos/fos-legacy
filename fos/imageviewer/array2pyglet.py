@@ -1,7 +1,7 @@
 from pyglet.gl import *
 from pyglet import window
 from pyglet import image
-from pygarrayimage.arrayimage import ArrayInterfaceImage
+from arrayimage import ArrayInterfaceImage
 import pyglet
 from pyglet.gl import *
 
@@ -31,8 +31,10 @@ if __name__ == '__main__':
     #arr2 = numpy.random.random( ( width, height, depth) )
     #arr2 = numpy.random.randn( width, height, depth )
     
+    fname='/home/eg309/Data/PROC_MR10032/subj_02/MPRAGE/1312211075232351192010091419535287463311204CBUMPRAGEs002a1001.nii.gz'
+
     # get the brain
-    arr2img = ni.load('test.nii.gz').get_data()
+    arr2img = ni.load(fname).get_data()
     arr2img = numpy.ascontiguousarray(arr2img)
     last_slice = arr2img.shape[0]
     
@@ -64,7 +66,7 @@ if __name__ == '__main__':
     while not w.has_exit:
         w.dispatch_events()
         
-        background.blit_tiled(0, 0, 0, w.width, w.height)
+        #background.blit_tiled(0, 0, 0, w.width, w.height)
         img.blit(0, 0, 0)
         w.flip()
 
@@ -72,9 +74,12 @@ if __name__ == '__main__':
         arr2 = arr2img[i,:,:]
         arr2 = np.interp( arr2, [arr2.min(), arr2.max()], [0, 255] )
         arr2 = arr2.astype(np.uint8)
+
+        aii.arr = arr2
+        #aii.dirty()
         aii.view_new_array(arr2)
         #aii.dirty() # dirty the ArrayInterfaceImage because the data changed
-#        
+        #
         i=(i+1)%last_slice
 
 #        if i == 1 and 0:

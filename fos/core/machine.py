@@ -101,7 +101,7 @@ class Machine(object):
         self.height=height
         self.config = Config(sample_buffers=1, samples=4,\
                         depth_size=24,double_buffer=True,\
-                        vsync=True)
+                        vsync=False)
     
     def run(self):
         window = pyglet.window.Window(width=self.width,\
