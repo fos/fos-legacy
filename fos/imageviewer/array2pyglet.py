@@ -50,14 +50,14 @@ if __name__ == '__main__':
 
     # background
     checks = pyglet.image.create(32, 32, pyglet.image.CheckerImagePattern())
-    background = pyglet.image.TileableTexture.create_for_image(checks)
+    #background = pyglet.image.TileableTexture.create_for_image(checks)
         
     # Enable alpha blending, required for image.blit.
     glEnable(GL_BLEND)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
-    w.width = img.width
-    w.height = img.height
+    w.width = 800#img.width
+    w.height = 800#img.height
     w.set_visible()
     
     #pyglet.app.run()
@@ -67,15 +67,23 @@ if __name__ == '__main__':
         w.dispatch_events()
         
         #background.blit_tiled(0, 0, 0, w.width, w.height)
+        glPushMatrix()
+        glScalef(1, 1., 0)  # assuming a 2d projection
         img.blit(0, 0, 0)
+        
+        glPopMatrix()
+        
+        
         w.flip()
+
+        
 
         # arr.fill(i)
         arr2 = arr2img[i,:,:]
         arr2 = np.interp( arr2, [arr2.min(), arr2.max()], [0, 255] )
         arr2 = arr2.astype(np.uint8)
 
-        aii.arr = arr2
+        #aii.arr = arr2
         #aii.dirty()
         aii.view_new_array(arr2)
         #aii.dirty() # dirty the ArrayInterfaceImage because the data changed
