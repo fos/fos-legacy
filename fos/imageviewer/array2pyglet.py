@@ -8,7 +8,6 @@ from pyglet.gl import *
 #window = pyglet.window.Window(visible=False, resizable=True)
 
 
-    
 #@window.event
 #def on_draw():
 #    background.blit_tiled(0, 0, 0, window.width, window.height)
@@ -31,10 +30,12 @@ if __name__ == '__main__':
     #arr2 = numpy.random.random( ( width, height, depth) )
     #arr2 = numpy.random.randn( width, height, depth )
     
-    fname='/home/eg309/Data/PROC_MR10032/subj_02/MPRAGE/1312211075232351192010091419535287463311204CBUMPRAGEs002a1001.nii.gz'
-
+#    fname='/home/eg309/Data/PROC_MR10032/subj_02/MPRAGE/1312211075232351192010091419535287463311204CBUMPRAGEs002a1001.nii.gz'
+    
     # get the brain
-    arr2img = ni.load(fname).get_data()
+    #arr2img = ni.load(fname).get_data()
+    arr2img = np.random.random( ( 200,200,200))
+    arr2img[:50,:,:] = 10
     arr2img = numpy.ascontiguousarray(arr2img)
     last_slice = arr2img.shape[0]
     
@@ -70,13 +71,8 @@ if __name__ == '__main__':
         glPushMatrix()
         glScalef(1, 1., 0)  # assuming a 2d projection
         img.blit(0, 0, 0)
-        
         glPopMatrix()
-        
-        
         w.flip()
-
-        
 
         # arr.fill(i)
         arr2 = arr2img[i,:,:]

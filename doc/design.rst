@@ -80,5 +80,4 @@ Comments:
 * Multithreading and scheduling is also something important. We need very fast threads.
 http://stackoverflow.com/questions/1961203/python-separating-the-gui-process-from-the-core-logic-process
 http://stackoverflow.com/questions/1182315/python-multicore-processing
-
 * Idea: zoom in and out of spatio-temporal patterns, spatio-temporal dynamic filter

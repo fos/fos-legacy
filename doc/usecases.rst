@@ -51,4 +51,3 @@ different data types we would need for a neuroscience visualization engine. Plea
  
  * pyglet in a background thread http://groups.google.com/group/pyglet-users/browse_thread/thread/a6a1e63ef242ffcb/577355f5af037bac
 
-http://code.astraw.com/projects/motmot/pygarrayimage.html 

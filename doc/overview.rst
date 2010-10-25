@@ -4,6 +4,10 @@ Our aim is to collect knowledge, references and feature requests...
 New
 ===
 
+* overview of opengl draw calls: http://tartley.com/?p=1045
+* pyglet-shaders: http://code.google.com/p/pyglet-shaders/
+* maybe helpful for translucent textures: http://compileandrun.com/?p=39
+* http://code.astraw.com/projects/motmot/pygarrayimage.html 
 * checkout this: http://invizian.loni.ucla.edu/
 * http://www.mevislab.de/
 * conference: http://vis.computer.org/VisWeek2010/
