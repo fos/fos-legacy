@@ -23,6 +23,7 @@ More Examples
 #import OpenGL.GL as GL
 import numpy as np
 from fos.core.machine import Machine, batch, mouse_x,mouse_y,actors
+#from fos.imageviewer.arrayimage import ArrayInterfaceImage
 import pyglet
 #pyglet.options['debug_gl']=False
 from pyglet.gl import *
@@ -477,6 +478,17 @@ sprite.position = (-sprite.width/2, - sprite.height/2)
 actors.append(sprite)
 #'''
 
+'''
+arr2 = np.random.random((32,32)).astype(np.float32)
+arr2 = np.interp( arr2, [arr2.min(), arr2.max()], [0, 255] )
+arr2 = arr2.astype(np.uint8)
+
+aii = ArrayInterfaceImage(arr2)
+img = aii.texture
+sprite = pyglet.sprite.Sprite(img, x=10, y=100)
+sprite.position = (-sprite.width/2, - sprite.height/2)
+actors.append(sprite)
+'''
 
 import nibabel.trackvis as tv
 

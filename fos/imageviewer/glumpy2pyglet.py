@@ -10,7 +10,7 @@
 
         
 
-
+'''
 # glumpy in pyglet?
 import pyglet
 import numpy, glumpy
@@ -34,7 +34,7 @@ ball = pyglet.sprite.Sprite(Ii, x=50, y=50)
 # glumpy
 #####
 
-'''
+
 
 import numpy, glumpy
 
@@ -61,11 +61,12 @@ def on_draw():
     ball.draw()
 
 pyglet.app.run()
+'''
 
 
 # custom
 #####
-from pygarrayimage.arrayimage import ArrayInterfaceImage
+from  arrayimage import ArrayInterfaceImage
 import pyglet
 from pyglet.gl import *
 import numpy as np
@@ -93,11 +94,23 @@ img = aii.texture
 
 @window.event
 def on_draw():
+
+    
     window.clear()
+    #'''
+    glPushMatrix()
+    glScalef(3, 1., 0)
     ball.draw()
+    glPopMatrix()
+    #'''
+    glPushMatrix()
+    glScalef(1, 1., 0)
+    glTranslatef(150,0,2)    
+    ball.draw()
+    glPopMatrix()
     
 ball = pyglet.sprite.Sprite(img, x=10, y=100)
-ball.scale = 4.0
+
 
 pyglet.app.run()
-'''
+
