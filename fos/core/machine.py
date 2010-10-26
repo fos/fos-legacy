@@ -99,6 +99,7 @@ class Machine(object):
 
         self.width=width
         self.height=height
+        #config broke after upgrating to ubuntu 10.10
         self.config = Config(sample_buffers=1, samples=4,\
                         depth_size=24,double_buffer=True,\
                         vsync=False)
@@ -107,8 +108,8 @@ class Machine(object):
         window = pyglet.window.Window(width=self.width,\
                                           height=self.height,\
                                           caption='The Light Machine',\
-                                          resizable=True, \
-                                          config=self.config)
+                                          resizable=True)#, \
+                                          #config=self.config)
         window.on_resize=on_resize
         window.on_draw=on_draw
         window.on_key_press=on_key_press
