@@ -44,3 +44,44 @@ class Dandelion(object):
     
     def delete(self):
         self.vertex_list.delete()
+
+
+'''
+
+class Urchine(object):
+
+    def __init__(self,batch,group=None):
+
+       
+        lno=100
+        self.vertex_list=lno*[None]
+        for i in range(lno):
+            lines=100*np.random.rand(10,3).astype('f')
+            vertices=lines.ravel().tolist()
+            self.vertex_list[i] = batch.add(len(lines),GL_LINE_STRIP,group,\
+                                         ('v3f/static',vertices))
+
+        self.lno=lno
+        
+    def update(self):
+        #self.vertex_list.vertices[0]+=1
+        pass
+    def delete(self):
+        
+        for i in range(self.lno):
+            self.vertex_list.delete()
+            
+        
+        #self.vertex_list.delete()
+
+urch=Urchine(batch=batch)
+'''
+
+'''
+lno=100000
+lines=[10*np.random.rand(10,3).astype('f') for i in range(lno)]
+colors=[np.random.rand(10,4).astype('f') for i in range(lno)]
+
+trk=Tracks(lines,colors)
+trk.init()
+'''

@@ -1,99 +1,19 @@
 from math import sin, cos,sqrt
 import numpy as np
-from fos.lib import pyglet
+
 #pyglet.options['debug_gl']=False
 
-from fos.lib.pyglet.gl import *
-from fos.lib.pyglet.window import key,mouse
-from fos.core.utils import get_model_matrix,screen_to_model,get_viewport
+
+from fos.core.managed_window import ManagedWindow
 import fos.core.collision as cll
 
-#from tracks import Tracks
-
-#Global variables
-mouse_x,mouse_y=0,0
-
-batch = pyglet.graphics.Batch()
-actors=[]
+from fos.lib import pyglet
+from fos.lib.pyglet.gl import *
+from fos.lib.pyglet.window import key,mouse
+from fos.core.interactor import Interaction
 
 
-
-'''
-
-
-class Urchine(object):
-
-    def __init__(self,batch,group=None):
-
-       
-        lno=100
-        self.vertex_list=lno*[None]
-        for i in range(lno):
-            lines=100*np.random.rand(10,3).astype('f')
-            vertices=lines.ravel().tolist()
-            self.vertex_list[i] = batch.add(len(lines),GL_LINE_STRIP,group,\
-                                         ('v3f/static',vertices))
-
-        self.lno=lno
-        
-    def update(self):
-        #self.vertex_list.vertices[0]+=1
-        pass
-    def delete(self):
-        
-        for i in range(self.lno):
-            self.vertex_list.delete()
-            
-        
-        #self.vertex_list.delete()
-
-urch=Urchine(batch=batch)
-'''
-
-'''
-lno=100000
-lines=[10*np.random.rand(10,3).astype('f') for i in range(lno)]
-colors=[np.random.rand(10,4).astype('f') for i in range(lno)]
-
-trk=Tracks(lines,colors)
-trk.init()
-'''
-
-class Interaction(object):
-
-    def __init__(self):
-        self.matrix=None
-        self.lookat=[0,0,170,0,0,0,0,1,0]
-        self.scroll_speed=10
-        self.mouse_speed=0.1        
-        self.reset()
-       
-    def reset(self):        
-        glPushMatrix()
-        glLoadIdentity()
-        self.matrix=get_model_matrix()                
-        glPopMatrix()
-
-    def translate(self,dx,dy,dz):
-        glPushMatrix()
-        glLoadIdentity()
-        glTranslatef(dx,dy,dz)
-        glMultMatrixf(self.matrix)
-        self.matrix=get_model_matrix()
-        glPopMatrix()
-
-    def rotate(self,ang,rx,ry,rz):
-        glPushMatrix()
-        glLoadIdentity()
-        glRotatef(ang,rx,ry,rz)
-        glMultMatrixf(self.matrix)
-        self.matrix=get_model_matrix()
-        glPopMatrix()
-
-cam_rot = Interaction()
-cam_trans = Interaction()
-
-class Machine(object):
+class Engine():
 
     def __init__(self,width=1024,height=768,config=None):
 
@@ -112,20 +32,24 @@ class Machine(object):
         
     
     def run(self):
+        
         window = pyglet.window.Window(width=self.width,\
-                                          height=self.height,\
-                                          caption='The Light Machine',\
-                                          resizable=True,\
-                                          vsync=False)
-                                          #config=self.config)
+                              height=self.height,\
+                              caption='The Light Machine',\
+                              resizable=True,\
+                              vsync=False)
+                              #config=self.config)
+        
+                            
         window.on_resize=on_resize
         window.on_draw=on_draw
         window.on_key_press=on_key_press
         window.on_mouse_drag=on_mouse_drag
         window.on_mouse_motion=on_mouse_motion
         window.on_mouse_scroll=on_mouse_scroll
-        
         schedule(update)
+        
+        
         print('NeoFos started')
         pyglet.app.run()
         
@@ -230,6 +154,11 @@ def schedule(update,dt=None):
     
 
 if __name__ == "__main__":
-
-    Machine().run()
+    #Global variables
+    mouse_x,mouse_y=0,0
+    batch = pyglet.graphics.Batch()
+    actors=[]
+    cam_rot = Interaction()
+    cam_trans = Interaction()
+    Engine().run()
 

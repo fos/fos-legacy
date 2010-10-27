@@ -1,5 +1,5 @@
-from pyglet.gl import *
-from pyglet.gl.gl import c_float, c_double, c_int
+from fos.lib.pyglet.gl import *
+from fos.lib.pyglet.gl.gl import c_float, c_double, c_int
 #before it was pyglet.gl
 
 #import pyglet

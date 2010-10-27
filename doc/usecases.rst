@@ -48,6 +48,16 @@ different data types we would need for a neuroscience visualization engine. Plea
  to share data and visualization of data as a larger community," explains Geveci. "Enabling sharing of data and
  results through distance visualization and collaboration is very important to us and I think is going to be
  important to the community at large."
- 
- * pyglet in a background thread http://groups.google.com/group/pyglet-users/browse_thread/thread/a6a1e63ef242ffcb/577355f5af037bac
+
+
+----
+
+* model
+1. take a neuron skeleton
+2. transform to V,E, and P
+3. find graph laplacian and compute eigendecomposition
+4. apply the coordinate signal to a subspace
+5. see what is coming out
+* efficiently convert mesh to a graph
+* highlight streamlines "active" in time based on connecting roi activation
 

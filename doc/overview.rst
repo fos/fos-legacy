@@ -4,6 +4,8 @@ Our aim is to collect knowledge, references and feature requests...
 New
 ===
 
+* http://code.google.com/p/pythonisosurfaces/
+* http://stackoverflow.com/questions/145838/benefits-of-inline-functions-in-c
 * overview of opengl draw calls: http://tartley.com/?p=1045
 * pyglet-shaders: http://code.google.com/p/pyglet-shaders/
 * maybe helpful for translucent textures: http://compileandrun.com/?p=39
