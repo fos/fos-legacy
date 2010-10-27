@@ -23,11 +23,11 @@ More Examples
 #import OpenGL.GL as GL
 import numpy as np
 from fos.core.machine import Machine, batch, mouse_x,mouse_y,actors
-from fos.imageviewer.arrayimage import ArrayInterfaceImage
+from fos.core.arrayimage import ArrayInterfaceImage
 import pyglet
 #pyglet.options['debug_gl']=False
-from pyglet.gl import *
-from pyglet.image import Animation, AnimationFrame
+from fos.lib.pyglet.gl import *
+from fos.lib.pyglet.image import Animation, AnimationFrame
 import os
 from fos.core import collision as cll
 import time
@@ -655,6 +655,29 @@ T=[pf.approximate_ei_trajectory(t) for t in T]
 ic=InteractiveCurves(T2)
 actors.append(ic)
 '''
+
+
+'''
+from threading import Thread
+#import time
+#import scene
+
+class Engine(Thread):
+    def __init__(self):
+        Thread.__init__(self)
+	self.m=None
+    def run(self):
+        self.m=Machine()
+    def yes(self):
+	self.run()
+	
+engine = Engine()
+
+print('starting engine ...')
+engine.yes()
+print('engine on')
+'''
+
 Machine().run()
 
 
