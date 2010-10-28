@@ -32,8 +32,8 @@ class Engine():
         
     
     def run(self):
-        
-        window = pyglet.window.Window(width=self.width,\
+        # pyglet.window.Window
+        window = ManagedWindow(width=self.width,\
                               height=self.height,\
                               caption='The Light Machine',\
                               resizable=True,\
@@ -42,14 +42,14 @@ class Engine():
         
                             
         window.on_resize=on_resize
-        window.on_draw=on_draw
         window.on_key_press=on_key_press
         window.on_mouse_drag=on_mouse_drag
         window.on_mouse_motion=on_mouse_motion
         window.on_mouse_scroll=on_mouse_scroll
+
+        window.draw=draw      
         schedule(update)
-        
-        
+                
         print('NeoFos started')
         pyglet.app.run()
         
@@ -70,7 +70,7 @@ def update(dt):
         except:
             pass
 
-def on_draw():   
+def draw():   
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)    
     glLoadIdentity()
 
@@ -153,12 +153,12 @@ def schedule(update,dt=None):
         pyglet.clock.schedule_interval(update,dt)
     
 
-if __name__ == "__main__":
-    #Global variables
-    mouse_x,mouse_y=0,0
-    batch = pyglet.graphics.Batch()
-    actors=[]
-    cam_rot = Interaction()
-    cam_trans = Interaction()
-    Engine().run()
+
+#Global variables
+mouse_x,mouse_y=0,0
+batch = pyglet.graphics.Batch()
+actors=[]
+cam_rot = Interaction()
+cam_trans = Interaction()
+Engine().run()
 

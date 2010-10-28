@@ -4,6 +4,7 @@ Our aim is to collect knowledge, references and feature requests...
 New
 ===
 
+* http://local.wasp.uwa.edu.au/~pbourke/geometry/polygonise/
 * http://code.google.com/p/pythonisosurfaces/
 * http://stackoverflow.com/questions/145838/benefits-of-inline-functions-in-c
 * overview of opengl draw calls: http://tartley.com/?p=1045
@@ -36,6 +37,17 @@ http://virdir.ncsa.illinois.edu/partiview/
 * web image authoring tipps: http://www.web3d.org/x3d/content/examples/X3dSceneAuthoringHints.html#Images
 * Gary Flake: is Pivot a turning point for web exploration? http://www.ted.com/talks/gary_flake_is_pivot_a_turning_point_for_web_exploration.html
 * fiber bundle, F5 format! http://www.fiberbundle.net/
+
+Our aim is to collect knowledge, references and feature requests...
+
+=======
+Meminfo
+=======
+
+http://www.geeks3d.com/20100531/programming-tips-how-to-know-the-graphics-memory-size-and-usage-in-opengl/
+
+GL_NVX_gpu_memory_info
+WGL_AMD_gpu_association
 
 =========
 Libraries

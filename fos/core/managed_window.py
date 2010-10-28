@@ -1,3 +1,5 @@
+""" Thanks to the sympy project """
+
 from fos.lib.pyglet.gl import *
 from fos.lib.pyglet.window import Window
 from fos.lib.pyglet.clock import Clock
@@ -12,7 +14,7 @@ class ManagedWindow(Window):
     in a separate thread. Behavior is added by creating a subclass
     which overrides setup, update, and/or draw.
     """
-    fps_limit = 30
+    fps_limit = 60
     default_win_args = dict(width=600,
                             height=500,
                             vsync=False,

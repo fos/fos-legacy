@@ -55,9 +55,7 @@ class ConnectedSlices():
         self.sprk=sprk
 
     def draw(self):
-        #print('draw')
 
-  
         glPushMatrix()
         glTranslatef(-self.spri.width/2-self.sprj.width/2,0,self.z)
         glScalef(1, 1., 0)
