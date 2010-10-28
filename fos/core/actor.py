@@ -20,6 +20,8 @@ class Actor():
         self.velocity
         self.acceleration
         self.center # center of mass / center of bounding box
+        self.orientation # of the bounding volume, orientation on the local coordinate system
+        self.local_coord_system # from the global opengl coordinate system
         
         # event related information
         self.event_queue
@@ -63,12 +65,19 @@ class Actor():
         """ Process the pick ray like intersecting with the actor """
         pass
     
-    @property
-    def bounding_volume(self):
-        """ Compute the bounding volume 
-        e.g. box, sphere, ellipsoid, rectangle
-        """
+    def bounding_box(self):
+        """ Compute the bounding box """
         pass
+    
+    def bounding_sphere(self):
+        """ Compute the bounding sphere """
+        pass
+        # can use PCA?
+    
+    def bouding_ellipsoid(self):
+        """ Compute the bounding elipsoid """
+        pass
+        # can use PCA?
         
         
 

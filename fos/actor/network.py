@@ -34,6 +34,8 @@ def init():
     node_alpha
         The node transparency
     
+    -> node_color -> RGBA
+    
     node_show_labels
         Show all labels on the nodes / 
         only for specified nodes.

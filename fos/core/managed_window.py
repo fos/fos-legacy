@@ -1,4 +1,5 @@
-""" Thanks to the sympy project """
+""" Thanks to the sympy project
+REMINDER: remove the clock from the window and put it to the engine """
 
 from fos.lib.pyglet.gl import *
 from fos.lib.pyglet.window import Window
@@ -71,6 +72,7 @@ class ManagedWindow(Window):
         """
         Closes the window.
         """
+        print "in managed window close"
         self.has_exit = True
 
     def setup(self):

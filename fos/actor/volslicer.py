@@ -1,6 +1,8 @@
+import numpy as np
 
 from fos.lib import pyglet
 from fos.lib.pyglet.gl import *
+from fos.core.arrayimage import ArrayInterfaceImage
 
 #sprite = pyglet.sprite.Sprite(img, x=0, y=0)
 #sprite.position = (-sprite.width/2, - sprite.height/2)

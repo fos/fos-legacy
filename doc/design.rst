@@ -81,3 +81,14 @@ Comments:
 http://stackoverflow.com/questions/1961203/python-separating-the-gui-process-from-the-core-logic-process
 http://stackoverflow.com/questions/1182315/python-multicore-processing
 * Idea: zoom in and out of spatio-temporal patterns, spatio-temporal dynamic filter
+
+---
+
+So what's the upshot: are people really only using graphics.OrderedGroup to sequence their batches, and wrapping the batch calls in immediate mode glEnable/glDisable/glPushMatrix/glPopMatrix calls in on_draw()?
+
+This is all legacy stuff: Enable/Disable go away when you move to shaders, Push/PopMatrix go away with OpenGL 3+... I haven't ever used the fixed-function pipeline in Pyglet (beyond the examples in the distribution), so I can't help you much with that.
+
+
+Once one moves to shaders, it is much simplified: you bind a shader, bind the necessary textures, update the uniform matrices and draw the batch. Rinse and repeat - it is well suited to encapsulating in single class.
+
+----

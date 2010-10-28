@@ -61,12 +61,9 @@ different data types we would need for a neuroscience visualization engine. Plea
 * efficiently convert mesh to a graph
 * highlight streamlines "active" in time based on connecting roi activation
 
-* progress bar
 * slice viewer
 * command menu
 * scene graph?
-* picking, collision detection
 * view volume
 * change transparency
-* network
 * "action" wrapper for objects

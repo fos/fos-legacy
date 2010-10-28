@@ -4,6 +4,9 @@ Our aim is to collect knowledge, references and feature requests...
 New
 ===
 
+* read: http://groups.google.com/group/pyglet-users/browse_thread/thread/ab1d988f2b5373cf
+* see glumpy4bounding box, e.g. function in box
+
 * http://local.wasp.uwa.edu.au/~pbourke/geometry/polygonise/
 * http://code.google.com/p/pythonisosurfaces/
 * http://stackoverflow.com/questions/145838/benefits-of-inline-functions-in-c
