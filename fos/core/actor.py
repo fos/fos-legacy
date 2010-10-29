@@ -6,7 +6,7 @@ class Actor():
         
         # data related information
         self.vertices
-        self.connectivity
+        self.connectivity # triangles
         self.field # scalar, vector, tensor
         self.colormap
         self.texture
