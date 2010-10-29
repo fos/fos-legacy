@@ -4,6 +4,8 @@ Our aim is to collect knowledge, references and feature requests...
 New
 ===
 
+* pyffmpeg
+* pymt packages: http://pymt.eu/wiki/Devel/FeaturesByLibraries
 * read: http://groups.google.com/group/pyglet-users/browse_thread/thread/ab1d988f2b5373cf
 * see glumpy4bounding box, e.g. function in box
 
