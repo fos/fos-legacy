@@ -77,12 +77,13 @@ class FosWindow(ManagedWindow):
     def on_resize(self, width, height):
         print "test", width, height
         
-#        self.set_size(width, height)
+        
         glViewport(0, 0, width, height)
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
         gluPerspective(60., width / float(height), .1, 2000.)
         glMatrixMode(GL_MODELVIEW)
+        #self.set_size(width, height)
         
 #        return pyglet.event.EVENT_HANDLED
 
@@ -94,7 +95,7 @@ class FosWindow(ManagedWindow):
             cam_trans.reset()
         
         if symbol == key.H:
-            self.set_size(100, 100)
+            self.set_size(900, 600)
             
         if symbol == key.P:                
             x,y=self.mouse_x,self.mouse_y
@@ -208,12 +209,12 @@ if __name__ == '__main__':
     a=np.random.random( ( 100, 100, 100) )
     aff = np.eye(4)
     cds = ConnectedSlices(aff,a)
-#    w.actors.append(cds)
+    w.actors.append(cds)
 
-    from fos.actor.network import AttributeNetwork
-    # network actor
-    pos = np.random.random( (10,3) )
-    net = AttributeNetwork(pos)
-    w.actors.append(net)
+#    from fos.actor.network import AttributeNetwork
+#    # network actor
+#    pos = np.random.random( (10,3) )
+#    net = AttributeNetwork(pos)
+#    w.actors.append(net)
     
     

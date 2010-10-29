@@ -1,3 +1,42 @@
+Workflow
+--------
+v,t,s = io.load_surface()
+from fos. actor import Surface
+from fos.core import World
+sa = Surface(v,t,s)
+engine.start()
+w = World(0)
+cam = Camera()
+ag = ActorsGraph()
+camg = CameraGraph()
+ag.add(sa)
+w.add(ag)
+camg.add(cam)
+w.add(camg)
+eng.add(w)
+wi = Window
+wi.attach(w)
+wi.select_camerac(w.camg[0])
+wi.show()
+
+# update attributes
+sa.color = fos.yellow
+sa.update()
+
+# engine has timer
+
+What actors do we support
+-------------------------
+* ConnectedSlices
+* Surface
+* ODFSlicer
+* Network
+* Dandelion
+* InteractiveCurves (for Trackfiles)
+
+* Video
+* Audio
+
 
 What are potential data sources?
 --------------------------------
@@ -22,6 +61,7 @@ And to links, streamlines (=sequence of lines) as connecting elements.
 
 * Streamlines
 ** a set of streamlines (=polygons), where each streamline consists of a sequence of lines
+
 
 ---
 
@@ -83,12 +123,3 @@ http://stackoverflow.com/questions/1182315/python-multicore-processing
 * Idea: zoom in and out of spatio-temporal patterns, spatio-temporal dynamic filter
 
 ---
-
-So what's the upshot: are people really only using graphics.OrderedGroup to sequence their batches, and wrapping the batch calls in immediate mode glEnable/glDisable/glPushMatrix/glPopMatrix calls in on_draw()?
-
-This is all legacy stuff: Enable/Disable go away when you move to shaders, Push/PopMatrix go away with OpenGL 3+... I haven't ever used the fixed-function pipeline in Pyglet (beyond the examples in the distribution), so I can't help you much with that.
-
-
-Once one moves to shaders, it is much simplified: you bind a shader, bind the necessary textures, update the uniform matrices and draw the batch. Rinse and repeat - it is well suited to encapsulating in single class.
-
-----
