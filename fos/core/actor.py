@@ -55,6 +55,10 @@ class Actor():
     # we would need to inherit from object
     def info(self):
         """ Show information about the actor """
+        # 'gl'
+        # 'conf'
+        # 'actor'
+        # debug mode
         pass
     
     def to_raytracer_file(self):

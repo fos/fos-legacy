@@ -14,6 +14,11 @@ class FosWindow(ManagedWindow):
     def __init__(self, **kwargs):
         super(FosWindow, self).__init__(**kwargs)
         
+        
+        self.actors = []
+        self.mouse_x, self.mouse_y = 0,0
+        self._render_lock = RLock()
+        
     def setup(self):
         
         #glClearColor(1.0, 1.0, 0.0, 0.0)
@@ -24,11 +29,9 @@ class FosWindow(ManagedWindow):
 
         #glEnable(GL_BLEND)
         #glBlendFunc(GL_SRC_ALPHA, GL_ONE#_MINUS_SRC_ALPHA)
+        pass
         
-        self._render_lock = RLock()
-    
         
-
     def update(self, dt):
         pass
     ''''
@@ -50,19 +53,19 @@ class FosWindow(ManagedWindow):
         gluLookAt(eyex,eyey,eyez,centx,centy,centz,upx,upy,upz)
         glMultMatrixf(cam_trans.matrix)
         glMultMatrixf(cam_rot.matrix)
-
-        quadratic = gluNewQuadric()
-        #gluQuadricNormals(quadratic, GLU_SMOOTH)
-        #gluQuadricTexture(quadratic, GLU_TRUE)
-        glPushMatrix()
-        glScalef(20.0, 20.0, 20.0)
-        #glTranslatef(20.0, 10.0, -1.5)
-        #gluCylinder(quadratic, 1.0, 1.0, 3.0, 32, 32)
-        gluSphere(quadratic, 10.3, 32, 32)
-        glPopMatrix()
-        gluDeleteQuadric(quadratic)
+#
+#        quadratic = gluNewQuadric()
+#        #gluQuadricNormals(quadratic, GLU_SMOOTH)
+#        #gluQuadricTexture(quadratic, GLU_TRUE)
+#        glPushMatrix()
+#        glScalef(20.0, 20.0, 20.0)
+#        #glTranslatef(20.0, 10.0, -1.5)
+#        #gluCylinder(quadratic, 1.0, 1.0, 3.0, 32, 32)
+#        gluSphere(quadratic, 10.3, 32, 32)
+#        glPopMatrix()
+#        gluDeleteQuadric(quadratic)
         
-        for a in actors:
+        for a in self.actors:
             try:
                 a.draw()
             except:
@@ -73,12 +76,15 @@ class FosWindow(ManagedWindow):
               
     def on_resize(self, width, height):
         print "test", width, height
+        
+#        self.set_size(width, height)
         glViewport(0, 0, width, height)
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
         gluPerspective(60., width / float(height), .1, 2000.)
         glMatrixMode(GL_MODELVIEW)
-        return pyglet.event.EVENT_HANDLED
+        
+#        return pyglet.event.EVENT_HANDLED
 
 
     def on_key_press(self, symbol,modifiers):
@@ -87,9 +93,11 @@ class FosWindow(ManagedWindow):
             cam_rot.reset()
             cam_trans.reset()
         
+        if symbol == key.H:
+            self.set_size(100, 100)
+            
         if symbol == key.P:                
-            global mouse_x, mouse_y
-            x,y=mouse_x,mouse_y
+            x,y=self.mouse_x,self.mouse_y
             nx,ny,nz=screen_to_model(x,y,0)
             fx,fy,fz=screen_to_model(x,y,1)        
             near=(nx,ny,nz)
@@ -104,9 +112,7 @@ class FosWindow(ManagedWindow):
             
 
     def on_mouse_motion(self, x,y,dx,dy):
-    #    print('mouse moved')
-        global mouse_x,mouse_y
-        mouse_x,mouse_y=x,y
+        self.mouse_x, self.mouse_y=x,y
         
     def on_mouse_drag(self, x,y,dx,dy,buttons,modifiers):    
         if buttons & mouse.LEFT:
@@ -174,19 +180,40 @@ def schedule(update,dt=None):
 #        pass
 #        self._render_lock.acquire()
 #
-#        self._render_lock.release()
+#        self._self.mouse_xlock.release()
 
 #Global variables
-mouse_x,mouse_y=0,0
-actors=[]
-cam_rot = Interaction()
-cam_trans = Interaction()
-
-a=np.random.random( ( 100, 100, 100) )
-aff = np.eye(4)
-cds = ConnectedSlices(aff,a)
-actors.append(cds)
+#mouse_x,mouse_y=0,0
+#actors=[]
+#cam_rot = Interaction()
+#cam_trans = Interaction()
+#
+#a=np.random.random( ( 100, 100, 100) )
+#aff = np.eye(4)
+#cds = ConnectedSlices(aff,a)
+#actors.append(cds)
 
 
 if __name__ == '__main__':
-    FosWindow()
+    w = FosWindow(#width=1024,
+             #height=768,
+             caption='The Light Machine',
+             resizable=True,
+             vsync=False)
+    
+    cam_rot = Interaction()
+    cam_trans = Interaction()
+    
+    # connected slices actor
+    a=np.random.random( ( 100, 100, 100) )
+    aff = np.eye(4)
+    cds = ConnectedSlices(aff,a)
+#    w.actors.append(cds)
+
+    from fos.actor.network import AttributeNetwork
+    # network actor
+    pos = np.random.random( (10,3) )
+    net = AttributeNetwork(pos)
+    w.actors.append(net)
+    
+    

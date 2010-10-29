@@ -18,7 +18,7 @@ class Engine():
         self._window = FosWindow(width=1024,
                                  height=768,
                                  caption='The Light Machine',
-                                 resizable=False,
+                                 resizable=True,
                                  vsync=False)
         
         # pyglet.window.Window
