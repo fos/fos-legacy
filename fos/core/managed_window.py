@@ -19,7 +19,7 @@ class ManagedWindow(Window):
     default_win_args = dict(width=600,
                             height=500,
                             vsync=False,
-                            resizable=True)
+                            resizable=False)
 
     def __init__(self, **win_args):
         """

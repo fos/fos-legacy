@@ -1,27 +1,4 @@
-Workflow
---------
-v,t,s = io.load_surface()
-from fos. actor import Surface
-from fos.core import World
-sa = Surface(v,t,s)
-engine.start()
-w = World(0)
-cam = Camera()
-ag = ActorsGraph()
-camg = CameraGraph()
-ag.add(sa)
-w.add(ag)
-camg.add(cam)
-w.add(camg)
-eng.add(w)
-wi = Window
-wi.attach(w)
-wi.select_camerac(w.camg[0])
-wi.show()
 
-# update attributes
-sa.color = fos.yellow
-sa.update()
 
 # engine has timer
 

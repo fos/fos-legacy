@@ -3,12 +3,13 @@ import numpy as np
 from fos.lib import pyglet
 from fos.lib.pyglet.gl import *
 from fos.core.arrayimage import ArrayInterfaceImage
+from fos.core.actor import Actor
 
 #sprite = pyglet.sprite.Sprite(img, x=0, y=0)
 #sprite.position = (-sprite.width/2, - sprite.height/2)
 #actors.append(sprite)
 
-class ConnectedSlices():
+class ConnectedSlices(Actor):
 
     def __init__(self,affine,data):
 

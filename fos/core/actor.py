@@ -5,28 +5,28 @@ class Actor():
     def __init__(self):
         
         # data related information
-        self.vertices
-        self.connectivity
-        self.field # scalar, vector, tensor
-        self.colormap
-        self.texture
+        self.vertices = None
+        self.connectivity = None
+        self.field = None # scalar, vector, tensor
+        self.colormap = None
+        self.texture = None
         
         # time related information
-        self.lifespan
+        self.lifespan = None
         # connectivity across time steps
         
         # movement related information 
-        self.position
-        self.velocity
-        self.acceleration
-        self.center # center of mass / center of bounding box
-        self.orientation # of the bounding volume, orientation on the local coordinate system
-        self.local_coord_system # from the global opengl coordinate system
+        self.position = None
+        self.velocity = None
+        self.acceleration = None
+        self.center = None # center of mass / center of bounding box
+        self.orientation = None # of the bounding volume, orientation on the local coordinate system
+        self.local_coord_system = None # from the global opengl coordinate system
         
         # event related information
-        self.event_queue
+        self.event_queue = None
         # mouse or keyboard events on the actor
-        self.event_handlers
+        self.event_handlers = None
         # related: menu options for the actor
         
         # is the object in a group?

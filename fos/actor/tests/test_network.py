@@ -14,3 +14,5 @@ def test_networkcreation():
     
     attrn = AttributeNetwork({'node_position' : node_position})
     
+    
+    assert_equal(1,0)

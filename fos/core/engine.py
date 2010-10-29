@@ -1,61 +1,63 @@
-from math import sin, cos,sqrt
 import numpy as np
 
-#pyglet.options['debug_gl']=False
-
+from fos.lib import pyglet
+from fos.core.world import World
+from fos.actor.volslicer import ConnectedSlices
 from fos.core.fos_window import FosWindow
-import fos.core.collision as cll
-
+from fos.core.camera import DefaultCamera
 
 class Engine():
 
     def __init__(self):        
-        self._window = None
-        
+        self.worlds = []
     
     def run(self):
+        pyglet.clock.schedule(self.update, 1/60.0)
+                
+    def add(self, world):
+        self.worlds.append(world)
         
-        self._window = FosWindow(width=1024,
-                                 height=768,
-                                 caption='The Light Machine',
-                                 resizable=True,
-                                 vsync=False)
-        
-        # pyglet.window.Window
-#        self._window = FosWindow(width=self.width,\
-#                              height=self.height,\
-#                              caption='The Light Machine',\
-#                              resizable=True,\
-#                              vsync=False)
-#                              #config=self.config)
-        
+    def update(self, dt):
+        print "dt", dt    
+        # this should call the update of all the actors
+        # in a world
+                    
+if __name__ == '__main__':
+    
+    eng = Engine()
+    
+    # create a world
+    w = World(0)
+    
+    # create default camera
+    cam = DefaultCamera()
+    
+    # add camera
+    w.add(cam)
+    
+    # create image viewr
+    a=np.random.random( ( 100, 100, 100) )
+    aff = np.eye(4)
+    cds = ConnectedSlices(aff,a)
+    
+    # add cds to world
+    w.add(cds)
+    
+    # add world to engine
+    eng.add(w)
+    
+    # create a window
+    wi = FosWindow()
+    
+    # attach window to world
+    wi.attach(w)
+    
+    wi2 = FosWindow()
+    # attach window to world
+    wi2.attach(w)
+    
+    # run the engine
+    eng.run()
+    
 
-#
-#        schedule(update)
-#                
-#        print('NeoFos started')
-#        # call the event loop of FosWindow, which subclasses
-#        # ManagedWindow that implements its own event loop
-#        pyglet.app.run()
-        
-
-    def show(self):
-        """
-        Creates and displays window, or activates it
-        (gives it focus) if it has already been created.
-        """
-        print "in show"
-        if self._window and not self._window.has_exit:
-            self._window.activate()
-        else:
-            self._win_args['visible'] = True
-            self.axes.reset_resources()
-            
-            #self._window = PlotWindow(self, **self._win_args)
-            
-
-Engine().run()
-# show the one and only window for now
-#Engine().show()
-
-
+    
