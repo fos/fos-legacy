@@ -11,21 +11,51 @@ class Engine():
 
     def __init__(self):        
         self.worlds = []
-    
+        
+        self.clock = pyglet.clock.Clock()
+        self.clock.schedule(self.update)
+                     
     def run(self):
-        pyglet.clock.schedule(self.update, 1/60.0)
-                
+        self.running = True
+        
+        while self.running:
+            dt = self.clock.tick()
+            print "dt", dt    
+                        
     def add(self, world):
         self.worlds.append(world)
-        
+                
     def update(self, dt):
         print "dt", dt    
         # this should call the update of all the actors
         # in a world
-                    
+        
+    def stop(self):
+        self.running = False
+        
+
+'''
+window = pyglet.window.Window()
+
+def test(dt):
+    print "dt", dt
+    
+pyglet.clock.schedule(test)
+fps_display = pyglet.clock.ClockDisplay()
+
+@window.event
+def on_draw():
+    window.clear()
+    fps_display.draw()
+
+pyglet.app.run()
+'''
+#clock.schedule_interval(self.update, 1/60.)
+
 if __name__ == '__main__':
     
-    eng = Engine()
+#    eng = Engine()
+#    eng.run()
     
     # create a world
     w = World(0)
@@ -37,19 +67,14 @@ if __name__ == '__main__':
     w.add(cam)
     
     # create image viewr
-    a=np.random.random( ( 100, 100, 100) )
+    a=np.random.random( (100, 100, 100) )
     aff = np.eye(4)
-    cds = ConnectedSlices(aff,a)
-    
-    # create frame rate display
-    dis = FPSDisplay()
-    w.add(dis)
-    
+    cds = ConnectedSlices(aff,a)    
     # add cds to world
     w.add(cds)
     
     # add world to engine
-    eng.add(w)
+    #    eng.add(w)
     
     # create a window
     wi = FosWindow()
@@ -62,7 +87,4 @@ if __name__ == '__main__':
 #    wi2.attach(w)
     
     # run the engine
-    eng.run()
-    
-
-    
+#    eng.run()

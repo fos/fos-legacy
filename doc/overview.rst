@@ -4,6 +4,7 @@ Our aim is to collect knowledge, references and feature requests...
 New
 ===
 
+* http://github.com/matthew-brett/miniglumpy
 * pyffmpeg
 * pymt packages: http://pymt.eu/wiki/Devel/FeaturesByLibraries
 * read: http://groups.google.com/group/pyglet-users/browse_thread/thread/ab1d988f2b5373cf

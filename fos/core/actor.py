@@ -1,8 +1,21 @@
+import numpy as np
 
 class Actor():
     """ Define a visualization object in Fos """
     
-    def __init__(self):
+    def __init__(self, affine = None, boundingbox = None, **kwargs):
+        """ Create an actor
+        
+        Parameters
+        ----------
+        
+        affine : 4x4
+        
+        boundingbox : 
+            defined by 4 points
+        
+        
+        """
         
         # data related information
         self.vertices = None
@@ -30,7 +43,15 @@ class Actor():
         # related: menu options for the actor
         
         # is the object in a group?
-        # 
+        
+        # defining the OBB
+        self.center_point = None
+        # orthogonal unit vectors
+        self.orientation = None
+        # box halfwidths along each axis
+        self.halfwidths = None
+        
+        # compute an axis aligned bounding box
         
     def setup(self):
         """ Data preparation """
