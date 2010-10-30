@@ -21,7 +21,7 @@ class FosWindow(ManagedWindow):
         
     def setup(self):
         
-        #glClearColor(1.0, 1.0, 0.0, 0.0)
+        #glClearColor(1.0, 0.0, 0.0, 0.0)
         #glClearDepth(1.0)
 #
 #        glDepthFunc(GL_LESS)
@@ -53,7 +53,11 @@ class FosWindow(ManagedWindow):
               
     def on_resize(self, width, height):
         print "test", width, height
-        
+        '''
+        if self._needs_resize:
+            self.set_size(width, height)
+            self._needs_resize = False
+        '''
         glViewport(0, 0, width, height)
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()

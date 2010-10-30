@@ -3,6 +3,7 @@ import numpy as np
 from fos.lib import pyglet
 from fos.core.world import World
 from fos.actor.volslicer import ConnectedSlices
+from fos.actor.fpsdisplay import FPSDisplay
 from fos.core.fos_window import FosWindow
 from fos.core.camera import DefaultCamera
 
@@ -40,6 +41,10 @@ if __name__ == '__main__':
     aff = np.eye(4)
     cds = ConnectedSlices(aff,a)
     
+    # create frame rate display
+    dis = FPSDisplay()
+    w.add(dis)
+    
     # add cds to world
     w.add(cds)
     
@@ -52,9 +57,9 @@ if __name__ == '__main__':
     # attach window to world
     wi.attach(w)
     
-    wi2 = FosWindow()
-    # attach window to world
-    wi2.attach(w)
+#    wi2 = FosWindow()
+#    # attach window to world
+#    wi2.attach(w)
     
     # run the engine
     eng.run()
