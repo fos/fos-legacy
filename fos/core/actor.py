@@ -3,16 +3,48 @@ import numpy as np
 class Actor():
     """ Define a visualization object in Fos """
     
-    def __init__(self, affine = None, boundingbox = None, **kwargs):
+    def __init__(self,
+                 affine = None,
+                 aabb = None,
+                 force_center_data = False,
+                 **kwargs):
         """ Create an actor
         
         Parameters
         ----------
         
-        affine : 4x4
-        
-        boundingbox : 
-            defined by 4 points
+        affine : 4x4 array
+            the affine is expected to be normal, i.e. it has only
+            rotational and translational components, but no shears
+            the affine is applied to the input vertices data to position
+            the actor in the world space. If set to none, an affine is
+            generated to positions the actor optimally for the camera view
+            
+        aabb : (center, orientation, halfwidths) or (corner1, corner2)
+            the axis-aligned bounding box. axis-aligned means aligned
+            with the world coordinate system axes
+            
+            center : 3x1 array
+                the center point of the aabb
+            orientation : 3x3 array
+                orthogonal unit vectors
+            halfwidths : 3x1 array
+                box halfwidths along each axis
+                
+            alternatively, you can define the axis aligned bounding-box
+            using two opposite corner points of the cube
+            corner1 : 3x1 array
+                lower-bottom-left point of the box when look into z direction
+            corner2 : 3x1 array
+                upper-top-right point of the box
+                
+            if set to None, an axis aligned boundingbox is computed
+            from the input vertices
+                
+        force_center_data : boolean
+            if set to true, the mean of vertices location is subtracted from
+            all the vertices. this is useful to compute a better bounding
+            box and if the data has no meaningful affine
         
         
         """
@@ -28,13 +60,9 @@ class Actor():
         self.lifespan = None
         # connectivity across time steps
         
-        # movement related information 
-        self.position = None
+        # movement related information. use the 
         self.velocity = None
         self.acceleration = None
-        self.center = None # center of mass / center of bounding box
-        self.orientation = None # of the bounding volume, orientation on the local coordinate system
-        self.local_coord_system = None # from the global opengl coordinate system
         
         # event related information
         self.event_queue = None
@@ -42,16 +70,26 @@ class Actor():
         self.event_handlers = None
         # related: menu options for the actor
         
-        # is the object in a group?
         
-        # defining the OBB
-        self.center_point = None
-        # orthogonal unit vectors
-        self.orientation = None
-        # box halfwidths along each axis
-        self.halfwidths = None
+        # if no aabb is given, compute one
+        if aabb == None:
+            # compute an axis aligned bounding box
+            self.aabb = self.update_aabb()
+        else:
+            # otherwise set to given aabb
+            if len(aabb) == 3:
+                # store directly
+                self.aabb = aabb
+                
+            elif len(aabb) == 2:
+                # two points given. convert to 3-tuple
+                # center = computemean
+                # half_x = abs(point2[0] - point1[0]) / 2.
+                # half_y = abs(point2[1] - point1[1]) / 2.
+                # half_z = abs(point2[2] - point1[3]) / 2.
+                # orientation are the default vectors [1,0,0], [0,1,0], [0,0,1]
+                self.aabb = aabb
         
-        # compute an axis aligned bounding box
         
     def setup(self):
         """ Data preparation """
@@ -90,8 +128,17 @@ class Actor():
         """ Process the pick ray like intersecting with the actor """
         pass
     
-    def bounding_box(self):
-        """ Compute the bounding box """
+    def update_aabb(self):
+        """ Updates the axis aligned bounding box. Either on object
+        creation without a bounding box given, or after a dynamic change
+        of the internal structure, e.g. changes in position of vertices """
+        pass
+        # if self.aabb = None
+        #     self.aabb = self.bounding_box()
+    
+    def update_aabb(self):
+        """ Compute the bounding box using the internal structure
+        of the actor, e.g. position of vertices """
         pass
     
     def bounding_sphere(self):

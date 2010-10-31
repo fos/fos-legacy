@@ -1,4 +1,8 @@
-from fos.lib import pyglet
+
+# it is sufficient to import "pyglet" here once
+from fos.lib import import_thirdparty
+pyglet = import_thirdparty("pyglet")
+
 from fos.core.actor_graph import ActorGraph
 from fos.core.camera_graph import CameraGraph
 from fos.core.camera import Camera

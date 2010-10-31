@@ -1,26 +1,28 @@
 import numpy as np
 
-from fos.lib import pyglet
+#from fos.lib import pyglet
+
 from fos.core.world import World
-from fos.actor.volslicer import ConnectedSlices
-from fos.actor.fpsdisplay import FPSDisplay
 from fos.core.fos_window import FosWindow
 from fos.core.camera import DefaultCamera
+
+# actors
+from fos.actor.volslicer import ConnectedSlices
 
 class Engine():
 
     def __init__(self):        
         self.worlds = []
         
-        self.clock = pyglet.clock.Clock()
-        self.clock.schedule(self.update)
+#        self.clock = pyglet.clock.Clock()
+#        self.clock.schedule(self.update)
                      
     def run(self):
         self.running = True
         
-        while self.running:
-            dt = self.clock.tick()
-            print "dt", dt    
+#        while self.running:
+#            dt = self.clock.tick()
+#            print "dt", dt    
                         
     def add(self, world):
         self.worlds.append(world)
@@ -72,7 +74,7 @@ if __name__ == '__main__':
     cds = ConnectedSlices(aff,a)    
     # add cds to world
     w.add(cds)
-    
+#    
     # add world to engine
     #    eng.add(w)
     

@@ -1614,6 +1614,8 @@ class FPSDisplay(object):
     def __init__(self, window):
         from time import time
         from pyglet.text import Label
+        print "in fpsdisplay", pyglet.text.__file__
+        
         self.label = Label('', x=10, y=10, 
                            font_size=24, bold=True,
                            color=(127, 127, 127, 127))

@@ -3,10 +3,13 @@ from fos.core.managed_window import ManagedWindow
 from fos.lib import pyglet
 from fos.lib.pyglet.window import key,mouse
 
+
 from threading import RLock
 import numpy as np
 
-        
+from fos.lib.pyglet.clock import Clock
+from fos.lib.pyglet.window import FPSDisplay
+
 class FosWindow(ManagedWindow):
     
     def __init__(self, **kwargs):
@@ -18,13 +21,11 @@ class FosWindow(ManagedWindow):
         # the world that is attached to this window
         self._world = None
         
-        # we have an update label
-        self.uplabel = pyglet.text.Label('0.0', font_size=10,
-                                         x=self.width//2, y=self.height//2, 
-                                         anchor_x='center', anchor_y='center')
+        # the frame rate display from pyglet
+        self.fps_display = FPSDisplay(self)
         
     def setup(self):
-        
+        pass
         #glClearColor(1.0, 0.0, 0.0, 0.0)
         #glClearDepth(1.0)
 #
@@ -33,12 +34,13 @@ class FosWindow(ManagedWindow):
 
         #glEnable(GL_BLEND)
         #glBlendFunc(GL_SRC_ALPHA, GL_ONE#_MINUS_SRC_ALPHA)
-        pass
+        
     
     def update(self, dt):
         if dt != 0:
-            self.uplabel.text = str(round(1.0/dt))    
+            print "freq", round(1.0/dt)
         
+    
     
     def attach(self, world):
         self._world = world
@@ -51,15 +53,14 @@ class FosWindow(ManagedWindow):
     
         self._world.cg.cameras[0].draw()
     
-        # draw label
-        self.uplabel.draw()
-    
         for a in self._world.ag.actors:
             try:
                 a.draw()
             except:
                 pass
-            
+        
+        self.fps_display.draw()
+        
         self._render_lock.release()
     
               

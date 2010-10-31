@@ -49,16 +49,23 @@ class ManagedWindow(Window):
             gl_lock.release()
 
         clock = Clock()
-        clock.set_fps_limit(self.fps_limit)
+        # this is deprecated
+#        clock.set_fps_limit(self.fps_limit)
+        clock.schedule_interval(self.update, 1.0/60)
+        
         while not self.has_exit:
-            dt = clock.tick()
+            # the clock needs to tick but we are not using dt
+            # dt = clock.tick()
+            clock.tick()
             gl_lock.acquire()
             try:
                 try:
                     self.switch_to()
                     self.dispatch_events()
                     self.clear()
-                    self.update(dt)
+                    # the update is called as a scheduled function
+                    # using the clock, not in the event loop anymore
+#                    self.update(dt)
                     self.draw()
                     self.flip()
                 except Exception, e:
