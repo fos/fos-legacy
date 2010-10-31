@@ -34,25 +34,6 @@ class Engine():
         
     def stop(self):
         self.running = False
-        
-
-'''
-window = pyglet.window.Window()
-
-def test(dt):
-    print "dt", dt
-    
-pyglet.clock.schedule(test)
-fps_display = pyglet.clock.ClockDisplay()
-
-@window.event
-def on_draw():
-    window.clear()
-    fps_display.draw()
-
-pyglet.app.run()
-'''
-#clock.schedule_interval(self.update, 1/60.)
 
 if __name__ == '__main__':
     
@@ -79,14 +60,26 @@ if __name__ == '__main__':
     #    eng.add(w)
     
     # create a window
-    wi = FosWindow()
-    
     # attach window to world
+    wi = FosWindow()
     wi.attach(w)
     
-#    wi2 = FosWindow()
-#    # attach window to world
-#    wi2.attach(w)
+    wi2 = FosWindow()
+    wi2.attach(w)
+
+    wi3 = FosWindow()
+    wi3.attach(w)
+
+    wi4 = FosWindow()
+    wi4.attach(w)
     
+    wi5 = FosWindow()
+    wi5.attach(w)
+
+    wi6 = FosWindow()
+    wi6.attach(w)
+    
+    wi7 = FosWindow()
+    wi7.attach(w)
     # run the engine
 #    eng.run()

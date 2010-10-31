@@ -1,12 +1,9 @@
+import numpy as np
+
 from fos.lib.pyglet.gl import *
 from fos.core.managed_window import ManagedWindow
 from fos.lib import pyglet
 from fos.lib.pyglet.window import key,mouse
-
-
-from threading import RLock
-import numpy as np
-
 from fos.lib.pyglet.clock import Clock
 from fos.lib.pyglet.window import FPSDisplay
 
@@ -16,13 +13,15 @@ class FosWindow(ManagedWindow):
         super(FosWindow, self).__init__(**kwargs)
         
         self.mouse_x, self.mouse_y = 0,0
-        self._render_lock = RLock()
-
+        
         # the world that is attached to this window
         self._world = None
         
         # the frame rate display from pyglet
         self.fps_display = FPSDisplay(self)
+        
+        # create a scheduled function
+        self.update_dt = 1.0/100
         
     def setup(self):
         pass
@@ -38,15 +37,15 @@ class FosWindow(ManagedWindow):
     
     def update(self, dt):
         if dt != 0:
-            print "freq", round(1.0/dt)
-        
-    
+            #print "freq", round(1.0/dt)
+            pass
+
     
     def attach(self, world):
         self._world = world
             
     def draw(self):   
-        self._render_lock.acquire()
+        self._world._render_lock.acquire()
         
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)    
         glLoadIdentity()
@@ -61,7 +60,7 @@ class FosWindow(ManagedWindow):
         
         self.fps_display.draw()
         
-        self._render_lock.release()
+        self._world._render_lock.release()
     
               
     def on_resize(self, width, height):

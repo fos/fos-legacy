@@ -51,13 +51,15 @@ class ManagedWindow(Window):
         clock = Clock()
         # this is deprecated
 #        clock.set_fps_limit(self.fps_limit)
-        clock.schedule_interval(self.update, 1.0/60)
+        clock.schedule_interval(self.update, self.update_dt)
+        #clock.schedule(self.update)
         
         while not self.has_exit:
             # the clock needs to tick but we are not using dt
             # dt = clock.tick()
-            clock.tick()
+            
             gl_lock.acquire()
+            clock.tick(poll=False)
             try:
                 try:
                     self.switch_to()
@@ -74,13 +76,6 @@ class ManagedWindow(Window):
             finally:
                 gl_lock.release()
         super(ManagedWindow, self).close()
-
-    def close(self):
-        """
-        Closes the window.
-        """
-        print "in managed window close"
-        self.has_exit = True
 
     def setup(self):
         """

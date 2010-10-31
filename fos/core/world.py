@@ -1,3 +1,4 @@
+from threading import RLock
 
 # it is sufficient to import "pyglet" here once
 from fos.lib import import_thirdparty
@@ -14,6 +15,8 @@ class World():
         self.id = id
         self.ag = ActorGraph()
         self.cg = CameraGraph()
+        
+        self._render_lock = RLock()
         
     def add(self, obj):
         if isinstance(obj, Actor):
