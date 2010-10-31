@@ -21,7 +21,7 @@ class FosWindow(ManagedWindow):
         self.fps_display = FPSDisplay(self)
         
         # create a scheduled function
-        self.update_dt = 1.0/100
+        #self.update_dt = 1.0/100
         
     def setup(self):
         pass
@@ -31,8 +31,8 @@ class FosWindow(ManagedWindow):
 #        glDepthFunc(GL_LESS)
 #        glEnable(GL_DEPTH_TEST)
 
-        #glEnable(GL_BLEND)
-        #glBlendFunc(GL_SRC_ALPHA, GL_ONE#_MINUS_SRC_ALPHA)
+        glEnable(GL_BLEND)
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
         
     
     def update(self, dt):

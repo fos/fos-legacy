@@ -1,5 +1,11 @@
+import numpy as np
 from fos.lib import pyglet
-from fos.lib.pyglet import *
+from fos.lib.pyglet.gl import *
+from fos.lib.pyglet.graphics import Batch
+from fos.core.actor import Actor
+
+def vec(*args):
+    return (GLfloat * len(args))(*args)
 
 class CommonSurfaceGroup(pyglet.graphics.Group):
     def set_state(self):
@@ -44,9 +50,11 @@ class IlluminatedSurfaceGroup(pyglet.graphics.Group):
         glDisable(GL_LIGHTING)
     
 
-class Surface(object):
+class Surface(Actor):
 
-    def __init__(self,values,vertices,faces,batch,group=None):
+    def __init__(self,values,vertices,faces,batch=None,group=None):
+        
+        self.batch=Batch()
             
         inds=faces.ravel().tolist()
         verx=vertices.ravel().tolist()
@@ -72,16 +80,30 @@ class Surface(object):
             
         norms=np.array(normals).ravel().tolist()
         
-        self.vertex_list = batch.add_indexed(len(vertices),\
+        '''
+        self.vertex_list = self.batch.add_indexed(len(vertices),\
                                                  GL_TRIANGLES,\
                                                  group,\
                                                  inds,\
                                                  ('v3d/static',verx),\
                                                  ('n3d/static',norms),\
                                                  ('c3d/static',colors))
-
-    def update(self):
-        pass
+                                                 
+        '''
+        self.vertex_list = self.batch.add(len(vertices),\
+                                                 GL_TRIANGLES,\
+                                                 group,\
+                                                 ('v3d/static',(0,100,-1,-100,-100,-1,100,-100,-1)),\
+                                                 ('n3d/static',(0,0,1,0,0,1,0,0,1)),\
+                                                 ('c3d/static',(1,0,0,0,1,0,0,0,1)))
+        
+    def draw(self):
+        print 'batch draw in surf'
+        self.batch.draw()
+        
+    def update(self,dt):
+        pass    
+    
     
     def delete(self):
         self.vertex_list.delete()

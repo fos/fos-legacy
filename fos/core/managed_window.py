@@ -51,7 +51,7 @@ class ManagedWindow(Window):
         clock = Clock()
         # this is deprecated
 #        clock.set_fps_limit(self.fps_limit)
-        clock.schedule_interval(self.update, self.update_dt)
+        clock.schedule_interval(self.update, 1/60.)
         #clock.schedule(self.update)
         
         while not self.has_exit:
