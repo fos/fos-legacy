@@ -5,6 +5,7 @@ import numpy as np
 from fos.core.world import World
 from fos.core.fos_window import FosWindow
 from fos.core.camera import DefaultCamera
+from fos.actor.cubes import Cubes
 
 # actors
 from fos.actor.volslicer import ConnectedSlices
@@ -69,21 +70,20 @@ if __name__ == '__main__':
     faces=np.array([[0,1,2]])
     values=255*np.ones(3)                   
         
-    
-    
+
     from fos.actor.surf import Surface
     from fos.actor.surf import CommonSurfaceGroup, IlluminatedSurfaceGroup
     
     group=CommonSurfaceGroup()#IlluminatedSurfaceGroup()#CommonSurfaceGroup()
-    
     s=Surface(values,vertices,faces,group)
-    
-    w.add(s)
-    
+#    w.add(s)
+
+    mycubes = Cubes( np.array([20.0,0.0,0.0]) )
+    w.add(mycubes)
     # create image viewr
-    a=np.random.random( (100, 100, 100) )
-    aff = np.eye(4)
-    cds = ConnectedSlices(aff,a)
+#    a=np.random.random( (100, 100, 100) )
+#    aff = np.eye(4)
+#    cds = ConnectedSlices(aff,a)
     
     #add cds to world
     #w.add(cds)

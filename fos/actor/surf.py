@@ -98,7 +98,7 @@ class Surface(Actor):
                                                  ('c3d/static',(1,0,0,0,1,0,0,0,1)))
         
     def draw(self):
-        print 'batch draw in surf'
+#        print 'batch draw in surf'
         self.batch.draw()
         
     def update(self,dt):
