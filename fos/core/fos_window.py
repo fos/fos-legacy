@@ -29,16 +29,13 @@ class FosWindow(ManagedWindow):
         # create a scheduled function
         #self.update_dt = 1.0/100
         
-    def setup(self):
-           
+    def setup(self):           
                 
         r,g,b,a = self.bgcolor
         glClearColor(r,g,b,a)
         glClearDepth(1.0)
-        #
         glDepthFunc(GL_LESS)
         glEnable(GL_DEPTH_TEST)
-
         glEnable(GL_BLEND)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
         

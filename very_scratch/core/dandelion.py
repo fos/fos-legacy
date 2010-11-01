@@ -651,6 +651,10 @@ import dipy.core.track_performance as pf
 T=[pf.approximate_ei_trajectory(t) for t in T]
 
 #slg=SmoothLineGroup()
+#'''
+ic=InteractiveCurves(T)
+actors.append(ic)
+#'''
 
 ic=InteractiveCurves(T2)
 actors.append(ic)

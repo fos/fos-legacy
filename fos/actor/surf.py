@@ -79,8 +79,7 @@ class Surface(Actor):
         normals=(normals/div)
             
         norms=np.array(normals).ravel().tolist()
-        
-        '''
+    
         self.vertex_list = self.batch.add_indexed(len(vertices),\
                                                  GL_TRIANGLES,\
                                                  group,\
@@ -89,28 +88,11 @@ class Surface(Actor):
                                                  ('n3d/static',norms),\
                                                  ('c3d/static',colors))
                                                  
-        '''
-        self.vertex_list = self.batch.add(len(vertices),\
-                                                 GL_TRIANGLES,\
-                                                 group,\
-                                                 ('v3d/static',(0,100,-1,-100,-100,-1,100,-100,-1)),\
-                                                 ('n3d/static',(0,0,1,0,0,1,0,0,1)),\
-                                                 ('c4d/static',(1,0,0,0.9,0,1,0,0.1,0,0,1,.1)))
-        
-        self.vertex_list2 = self.batch.add(len(vertices),\
-                                                 GL_TRIANGLES,\
-                                                 group,\
-                                                 ('v3d/static',(0,200,-25,-100,-100,-25,100,-100,-25)),\
-                                                 ('n3d/static',(0,0,1,0,0,1,0,0,1)),\
-                                                 ('c4d/static',(1,0,0,0.1,0,1,0,0.1,0,0,1,.1)))
-        
-        
-    def draw(self):        
+    def draw(self):
         self.batch.draw()
         
     def update(self,dt):
         pass    
-    
-    
+        
     def delete(self):
         self.vertex_list.delete()
