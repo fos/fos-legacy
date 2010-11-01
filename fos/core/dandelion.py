@@ -476,7 +476,7 @@ actors.append(sprite)
 #'''
 
 
-import dipy.io.trackvis as tv
+import nibabel.trackvis as tv
 
 '''
 T_, _ = tv.read('/home/eg01/Devel/dipy/dipy/core/bench/data/tracks300.trk.gz')
@@ -497,7 +497,7 @@ T=[i[0] for i in streams]
 
 del streams
 
-#T=T[:2000]
+T=T[:1000]
 
 #'''
 import dipy.core.track_performance as pf
