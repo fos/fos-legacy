@@ -46,7 +46,7 @@ class FosWindow(ManagedWindow):
         self._world = world
             
     def draw(self):   
-        self._world._render_lock.acquire()
+#        self._world._render_lock.acquire()
         
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)    
         glLoadIdentity()
@@ -61,7 +61,7 @@ class FosWindow(ManagedWindow):
         
         self.fps_display.draw()
         
-        self._world._render_lock.release()
+#        self._world._render_lock.release()
     
               
     def on_resize(self, width, height):

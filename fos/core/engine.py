@@ -71,11 +71,11 @@ if __name__ == '__main__':
     values=255*np.ones(3)                   
         
 
-    from fos.actor.surf import Surface
-    from fos.actor.surf import CommonSurfaceGroup, IlluminatedSurfaceGroup
-    
-    group=CommonSurfaceGroup()#IlluminatedSurfaceGroup()#CommonSurfaceGroup()
-    s=Surface(values,vertices,faces,group)
+#    from fos.actor.surf import Surface
+#    from fos.actor.surf import CommonSurfaceGroup, IlluminatedSurfaceGroup
+#    
+#    group=CommonSurfaceGroup()#IlluminatedSurfaceGroup()#CommonSurfaceGroup()
+#    s=Surface(values,vertices,faces,group)
 #    w.add(s)
 
     mycubes = Cubes( np.array([20.0,0.0,0.0]) )

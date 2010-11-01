@@ -15,9 +15,9 @@ class ManagedWindow(Window):
     in a separate thread. Behavior is added by creating a subclass
     which overrides setup, update, and/or draw.
     """
-    fps_limit = 60
-    default_win_args = dict(width=600,
-                            height=500,
+    fps_limit = 80
+    default_win_args = dict(width=640,
+                            height=480,
                             vsync=False,
                             resizable=False)
 

@@ -1,6 +1,7 @@
 import numpy as np
 from itertools import chain, islice, product, repeat, cycle, izip
 
+from fos.actor.surf import CommonSurfaceGroup, IlluminatedSurfaceGroup
 from fos.core.world import World
 from fos.lib.pyglet.gl import *
 
@@ -164,7 +165,7 @@ class Cubes(Actor):
         self.batch=Batch()
         
         # just one cube
-        e2 = 10. / 2
+        e2 = 1. / 2
         verts = list(product(*repeat([-e2, +e2], 3)))
         faces = [
             [0, 1, 3, 2], # left
@@ -177,16 +178,37 @@ class Cubes(Actor):
         
         oc = Polyhedron(verts, faces)
         glprim = oc.get_glprimitive()
-
-        self.vertex_list = self.batch.add_indexed(len(glprim.glvertices) / 3,\
+        group = IlluminatedSurfaceGroup()
+        self.vertex_list = []
+        
+        self.vertex_list.append(self.batch.add_indexed(len(glprim.glvertices) / 3,\
                                                  GL_TRIANGLES,\
                                                  None,\
                                                  list(glprim.glindices),\
-                                                 ('v3f/static',list(glprim.glvertices)),\
+                                                 ('v3f/static',np.array(glprim.glvertices)),\
                                                  ('n3f/static',list(glprim.glnormals)),\
                                                  ('c4B/static',list(glprim.glcolors))
-                                                  \
-                                                 )
+                                                 ) )
+
+        ver = np.array(glprim.glvertices)
+        for i in range(1,300):
+            self.vertex_list.append(self.batch.add_indexed(len(glprim.glvertices) / 3,\
+                                                 GL_TRIANGLES,\
+                                                 None,\
+                                                 list(glprim.glindices),\
+                                                 ('v3f/static',ver+(i*1)),\
+                                                 ('n3f/static',list(glprim.glnormals)),\
+                                                 ('c4B/static',list(glprim.glcolors))
+                                                 ))
+            self.vertex_list.append(self.batch.add_indexed(len(glprim.glvertices) / 3,\
+                                                 GL_TRIANGLES,\
+                                                 None,\
+                                                 list(glprim.glindices),\
+                                                 ('v3f/static',ver-(i*1)),\
+                                                 ('n3f/static',list(glprim.glnormals)),\
+                                                 ('c4B/static',list(glprim.glcolors))
+                                                 ))            
+
         
     def draw(self):
 
