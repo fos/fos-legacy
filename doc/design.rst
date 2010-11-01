@@ -1,4 +1,20 @@
 
+
+# engine has timer
+
+What actors do we support
+-------------------------
+* ConnectedSlices
+* Surface
+* ODFSlicer
+* Network
+* Dandelion
+* InteractiveCurves (for Trackfiles)
+
+* Video
+* Audio
+
+
 What are potential data sources?
 --------------------------------
 
@@ -22,6 +38,7 @@ And to links, streamlines (=sequence of lines) as connecting elements.
 
 * Streamlines
 ** a set of streamlines (=polygons), where each streamline consists of a sequence of lines
+
 
 ---
 
@@ -80,5 +97,6 @@ Comments:
 * Multithreading and scheduling is also something important. We need very fast threads.
 http://stackoverflow.com/questions/1961203/python-separating-the-gui-process-from-the-core-logic-process
 http://stackoverflow.com/questions/1182315/python-multicore-processing
-
 * Idea: zoom in and out of spatio-temporal patterns, spatio-temporal dynamic filter
+
+---
