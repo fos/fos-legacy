@@ -13,7 +13,7 @@ class FosWindow(ManagedWindow):
     def __init__(self, bgcolor=None, **kwargs):
         super(FosWindow, self).__init__(**kwargs)
         
-        if color==None:
+        if bgcolor==None:
             self.bgcolor=color.black
         else:
             self.bgcolor=bgcolor        
