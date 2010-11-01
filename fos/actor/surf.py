@@ -95,10 +95,17 @@ class Surface(Actor):
                                                  group,\
                                                  ('v3d/static',(0,100,-1,-100,-100,-1,100,-100,-1)),\
                                                  ('n3d/static',(0,0,1,0,0,1,0,0,1)),\
-                                                 ('c3d/static',(1,0,0,0,1,0,0,0,1)))
+                                                 ('c4d/static',(1,0,0,0.9,0,1,0,0.1,0,0,1,.1)))
         
-    def draw(self):
-        print 'batch draw in surf'
+        self.vertex_list2 = self.batch.add(len(vertices),\
+                                                 GL_TRIANGLES,\
+                                                 group,\
+                                                 ('v3d/static',(0,200,-25,-100,-100,-25,100,-100,-25)),\
+                                                 ('n3d/static',(0,0,1,0,0,1,0,0,1)),\
+                                                 ('c4d/static',(1,0,0,0.1,0,1,0,0.1,0,0,1,.1)))
+        
+        
+    def draw(self):        
         self.batch.draw()
         
     def update(self,dt):

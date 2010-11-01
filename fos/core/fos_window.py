@@ -6,11 +6,17 @@ from fos.lib import pyglet
 from fos.lib.pyglet.window import key,mouse
 from fos.lib.pyglet.clock import Clock
 from fos.lib.pyglet.window import FPSDisplay
+from fos.core import color
 
 class FosWindow(ManagedWindow):
     
-    def __init__(self, **kwargs):
+    def __init__(self, bgcolor=None, **kwargs):
         super(FosWindow, self).__init__(**kwargs)
+        
+        if color==None:
+            self.bgcolor=color.black
+        else:
+            self.bgcolor=bgcolor        
         
         self.mouse_x, self.mouse_y = 0,0
         
@@ -24,17 +30,19 @@ class FosWindow(ManagedWindow):
         #self.update_dt = 1.0/100
         
     def setup(self):
+           
                 
-        #glClearColor(1.0, 0.0, 0.0, 0.0)
-        #glClearDepth(1.0)
-#
-#        glDepthFunc(GL_LESS)
-#        glEnable(GL_DEPTH_TEST)
+        r,g,b,a = self.bgcolor
+        glClearColor(r,g,b,a)
+        glClearDepth(1.0)
+        #
+        glDepthFunc(GL_LESS)
+        glEnable(GL_DEPTH_TEST)
 
-        #glEnable(GL_BLEND)
-        #glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-        pass
+        glEnable(GL_BLEND)
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
         
+        return        
     
     def update(self, dt):
         if dt != 0:

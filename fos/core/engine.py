@@ -74,7 +74,7 @@ if __name__ == '__main__':
     from fos.actor.surf import Surface
     from fos.actor.surf import CommonSurfaceGroup, IlluminatedSurfaceGroup
     
-    group=CommonSurfaceGroup()#IlluminatedSurfaceGroup()#CommonSurfaceGroup()
+    group=CommonSurfaceGroup()
     
     s=Surface(values,vertices,faces,group)
     
@@ -88,9 +88,10 @@ if __name__ == '__main__':
     #add cds to world
     #w.add(cds)
 #    
+    from fos.core import color
 
     # create a window
     # attach window to world
-    wi = FosWindow()
+    wi = FosWindow(bgcolor=color.orange)
     wi.attach(w)
 
