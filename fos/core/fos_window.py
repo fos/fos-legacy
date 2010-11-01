@@ -25,6 +25,17 @@ class FosWindow(ManagedWindow):
         
     def setup(self):
                 
+        gl.glEnableClientState(gl.GL_VERTEX_ARRAY)
+        gl.glEnableClientState(gl.GL_COLOR_ARRAY)
+        gl.glEnable(gl.GL_DEPTH_TEST)        
+        gl.glEnable(gl.GL_POLYGON_SMOOTH)
+        gl.glEnable(gl.GL_BLEND)
+        gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA)
+        gl.glHint(gl.GL_POLYGON_SMOOTH_HINT, gl.GL_NICEST) 
+
+        gl.glCullFace(gl.GL_BACK)
+        gl.glEnable(gl.GL_CULL_FACE)
+        
         #glClearColor(1.0, 0.0, 0.0, 0.0)
         #glClearDepth(1.0)
 #
@@ -46,7 +57,7 @@ class FosWindow(ManagedWindow):
         self._world = world
             
     def draw(self):   
-#        self._world._render_lock.acquire()
+        self._world._render_lock.acquire()
         
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)    
         glLoadIdentity()
@@ -61,7 +72,7 @@ class FosWindow(ManagedWindow):
         
         self.fps_display.draw()
         
-#        self._world._render_lock.release()
+        self._world._render_lock.release()
     
               
     def on_resize(self, width, height):
