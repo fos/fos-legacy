@@ -76,12 +76,6 @@ class FosWindow(ManagedWindow):
     
               
     def on_resize(self, width, height):
-        print "test", width, height
-        '''
-        if self._needs_resize:
-            self.set_size(width, height)
-            self._needs_resize = False
-        '''
         glViewport(0, 0, width, height)
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
@@ -101,7 +95,16 @@ class FosWindow(ManagedWindow):
         
         if symbol == key.H:
             self.set_size(900, 600)
-            
+        if modifiers & key.MOD_CTRL:
+            if symbol == key.PLUS:
+                neww = self.width + self.width / 10
+                newh = self.height + self.height / 10
+                self.set_size(neww, newh)
+            elif symbol == key.MINUS:
+                neww = self.width - self.width / 10
+                newh = self.height - self.height / 10
+                self.set_size(neww, newh)
+                 
         if symbol == key.P:          
                   
             x,y=self.mouse_x,self.mouse_y

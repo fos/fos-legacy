@@ -11,6 +11,7 @@ class NodeGLPrimitive():
     vertices_nr = 0
     
     color_ptr = None
+    colors = None
     normal_ptr = None
     
     mode = None
@@ -26,6 +27,8 @@ class NodeGLPrimitive():
         self.type = GL_UNSIGNED_INT
             
     def _make_cubes(self, position, size):
+        
+        assert position.shape[1] == 3
         
         nr = len(position)
         # allocate space for the big array
@@ -87,25 +90,76 @@ class NodeGLPrimitive():
         self.indices_ptr = self.indices.ctypes.data
 
     
-    def _make_colors(self, color):
+    def _make_color(self, color):
         if self.vertices is None:
             return
-        pass
+        assert color.shape[0] == self.nr_nodes
+        self.colors = color.repeat(8, axis=0)
+        self.color_ptr = self.colors.ctypes.data
+        
     
     def _make_normals(self):
         if self.vertices is None or self.indices is None:
             return
-        pass
+        
     
     
 class EdgeGLPrimitive():
     
-    def __init__(self):
-        pass
+
+    vertices = None
+    vertices_ptr = None
+    vertices_nr = 0
     
-    def _form_edge(self, position, edge_connectivity):
-        # produce edge gls
-        pass
+    color_ptr = None
+    colors = None
+    
+    mode = None
+    type = None
+    nr_edges = None
+    indices_ptr = None
+    indices = None
+    indices_nr = 0
+    
+    def __init__(self):
+        
+        self.mode = GL_LINES
+        self.type = GL_UNSIGNED_INT
+        
+    def _make_edges(self, position, edges):
+
+        assert position.shape[1] == 3
+        assert edges.shape[1] == 2
+        
+        nr = len(edges)
+        # allocate space for the big array
+        if self.vertices == None:
+            self.nr_edges = nr
+            self.vertices = np.zeros( (2*self.nr_edges, 3), dtype = np.float32)
+            self.indices = np.zeros( (self.nr_edges, 2), dtype = np.uint32)
+        else:
+            # number of nodes changed
+            if nr != self.nr_lines:
+                # need to reallocate array
+                self.nr_edges = nr
+                self.vertices = np.zeros( (2*self.nr_edges, 3), dtype = np.float32)
+                self.indices = np.zeros( (self.nr_edges, 2), dtype = np.uint32)
+        
+        self.indices[:,:] = edges
+        self.vertices[:,:] = position[self.indices.ravel(),:]
+        
+        self.vertices_nr = self.vertices.shape[0]
+        self.indices_nr = self.indices.shape[0] * self.indices.shape[1]
+        
+        self.vertices_ptr = self.vertices.ctypes.data
+        self.indices_ptr = self.indices.ctypes.data
+        
+    def _make_color(self, color):
+        if self.vertices is None:
+            return
+        assert color.shape[0] == self.nr_edges
+        self.colors = color.repeat(2, axis=0)
+        self.color_ptr = self.colors.ctypes.data
         
 class AttributeNetwork(Actor):
     
@@ -154,16 +208,13 @@ class AttributeNetwork(Actor):
         edge_weight : (M,1)
             The weight determines the width of the line
             
-        edge_color
+        edge_color : (N,4)
             The color of the edges
             (or cmap, vmin, vmax)
             
         edge_style
             solid, dashed, dotted, dashdot
             What does OpenGL support natively?
-            
-        edge_alpha
-            The transparency of the edge
             
         edge_label
             The label for the edges
@@ -192,73 +243,78 @@ class AttributeNetwork(Actor):
         # - dynamic graph with lifetime on nodes/edges
         # - hierarchic graph
 
+        self.node_glprimitive = NodeGLPrimitive()
+        self.edge_glprimitive = EdgeGLPrimitive()
+        
+        
         if kwargs.has_key('node_position'):
             self.node_position = kwargs['node_position']
-        if kwargs.has_key('node_size'):
-            self.node_size = kwargs['node_size']
+
+            if kwargs.has_key('node_size'):
+                self.node_size = kwargs['node_size']
+            else:
+                # default size 0.5
+                self.node_size = np.ones( (self.node_position.shape[0], 1), dtype = np.float32 ) / 2.0
+                
+            self.node_glprimitive._make_cubes(self.node_position, self.node_size)
+        else:
+            raise Exception("You have to specify the node_position array")
+        
+        if kwargs.has_key('node_color'):
+            self.node_color = kwargs['node_color']
+            self.node_glprimitive._make_color(self.node_color)
             
 #        self.node_shape = kwargs['node_shape']
 #        self.node_label = kwargs['node_label']
-#        self.node_color = kwargs['node_color']
-#        
-#        self.edge_connectivity = kwargs['edge_connectivity']
-#        self.edge_weight = kwargs['edge_weight']
-        
-        # we have two primitives, nodes & edges
-        # that need a seperate building and update procedure
-        # we are going to draw them with on drawelements call
-        
-        self.node_glprimitive = NodeGLPrimitive()
-        self.edge_glprimitive = EdgeGLPrimitive()
 
-        self.node_glprimitive._make_cubes(self.node_position, self.node_size)
-
-        # XXX: test for one cube
-        
-#        self.v = np.array( [[0,100,-1], [-100,-100,-1], [100,-100,-1], [100,100,-1] ], dtype = np.float32 )
-#        self.f = np.array( [[0,1,2, 3]], dtype = np.uint32)
-#        self.vp = self.v.ctypes.data
-#        self.fp = self.f.ctypes.data 
+        if kwargs.has_key('edge_connectivity'):
+            self.edge_connectivity = kwargs['edge_connectivity']
+            self.edge_glprimitive._make_edges(self.node_position, self.edge_connectivity)
+            
+        if kwargs.has_key('edge_color'):
+            self.edge_color = kwargs['edge_color']
+            self.edge_glprimitive._make_color(self.edge_color)
+            
+        if kwargs.has_key('edge_weight'):
+            self.edge_weight = kwargs['edge_weight']
+          
         
 
     def update(self, dt):
-
+        pass
         # update the node position and size to make it dynamic
         # only need to update if anything has changed (chaged)
-        self.node_position += np.random.random( (self.node_position.shape) ) * 2
-        self.node_size = np.random.random( (self.node_size.shape) ) * 2
+#        self.node_position += np.random.random( (self.node_position.shape) ) * 2
+#        self.node_size = np.random.random( (self.node_size.shape) ) * 2
         
         # this functionality could be implemented with cython
-        self.node_glprimitive._make_cubes(self.node_position, self.node_size)
-
-    def draw(self):
+#        self.node_glprimitive._make_cubes(self.node_position, self.node_size)
+#        self.node_color[:,3] += 1
+#        self.node_color[:,3] = self.node_color[:,3] % 255
+#        self.node_glprimitive._make_color(self.node_color)
         
-        # draw array primitives
-        for pri in [self.node_glprimitive]:
-            
-            glEnableClientState(GL_VERTEX_ARRAY)
-#            glPushMatrix()      
-                    
-            # apply first the actor affine
-            # apply then the primitive affine
-#            glTranslatef()
-#            glMultMatrixf()
-            
-            # draw elements
+    def draw(self):
+        pri = self.edge_glprimitive
+        glLineWidth(5.0)
+        glEnableClientState(GL_VERTEX_ARRAY)
+        glEnableClientState(GL_COLOR_ARRAY)
+        glVertexPointer(3, GL_FLOAT, 0, pri.vertices_ptr)
+        glColorPointer(4, GL_UNSIGNED_BYTE, 0, pri.color_ptr)
+        glDrawElements(pri.mode,pri.indices_nr,pri.type,pri.indices_ptr)
+        glDisableClientState(GL_COLOR_ARRAY)
+        glDisableClientState(GL_VERTEX_ARRAY)
+                  
+        pri = self.node_glprimitive
+        glEnableClientState(GL_VERTEX_ARRAY)
+        glEnableClientState(GL_COLOR_ARRAY)
+        glVertexPointer(3, GL_FLOAT, 0, pri.vertices_ptr)
+        glColorPointer(4, GL_UNSIGNED_BYTE, 0, pri.color_ptr)
+        glDrawElements(pri.mode,pri.indices_nr,pri.type,pri.indices_ptr)
+        glDisableClientState(GL_COLOR_ARRAY)
+        glDisableClientState(GL_VERTEX_ARRAY)
+        
 
-            glVertexPointer(3, GL_FLOAT, 0, pri.vertices_ptr)
-#            glColorPointer(4, GL_UNSIGNED_BYTE, 0, pri.color_ptr)
-#            glNormalPointer(GL_FLOAT, 0, pri.normal_ptr)
-            
-            glDrawElements(
-                pri.mode,
-                pri.indices_nr,
-                pri.type,
-                pri.indices_ptr)
-
-#            glPopMatrix()
-            glDisableClientState(GL_VERTEX_ARRAY)   
-    
+        
     def create_node_geometry(self, node_position, node_size, node_shape):
         """ Takes the node attributes and produces the numpy arrays
         in memory that we will use for OpenGL """
