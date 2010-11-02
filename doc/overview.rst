@@ -4,6 +4,7 @@ Our aim is to collect knowledge, references and feature requests...
 New
 ===
 
+* http://www.informit.com/articles/article.aspx?p=461848&seqNum=2
 * http://github.com/matthew-brett/miniglumpy
 * pyffmpeg
 * pymt packages: http://pymt.eu/wiki/Devel/FeaturesByLibraries

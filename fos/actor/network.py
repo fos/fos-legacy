@@ -1,16 +1,112 @@
-from itertools import chain, islice, product, repeat
+import numpy as np
 
-from fos.lib.pyglet.gl import gl
+from fos.core.world import World
+from fos.lib.pyglet.gl import *
 from fos.core.actor import Actor
-from fos.geometry.vec3 import Vec3
-from fos.geometry.glyph import Glyph
 
-type_to_enum = {
-    gl.GLubyte: gl.GL_UNSIGNED_BYTE,
-    gl.GLushort: gl.GL_UNSIGNED_SHORT,
-    gl.GLuint: gl.GL_UNSIGNED_INT,
-}
+class NodeGLPrimitive():
 
+    vertices = None
+    vertices_ptr = None
+    vertices_nr = 0
+    
+    color_ptr = None
+    normal_ptr = None
+    
+    mode = None
+    type = None
+    nr_nodes = None
+    indices_ptr = None
+    indices = None
+    indices_nr = 0
+    
+    def __init__(self):
+        
+        self.mode = GL_QUADS
+        self.type = GL_UNSIGNED_INT
+            
+    def _make_cubes(self, position, size):
+        
+        nr = len(position)
+        # allocate space for the big array
+        if self.vertices == None:
+            self.nr_nodes = nr
+            self.vertices = np.zeros( (8*self.nr_nodes, 3), dtype = np.float32)
+            self.indices = np.zeros( (6*self.nr_nodes, 4), dtype = np.uint32)
+            # self.affine = np.zeros( (4,4,self.nr_nodes), dtype = np.float)
+        else:
+            # number of nodes changed
+            if nr != self.nr_nodes:
+                # need to reallocate array
+                self.nr_nodes = nr
+                self.vertices = np.zeros( (8*self.nr_nodes, 3), dtype = np.float32)
+                self.indices = np.zeros( (6*self.nr_nodes, 4), dtype = np.uint32)
+            # else: you could zero them here
+            
+        for i in xrange(self.nr_nodes):
+            # comment: we might needs this loop only on
+            # creation time. user interaction updates directly the vertices
+            
+            vertices = size[i] * np.array([
+                   [-0.5, -0.5, -0.5],
+                   [-0.5, -0.5,  0.5],
+                   [-0.5,  0.5, -0.5],
+                   [-0.5,  0.5,  0.5],
+                   [ 0.5, -0.5, -0.5],
+                   [ 0.5, -0.5,  0.5],
+                   [ 0.5,  0.5, -0.5],
+                   [ 0.5,  0.5,  0.5]], dtype = np.float32)
+            
+            # updating the affine for one cube
+            # we do not need this for now because we are drawing
+            # with drawelements 
+            # for now, just add the position
+            vertices += position[i,:]
+            
+            # select the correct block to store the update vertices data
+            self.vertices[8*i:(8*(i+1)),:] = vertices
+            
+            faces = np.array([ [0,1,5,4],
+                               [2,3,7,6],
+                               [2,0,1,3],
+                               [3,7,5,1],
+                               [7,6,4,5],
+                               [6,2,0,4] ], dtype = np.uint32)
+            
+            # offset using i and the number of vertices
+            faces += 8*i
+            
+            # updates the indices with the faces
+            self.indices[6*i:(6*(i+1)),:] = faces
+        
+
+        self.vertices_nr = self.vertices.shape[0]
+        self.indices_nr = self.indices.shape[0] * self.indices.shape[1]
+        
+        self.vertices_ptr = self.vertices.ctypes.data
+        self.indices_ptr = self.indices.ctypes.data
+
+    
+    def _make_colors(self, color):
+        if self.vertices is None:
+            return
+        pass
+    
+    def _make_normals(self):
+        if self.vertices is None or self.indices is None:
+            return
+        pass
+    
+    
+class EdgeGLPrimitive():
+    
+    def __init__(self):
+        pass
+    
+    def _form_edge(self, position, edge_connectivity):
+        # produce edge gls
+        pass
+        
 class AttributeNetwork(Actor):
     
     def __init__(self, *args, **kwargs):
@@ -29,25 +125,20 @@ class AttributeNetwork(Actor):
         ------------
         node_position : (N,3)
             Node positions as ndarray
-        
-        node_label
-            Node labels
-        
+
         node_size
             The size of the node
+
+        node_label
+            Node labels
             
         node_shape
             cube, sphere, pyramid, electrodes (cylinders)
             
-        node_color : (N,3)
-            The color of the nodes
+        node_color : (N,4)
+            The color of the nodes and its alpha value
             Either given [0,1] or [0,255]
             (or: cmap, vmin, vmax)
-            
-        node_alpha
-            The node transparency
-        
-        -> node_color -> RGBA
         
         node_show_labels
             Show all labels on the nodes / 
@@ -100,61 +191,94 @@ class AttributeNetwork(Actor):
         # - pick a node / edge, show info, etc.
         # - dynamic graph with lifetime on nodes/edges
         # - hierarchic graph
-        if kwargs.has_key('node_position'):
-            print kwargs['node_position']
-            
-        size = 100.0
-        
-        e2 = size / 2
-        vertices = list(product(*repeat([-e2, +e2], 3)))
-        faces = [
-            [0, 1, 3, 2], # left
-            [4, 6, 7, 5], # right
-            [7, 3, 1, 5], # front
-            [0, 2, 6, 4], # back
-            [3, 7, 6, 2], # top
-            [1, 0, 4, 5], # bottom
-        ]
-        
-        if len(vertices) > 0 and not isinstance(vertices[0], Vec3):
-            vertices = [Vec3(*v) for v in vertices]
-        self.vertices = vertices
 
-        for face in faces:
-            assert len(face) >= 3
-            for index in face:
-                assert 0 <= index < len(vertices)
-        self.faces = faces
+        if kwargs.has_key('node_position'):
+            self.node_position = kwargs['node_position']
+        if kwargs.has_key('node_size'):
+            self.node_size = kwargs['node_size']
+            
+#        self.node_shape = kwargs['node_shape']
+#        self.node_label = kwargs['node_label']
+#        self.node_color = kwargs['node_color']
+#        
+#        self.edge_connectivity = kwargs['edge_connectivity']
+#        self.edge_weight = kwargs['edge_weight']
         
-        # make an actor / glyph
+        # we have two primitives, nodes & edges
+        # that need a seperate building and update procedure
+        # we are going to draw them with on drawelements call
         
-        self.glyph = Glyph()
-        self.glyph.from_shape(self.vertices, self.faces)
+        self.node_glprimitive = NodeGLPrimitive()
+        self.edge_glprimitive = EdgeGLPrimitive()
+
+        self.node_glprimitive._make_cubes(self.node_position, self.node_size)
+
+        # XXX: test for one cube
         
+#        self.v = np.array( [[0,100,-1], [-100,-100,-1], [100,-100,-1], [100,100,-1] ], dtype = np.float32 )
+#        self.f = np.array( [[0,1,2, 3]], dtype = np.uint32)
+#        self.vp = self.v.ctypes.data
+#        self.fp = self.f.ctypes.data 
+        
+
+    def update(self, dt):
+
+        # update the node position and size to make it dynamic
+        # only need to update if anything has changed (chaged)
+        self.node_position += np.random.random( (self.node_position.shape) ) * 2
+        self.node_size = np.random.random( (self.node_size.shape) ) * 2
+        
+        # this functionality could be implemented with cython
+        self.node_glprimitive._make_cubes(self.node_position, self.node_size)
+
     def draw(self):
         
-        gl.glEnableClientState(gl.GL_NORMAL_ARRAY)
+        # draw array primitives
+        for pri in [self.node_glprimitive]:
+            
+            glEnableClientState(GL_VERTEX_ARRAY)
+#            glPushMatrix()      
+                    
+            # apply first the actor affine
+            # apply then the primitive affine
+#            glTranslatef()
+#            glMultMatrixf()
+            
+            # draw elements
+
+            glVertexPointer(3, GL_FLOAT, 0, pri.vertices_ptr)
+#            glColorPointer(4, GL_UNSIGNED_BYTE, 0, pri.color_ptr)
+#            glNormalPointer(GL_FLOAT, 0, pri.normal_ptr)
+            
+            glDrawElements(
+                pri.mode,
+                pri.indices_nr,
+                pri.type,
+                pri.indices_ptr)
+
+#            glPopMatrix()
+            glDisableClientState(GL_VERTEX_ARRAY)   
     
-
-        gl.glPushMatrix()
-
-#        gl.glTranslatef(*item.position)
-
-#        gl.glMultMatrixf(item.orientation.matrix)
-
-        gl.glScalef(20.0, 20.0, 20.0)
-                
-        gl.glVertexPointer(3, gl.GL_FLOAT, 0, self.glyph.glvertices)
-        gl.glNormalPointer(gl.GL_FLOAT, 0, self.glyph.glnormals)
-        gl.glDrawElements(
-            gl.GL_TRIANGLES,
-            len(self.glyph.glindices),
-            type_to_enum[self.glyph.glindex_type],
-            self.glyph.glindices)
-
-        gl.glPopMatrix()
+    def create_node_geometry(self, node_position, node_size, node_shape):
+        """ Takes the node attributes and produces the numpy arrays
+        in memory that we will use for OpenGL """
         
-        gl.glDisableClientState(gl.GL_NORMAL_ARRAY)
+        # nr of nodes
+        nr_nodes = len(node_position)       
+        
+        # the new vertices array
+        # the new quad faces index array
+        
+        # create an affine array
+        self.node_affines = np.array( (4,4, nr_nodes) )
+        
+        for i in xrange(nr_nodes):
+            pass
+        
+        
+
+        
+
             
         
         

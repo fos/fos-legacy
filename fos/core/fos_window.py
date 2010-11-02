@@ -42,9 +42,15 @@ class FosWindow(ManagedWindow):
         return        
     
     def update(self, dt):
-        if dt != 0:
-            #print "freq", round(1.0/dt)
-            pass
+        for a in self._world.ag.actors:
+            try:
+                a.update(dt)
+            except:
+                pass
+            
+#        if dt != 0:
+#            print "freq", round(1.0/dt)
+#            pass
 
     
     def attach(self, world):
