@@ -1,4 +1,4 @@
-from fos.lib.pyglet.gl import *
+
 from fos.core.utils import get_model_matrix #,screen_to_model,get_viewport
 
 class Interaction(object):

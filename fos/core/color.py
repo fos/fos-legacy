@@ -1,5 +1,3 @@
-from fos.lib.pyglet.gl import *
-
 red = (1., 0, 0, 1.)
 orange = (1., 0.498, 0, 1)
 yellow = (1, 1, 0, 1.)

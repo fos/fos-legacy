@@ -43,7 +43,7 @@ __version__ = '$Id$'
 import os
 import sys
 
-# replace the pyglet package
+## replace the pyglet package
 from fos.lib import import_thirdparty
 pyglet = import_thirdparty("pyglet")
 
