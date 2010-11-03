@@ -23,6 +23,11 @@ col_ext, cmdclass = make_cython_ext(
     has_cython,
     include_dirs = [np.get_include()])
 
+cgl_ext, cmdclass = make_cython_ext(
+    'fos.core.cython_gl',
+    has_cython,
+    include_dirs = [np.get_include()])
+
 setup(name='fos',
       version='0.1a',
       description='Scientific 3d Engine',
@@ -31,7 +36,7 @@ setup(name='fos',
       url='http://github.com/Garyfallidis/Fos',
       packages=['fos','fos.core'],
       #package_data={'dipy.io': ['tests/data/*', 'tests/*.py']},
-      ext_modules = [col_ext],
+      ext_modules = [col_ext,cgl_ext],
       cmdclass    = cmdclass,      
       scripts=glob('scripts/*.py')
       )

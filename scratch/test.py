@@ -14,8 +14,7 @@ w.add(cam)
 #aff = np.eye(4)
 #cds = ConnectedSlices(aff,a)
 #w.add(cds)
-#    
-#
+
 tri = Triangle()
 w.add(tri)
 
