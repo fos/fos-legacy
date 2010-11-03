@@ -2,6 +2,8 @@ import numpy as np
 
 from fos.lib.pyglet.gl import *
 from fos.core.managed_window import ManagedWindow
+from fos.core.world import World
+
 from fos.lib import pyglet
 from fos.lib.pyglet.window import key,mouse
 from fos.lib.pyglet.clock import Clock
@@ -40,20 +42,21 @@ class FosWindow(ManagedWindow):
         
         self.update_dt = 1.0/60
         
-        super(FosWindow, self).__init__(**kwargs)
-        
-        if bgcolor==None:
-            self.bgcolor=color.black
+        if bgcolor == None:
+            self.bgcolor = color.black
         else:
-            self.bgcolor=bgcolor        
+            self.bgcolor = bgcolor        
         
         self.mouse_x, self.mouse_y = 0,0
         
-        # the world that is attached to this window
-        self._world = None
+        # create an empty world by default
+        emptyworld = World("Zero-Point World")
+        self.attach(emptyworld)
         
         # the frame rate display from pyglet
         self.fps_display = FPSDisplay(self)
+        
+        super(FosWindow, self).__init__(**kwargs)
         
         
     def setup(self):           
@@ -100,6 +103,9 @@ class FosWindow(ManagedWindow):
 #            print "freq", round(1.0/dt)
 #            pass
 
+    def get_world(self):
+        """ Returns the world that is attached to this window """
+        return self._world
     
     def attach(self, world):
         """ Attach a FosWindow to a world. The world needs
@@ -109,7 +115,8 @@ class FosWindow(ManagedWindow):
         
         """
         world._render_lock.acquire()
-#        # can not attach a window to a world that has not cameras
+        
+        # can not attach a window to a world that has not cameras
         if len(world.get_cameras()) == 0:
             raise Exception("Can not attach window to a world with no cameras")
         
@@ -117,12 +124,14 @@ class FosWindow(ManagedWindow):
         
         # just take the first camera
         self.current_camera = self._world.get_cameras()[0]
+        
         world._render_lock.release()
             
     def draw(self):   
         self._world._render_lock.acquire()
         
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)    
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
     
         self.current_camera.draw()
@@ -205,11 +214,5 @@ class FosWindow(ManagedWindow):
     def on_mouse_scroll(self, x,y,scroll_x,scroll_y):
         self.current_camera.cam_trans.translate(0,0,scroll_y*self.current_camera.scroll_speed)
 
-    def on_close(self):
-        """
-        Closes the Fos window.
-        """
-        self.has_exit = True
-        self.close()
 
     
