@@ -107,14 +107,8 @@ def ndarray_offset(cnp.ndarray[long, ndim=1] indices, \
 def get_vertices_faces(cnp.ndarray[float, ndim=2] verts,cnp.ndarray[unsigned int, ndim=2] faces):
 
     print 'hello'
-
     return
 
-def get_pointer(void *test):
-    
-    cdef float tmp=test[0]
-    
-    return
 
 def get_ppointer(cnp.ndarray[unsigned int, ndim=2] indices):
     
