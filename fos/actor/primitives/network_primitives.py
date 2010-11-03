@@ -1,6 +1,5 @@
 import numpy as np
 
-from fos.core.world import World
 from fos.lib.pyglet.gl import *
 
 class NodeGLPrimitive():

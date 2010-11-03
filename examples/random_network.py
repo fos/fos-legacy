@@ -7,8 +7,8 @@ from fos.actor.network import AttributeNetwork
 w = World("myworld")    
 
 # node positions
-s = 100
-pos = np.random.random( (s,3)).astype(np.float32) * 10
+s = 1000
+pos = np.random.random( (s,3)).astype(np.float32) * 100
 col = np.random.random_integers( 0, 255, (s,4) ).astype(np.ubyte)
 col[:, 3] = 255
 
@@ -31,7 +31,12 @@ edg = np.array( [[0,1], [2,3]] , dtype = np.uint32)
 edg_col = np.array( [[255,255,0,255],
                      [255,0,255,10]], dtype = np.ubyte )
 
-cu = AttributeNetwork(node_position = pos,
+aff = np.eye(4, dtype = np.float32)
+aff[:3,3] = [0,0,0]
+
+cu = AttributeNetwork(affine = aff,
+                      force_centering = True,
+                      node_position = pos,
                       node_size = size,
                       node_color = col,
                       edge_connectivity = edg,

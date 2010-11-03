@@ -96,11 +96,7 @@ class AttributeNetwork(Actor):
         else:
             self.affine = affine
         
-#        self.affine = self.affine.T.copy()
-#        
-#        print self.affine.flags
-        self.affine_ptr = self.affine.ctypes.data
-        print self.affine_ptr
+        self.glaffine = self._update_glaffine()
         
         if kwargs.has_key('node_position'):
             self.node_position = kwargs['node_position']
@@ -174,23 +170,52 @@ class AttributeNetwork(Actor):
         
         
     def start(self, tickingtime = 2.0):
+        print "the actor is alive"
         self.living = True
         self.internal_timestamp = 0.0
         self.tickingtime = tickingtime
         
     def stop(self):
+        print "the actor stops living"
         self.living = False
         
     def cont(self):
+        print "continue to live happily"
         self.living = True
+    
+    def set_affine(self, affine):
+        # update the affine
+        print "update affine", self.affine
+        self.affine = affine
+        self._update_glaffine()
+        
+    def translate(self, dx, dy, dz):
+        """ Translate the actor.
+        Remember the OpenGL has right-handed 
+        coordinate system """
+        self.affine[0,3] += dx
+        self.affine[1,3] += dy
+        self.affine[2,3] += dz
+        self._update_glaffine()
+    
+    def set_position(self, x, y, z):
+        """ Position the actor.
+        Remember the OpenGL has right-handed 
+        coordinate system """
+        self.affine[0,3] += x
+        self.affine[1,3] += y
+        self.affine[2,3] += z
+        self._update_glaffine()
         
     def update(self, dt):
         
         if self.living:
             self.internal_timestamp += dt
             
-#            if not bool(int(self.internal_timestamp) % self.tickingtime):
-#                print "object ticked at", self.internal_timestamp
+            if self.internal_timestamp > 10.0:
+                print "you lived 10 seconds. this is enough"
+                self.stop()
+                
                 
         # update the node position and size to make it dynamic
         # only need to update if anything has changed (chaged)
@@ -206,8 +231,7 @@ class AttributeNetwork(Actor):
     def draw(self):
         
         glPushMatrix()
-#        glMultMatrixf(self.affine_ptr)
-#        glTranslatef(100.0, 0,0)
+        glMultMatrixf(self.glaffine)
         
         pri = self.edge_glprimitive
         glLineWidth(5.0)
@@ -230,7 +254,9 @@ class AttributeNetwork(Actor):
 
         glPopMatrix()
             
-        
+    def _update_glaffine(self):
+        self.glaffine = (GLfloat * 16)(*tuple(self.affine.T.ravel()))
+         
     def _compute_aabb(self):
 
         # using the node_position, node_size to compute the aabb for the cube
