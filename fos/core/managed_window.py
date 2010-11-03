@@ -99,5 +99,24 @@ class ManagedWindow(Window):
         """
         pass
 
+
+
+#    def close(self):
+#        '''Close the window.
+#
+#        After closing the window, the GL context will be invalid.  The
+#        window instance cannot be reused once closed (see also `set_visible`).
+#
+#        The `pyglet.app.EventLoop.on_window_close` event is dispatched on
+#        `pyglet.app.event_loop` when this method is called.
+#        '''
+#        self.has_exit = True
+#        try:
+#            super(ManagedWindow, self).close()
+#        except Exception, e:
+#            print "exception while closing the window %s" % str(e)
+#            pass
+        
+            
 if __name__ == '__main__':
     ManagedWindow()

@@ -8,10 +8,13 @@ from fos.core.camera import DefaultCamera
 
 class World():
 
-    def __init__(self, name):
+    def __init__(self, name = None):
         self.name = name
         self.ag = ActorGraph()
         self.cl = CameraList()
+        
+        # attached window
+        self.wins = []
         
         # create a simple camera
         simple_camera = DefaultCamera()
@@ -21,11 +24,9 @@ class World():
         
     def add(self, obj, update_camera = True):
         if isinstance(obj, Actor):
-            print "computing bounding box for actor"
-            
+
             if update_camera:
                 print "update the camera view"
-                
             
             print "added actor", obj
             self.ag.add(obj)
