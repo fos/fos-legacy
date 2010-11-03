@@ -1,16 +1,10 @@
-from itertools import chain, islice, product, repeat
+import numpy as np
 
-from fos.lib.pyglet.gl import gl
+from fos.core.world import World
+from fos.lib.pyglet.gl import *
 from fos.core.actor import Actor
-from fos.geometry.vec3 import Vec3
-from fos.geometry.glyph import Glyph
-
-type_to_enum = {
-    gl.GLubyte: gl.GL_UNSIGNED_BYTE,
-    gl.GLushort: gl.GL_UNSIGNED_SHORT,
-    gl.GLuint: gl.GL_UNSIGNED_INT,
-}
-
+from .primitives.network_primitives import NodeGLPrimitive, EdgeGLPrimitive
+        
 class AttributeNetwork(Actor):
     
     def __init__(self, *args, **kwargs):
@@ -29,25 +23,20 @@ class AttributeNetwork(Actor):
         ------------
         node_position : (N,3)
             Node positions as ndarray
-        
-        node_label
-            Node labels
-        
+
         node_size
             The size of the node
+
+        node_label
+            Node labels
             
         node_shape
             cube, sphere, pyramid, electrodes (cylinders)
             
-        node_color : (N,3)
-            The color of the nodes
+        node_color : (N,4)
+            The color of the nodes and its alpha value
             Either given [0,1] or [0,255]
             (or: cmap, vmin, vmax)
-            
-        node_alpha
-            The node transparency
-        
-        -> node_color -> RGBA
         
         node_show_labels
             Show all labels on the nodes / 
@@ -63,7 +52,7 @@ class AttributeNetwork(Actor):
         edge_weight : (M,1)
             The weight determines the width of the line
             
-        edge_color
+        edge_color : (N,4)
             The color of the edges
             (or cmap, vmin, vmax)
             
@@ -71,12 +60,12 @@ class AttributeNetwork(Actor):
             solid, dashed, dotted, dashdot
             What does OpenGL support natively?
             
-        edge_alpha
-            The transparency of the edge
-            
         edge_label
             The label for the edges
-            
+        
+        edge_width_granularity
+            Idea: Subdivide the weight histogram into different
+            bins with their own line width
         
         Font related (global or per node/edge?)
         ------------
@@ -96,65 +85,84 @@ class AttributeNetwork(Actor):
         """
         
         # open questions
-        # - how to normalize the input node_position distribution
         # - pick a node / edge, show info, etc.
         # - dynamic graph with lifetime on nodes/edges
         # - hierarchic graph
-        if kwargs.has_key('node_position'):
-            print kwargs['node_position']
-            
-        size = 100.0
-        
-        e2 = size / 2
-        vertices = list(product(*repeat([-e2, +e2], 3)))
-        faces = [
-            [0, 1, 3, 2], # left
-            [4, 6, 7, 5], # right
-            [7, 3, 1, 5], # front
-            [0, 2, 6, 4], # back
-            [3, 7, 6, 2], # top
-            [1, 0, 4, 5], # bottom
-        ]
-        
-        if len(vertices) > 0 and not isinstance(vertices[0], Vec3):
-            vertices = [Vec3(*v) for v in vertices]
-        self.vertices = vertices
 
-        for face in faces:
-            assert len(face) >= 3
-            for index in face:
-                assert 0 <= index < len(vertices)
-        self.faces = faces
+        self.node_glprimitive = NodeGLPrimitive()
+        self.edge_glprimitive = EdgeGLPrimitive()
         
-        # make an actor / glyph
         
-        self.glyph = Glyph()
-        self.glyph.from_shape(self.vertices, self.faces)
+        if kwargs.has_key('node_position'):
+            self.node_position = kwargs['node_position']
+
+            if kwargs.has_key('node_size'):
+                self.node_size = kwargs['node_size']
+            else:
+                # default size 0.5
+                self.node_size = np.ones( (self.node_position.shape[0], 1), dtype = np.float32 ) / 2.0
+                
+            self.node_glprimitive._make_cubes(self.node_position, self.node_size)
+        else:
+            raise Exception("You have to specify the node_position array")
+        
+        if kwargs.has_key('node_color'):
+            self.node_color = kwargs['node_color']
+            self.node_glprimitive._make_color(self.node_color)
+            
+#        self.node_shape = kwargs['node_shape']
+#        self.node_label = kwargs['node_label']
+
+        if kwargs.has_key('edge_connectivity'):
+            self.edge_connectivity = kwargs['edge_connectivity']
+            self.edge_glprimitive._make_edges(self.node_position, self.edge_connectivity)
+            
+        if kwargs.has_key('edge_color'):
+            self.edge_color = kwargs['edge_color']
+            self.edge_glprimitive._make_color(self.edge_color)
+            
+        if kwargs.has_key('edge_weight'):
+            self.edge_weight = kwargs['edge_weight']
+          
+
+    def update(self, dt):
+        pass
+#        print "dt", dt
+        # update the node position and size to make it dynamic
+        # only need to update if anything has changed (chaged)
+#        self.node_position += np.random.random( (self.node_position.shape) ) * 2
+#        self.node_size = np.random.random( (self.node_size.shape) ) * 2
+        
+        # this functionality could be implemented with cython
+#        self.node_glprimitive._make_cubes(self.node_position, self.node_size)
+#        self.node_color[:,3] += 1
+#        self.node_color[:,3] = self.node_color[:,3] % 255
+#        self.node_glprimitive._make_color(self.node_color)
         
     def draw(self):
+        pri = self.edge_glprimitive
+        glLineWidth(5.0)
+        glEnableClientState(GL_VERTEX_ARRAY)
+        glEnableClientState(GL_COLOR_ARRAY)
+        glVertexPointer(3, GL_FLOAT, 0, pri.vertices_ptr)
+        glColorPointer(4, GL_UNSIGNED_BYTE, 0, pri.color_ptr)
+        glDrawElements(pri.mode,pri.indices_nr,pri.type,pri.indices_ptr)
+        glDisableClientState(GL_COLOR_ARRAY)
+        glDisableClientState(GL_VERTEX_ARRAY)
+                  
+        pri = self.node_glprimitive
+        glEnableClientState(GL_VERTEX_ARRAY)
+        glEnableClientState(GL_COLOR_ARRAY)
+        glVertexPointer(3, GL_FLOAT, 0, pri.vertices_ptr)
+        glColorPointer(4, GL_UNSIGNED_BYTE, 0, pri.color_ptr)
+        glDrawElements(pri.mode,pri.indices_nr,pri.type,pri.indices_ptr)
+        glDisableClientState(GL_COLOR_ARRAY)
+        glDisableClientState(GL_VERTEX_ARRAY)
         
-        gl.glEnableClientState(gl.GL_NORMAL_ARRAY)
-    
-
-        gl.glPushMatrix()
-
-#        gl.glTranslatef(*item.position)
-
-#        gl.glMultMatrixf(item.orientation.matrix)
-
-        gl.glScalef(20.0, 20.0, 20.0)
-                
-        gl.glVertexPointer(3, gl.GL_FLOAT, 0, self.glyph.glvertices)
-        gl.glNormalPointer(gl.GL_FLOAT, 0, self.glyph.glnormals)
-        gl.glDrawElements(
-            gl.GL_TRIANGLES,
-            len(self.glyph.glindices),
-            type_to_enum[self.glyph.glindex_type],
-            self.glyph.glindices)
-
-        gl.glPopMatrix()
         
-        gl.glDisableClientState(gl.GL_NORMAL_ARRAY)
+
+        
+
             
         
         

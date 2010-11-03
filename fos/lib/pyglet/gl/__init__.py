@@ -94,6 +94,10 @@ below.
 __docformat__ = 'restructuredtext'
 __version__ = '$Id$'
 
+# replace the pyglet package
+from fos.lib import import_thirdparty
+pyglet = import_thirdparty("pyglet")
+
 from pyglet.gl.lib import GLException
 from pyglet.gl.gl import *
 from pyglet.gl.glu import *

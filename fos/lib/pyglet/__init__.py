@@ -43,6 +43,10 @@ __version__ = '$Id$'
 import os
 import sys
 
+# replace the pyglet package
+from fos.lib import import_thirdparty
+pyglet = import_thirdparty("pyglet")
+
 _is_epydoc = hasattr(sys, 'is_epydoc') and sys.is_epydoc
 
 #: The release version of this pyglet installation.  

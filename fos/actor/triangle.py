@@ -1,5 +1,6 @@
 import numpy as np
-from ctypes import c_void_p
+from ctypes import c_void_p, cast, POINTER, c_int32, c_int
+
 import ctypes
 
 from fos.lib.pyglet.gl import *
@@ -17,19 +18,23 @@ class Triangle(Actor):
         
         self.triangle_vertices = np.array( [[0,100,-1], [-100,-100,-1], [100,-100,-1] ], dtype = np.float32 )
         self.tri_vert_ptr = self.triangle_vertices.ctypes.data #get the pointer        
-        
+      
         self.triangle_vertices2 = self.triangle_vertices + np.array( [100,0,0], dtype = np.float32)        
         self.tri_vertex_array = np.vstack( (self.triangle_vertices, self.triangle_vertices2) )
         self.tri_vertex_array_ptr = self.tri_vertex_array.ctypes.data 
                 
         self.tri_vert_ptr = self.triangle_vertices.ctypes.data
-        
+       
+
         self.triangle_face = np.array( [[0,1,2]], dtype = np.uint32)
         self.tri_face_ptr = self.triangle_face.ctypes.data        
         
 #        self.tri_vert_ptr2 = self.triangle_vertices2.ctypes.data
         self.triangle_face2 = np.array( [[3,4,5]], dtype = np.uint32)
         self.tri_face_ptr2 = self.triangle_face2.ctypes.data
+
+    
+    def draw_test(self):
         
         # GLsizei which is ctypes.c_int
         self.count_arr = np.array( [3,3], dtype = np.int32)
@@ -54,14 +59,13 @@ class Triangle(Actor):
         self.index_ptr = (iptr*len(index))(*[row.ctypes.data_as(iptr) for row in index])
         print "last value", self.index_ptr,self.index_ptr[0][0],self.index_ptr[1][2]
         print 'count_arr_ptr',self.count_arr_ptr        
-        print 'tri_face_ptr',self.tri_face_ptr
-        
+        print 'tri_face_ptr',self.tri_face_ptr        
         #np.array([tri_face_ptr2])
         
         '''
         
     def draw(self):
-        
+       
         #self.multi_draw_elements()
         self.draw_elements()
         
@@ -86,8 +90,7 @@ class Triangle(Actor):
     def draw_elements(self):
         
         glEnableClientState(GL_VERTEX_ARRAY)
-        glVertexPointer(3, GL_FLOAT, 0, self.tri_vert_ptr)
-        
+        glVertexPointer(3, GL_FLOAT, 0, self.tri_vert_ptr)        
         glDrawElements(GL_TRIANGLES, 3,GL_UNSIGNED_INT, self.tri_face_ptr)
         glDisableClientState(GL_VERTEX_ARRAY)    
                                        
