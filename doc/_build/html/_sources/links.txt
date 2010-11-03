@@ -1,8 +1,11 @@
+=====
+Links
+=====
 Our aim is to collect knowledge, references and feature requests...
 
-===
+
 New
-===
+---
 
 * http://www.informit.com/articles/article.aspx?p=461848&seqNum=2
 * http://github.com/matthew-brett/miniglumpy
@@ -45,25 +48,11 @@ http://virdir.ncsa.illinois.edu/partiview/
 * Gary Flake: is Pivot a turning point for web exploration? http://www.ted.com/talks/gary_flake_is_pivot_a_turning_point_for_web_exploration.html
 * fiber bundle, F5 format! http://www.fiberbundle.net/
 
-
 Our aim is to collect knowledge, references and feature requests...
-
-Tutorials
----------
-* http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=45
-
-=======
-Meminfo
-=======
-
-http://www.geeks3d.com/20100531/programming-tips-how-to-know-the-graphics-memory-size-and-usage-in-opengl/
-
-GL_NVX_gpu_memory_info
+Meminfo: http://www.geeks3d.com/20100531/programming-tips-how-to-know-the-graphics-memory-size-and-usage-in-opengl/
+GL_NVX_gpu_memory_info 
 WGL_AMD_gpu_association
 
-=========
-Libraries
-=========
 
 Engines
 -------
@@ -105,8 +94,7 @@ Fonts
 
 Video support
 -------------
-* pyglet, needs libavbin0
-* pyffmpeg
+1. pyglet, needs libavbin0
 
 Scenegraph
 ----------
@@ -122,7 +110,7 @@ Computational Geometry
 * www.cgal.org
 * ghull
 * Applied Geometry Group ETH :http://www.agg.ethz.ch/
-* Bounding volume code http://copythatfloppy.net/bzr/xyzzy/
+* bounding volume code http://copythatfloppy.net/bzr/xyzzy/
 
 GUI Backends
 ------------
@@ -139,10 +127,6 @@ Computer Vision
 ---------------
 * PyOpenCV http://code.google.com/p/pyopencv/
 
-====
-Text
-====
-
 Tutorials
 ---------
 * http://nehe.gamedev.net/
@@ -157,12 +141,6 @@ Documentations
 --------------
 * http://pyopengl.sourceforge.net/documentation/index.html
 * http://www.pyglet.org/documentation.html
-
-
-========
-Software
-========
-
 
 Raytracer
 ---------
@@ -184,10 +162,6 @@ Biomedical
 ----------
 * http://www.sci.utah.edu/cibc/software/107-map3d.html
 
-
-=====
-Other
-=====
 
 People
 ------

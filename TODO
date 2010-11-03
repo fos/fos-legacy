@@ -1,0 +1,13 @@
+* actor creation in a thread
+* set_resize is working. correctly inject it into the on_resize event.
+* math text/function visualization from sympy with Plot._pobjects
+* * group/ungroup of actors
+* server with ports open for websocket, running engine and taking commands
+* progress bar
+* streamable sources, e.g. with pyffmpeg
+* slice viewer
+* command menu for actors
+* scene graph?
+* view volume
+* change transparency
+* "action" wrapper for objects

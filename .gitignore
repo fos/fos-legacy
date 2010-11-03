@@ -2,5 +2,4 @@ build/
 *.pyc
 *.py~
 *.c
-doc/_build/
 .settings/
