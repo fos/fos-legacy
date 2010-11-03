@@ -48,13 +48,72 @@ class IlluminatedSurfaceGroup(pyglet.graphics.Group):
         glDisable(GL_CULL_FACE)
         glLineWidth(1.)
         glDisable(GL_LIGHTING)
+
+
+class Surface(Actor):
     
+    def __init__(self,vertices,faces,normals):
+        
+       self.vert_ptr=vertices.ctypes.data
+       self.face_ptr=faces.ctypes.data
+       self.norm_ptr=normals.ctypes.data
+       
+       self.tri_no=len(vertices)
+        
+    def draw(self):    
+                
+        self.set_state()
+        #glLineWidth(3.)        
+        glEnableClientState(GL_VERTEX_ARRAY)
+        glEnableClientState(GL_NORMAL_ARRAY)
+        glVertexPointer(3, GL_FLOAT, 0, self.vert_ptr)  
+        glNormalPointer(3, GL_FLOAT, 0, self.norm_ptr)
+        glDrawElements(GL_TRIANGLES, 6,GL_UNSIGNED_INT, self.face_ptr)
+        glDisableClientState(GL_NORMAL_ARRAY)
+        glDisableClientState(GL_VERTEX_ARRAY)
+        self.unset_state()              
+
+    def set_state(self):
+        glEnable(GL_DEPTH_TEST)
+        glEnable(GL_CULL_FACE)        
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
+        #glLineWidth(3.)
+        glEnable(GL_LIGHTING)
+        glEnable(GL_LIGHT0)
+        glEnable(GL_LIGHT1)
+        #Define a simple function to create ctypes arrays of floats:
+
+        glLightfv(GL_LIGHT0, GL_POSITION, vec(.5, .5, 1, 0))
+        glLightfv(GL_LIGHT0, GL_SPECULAR, vec(.5, .5, 1, 1))
+        glLightfv(GL_LIGHT0, GL_DIFFUSE, vec(1, 1, 1, 1))
+        
+        glLightfv(GL_LIGHT1, GL_POSITION, vec(1, 0, .5, 0))
+        glLightfv(GL_LIGHT1, GL_DIFFUSE, vec(.5, .0, 0, 1))
+        glLightfv(GL_LIGHT1, GL_SPECULAR, vec(1, 0, 0, 1))
+
+        glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,vec(0.5, 0, 0.3, 0.5))
+        glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR, vec(1, 1, 1, 0.5))
+        glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS, 50)
+        
+    def unset_state(self):
+        glDisable(GL_DEPTH_TEST)
+        glDisable(GL_CULL_FACE)
+        #glLineWidth(1.)
+        glDisable(GL_LIGHTING)
+    
+    
+    def update(self, dt):
+        pass
+
+'''    
 
 class Surface(Actor):
 
-    def __init__(self,values,vertices,faces,batch=None,group=None):
+    def __init__(self,vertices,faces,values,batch,group=None):
         
-        self.batch=Batch()
+        
+        
+        self.batch=batch
             
         inds=faces.ravel().tolist()
         verx=vertices.ravel().tolist()
@@ -74,11 +133,10 @@ class Surface(Actor):
         for (i,lp) in enumerate(faces):
             normals[lp]+=trinormals[i]
 
-        div=np.sqrt(np.sum(normals**2,axis=1))     
-        div=div.reshape(len(div),1)
-        normals=(normals/div)
-            
-        norms=np.array(normals).ravel().tolist()
+            div=np.sqrt(np.sum(normals**2,axis=1))     
+            div=div.reshape(len(div),1)
+            normals=(normals/div)            
+            norms=np.array(normals).ravel().tolist()
     
         self.vertex_list = self.batch.add_indexed(len(vertices),\
                                                  GL_TRIANGLES,\
@@ -96,3 +154,4 @@ class Surface(Actor):
         
     def delete(self):
         self.vertex_list.delete()
+'''
