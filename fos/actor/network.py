@@ -1,21 +1,29 @@
 import numpy as np
 
-from fos.core.world import World
 from fos.lib.pyglet.gl import *
+from fos.core.world import World
+from fos.lib.pyglet.gl import GLfloat
+
 from fos.core.actor import Actor
 from fos.actor.primitives.network_primitives import NodeGLPrimitive, EdgeGLPrimitive
         
 class AttributeNetwork(Actor):
     
     def __init__(self, affine = None, force_centering = True, *args, **kwargs):
-        """
+        """ Draw a network
                 
         affine : (4,4)
             The affine has a translational and rotational part
         force_centering : bool
-            Subtract the mean over node_position from all node positions to center the
-            actor.
-            
+            Subtract the mean over node_position from all node positions to center the actor.
+        scale_factor : float
+            Scaling the actor, scales all the vertices. You might want to multiply
+            your node_position array.
+        global_node_size : float
+            Size for all nodes, used when node_size is None. If None, defaults to 1.0
+        global_line_width : float
+            The global line width. Defaults to 1.0
+        
         Node related
         ------------
         node_position : (N,3)
@@ -100,33 +108,24 @@ class AttributeNetwork(Actor):
         
         if kwargs.has_key('node_position'):
             self.node_position = kwargs['node_position']
-            
-            if force_centering:
-                self.node_position = self.node_position - np.mean(self.node_position)
-
-            if kwargs.has_key('node_size'):
-                self.node_size = kwargs['node_size'].ravel()
-            else:
-                # default size 0.5
-                self.node_size = np.ones( (self.node_position.shape[0], 1), dtype = np.float32 ).ravel() / 2.0
-
         else:
             raise Exception("You have to specify the node_position array")
         
-        if kwargs.has_key('node_color'):
-            self.node_color = kwargs['node_color']
-        else:
-            self.node_color = None
 
         if kwargs.has_key('edge_connectivity'):
             self.edge_connectivity = kwargs['edge_connectivity']
+
+            nr_edges = self.edge_connectivity.shape[0]
+            
+            if kwargs.has_key('edge_color'):
+                self.edge_color = kwargs['edge_color']
+            else:
+                # default edge color
+                self.edge_color = np.array( [[255,255,255,255]], dtype = np.ubyte).repeat(nr_edges,axis=0)
+
         else:
             self.edge_connectivity = None
-            
-        if kwargs.has_key('edge_color'):
-            self.edge_color = kwargs['edge_color']
-        else:
-            self.edge_color = None
+
 
         if kwargs.has_key('edge_weight'):
             self.edge_weight = kwargs['edge_weight']
@@ -141,6 +140,39 @@ class AttributeNetwork(Actor):
         else:
             self.obb = None
             
+        if kwargs.has_key('scale_factor'):
+            self.scale_factor = kwargs['scale_factor']
+        else:
+            self.scale_factor = 1.0
+
+        if kwargs.has_key('global_node_size'):
+            self.global_node_size = kwargs['global_node_size']
+        else:
+            self.global_node_size = 1.0
+            
+        if kwargs.has_key('global_edge_width'):
+            self.global_edge_width = kwargs['global_edge_width']
+        else:
+            self.global_edge_width = 1.0
+            
+        if not self.node_position is None:
+            nr_nodes = self.node_position.shape[0]
+            
+            if force_centering:
+                self.node_position = self.node_position - np.mean(self.node_position)
+
+            if kwargs.has_key('node_size'):
+                self.node_size = kwargs['node_size'].ravel()
+            else:
+                # default size 1.0
+                self.node_size = np.ones( (nr_nodes, 1), dtype = np.float32 ).ravel() * self.global_node_size
+
+            if kwargs.has_key('node_color'):
+                self.node_color = kwargs['node_color']
+            else:
+                # create default colors for nodes
+                self.node_color = np.array( [[200,200,200,255]], dtype = np.ubyte).repeat(nr_nodes,axis=0)
+            
         # default variables
         self.internal_timestamp = 0.0
         
@@ -148,6 +180,7 @@ class AttributeNetwork(Actor):
         ##################
         if not self.node_position is None and not self.node_size is None:
             assert self.node_position.shape[0] == self.node_size.size
+            
             self.node_glprimitive._make_cubes(self.node_position, self.node_size)
 
             if self.aabb is None:
@@ -157,12 +190,15 @@ class AttributeNetwork(Actor):
             if self.obb is None:
                 # compute the obb
                 self._compute_obb()
+                
+            self.scale(self.scale_factor)
                         
         if not self.node_color is None:
             self.node_glprimitive._make_color(self.node_color)
             
         if not self.edge_connectivity is None:
             self.edge_glprimitive._make_edges(self.node_position, self.edge_connectivity)
+            
         if not self.edge_color is None:
             self.edge_glprimitive._make_color(self.edge_color)
         
@@ -187,6 +223,15 @@ class AttributeNetwork(Actor):
         # update the affine
         print "update affine", self.affine
         self.affine = affine
+        self._update_glaffine()
+    
+    def scale(self, scale_factor):    
+        """ Scales the actor by scale factor.
+        Multiplies the diagonal of the affine for
+        the first 3 elements """
+        self.affine[0,0] *= scale_factor
+        self.affine[1,1] *= scale_factor
+        self.affine[2,2] *= scale_factor
         self._update_glaffine()
         
     def translate(self, dx, dy, dz):
@@ -229,20 +274,23 @@ class AttributeNetwork(Actor):
 #        self.node_glprimitive._make_color(self.node_color)
         
     def draw(self):
-        
+    
         glPushMatrix()
         glMultMatrixf(self.glaffine)
         
+        # check if network has edges at all
         pri = self.edge_glprimitive
-        glLineWidth(5.0)
-        glEnableClientState(GL_VERTEX_ARRAY)
-        glEnableClientState(GL_COLOR_ARRAY)
-        glVertexPointer(3, GL_FLOAT, 0, pri.vertices_ptr)
-        glColorPointer(4, GL_UNSIGNED_BYTE, 0, pri.color_ptr)
-        glDrawElements(pri.mode,pri.indices_nr,pri.type,pri.indices_ptr)
-        glDisableClientState(GL_COLOR_ARRAY)
-        glDisableClientState(GL_VERTEX_ARRAY)
-                  
+        if not pri.vertices is None:
+            glLineWidth(self.global_edge_width)
+            glEnableClientState(GL_VERTEX_ARRAY)
+            glEnableClientState(GL_COLOR_ARRAY)
+            glVertexPointer(3, GL_FLOAT, 0, pri.vertices_ptr)
+            glColorPointer(4, GL_UNSIGNED_BYTE, 0, pri.color_ptr)
+            glDrawElements(pri.mode,pri.indices_nr,pri.type,pri.indices_ptr)
+            glDisableClientState(GL_COLOR_ARRAY)
+            glDisableClientState(GL_VERTEX_ARRAY)
+        
+        # network requires to have nodes
         pri = self.node_glprimitive
         glEnableClientState(GL_VERTEX_ARRAY)
         glEnableClientState(GL_COLOR_ARRAY)
@@ -253,6 +301,8 @@ class AttributeNetwork(Actor):
         glDisableClientState(GL_VERTEX_ARRAY)
 
         glPopMatrix()
+            
+            
             
     def _update_glaffine(self):
         self.glaffine = (GLfloat * 16)(*tuple(self.affine.T.ravel()))

@@ -3,8 +3,8 @@ import numpy as np
 from fos import FosWindow
 from fos.actor.network import AttributeNetwork
 
-import fos.lib.pyglet
-fos.lib.pyglet.options['debug_gl'] = True
+#import fos.lib.pyglet
+#fos.lib.pyglet.options['debug_gl'] = True
 
 wi = FosWindow()
 w = wi.get_world()

@@ -1616,7 +1616,7 @@ class FPSDisplay(object):
         from pyglet.text import Label
         
         self.label = Label('', x=10, y=10, 
-                           font_size=24, bold=True,
+                           font_size=20, bold=True,
                            color=(127, 127, 127, 127))
 
         self.window = window

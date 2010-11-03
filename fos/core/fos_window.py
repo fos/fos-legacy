@@ -1,13 +1,15 @@
 import numpy as np
 
 from fos.lib.pyglet.gl import *
-from fos.core.managed_window import ManagedWindow
-from fos.core.world import World
 
-from fos.lib import pyglet
+from fos.core.managed_window import ManagedWindow
+from fos import World
+
+#from fos.lib import pyglet
 from fos.lib.pyglet.window import key,mouse
 from fos.lib.pyglet.clock import Clock
 from fos.lib.pyglet.window import FPSDisplay
+from fos.core.window_text  import WindowText
 from fos.core import color
 
 class FosWindow(ManagedWindow):
@@ -55,8 +57,11 @@ class FosWindow(ManagedWindow):
         
         # the frame rate display from pyglet
         self.fps_display = FPSDisplay(self)
+        self.foslabel = WindowText(self, 'Fos', x=10 , y=38)
         
+        # fos ad
         super(FosWindow, self).__init__(**kwargs)
+        
         
         
     def setup(self):           
@@ -143,7 +148,8 @@ class FosWindow(ManagedWindow):
                 pass
         
         self.fps_display.draw()
-        
+        self.foslabel.draw()
+
         self._world._render_lock.release()
     
               
@@ -153,8 +159,6 @@ class FosWindow(ManagedWindow):
         glLoadIdentity()
         gluPerspective(60., width / float(height), .1, 2000.)
         glMatrixMode(GL_MODELVIEW)
-        
-        return pyglet.event.EVENT_HANDLED
 
 
     def on_key_press(self, symbol,modifiers):

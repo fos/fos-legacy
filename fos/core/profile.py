@@ -1,6 +1,13 @@
 """ Class for profiling cython code
+Needs: sudo apt-get install python-profiler
+
 """
-import pstats, cProfile
+try:
+    import pstats
+except ImportError:
+    raise ImportError("pstats is not installed.")
+    
+import cProfile
 import os
 import subprocess
 
@@ -30,12 +37,14 @@ class Profiler():
     Examples
     --------
     >>> import fos.core.profile as p
-    >>> import fos.core.track_metrics as tm
+    >>> from fos.core.fos_window import FosWindow
+    >>> def test(): wi = FosWindow()
+    >>> a = p.Profiler(test)
     >>> p.Profiler(tm.length,np.random.rand(1000000,3))
     >>> fname='test.py'
-    >>> p.Profiler(fname)
-    >>> p.print_stats(10)
-    >>> p.print_stats('det')
+    >>> a = p.Profiler(fname)
+    >>> a.print_stats(10)
+    >>> a.print_stats('det')
 
     References
     ----------
