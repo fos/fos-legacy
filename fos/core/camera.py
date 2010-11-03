@@ -35,6 +35,7 @@ class Camera():
         pass
     
     def update(self):
+        " This should update the camera "
         pass
 
     def draw(self):

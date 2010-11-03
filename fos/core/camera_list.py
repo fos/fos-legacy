@@ -1,5 +1,5 @@
 
-class CameraGraph(object):
+class CameraList(object):
     
     def __init__(self):
         self.cameras = []

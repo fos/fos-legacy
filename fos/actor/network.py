@@ -62,7 +62,10 @@ class AttributeNetwork(Actor):
             
         edge_label
             The label for the edges
-            
+        
+        edge_width_granularity
+            Idea: Subdivide the weight histogram into different
+            bins with their own line width
         
         Font related (global or per node/edge?)
         ------------
@@ -124,6 +127,7 @@ class AttributeNetwork(Actor):
 
     def update(self, dt):
         pass
+#        print "dt", dt
         # update the node position and size to make it dynamic
         # only need to update if anything has changed (chaged)
 #        self.node_position += np.random.random( (self.node_position.shape) ) * 2

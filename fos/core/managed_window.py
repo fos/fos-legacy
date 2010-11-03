@@ -15,7 +15,7 @@ class ManagedWindow(Window):
     in a separate thread. Behavior is added by creating a subclass
     which overrides setup, update, and/or draw.
     """
-    fps_limit = 80
+
     default_win_args = dict(width=640,
                             height=480,
                             vsync=False,
@@ -49,15 +49,11 @@ class ManagedWindow(Window):
             gl_lock.release()
 
         clock = Clock()
-        # this is deprecated
-#        clock.set_fps_limit(self.fps_limit)
-        clock.schedule_interval(self.update, 1/60.)
-        #clock.schedule(self.update)
+        clock.schedule_interval(self.update, self.update_dt)
         
         while not self.has_exit:
             # the clock needs to tick but we are not using dt
             # dt = clock.tick()
-            
             gl_lock.acquire()
             clock.tick(poll=False)
             try:
