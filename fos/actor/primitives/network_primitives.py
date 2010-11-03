@@ -28,6 +28,8 @@ class NodeGLPrimitive():
     def _make_cubes(self, position, size):
         
         assert position.shape[1] == 3
+        size = size.ravel()
+        assert position.shape[0] == len(size)
         
         nr = len(position)
         # allocate space for the big array

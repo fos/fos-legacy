@@ -9,16 +9,7 @@ class AttributeNetwork(Actor):
     
     def __init__(self, *args, **kwargs):
         """
-        
-        Graph related
-        -------------
-        
-        layout
-            The layout algorithm used if node_position
-            not given. Default: random
-            From NetworkX: circular, random, shell, spring, spectral, fruchterman_reingold
-            Else: ...
-        
+                
         Node related
         ------------
         node_position : (N,3)
@@ -92,17 +83,19 @@ class AttributeNetwork(Actor):
         self.node_glprimitive = NodeGLPrimitive()
         self.edge_glprimitive = EdgeGLPrimitive()
         
-        
         if kwargs.has_key('node_position'):
             self.node_position = kwargs['node_position']
 
             if kwargs.has_key('node_size'):
-                self.node_size = kwargs['node_size']
+                self.node_size = kwargs['node_size'].ravel()
             else:
                 # default size 0.5
-                self.node_size = np.ones( (self.node_position.shape[0], 1), dtype = np.float32 ) / 2.0
+                self.node_size = np.ones( (self.node_position.shape[0], 1), dtype = np.float32 ).ravel() / 2.0
                 
             self.node_glprimitive._make_cubes(self.node_position, self.node_size)
+            
+            # compute aabb
+            self._compute_aabb()
         else:
             raise Exception("You have to specify the node_position array")
         
@@ -159,10 +152,25 @@ class AttributeNetwork(Actor):
         glDisableClientState(GL_COLOR_ARRAY)
         glDisableClientState(GL_VERTEX_ARRAY)
         
-        
+    def _compute_aabb(self):
 
-        
+        # using the node_position, node_size to compute the aabb for the cube
+        # make it a bit bigger
+        nodep = self.node_position
+        nodes = self.node_size / 2.0
 
-            
+        self.aabb_2p = np.zeros( (2,3), dtype = np.float32)
+        self.aabb_2p[0,:] = np.array([[nodep[:,0].min(),nodep[:,1].min(),nodep[:,2].min()]], dtype = np.float32)
+        self.aabb_2p[1,:] = np.array([nodep[:,0].max(), nodep[:,1].max(),nodep[:,2].max()], dtype = np.float32)
+        nodes.shape = (len(nodes), 1)
+        nodes = nodes.repeat(3, axis=1)
+        # subtract the node size
+        self.aabb_2p[0,:] -= nodes[0,:]
+        # add the node size
+        self.aabb_2p[1,:] += nodes[1,:]
+
+        # compute aabb_3p
+        
+        
         
         
