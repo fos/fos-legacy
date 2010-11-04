@@ -3,6 +3,7 @@ import numpy as np
 from fos.lib.pyglet.gl import *
 
 from fos.core.window.managed_window import ManagedWindow
+from fos.core.utils import screen_to_model
 from fos import World
 
 from fos.lib.pyglet.window import key,mouse
@@ -10,6 +11,8 @@ from fos.lib.pyglet.clock import Clock
 from fos.lib.pyglet.window import FPSDisplay
 from fos.core.window.window_text  import WindowText
 from fos.core import color
+
+
 
 class FosWindow(ManagedWindow):
     
@@ -192,7 +195,7 @@ class FosWindow(ManagedWindow):
             fx,fy,fz=screen_to_model(x,y,1)        
             near=(nx,ny,nz)
             far=(fx,fy,fz)
-            for a in actors:
+            for a in self._world.ag.actors:
                 try:
                     a.process_pickray(near,far)
                 except:
