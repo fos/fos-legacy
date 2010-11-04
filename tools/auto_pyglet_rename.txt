@@ -1,0 +1,9 @@
+We currently use aptana to rename pyglet internally but we could make a script that takes as an input the old fos.lib.pyglet and replaces it and renames it with the new pyglet.
+
+We could use perl for this 
+perl -pi -e s/Parameters:/Parameters/g scratch/test_propagation.py
+
+but perhaps is better to make a nice python script.
+
+The plus with aptana is that you can do undo!!!
+
