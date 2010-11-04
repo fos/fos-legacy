@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-''' Installation script for fos package '''
+''' Installation script for the fos package '''
 
 
 from os.path import join as pjoin
@@ -29,15 +29,13 @@ cgl_ext, cmdclass = make_cython_ext(
     include_dirs = [np.get_include()])
 
 setup(name='fos',
-      version='0.1a',
+      version='0.2',
       description='Scientific 3d Engine',
       author='Fos Team',
       author_email='garyfallidis@gmail.com',
       url='http://github.com/Garyfallidis/Fos',
       packages=['fos','fos.core'],
-      #package_data={'dipy.io': ['tests/data/*', 'tests/*.py']},
       ext_modules = [col_ext], #,cgl_ext],
-      cmdclass    = cmdclass,      
-      scripts=glob('scripts/*.py')
+      cmdclass    = cmdclass,
       )
 
