@@ -84,7 +84,7 @@ class NodeGLPrimitive():
         
 
         self.vertices_nr = self.vertices.shape[0]
-        self.indices_nr = self.indices.shape[0] * self.indices.shape[1]
+        self.indices_nr = self.indices.size
         
         self.vertices_ptr = self.vertices.ctypes.data
         self.indices_ptr = self.indices.ctypes.data

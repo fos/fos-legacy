@@ -5,7 +5,7 @@ from fos.core.world import World
 from fos.lib.pyglet.gl import GLfloat
 
 from fos.core.actor import Actor
-from fos.actor.primitives.network_primitives import NodeGLPrimitive, EdgeGLPrimitive
+from fos.actor.primitives import NodePrimitive, EdgePrimitive, AABBPrimitive
         
 class AttributeNetwork(Actor):
     
@@ -94,9 +94,9 @@ class AttributeNetwork(Actor):
         # - dynamic graph with lifetime on nodes/edges
         # - hierarchic graph
 
-        self.node_glprimitive = NodeGLPrimitive()
-        self.edge_glprimitive = EdgeGLPrimitive()
-        self.aabb_glprimitive = NodeGLPrimitive()
+        self.node_glprimitive = NodePrimitive()
+        self.edge_glprimitive = EdgePrimitive()
+        self.aabb_glprimitive = AABBPrimitive()
         
         if affine == None:
             # create a default affine
@@ -251,6 +251,9 @@ class AttributeNetwork(Actor):
         self.affine[1,3] += y
         self.affine[2,3] += z
         self._update_glaffine()
+
+    def _update_glaffine(self):
+        self.glaffine = (GLfloat * 16)(*tuple(self.affine.T.ravel()))
         
     def update(self, dt):
         
@@ -302,10 +305,7 @@ class AttributeNetwork(Actor):
 
         glPopMatrix()
             
-            
-            
-    def _update_glaffine(self):
-        self.glaffine = (GLfloat * 16)(*tuple(self.affine.T.ravel()))
+
          
     def _compute_aabb(self):
 
