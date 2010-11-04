@@ -111,7 +111,7 @@ class AttributeNetwork(Actor):
         else:
             raise Exception("You have to specify the node_position array")
         
-
+        self.edge_color = None
         if kwargs.has_key('edge_connectivity'):
             self.edge_connectivity = kwargs['edge_connectivity']
 

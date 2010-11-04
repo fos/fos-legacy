@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -45,10 +45,10 @@ from ctypes import *
 import math
 from sys import byteorder
 
-from pyglet.font import base
-import pyglet.image
-from pyglet.libs.darwin import *
-from pyglet.libs.darwin import _oscheck
+from fos.lib.pyglet.font import base
+import fos.lib.pyglet.image
+from fos.lib.pyglet.libs.darwin import *
+from fos.lib.pyglet.libs.darwin import _oscheck
 
 class FixedPoint(Structure):
     _fields_ = [
@@ -313,7 +313,7 @@ class CarbonGlyphRenderer(base.GlyphRenderer):
         # glyph upside-down and flip the tex_coords.  Note region used
         # to start at top of glyph image.
         pitch = int(4 * self._bitmap_rect.size.width)
-        image = pyglet.image.ImageData(image_width, 
+        image = fos.lib.pyglet.image.ImageData(image_width, 
             self._bitmap_rect.size.height, 'RGBA', self._bitmap, pitch)
         skip_rows = int(self._bitmap_rect.size.height - image_height)
         image = image.get_region(0, skip_rows, image.width, image_height)
@@ -360,7 +360,7 @@ class CarbonFont(base.Font):
             name = 'Helvetica'
 
         if dpi is None:
-            dpi = 96 # pyglet 1.1; in pyglet 1.0 this was 72.
+            dpi = 96 # fos.lib.pyglet 1.1; in fos.lib.pyglet 1.0 this was 72.
 
         # If application is not DPI-aware, DPI is fixed at 72.  Scale
         # font size to emulate other DPI.  This will need to be fixed if issue

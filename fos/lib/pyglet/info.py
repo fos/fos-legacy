@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -36,7 +36,7 @@
 
 Intended usage is to create a file for bug reports, e.g.::
 
-    python -m pyglet.info > info.txt
+    python -m fos.lib.pyglet.info > info.txt
 
 '''
 
@@ -65,24 +65,24 @@ def dump_python():
             print "os.environ['%s']: %s" % (key, value)
 
 def dump_pyglet():
-    '''Dump pyglet version and options.'''
-    import pyglet
-    print 'pyglet.version:', pyglet.version
-    print 'pyglet.__file__:', pyglet.__file__
-    for key, value in pyglet.options.items():
+    '''Dump fos.lib.pyglet version and options.'''
+    import fos.lib.pyglet
+    print 'pyglet.version:', fos.lib.pyglet.version
+    print 'pyglet.__file__:', fos.lib.pyglet.__file__
+    for key, value in fos.lib.pyglet.options.items():
         print "pyglet.options['%s'] = %r" % (key, value)
 
 def dump_window():
     '''Dump display, window, screen and default config info.'''
-    import pyglet.window
-    platform = pyglet.window.get_platform()
+    import fos.lib.pyglet.window
+    platform = fos.lib.pyglet.window.get_platform()
     print 'platform:', repr(platform)
     display = platform.get_default_display()
     print 'display:', repr(display)
     screens = display.get_screens()
     for i, screen in enumerate(screens):
         print 'screens[%d]: %r' % (i, screen)
-    window = pyglet.window.Window(visible=False)
+    window = fos.lib.pyglet.window.Window(visible=False)
     for key, value in window.config.get_gl_attributes():
         print "config['%s'] = %r" % (key, value)
     print 'context:', repr(window.context)
@@ -96,7 +96,7 @@ def dump_gl(context=None):
     if context is not None:
         info = context.get_info()
     else:
-        from pyglet.gl import gl_info as info
+        from fos.lib.pyglet.gl import gl_info as info
     print 'gl_info.get_version():',  info.get_version()
     print 'gl_info.get_vendor():',  info.get_vendor()
     print 'gl_info.get_renderer():',  info.get_renderer()
@@ -108,7 +108,7 @@ def dump_gl(context=None):
 
 def dump_glu():
     '''Dump GLU info.'''
-    from pyglet.gl import glu_info
+    from fos.lib.pyglet.gl import glu_info
     print 'glu_info.get_version():',  glu_info.get_version()
     print 'glu_info.get_extensions():'
     extensions = list(glu_info.get_extensions())
@@ -119,12 +119,12 @@ def dump_glu():
 def dump_glx():
     '''Dump GLX info.'''
     try:
-        from pyglet.gl import glx_info
+        from fos.lib.pyglet.gl import glx_info
     except:
         print 'GLX not available.'
         return
-    import pyglet
-    window = pyglet.window.Window(visible=False)
+    import fos.lib.pyglet
+    window = fos.lib.pyglet.window.Window(visible=False)
     print 'context.is_direct():', window.context.is_direct()
     window.close()
 
@@ -146,25 +146,25 @@ def dump_glx():
             print '  ', name
 
 def dump_media():
-    '''Dump pyglet.media info.'''
-    import pyglet.media
-    print 'audio driver:', pyglet.media.get_audio_driver()
+    '''Dump fos.lib.pyglet.media info.'''
+    import fos.lib.pyglet.media
+    print 'audio driver:', fos.lib.pyglet.media.get_audio_driver()
 
 def dump_avbin():
     '''Dump AVbin info.'''
     try:
-        import pyglet.media.avbin
-        print 'Library:', pyglet.media.avbin.av
-        print 'AVbin version:', pyglet.media.avbin.av.avbin_get_version()
+        import fos.lib.pyglet.media.avbin
+        print 'Library:', fos.lib.pyglet.media.avbin.av
+        print 'AVbin version:', fos.lib.pyglet.media.avbin.av.avbin_get_version()
         print 'FFmpeg revision:', \
-            pyglet.media.avbin.av.avbin_get_ffmpeg_revision()
+            fos.lib.pyglet.media.avbin.av.avbin_get_ffmpeg_revision()
     except:
         print 'AVbin not available.'
 
 def dump_al():
     '''Dump OpenAL info.'''
     try:
-        from pyglet.media.drivers import openal
+        from fos.lib.pyglet.media.drivers import openal
     except:
         print 'OpenAL not available.'
         return
@@ -179,7 +179,7 @@ def dump_al():
 def dump_wintab():
     '''Dump WinTab info.'''
     try:
-        from pyglet.input import wintab
+        from fos.lib.pyglet.input import wintab
     except:
         print 'WinTab not available.'
         return

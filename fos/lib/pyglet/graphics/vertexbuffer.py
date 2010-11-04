@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 #
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -50,10 +50,10 @@ __version__ = '$Id: $'
 import ctypes
 import sys
 
-import pyglet
-from pyglet.gl import *
+import fos.lib.pyglet
+from fos.lib.pyglet.gl import *
 
-_enable_vbo = pyglet.options['graphics_vbo']
+_enable_vbo = fos.lib.pyglet.options['graphics_vbo']
 
 # Enable workaround permanently if any VBO is created on a context that has
 # this workaround.  (On systems with multiple contexts where one is
@@ -80,7 +80,7 @@ def create_buffer(size,
 
     :rtype: `AbstractBuffer`
     '''
-    from pyglet import gl
+    from fos.lib.pyglet import gl
     if (vbo and
         gl_info.have_version(1, 5) and
         _enable_vbo and
@@ -108,7 +108,7 @@ def create_mappable_buffer(size,
 
     :rtype: `AbstractBuffer` with `AbstractMappable`
     '''
-    from pyglet import gl
+    from fos.lib.pyglet import gl
     if (vbo and
         gl_info.have_version(1, 5) and
         _enable_vbo and
@@ -294,7 +294,7 @@ class VertexBufferObject(AbstractBuffer):
         self.size = size
         self.target = target
         self.usage = usage
-        self._context = pyglet.gl.current_context
+        self._context = fos.lib.pyglet.gl.current_context
 
         id = GLuint()
         glGenBuffers(1, id)
@@ -305,7 +305,7 @@ class VertexBufferObject(AbstractBuffer):
         glPopClientAttrib()
 
         global _workaround_vbo_finish
-        if pyglet.gl.current_context._workaround_vbo_finish:
+        if fos.lib.pyglet.gl.current_context._workaround_vbo_finish:
             _workaround_vbo_finish = True
 
     def bind(self):

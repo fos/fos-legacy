@@ -8,11 +8,11 @@ __version__ = '$Id$'
 
 import time
 
-from pyglet.media import AbstractAudioPlayer, AbstractAudioDriver, \
+from fos.lib.pyglet.media import AbstractAudioPlayer, AbstractAudioDriver, \
                          MediaThread, MediaEvent
 
-import pyglet
-_debug = pyglet.options['debug_media']
+import fos.lib.pyglet
+_debug = fos.lib.pyglet.options['debug_media']
 
 class SilentAudioPacket(object):
     def __init__(self, timestamp, duration):

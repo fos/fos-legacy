@@ -3,9 +3,9 @@
 
 from base import Display, Screen, ScreenMode, Canvas
 
-from pyglet.libs.win32 import _kernel32, _user32, types, constants
-from pyglet.libs.win32.constants import *
-from pyglet.libs.win32.types import *
+from fos.lib.pyglet.libs.win32 import _kernel32, _user32, types, constants
+from fos.lib.pyglet.libs.win32.constants import *
+from fos.lib.pyglet.libs.win32.types import *
 
 class Win32Display(Display):
     def get_screens(self):

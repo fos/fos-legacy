@@ -31,8 +31,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 # ----------------------------------------------------------------------
 
-import pyglet
-from pyglet.gl import *
+import fos.lib.pyglet
+from fos.lib.pyglet.gl import *
 
 from shape import Rectangle
 from widget import Widget

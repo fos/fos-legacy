@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -40,7 +40,7 @@ Measuring time
 The `tick` and `get_fps` functions can be used in conjunction to fulfil most
 games' basic requirements::
 
-    from pyglet import clock
+    from fos.lib.pyglet import clock
     while True:
         dt = clock.tick()
         # ... update and render ...
@@ -145,7 +145,7 @@ import time
 import sys
 import ctypes
 
-import pyglet.lib
+import fos.lib.pyglet.lib
 
 if sys.platform in ('win32', 'cygwin'):
     # Win32 Sleep function is only 10-millisecond resolution, so instead
@@ -166,7 +166,7 @@ if sys.platform in ('win32', 'cygwin'):
     _default_time_function = time.clock
 
 else:
-    _c = pyglet.lib.load_library('c', darwin='/usr/lib/libc.dylib')
+    _c = fos.lib.pyglet.lib.load_library('c', darwin='/usr/lib/libc.dylib')
     _c.usleep.argtypes = [ctypes.c_ulong]
 
     class _ClockBase(object):
@@ -232,7 +232,7 @@ class Clock(_ClockBase):
         :Parameters:
             `fps_limit` : float
                 If not None, the maximum allowable framerate.  Defaults
-                to None.  Deprecated in pyglet 1.2.
+                to None.  Deprecated in fos.lib.pyglet 1.2.
             `time_function` : function
                 Function to return the elapsed time of the application, 
                 in seconds.  Defaults to time.time, but can be replaced
@@ -258,7 +258,7 @@ class Clock(_ClockBase):
         This updates the clock's internal measure of time and returns
         the difference since the last update (or since the clock was created).
 
-        :since: pyglet 1.2
+        :since: fos.lib.pyglet 1.2
 
         :rtype: float
         :return: The number of seconds since the last `update_time`, or 0
@@ -280,7 +280,7 @@ class Clock(_ClockBase):
     def call_scheduled_functions(self, dt):
         '''Call scheduled functions that elapsed on the last `update_time`.
 
-        :since: pyglet 1.2
+        :since: fos.lib.pyglet 1.2
 
         :Parameters:
             dt : float
@@ -353,7 +353,7 @@ class Clock(_ClockBase):
                 for advanced applications managing their own sleep timers
                 only.
                 
-                Since pyglet 1.1.
+                Since fos.lib.pyglet 1.1.
 
         :rtype: float
         :return: The number of seconds since the last "tick", or 0 if this was
@@ -428,7 +428,7 @@ class Clock(_ClockBase):
         :return: Time until the next scheduled event in seconds, or ``None``
             if there is no event scheduled.
 
-        :since: pyglet 1.1
+        :since: fos.lib.pyglet 1.1
         '''
         if self._schedule_items or not sleep_idle:
             if not self.period_limit:
@@ -573,7 +573,7 @@ class Clock(_ClockBase):
         graphics animations out of phase; for example, multiple flags
         waving in the wind.
 
-        :since: pyglet 1.1
+        :since: fos.lib.pyglet 1.1
 
         :Parameters:
             `func` : function
@@ -729,7 +729,7 @@ def tick(poll=False):
             for advanced applications managing their own sleep timers
             only.
             
-            Since pyglet 1.1.
+            Since fos.lib.pyglet 1.1.
 
     :rtype: float
     :return: The number of seconds since the last "tick", or 0 if this was the
@@ -753,7 +753,7 @@ def get_sleep_time(sleep_idle):
     :return: Time until the next scheduled event in seconds, or ``None``
         if there is no event scheduled.
 
-    :since: pyglet 1.1
+    :since: fos.lib.pyglet 1.1
     '''
     return _default.get_sleep_time(sleep_idle)
 
@@ -823,7 +823,7 @@ def schedule_interval_soft(func, interval, *args, **kwargs):
 
     :see: `Clock.schedule_interval_soft`
 
-    :since: pyglet 1.1
+    :since: fos.lib.pyglet 1.1
     
     :Parameters:
         `func` : function
@@ -875,7 +875,7 @@ class ClockDisplay(object):
 
     :deprecated: This class presents values that are often misleading, as
         they reflect the rate of clock ticks, not displayed framerate.  Use
-        pyglet.window.FPSDisplay instead.
+        fos.lib.pyglet.window.FPSDisplay instead.
 
     '''
     
@@ -912,11 +912,11 @@ class ClockDisplay(object):
         self.clock.schedule_interval(self.update_text, interval)
 
         if not font:
-            from pyglet.font import load as load_font
+            from fos.lib.pyglet.font import load as load_font
             font = load_font('', 36, bold=True)
 
-        import pyglet.font
-        self.label = pyglet.font.Text(font, '', color=color, x=10, y=10)
+        import fos.lib.pyglet.font
+        self.label = fos.lib.pyglet.font.Text(font, '', color=color, x=10, y=10)
 
         self.format = format
 
@@ -929,7 +929,7 @@ class ClockDisplay(object):
         resource drain.  Call this method to unschedule the update method
         and allow the ClockDisplay to be garbage collected.
 
-        :since: pyglet 1.1
+        :since: fos.lib.pyglet 1.1
         '''
         self.clock.unschedule(self.update_text)
 

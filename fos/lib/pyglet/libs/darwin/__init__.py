@@ -1,11 +1,11 @@
-import pyglet
+import fos.lib.pyglet
 
 from types import *
 from constants import *
 
-carbon = pyglet.lib.load_library(
+carbon = fos.lib.pyglet.lib.load_library(
     framework='/System/Library/Frameworks/Carbon.framework')
-quicktime = pyglet.lib.load_library(
+quicktime = fos.lib.pyglet.lib.load_library(
     framework='/System/Library/Frameworks/QuickTime.framework')
 
 carbon.GetEventDispatcherTarget.restype = EventTargetRef

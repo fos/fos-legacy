@@ -98,7 +98,9 @@ class ManagedWindow(Window):
         """
         pass
 
-
+#    def fertig(self):
+#        self.dispatch_event('on_close')
+#        super(ManagedWindow, self).dispatch_event('on_close')
 
 #    def close(self):
 #        '''Close the window.

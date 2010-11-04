@@ -9,32 +9,32 @@ __version__ = '$Id: $'
 from ctypes import *
 import ctypes
 
-from pyglet import app
-from pyglet.app.xlib import XlibSelectDevice
+from fos.lib.pyglet import app
+from fos.lib.pyglet.app.xlib import XlibSelectDevice
 from base import Display, Screen, ScreenMode, Canvas
 
 import xlib_vidmoderestore
 
 # XXX
-#from pyglet.window import NoSuchDisplayException
+#from fos.lib.pyglet.window import NoSuchDisplayException
 class NoSuchDisplayException(Exception):
     pass
 
-from pyglet.libs.x11 import xlib
+from fos.lib.pyglet.libs.x11 import xlib
 try:
-    from pyglet.libs.x11 import xinerama
+    from fos.lib.pyglet.libs.x11 import xinerama
     _have_xinerama = True
 except:
     _have_xinerama = False
 
 try:
-    from pyglet.libs.x11 import xsync
+    from fos.lib.pyglet.libs.x11 import xsync
     _have_xsync = True
 except:
     _have_xsync = False
 
 try:
-    from pyglet.libs.x11 import xf86vmode
+    from fos.lib.pyglet.libs.x11 import xf86vmode
     _have_xf86vmode = True
 except:
     _have_xf86vmode = False
@@ -48,8 +48,8 @@ def _error_handler(display, event):
     # driver bugs (and so the reports are useless).  Nevertheless, set
     # environment variable PYGLET_DEBUG_X11 to 1 to get dumps of the error
     # and a traceback (execution will continue).
-    import pyglet
-    if pyglet.options['debug_x11']:
+    import fos.lib.pyglet
+    if fos.lib.pyglet.options['debug_x11']:
         event = event.contents
         buf = c_buffer(1024)
         xlib.XGetErrorText(display, event.error_code, buf, len(buf))

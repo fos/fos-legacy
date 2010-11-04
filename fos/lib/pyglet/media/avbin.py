@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -42,16 +42,16 @@ import ctypes
 import threading
 import time
 
-import pyglet
-from pyglet import gl
-from pyglet.gl import gl_info
-from pyglet import image
-import pyglet.lib
-from pyglet.media import \
+import fos.lib.pyglet
+from fos.lib.pyglet import gl
+from fos.lib.pyglet.gl import gl_info
+from fos.lib.pyglet import image
+import fos.lib.pyglet.lib
+from fos.lib.pyglet.media import \
     MediaFormatException, StreamingSource, VideoFormat, AudioFormat, \
     AudioData, MediaEvent, WorkerThread, SourceInfo
 
-av = pyglet.lib.load_library('avbin', 
+av = fos.lib.pyglet.lib.load_library('avbin', 
                              darwin='/usr/local/lib/libavbin.dylib')
 
 AVBIN_RESULT_ERROR = -1
@@ -553,7 +553,7 @@ class AVbinSource(StreamingSource):
             return packet.image
 
 av.avbin_init()
-if pyglet.options['debug_media']:
+if fos.lib.pyglet.options['debug_media']:
     _debug = True
     av.avbin_set_log_level(AVBIN_LOG_DEBUG)
 else:

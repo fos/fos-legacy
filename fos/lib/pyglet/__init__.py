@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -43,22 +43,18 @@ __version__ = '$Id$'
 import os
 import sys
 
-## replace the pyglet package
-from fos.lib import import_thirdparty
-pyglet = import_thirdparty("pyglet")
-
 _is_epydoc = hasattr(sys, 'is_epydoc') and sys.is_epydoc
 
-#: The release version of this pyglet installation.  
+#: The release version of this fos.lib.pyglet installation.  
 #:
-#: Valid only if pyglet was installed from a source or binary distribution
+#: Valid only if fos.lib.pyglet was installed from a source or binary distribution
 #: (i.e. not in a checked-out copy from SVN).
 #: 
 #: Use setuptools if you need to check for a specific release version, e.g.::
 #:
-#:    >>> import pyglet
+#:    >>> import fos.lib.pyglet
 #:    >>> from pkg_resources import parse_version
-#:    >>> parse_version(pyglet.version) >= parse_version('1.1')
+#:    >>> parse_version(fos.lib.pyglet.version) >= parse_version('1.1')
 #:    True
 #:
 version = '1.2dev'
@@ -76,11 +72,11 @@ _enable_optimisations = not __debug__
 if getattr(sys, 'frozen', None):
     _enable_optimisations = True
 
-#: Global dict of pyglet options.  To change an option from its default, you
+#: Global dict of fos.lib.pyglet options.  To change an option from its default, you
 #: must import ``pyglet`` before any sub-packages.  For example::
 #:
-#:      import pyglet
-#:      pyglet.options['debug_gl'] = False
+#:      import fos.lib.pyglet
+#:      fos.lib.pyglet.options['debug_gl'] = False
 #:
 #: The default options can be overridden from the OS environment.  The
 #: corresponding environment variable for each option key is prefaced by
@@ -107,31 +103,31 @@ if getattr(sys, 'frozen', None):
 #:     errors using ``glGetError``.  This will severely impact performance,
 #:     but provides useful exceptions at the point of failure.  By default,
 #:     this option is enabled if ``__debug__`` is (i.e., if Python was not run
-#:     with the -O option).  It is disabled by default when pyglet is "frozen"
+#:     with the -O option).  It is disabled by default when fos.lib.pyglet is "frozen"
 #:     within a py2exe or py2app library archive.
 #: shadow_window
-#:     By default, pyglet creates a hidden window with a GL context when
-#:     pyglet.gl is imported.  This allows resources to be loaded before
+#:     By default, fos.lib.pyglet creates a hidden window with a GL context when
+#:     fos.lib.pyglet.gl is imported.  This allows resources to be loaded before
 #:     the application window is created, and permits GL objects to be
 #:     shared between windows even after they've been closed.  You can
 #:     disable the creation of the shadow window by setting this option to
 #:     False.  Recommended for advanced devlopers only.
 #:
-#:     **Since:** pyglet 1.1
+#:     **Since:** fos.lib.pyglet 1.1
 #: vsync
 #:     If set, the `pyglet.window.Window.vsync` property is ignored, and
 #:     this option overrides it (to either force vsync on or off).  If unset,
 #:     or set to None, the `pyglet.window.Window.vsync` property behaves
 #:     as documented.
 #: xsync
-#:     If set (the default), pyglet will attempt to synchronise the drawing of
+#:     If set (the default), fos.lib.pyglet will attempt to synchronise the drawing of
 #:     double-buffered windows to the border updates of the X11 window
 #:     manager.  This improves the appearance of the window during resize
 #:     operations.  This option only affects double-buffered windows on
 #:     X11 servers supporting the Xsync extension with a window manager
 #:     that implements the _NET_WM_SYNC_REQUEST protocol.
 #:
-#:     **Since:** pyglet 1.1
+#:     **Since:** fos.lib.pyglet 1.1
 #:
 options = {
     'audio': ('directsound', 'pulse', 'openal', 'silent'),
@@ -219,7 +215,7 @@ def _trace_repr(value, size=40):
     return value
 
 def _trace_frame(thread, frame, indent):
-    from pyglet import lib
+    from fos.lib.pyglet import lib
     if frame.f_code is lib._TraceFunction.__call__.func_code:
         is_ctypes = True
         func = frame.f_locals['self']._func
@@ -313,7 +309,7 @@ class _ModuleProxy(object):
             if self._module is not None:
                 raise
 
-            import_name = 'pyglet.%s' % self._module_name
+            import_name = 'fos.lib.pyglet.%s' % self._module_name
             __import__(import_name)
             module = sys.modules[import_name]
             object.__setattr__(self, '_module', module)
@@ -372,6 +368,6 @@ if False:
     import text
     import window
 
-# Hack around some epydoc bug that causes it to think pyglet.window is None.
+# Hack around some epydoc bug that causes it to think fos.lib.pyglet.window is None.
 if _is_epydoc:
     import window

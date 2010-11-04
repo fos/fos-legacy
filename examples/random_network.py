@@ -1,7 +1,7 @@
 import numpy as np
 
-from fos.core.world import World
-from fos.core.fos_window import FosWindow
+from fos import World, Window
+
 from fos.actor.network import AttributeNetwork
 
 w = World("myworld")    
@@ -46,5 +46,5 @@ cu = AttributeNetwork(affine = aff,
 w.add(cu)
 #w.delete(cu)
 
-wi = FosWindow()
+wi = Window()
 wi.attach(w)

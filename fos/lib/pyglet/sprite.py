@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -43,18 +43,18 @@ The following complete example loads a ``"ball.png"`` image and creates a
 sprite for that image.  The sprite is then drawn in the window's
 draw event handler::
 
-    import pyglet
+    import fos.lib.pyglet
 
-    ball_image = pyglet.image.load('ball.png')
-    ball = pyglet.sprite.Sprite(ball_image, x=50, y=50)
+    ball_image = fos.lib.pyglet.image.load('ball.png')
+    ball = fos.lib.pyglet.sprite.Sprite(ball_image, x=50, y=50)
 
-    window = pyglet.window.Window()
+    window = fos.lib.pyglet.window.Window()
 
     @window.event
     def on_draw():
         ball.draw()
 
-    pyglet.app.run()
+    fos.lib.pyglet.app.run()
 
 The sprite can be moved by modifying the ``x`` and ``y`` properties.  Other
 properties determine the sprite's rotation, scale and opacity.
@@ -71,12 +71,12 @@ of their ``draw`` methods were called individually.  The following example
 creates one hundred ball sprites and adds each of them to a `Batch`.  The
 entire batch of sprites is then drawn in one call::
 
-    batch = pyglet.graphics.Batch()
+    batch = fos.lib.pyglet.graphics.Batch()
 
     ball_sprites = []
     for i in range(100):
         x, y = i * 10, 50
-        ball_sprites.append(pyglet.sprite.Sprite(ball_image, x, y, batch=batch)
+        ball_sprites.append(fos.lib.pyglet.sprite.Sprite(ball_image, x, y, batch=batch)
 
     @window.event
     def on_draw():
@@ -87,7 +87,7 @@ however a sprite can belong to at most one batch.  See the documentation for
 `pyglet.graphics` for more details on batched rendering, and grouping of
 sprites within batches.
 
-:since: pyglet 1.1
+:since: fos.lib.pyglet 1.1
 '''
 
 __docformat__ = 'restructuredtext'
@@ -96,11 +96,11 @@ __version__ = '$Id$'
 import math
 import sys
 
-from pyglet.gl import *
-from pyglet import clock
-from pyglet import event
-from pyglet import graphics
-from pyglet import image
+from fos.lib.pyglet.gl import *
+from fos.lib.pyglet import clock
+from fos.lib.pyglet import event
+from fos.lib.pyglet import graphics
+from fos.lib.pyglet import image
 
 _is_epydoc = hasattr(sys, 'is_epydoc') and sys.is_epydoc
 

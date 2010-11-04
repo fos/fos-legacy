@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -40,9 +40,9 @@ __version__ = '$Id: $'
 
 import re
 
-import pyglet
+import fos.lib.pyglet
 
-class ImageElement(pyglet.text.document.InlineElement):
+class ImageElement(fos.lib.pyglet.text.document.InlineElement):
     def __init__(self, image, width=None, height=None):
         self.image = image.get_texture()
         self.width = width is None and image.width or width
@@ -55,13 +55,13 @@ class ImageElement(pyglet.text.document.InlineElement):
         super(ImageElement, self).__init__(ascent, descent, self.width)
 
     def place(self, layout, x, y):
-        group = pyglet.graphics.TextureGroup(self.image.texture, 
+        group = fos.lib.pyglet.graphics.TextureGroup(self.image.texture, 
                                              layout.top_group)
         x1 = x
         y1 = y + self.descent
         x2 = x + self.width
         y2 = y + self.height + self.descent
-        vertex_list = layout.batch.add(4, pyglet.gl.GL_QUADS, group,
+        vertex_list = layout.batch.add(4, fos.lib.pyglet.gl.GL_QUADS, group,
             ('v2i', (x1, y1, x2, y1, x2, y2, x1, y2)),
             ('c3B', (255, 255, 255) * 4),
             ('t3f', self.image.tex_coords))
@@ -210,16 +210,16 @@ class OrderedListBuilder(ListBuilder):
         else:
             return '%s%d%s' % (self.prefix, value, self.suffix)
 
-class StructuredTextDecoder(pyglet.text.DocumentDecoder):
+class StructuredTextDecoder(fos.lib.pyglet.text.DocumentDecoder):
     def decode(self, text, location=None):
         self.len_text = 0
         self.current_style = {}
         self.next_style = {}
         self.stack = []
         self.list_stack = []
-        self.document = pyglet.text.document.FormattedDocument()
+        self.document = fos.lib.pyglet.text.document.FormattedDocument()
         if location is None:
-            location = pyglet.resource.FileLocation('')
+            location = fos.lib.pyglet.resource.FileLocation('')
         self.decode_structured(text, location)
         return self.document
 

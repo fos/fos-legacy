@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -37,7 +37,7 @@
 This is a fairly-low level interface to text rendering.  Obtain a font using
 `load`::
 
-    from pyglet import font
+    from fos.lib.pyglet import font
     arial = font.load('Arial', 14, bold=True, italic=False)
 
 pyglet will load any system-installed fonts.  You can add additional fonts
@@ -75,11 +75,11 @@ import os
 import math
 import weakref
 
-import pyglet
-from pyglet.gl import *
-from pyglet import gl
-from pyglet import image
-from pyglet import window
+import fos.lib.pyglet
+from fos.lib.pyglet.gl import *
+from fos.lib.pyglet import gl
+from fos.lib.pyglet import image
+from fos.lib.pyglet import window
 
 class GlyphString(object):
     '''An immutable string of glyphs that can be rendered quickly.
@@ -206,7 +206,7 @@ class GlyphString(object):
         
         Assumes texture state is enabled.  To enable the texture state::
 
-            from pyglet.gl import *
+            from fos.lib.pyglet.gl import *
             glEnable(GL_TEXTURE_2D)
 
         :Parameters:
@@ -247,7 +247,7 @@ class GlyphString(object):
         if from_index:
             glPopMatrix()
 
-class _TextZGroup(pyglet.graphics.Group):
+class _TextZGroup(fos.lib.pyglet.graphics.Group):
     z = 0
 
     def set_state(self):
@@ -339,8 +339,8 @@ class Text(object):
             multiline = True
 
         self._group = _TextZGroup()
-        self._document = pyglet.text.decode_text(text)
-        self._layout = pyglet.text.layout.TextLayout(self._document, 
+        self._document = fos.lib.pyglet.text.decode_text(text)
+        self._layout = fos.lib.pyglet.text.layout.TextLayout(self._document, 
                                               width=width,
                                               multiline=multiline,
                                               dpi=font.dpi,
@@ -564,19 +564,19 @@ class Text(object):
 
 if not getattr(sys, 'is_epydoc', False):
     if sys.platform == 'darwin':
-        from pyglet.font.carbon import CarbonFont
+        from fos.lib.pyglet.font.carbon import CarbonFont
         _font_class = CarbonFont
     elif sys.platform in ('win32', 'cygwin'):
-        if pyglet.options['font'][0] == 'win32':
-            from pyglet.font.win32 import Win32Font
+        if fos.lib.pyglet.options['font'][0] == 'win32':
+            from fos.lib.pyglet.font.win32 import Win32Font
             _font_class = Win32Font
-        elif pyglet.options['font'][0] == 'gdiplus':
-            from pyglet.font.win32 import GDIPlusFont
+        elif fos.lib.pyglet.options['font'][0] == 'gdiplus':
+            from fos.lib.pyglet.font.win32 import GDIPlusFont
             _font_class = GDIPlusFont
         else:
             assert False, 'Unknown font driver'
     else:
-        from pyglet.font.freetype import FreeTypeFont
+        from fos.lib.pyglet.font.freetype import FreeTypeFont
         _font_class = FreeTypeFont
 
 def load(name=None, size=None, bold=False, italic=False, dpi=None):
@@ -587,10 +587,10 @@ def load(name=None, size=None, bold=False, italic=False, dpi=None):
             Font family, for example, "Times New Roman".  If a list of names
             is provided, the first one matching a known font is used.  If no
             font can be matched to the name(s), a default font is used.  In
-            pyglet 1.1, the name may be omitted.
+            fos.lib.pyglet 1.1, the name may be omitted.
         `size` : float
             Size of the font, in points.  The returned font may be an exact
-            match or the closest available.  In pyglet 1.1, the size may be
+            match or the closest available.  In fos.lib.pyglet 1.1, the size may be
             omitted, and defaults to 12pt.
         `bold` : bool
             If True, a bold variant is returned, if one exists for the given
@@ -655,10 +655,10 @@ def load(name=None, size=None, bold=False, italic=False, dpi=None):
     return font
 
 def add_file(font):
-    '''Add a font to pyglet's search path.
+    '''Add a font to fos.lib.pyglet's search path.
 
     In order to load a font that is not installed on the system, you must
-    call this method to tell pyglet that it exists.  You can supply
+    call this method to tell fos.lib.pyglet that it exists.  You can supply
     either a filename or any file-like object.
 
     The font format is platform-dependent, but is typically a TrueType font
@@ -678,7 +678,7 @@ def add_file(font):
 
 
 def add_directory(dir):
-    '''Add a directory of fonts to pyglet's search path.
+    '''Add a directory of fonts to fos.lib.pyglet's search path.
 
     This function simply calls `add_file` for each file with a ``.ttf``
     extension in the given directory.  Subdirectories are not searched.

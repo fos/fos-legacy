@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -39,7 +39,7 @@ accompanying documentation.
 
 To load an image::
 
-    from pyglet import image
+    from fos.lib.pyglet import image
     pic = image.load('picture.png')
 
 The supported image file types include PNG, BMP, GIF, JPG, and many more,
@@ -51,7 +51,7 @@ object instead of a filename::
 The hint helps the module locate an appropriate decoder to use based on the
 file extension.  It is optional.
 
-Once loaded, images can be used directly by most other modules of pyglet.  All
+Once loaded, images can be used directly by most other modules of fos.lib.pyglet.  All
 images have a width and height you can access::
 
     width, height = pic.width, pic.height
@@ -90,9 +90,9 @@ If you are using OpenGL directly, you can access the image as a texture::
 
 (This is the most efficient way to obtain a texture; some images are
 immediately loaded as textures, whereas others go through an intermediate
-form).  To use a texture with pyglet.gl::
+form).  To use a texture with fos.lib.pyglet.gl::
 
-    from pyglet.gl import *
+    from fos.lib.pyglet.gl import *
     glEnable(texture.target)        # typically target is GL_TEXTURE_2D
     glBindTexture(texture.target, texture.id)
     # ... draw with the texture
@@ -140,14 +140,14 @@ from ctypes import *
 from math import ceil
 from StringIO import StringIO
 
-from pyglet import gl
-from pyglet.gl import *
-from pyglet.gl import gl_info
-from pyglet import graphics
-from pyglet.window import *
+from fos.lib.pyglet import gl
+from fos.lib.pyglet.gl import *
+from fos.lib.pyglet.gl import gl_info
+from fos.lib.pyglet import graphics
+from fos.lib.pyglet.window import *
 
-from pyglet.image import atlas
-from pyglet.compat import asbytes
+from fos.lib.pyglet.image import atlas
+from fos.lib.pyglet.compat import asbytes
 
 class ImageException(Exception):
     pass
@@ -313,7 +313,7 @@ class AbstractImage(object):
 
         :rtype: `ImageData`
 
-        :since: pyglet 1.1
+        :since: fos.lib.pyglet 1.1
         '''
         raise ImageException('Cannot retrieve image data for %r' % self)
 
@@ -361,10 +361,10 @@ class AbstractImage(object):
             `force_rectangle` : bool
                 True if the texture must be created as a rectangle.
 
-                **Since:** pyglet 1.1.4.
+                **Since:** fos.lib.pyglet 1.1.4.
         :rtype: `Texture`
 
-        :since: pyglet 1.1
+        :since: fos.lib.pyglet 1.1
         '''
         raise ImageException('Cannot retrieve texture for %r' % self)
 
@@ -386,7 +386,7 @@ class AbstractImage(object):
 
         :rtype: `Texture`
 
-        :since: pyglet 1.1
+        :since: fos.lib.pyglet 1.1
         '''
         raise ImageException('Cannot retrieve mipmapped texture for %r' % self)
 
@@ -497,7 +497,7 @@ class AbstractImageSequence(object):
 
         :rtype: `TextureSequence`
 
-        :since: pyglet 1.1
+        :since: fos.lib.pyglet 1.1
         '''
         raise NotImplementedError('abstract')
 
@@ -521,7 +521,7 @@ class AbstractImageSequence(object):
 
         :rtype: `Animation`
 
-        :since: pyglet 1.1
+        :since: fos.lib.pyglet 1.1
         '''
         return Animation.from_image_sequence(self, period, loop)
 
@@ -551,7 +551,7 @@ class AbstractImageSequence(object):
 
         :rtype: Iterator
 
-        :since: pyglet 1.1
+        :since: fos.lib.pyglet 1.1
         '''
         raise NotImplementedError('abstract')
         
@@ -695,7 +695,7 @@ class ImageData(AbstractImage):
                 Number of bytes per row.  Negative values indicate a
                 top-to-bottom arrangement.
 
-        :since: pyglet 1.1
+        :since: fos.lib.pyglet 1.1
 
         :rtype: sequence of bytes, or str
         '''
@@ -715,7 +715,7 @@ class ImageData(AbstractImage):
             `data` : str or sequence of bytes
                 Image data.
 
-        :since: pyglet 1.1
+        :since: fos.lib.pyglet 1.1
         '''
         self._current_format = format
         self._current_pitch = pitch
@@ -772,12 +772,12 @@ class ImageData(AbstractImage):
                 ``True`` if a rectangle can be created; see
                 `AbstractImage.get_texture`.
 
-                **Since:** pyglet 1.1
+                **Since:** fos.lib.pyglet 1.1
             `force_rectangle` : bool
                 ``True`` if a rectangle must be created; see
                 `AbstractImage.get_texture`.
 
-                **Since:** pyglet 1.1.4
+                **Since:** fos.lib.pyglet 1.1.4
 
         :rtype: cls or cls.region_class
         '''
@@ -812,7 +812,7 @@ class ImageData(AbstractImage):
 
         :rtype: `Texture`
 
-        :since: pyglet 1.1
+        :since: fos.lib.pyglet 1.1
         '''
         if self._current_mipmap_texture:
             return self._current_mipmap_texture
@@ -1446,7 +1446,7 @@ class Texture(AbstractImage):
                 ``True`` if a rectangular texture is required.  See
                 `AbstractImage.get_texture`.  
                 
-                **Since:** pyglet 1.1.4.
+                **Since:** fos.lib.pyglet 1.1.4.
             `min_filter` : int
                 The minifaction filter used for this texture, commonly ``GL_LINEAR`` or ``GL_NEAREST``
             `mag_filter` : int
@@ -1454,7 +1454,7 @@ class Texture(AbstractImage):
 
         :rtype: `Texture`
         
-        :since: pyglet 1.1
+        :since: fos.lib.pyglet 1.1
         '''
         target = GL_TEXTURE_2D
         if rectangle or force_rectangle:
@@ -2374,14 +2374,14 @@ class TextureGrid(TextureRegion, UniformTextureSequence):
         return iter(self.items)
 
 # --------------------------------------------------------------------------
-# Animation stuff here.  Vote on if this should be in pyglet.image.animation
+# Animation stuff here.  Vote on if this should be in fos.lib.pyglet.image.animation
 # or just leave it tacked on here.
 
 # TODO: 
 #       conversion Animation ->  media.Source
 #       move to another module?  
-#          pyglet.animation?
-#          pyglet.image.animation?
+#          fos.lib.pyglet.animation?
+#          fos.lib.pyglet.image.animation?
 
 def load_animation(filename, file=None, decoder=None):
     '''Load an animation from a file.
@@ -2554,5 +2554,5 @@ class AnimationFrame(object):
 
 
 # Initialise default codecs
-from pyglet.image import codecs as _codecs
+from fos.lib.pyglet.image import codecs as _codecs
 _codecs.add_default_image_codecs()

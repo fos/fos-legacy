@@ -8,13 +8,13 @@ __version__ = '$Id: $'
 
 from base import Config, CanvasConfig, Context
 
-from pyglet.libs.darwin import *
-from pyglet.libs.darwin import _oscheck
-from pyglet.gl import ContextException
-from pyglet.gl import gl
-from pyglet.gl import agl
+from fos.lib.pyglet.libs.darwin import *
+from fos.lib.pyglet.libs.darwin import _oscheck
+from fos.lib.pyglet.gl import ContextException
+from fos.lib.pyglet.gl import gl
+from fos.lib.pyglet.gl import agl
 
-from pyglet.canvas.carbon import CarbonCanvas, CarbonFullScreenCanvas
+from fos.lib.pyglet.canvas.carbon import CarbonCanvas, CarbonFullScreenCanvas
 
 def _aglcheck():
     err = agl.aglGetError()
@@ -41,7 +41,7 @@ class CarbonConfig(Config):
         attrs.append(agl.AGL_RGBA)
 
         # In 10.3 and later, AGL_FULLSCREEN is specified so the window can
-        # be toggled to/from fullscreen without losing context.  pyglet
+        # be toggled to/from fullscreen without losing context.  fos.lib.pyglet
         # no longer supports earlier versions of OS X, so we always supply it.
         attrs.append(agl.AGL_FULLSCREEN)
 
@@ -78,14 +78,14 @@ class CarbonCanvasConfig(CanvasConfig):
         'accum_blue_size': agl.AGL_ACCUM_BLUE_SIZE,
         'accum_alpha_size': agl.AGL_ACCUM_ALPHA_SIZE,
 
-        # Not exposed by pyglet API (set internally)
+        # Not exposed by fos.lib.pyglet API (set internally)
         'all_renderers': agl.AGL_ALL_RENDERERS,
         'rgba': agl.AGL_RGBA,
         'fullscreen': agl.AGL_FULLSCREEN,
         'minimum_policy': agl.AGL_MINIMUM_POLICY,
         'maximum_policy': agl.AGL_MAXIMUM_POLICY,
 
-        # Not supported in current pyglet API
+        # Not supported in current fos.lib.pyglet API
         'level': agl.AGL_LEVEL, 
         'pixel_size': agl.AGL_PIXEL_SIZE,   # == buffer_size
         'aux_depth_stencil': agl.AGL_AUX_DEPTH_STENCIL,

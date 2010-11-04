@@ -1,12 +1,12 @@
 import numpy as np
 
-from fos import FosWindow
+from fos import Window
 from fos.actor.network import AttributeNetwork
 
 #import fos.lib.pyglet
 #fos.lib.pyglet.options['debug_gl'] = True
 
-wi = FosWindow()
+wi = Window()
 w = wi.get_world()
 
 # node positions

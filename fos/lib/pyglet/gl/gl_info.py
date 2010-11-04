@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -36,7 +36,7 @@
 
 Usage::
     
-    from pyglet.gl import gl_info
+    from fos.lib.pyglet.gl import gl_info
 
     if gl_info.have_extension('GL_NV_register_combiners'):
         # ...
@@ -45,7 +45,7 @@ If you are using more than one context, you can set up a separate GLInfo
 object for each context.  Call `set_active_context` after switching to the
 context::
 
-    from pyglet.gl.gl_info import GLInfo
+    from fos.lib.pyglet.gl.gl_info import GLInfo
 
     info = GLInfo()
     info.set_active_context()
@@ -61,8 +61,8 @@ __version__ = '$Id: $'
 from ctypes import *
 import warnings
 
-from pyglet.gl.gl import *
-from pyglet.compat import asstr
+from fos.lib.pyglet.gl.gl import *
+from fos.lib.pyglet.compat import asstr
 
 class GLInfo(object):
     '''Information interface for a single GL context.

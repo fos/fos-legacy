@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -38,7 +38,7 @@
 Abstract representation
 =======================
 
-Styled text in pyglet is represented by one of the `AbstractDocument` classes,
+Styled text in fos.lib.pyglet is represented by one of the `AbstractDocument` classes,
 which manage the state representation of text and style independently of how
 it is loaded or rendered.  
 
@@ -60,7 +60,7 @@ permitted; unlike HTML and other structured markup, the ranges need not be
 nested.
 
 The document has no knowledge of the semantics of ``"bold"`` or ``"italic"``,
-it stores only the style names.  The pyglet layout classes give meaning to
+it stores only the style names.  The fos.lib.pyglet layout classes give meaning to
 these style names in the way they are rendered; but you are also free to
 invent your own style names (which will be ignored by the layout classes).
 This can be useful to tag areas of interest in a document, or maintain
@@ -86,7 +86,7 @@ Document classes
 
 Any class implementing `AbstractDocument` provides an interface to a
 document model as described above.  In theory a structured document such as
-HTML or XML could export this model, though the classes provided by pyglet
+HTML or XML could export this model, though the classes provided by fos.lib.pyglet
 implement only unstructured documents.
 
 The `UnformattedDocument` class assumes any styles set are set over the entire
@@ -99,7 +99,7 @@ the `RunList` class to represent style runs efficiently.
 Style attributes
 ================
 
-The following character style attribute names are recognised by pyglet:
+The following character style attribute names are recognised by fos.lib.pyglet:
 
 ``font_name``
     Font family name, as given to `pyglet.font.load`.
@@ -123,7 +123,7 @@ The following character style attribute names are recognised by pyglet:
     4-tuple of ints in range (0, 255) giving RGBA text background color; or
     ``None`` for no background fill.
 
-The following paragraph style attribute names are recognised by pyglet.  Note
+The following paragraph style attribute names are recognised by fos.lib.pyglet.  Note
 that paragraph styles are handled no differently from character styles by the
 document: it is the application's responsibility to set the style over an
 entire paragraph, otherwise results are undefined.
@@ -161,7 +161,7 @@ All style attributes (including those not present in a document) default to
 ``None`` (including the so-called "boolean" styles listed above).  The meaning
 of a ``None`` style is style- and application-dependent. 
 
-:since: pyglet 1.1
+:since: fos.lib.pyglet 1.1
 '''
 
 __docformat__ = 'restructuredtext'
@@ -170,8 +170,8 @@ __version__ = '$Id: $'
 import re
 import sys
 
-from pyglet import event
-from pyglet.text import runlist
+from fos.lib.pyglet import event
+from fos.lib.pyglet.text import runlist
 
 _is_epydoc = hasattr(sys, 'is_epydoc') and sys.is_epydoc
 
@@ -185,7 +185,7 @@ class InlineElement(object):
     measured by their horizontal advance, ascent above the baseline, and
     descent below the baseline.  
     
-    The pyglet layout classes reserve space in the layout for elements and
+    The fos.lib.pyglet layout classes reserve space in the layout for elements and
     call the element's methods to ensure they are rendered at the
     appropriate position.
 
@@ -260,7 +260,7 @@ class InlineElement(object):
 class AbstractDocument(event.EventDispatcher):
     '''Abstract document interface used by all `pyglet.text` classes.
 
-    This class can be overridden to interface pyglet with a third-party
+    This class can be overridden to interface fos.lib.pyglet with a third-party
     document format.  It may be easier to implement the document format in
     terms of one of the supplied concrete classes `FormattedDocument` or
     `UnformattedDocument`. 
@@ -604,7 +604,7 @@ class UnformattedDocument(AbstractDocument):
         return runlist.ConstRunIterator(len(self.text), ft)
 
     def get_font(self, position=None, dpi=None):
-        from pyglet import font
+        from fos.lib.pyglet import font
         font_name = self.styles.get('font_name')
         font_size = self.styles.get('font_size')
         bold = self.styles.get('bold', False)
@@ -706,7 +706,7 @@ class _FontStyleRunsRangeIterator(object):
         self.dpi = dpi
 
     def ranges(self, start, end):
-        from pyglet import font
+        from fos.lib.pyglet import font
         for start, end, styles in self.zip_iter.ranges(start, end):
             font_name, font_size, bold, italic = styles
             ft = font.load(font_name, font_size, 
@@ -715,7 +715,7 @@ class _FontStyleRunsRangeIterator(object):
             yield start, end, ft
 
     def __getitem__(self, index):
-        from pyglet import font
+        from fos.lib.pyglet import font
         font_name, font_size, bold, italic = self.zip_iter[index]
         return font.load(font_name, font_size,
                          bold=bool(bold), italic=bool(italic), 

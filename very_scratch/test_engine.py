@@ -6,7 +6,7 @@ from numpy.testing import assert_array_equal, assert_array_almost_equal
 
 import numpy as np
 
-from fos.lib import pyglet
+import fos.lib.pyglet as pyglet
 from fos.core.world import World
 from fos.actor.volslicer import ConnectedSlices
 from fos.core.fos_window import FosWindow

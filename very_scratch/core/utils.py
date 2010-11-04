@@ -1,8 +1,8 @@
-from pyglet.gl import *
-from pyglet.gl.gl import c_float, c_double, c_int
+from fos.lib.pyglet.gl import *
+from fos.lib.pyglet.gl.gl import c_float, c_double, c_int
 #before it was pyglet.gl
 
-#import pyglet
+#import fos.lib.pyglet
 #print pyglet.__file__
 
 def get_model_matrix(array_type=c_float, glGetMethod=glGetFloatv):

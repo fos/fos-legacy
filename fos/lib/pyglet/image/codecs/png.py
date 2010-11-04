@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -40,11 +40,11 @@ __version__ = '$Id: $'
 
 import array
 
-from pyglet.gl import *
-from pyglet.image import *
-from pyglet.image.codecs import *
+from fos.lib.pyglet.gl import *
+from fos.lib.pyglet.image import *
+from fos.lib.pyglet.image.codecs import *
 
-import pyglet.image.codecs.pypng
+import fos.lib.pyglet.image.codecs.pypng
 
 class PNGImageDecoder(ImageDecoder):
     def get_file_extensions(self):
@@ -52,7 +52,7 @@ class PNGImageDecoder(ImageDecoder):
 
     def decode(self, file, filename):
         try:
-            reader = pyglet.image.codecs.pypng.Reader(file=file)
+            reader = fos.lib.pyglet.image.codecs.pypng.Reader(file=file)
             width, height, pixels, metadata = reader.read()
         except Exception, e:
             raise ImageDecodeException(
@@ -93,7 +93,7 @@ class PNGImageEncoder(ImageEncoder):
 
         image.pitch = -(image.width * len(image.format))
 
-        writer = pyglet.image.codecs.pypng.Writer(
+        writer = fos.lib.pyglet.image.codecs.pypng.Writer(
             image.width, image.height,
             bytes_per_sample=1,
             greyscale=greyscale,

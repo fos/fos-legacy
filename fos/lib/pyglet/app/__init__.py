@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -38,22 +38,22 @@ Most applications need only call `run` after creating one or more windows
 to begin processing events.  For example, a simple application consisting of
 one window is::
 
-    import pyglet
+    import fos.lib.pyglet
 
-    win = pyglet.window.Window()
-    pyglet.app.run()
+    win = fos.lib.pyglet.window.Window()
+    fos.lib.pyglet.app.run()
 
 To handle events on the main event loop, instantiate it manually.  The
 following example exits the application as soon as any window is closed (the
 default policy is to wait until all windows are closed)::
 
-    event_loop = pyglet.app.EventLoop()
+    event_loop = fos.lib.pyglet.app.EventLoop()
 
     @event_loop.event
     def on_window_close(window):
         event_loop.exit()
 
-:since: pyglet 1.1
+:since: fos.lib.pyglet 1.1
 '''
 
 __docformat__ = 'restructuredtext'
@@ -117,7 +117,7 @@ def run():
 
     This is a convenience function, equivalent to::
 
-        pyglet.app.event_loop.run()
+        fos.lib.pyglet.app.event_loop.run()
 
     '''
     event_loop.run()
@@ -136,16 +136,16 @@ def exit():
     '''
     event_loop.exit()
 
-from pyglet.app.base import EventLoop
+from fos.lib.pyglet.app.base import EventLoop
 if _is_epydoc:
-    from pyglet.app.base import PlatformEventLoop
+    from fos.lib.pyglet.app.base import PlatformEventLoop
 else:
     if sys.platform == 'darwin':
-        from pyglet.app.carbon import CarbonEventLoop as PlatformEventLoop
+        from fos.lib.pyglet.app.carbon import CarbonEventLoop as PlatformEventLoop
     elif sys.platform in ('win32', 'cygwin'):
-        from pyglet.app.win32 import Win32EventLoop as PlatformEventLoop
+        from fos.lib.pyglet.app.win32 import Win32EventLoop as PlatformEventLoop
     else:
-        from pyglet.app.xlib import XlibEventLoop as PlatformEventLoop
+        from fos.lib.pyglet.app.xlib import XlibEventLoop as PlatformEventLoop
 
 #: The global event loop.  Applications can replace this with their own
 #: subclass of `pyglet.app.base.EventLoop` before calling `EventLoop.run`.
@@ -156,7 +156,7 @@ event_loop = EventLoop()
 #: The platform-dependent event loop.  Applications must not subclass or
 #: replace this object.
 #:
-#: :since: pyglet 1.2
+#: :since: fos.lib.pyglet 1.2
 #:
 #: :type: `PlatformEventLoop`
 platform_event_loop = PlatformEventLoop()

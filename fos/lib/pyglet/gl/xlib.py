@@ -8,14 +8,14 @@ __version__ = '$Id: $'
 
 from ctypes import *
 
-from pyglet.canvas.xlib import XlibCanvas
+from fos.lib.pyglet.canvas.xlib import XlibCanvas
 from base import Config, CanvasConfig, Context
 
-from pyglet import gl
-from pyglet.gl import glx
-from pyglet.gl import glxext_arb
-from pyglet.gl import glx_info
-from pyglet.gl import glxext_mesa
+from fos.lib.pyglet import gl
+from fos.lib.pyglet.gl import glx
+from fos.lib.pyglet.gl import glxext_arb
+from fos.lib.pyglet.gl import glx_info
+from fos.lib.pyglet.gl import glxext_mesa
 
 class XlibConfig(Config):
     def match(self, canvas):
@@ -151,7 +151,7 @@ class XlibCanvasConfig13(BaseXlibCanvasConfig):
         'sample_buffers': glx.GLX_SAMPLE_BUFFERS,
         'samples': glx.GLX_SAMPLES,
 
-        # Not supported in current pyglet API:
+        # Not supported in current fos.lib.pyglet API:
         'render_type': glx.GLX_RENDER_TYPE,
         'config_caveat': glx.GLX_CONFIG_CAVEAT,
         'transparent_type': glx.GLX_TRANSPARENT_TYPE,

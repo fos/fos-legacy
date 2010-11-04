@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -41,9 +41,9 @@ http://oss.sgi.com/projects/ogl-sample/registry/EXT/texture_compression_s3tc.txt
 import ctypes
 import re
 
-from pyglet.gl import *
-from pyglet.gl import gl_info
-from pyglet.image import AbstractImage, Texture
+from fos.lib.pyglet.gl import *
+from fos.lib.pyglet.gl import gl_info
+from fos.lib.pyglet.image import AbstractImage, Texture
 
 split_8byte = re.compile('.' * 8, flags=re.DOTALL)
 split_16byte = re.compile('.' * 16, flags=re.DOTALL)

@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -41,7 +41,7 @@ including joysticks, tablets, space controllers, wheels, pedals, remote
 controls, keyboards and mice.  The set of returned devices varies greatly
 depending on the operating system (and, of course, what's plugged in).  
 
-At this level pyglet does not try to interpret *what* a particular device is,
+At this level fos.lib.pyglet does not try to interpret *what* a particular device is,
 merely what controls it provides.  A `Control` can be either a button, whose
 value is either ``True`` or ``False``, or a relative or absolute-valued axis,
 whose value is a float.  Sometimes the name of a control can be provided (for
@@ -51,7 +51,7 @@ to be asked to press each button in turn or move each axis separately to
 identify them.
 
 Higher-level interfaces are provided for joysticks, tablets and the Apple
-remote control.  These devices can usually be identified by pyglet positively,
+remote control.  These devices can usually be identified by fos.lib.pyglet positively,
 and a base level of functionality for each one provided through a common
 interface.
 
@@ -73,7 +73,7 @@ To use a tablet, follow the procedure above using `get_tablets`, but note that
 no control list is available; instead, calling `Tablet.open` returns a
 `TabletCanvas` onto which you should set your event handlers.
 
-:since: pyglet 1.2
+:since: fos.lib.pyglet 1.2
 
 '''
 
@@ -136,7 +136,7 @@ if _is_epydoc:
         This function may return a valid tablet device even if one is not
         attached (for example, it is not possible on Mac OS X to determine if
         a tablet device is connected).  Despite returning a list of tablets,
-        pyglet does not currently support multiple tablets, and the behaviour
+        fos.lib.pyglet does not currently support multiple tablets, and the behaviour
         is undefined if more than one is attached.
 
         :Parameters:

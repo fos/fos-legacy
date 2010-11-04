@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -81,7 +81,7 @@ platforms.
 The default path is ``['.']``.  If you modify the path, you must call
 `reindex`.
 
-:since: pyglet 1.1
+:since: fos.lib.pyglet 1.1
 '''
 
 __docformat__ = 'restructuredtext'
@@ -93,7 +93,7 @@ import sys
 import zipfile
 import StringIO
 
-import pyglet
+import fos.lib.pyglet
 
 class ResourceNotFoundException(Exception):
     '''The named resource was not found on the search path.'''
@@ -421,7 +421,7 @@ class Loader(object):
     def add_font(self, name):
         '''Add a font resource to the application.
 
-        Fonts not installed on the system must be added to pyglet before they
+        Fonts not installed on the system must be added to fos.lib.pyglet before they
         can be used with `font.load`.  Although the font is added with
         its filename using this function, it is loaded by specifying its
         family name.  For example::
@@ -435,13 +435,13 @@ class Loader(object):
 
         '''
         self._require_index()
-        from pyglet import font
+        from fos.lib.pyglet import font
         file = self.file(name)
         font.add_file(file)
 
     def _alloc_image(self, name):
         file = self.file(name)
-        img = pyglet.image.load(name, file=file)
+        img = fos.lib.pyglet.image.load(name, file=file)
         bin = self._get_texture_atlas_bin(img.width, img.height)
         if bin is None:
             return img.get_texture(True)
@@ -467,7 +467,7 @@ class Loader(object):
             bin = self._texture_atlas_bins[bin_size]
         except KeyError:
             bin = self._texture_atlas_bins[bin_size] = \
-                pyglet.image.atlas.TextureBin()
+                fos.lib.pyglet.image.atlas.TextureBin()
 
         return bin
 
@@ -527,7 +527,7 @@ class Loader(object):
         try:
             identity = self._cached_animations[name]
         except KeyError:
-            animation = pyglet.image.load_animation(name, self.file(name))
+            animation = fos.lib.pyglet.image.load_animation(name, self.file(name))
             bin = self._get_texture_atlas_bin(animation.get_max_width(), 
                                               animation.get_max_height())
             if bin:
@@ -590,7 +590,7 @@ class Loader(object):
         :rtype: `media.Source`
         '''
         self._require_index()
-        from pyglet import media
+        from fos.lib.pyglet import media
         try:
             location = self._index[name]
             if isinstance(location, FileLocation):
@@ -622,7 +622,7 @@ class Loader(object):
             return self._cached_textures[name]
 
         file = self.file(name)
-        texture = pyglet.image.load(name, file=file).get_texture()
+        texture = fos.lib.pyglet.image.load(name, file=file).get_texture()
         self._cached_textures[name] = texture
         return texture
 
@@ -637,7 +637,7 @@ class Loader(object):
         '''
         self._require_index()
         file = self.file(name)
-        return pyglet.text.decode_html(file.read(), self.location(name))
+        return fos.lib.pyglet.text.decode_html(file.read(), self.location(name))
 
     def attributed(self, name):
         '''Load an attributed text document.
@@ -652,7 +652,7 @@ class Loader(object):
         '''
         self._require_index()
         file = self.file(name)
-        return pyglet.text.load(name, file, 'text/vnd.pyglet-attributed')
+        return fos.lib.pyglet.text.load(name, file, 'text/vnd.pyglet-attributed')
 
     def text(self, name):
         '''Load a plain text document.
@@ -665,7 +665,7 @@ class Loader(object):
         '''
         self._require_index()
         file = self.file(name)
-        return pyglet.text.load(name, file, 'text/plain')
+        return fos.lib.pyglet.text.load(name, file, 'text/plain')
 
     def get_cached_texture_names(self):
         '''Get the names of textures currently cached.

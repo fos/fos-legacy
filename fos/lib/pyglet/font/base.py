@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -32,7 +32,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 # ----------------------------------------------------------------------------
 
-'''Abstract classes used by pyglet.font implementations.
+'''Abstract classes used by fos.lib.pyglet.font implementations.
 
 These classes should not be constructed directly.  Instead, use the functions
 in `pyglet.font` to obtain platform-specific instances.  You can use these
@@ -44,8 +44,8 @@ __version__ = '$Id$'
 
 import unicodedata
 
-from pyglet.gl import *
-from pyglet import image
+from fos.lib.pyglet.gl import *
+from fos.lib.pyglet import image
 
 _other_grapheme_extend = \
     map(unichr, [0x09be, 0x09d7, 0x0be3, 0x0b57, 0x0bbe, 0x0bd7, 0x0cc2,
@@ -115,7 +115,7 @@ def get_grapheme_clusters(text):
         `text` : unicode
             String to cluster.
 
-    :since: pyglet 1.1.2
+    :since: fos.lib.pyglet 1.1.2
 
     :rtype: List of `unicode`
     :return: List of Unicode grapheme clusters

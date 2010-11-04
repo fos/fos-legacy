@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -79,10 +79,10 @@ import sys
 import threading
 import time
 
-import pyglet
-from pyglet.compat import bytes_type, BytesIO
+import fos.lib.pyglet
+from fos.lib.pyglet.compat import bytes_type, BytesIO
 
-_debug = pyglet.options['debug_media']
+_debug = fos.lib.pyglet.options['debug_media']
 
 class MediaException(Exception):
     pass
@@ -129,8 +129,8 @@ class MediaThread(object):
         pass
 
     def _thread_run(self):
-        if pyglet.options['debug_trace']:
-            pyglet._install_trace()
+        if fos.lib.pyglet.options['debug_trace']:
+            fos.lib.pyglet._install_trace()
 
         self._threads_lock.acquire()
         self._threads.add(self)
@@ -242,7 +242,7 @@ class AudioFormat(object):
 
     :Ivariables:
         `channels` : int
-            The number of channels: 1 for mono or 2 for stereo (pyglet does
+            The number of channels: 1 for mono or 2 for stereo (fos.lib.pyglet does
             not yet support surround-sound sources).
         `sample_size` : int
             Bits per sample; only 8 or 16 are supported.
@@ -297,7 +297,7 @@ class VideoFormat(object):
             AVbin 8 or later is required, otherwise the frame rate will be
             ``None``.
 
-            **Since:** pyglet 1.2.
+            **Since:** fos.lib.pyglet 1.2.
 
     '''
     
@@ -310,7 +310,7 @@ class VideoFormat(object):
 class AudioData(object):
     '''A single packet of audio data.
 
-    This class is used internally by pyglet.
+    This class is used internally by fos.lib.pyglet.
 
     :Ivariables:
         `data` : str or ctypes array or pointer
@@ -377,7 +377,7 @@ class MediaEvent(object):
         self.args = args
 
     def _sync_dispatch_to_player(self, player):
-        pyglet.app.platform_event_loop.post_event(player, self.event, *self.args)
+        fos.lib.pyglet.app.platform_event_loop.post_event(player, self.event, *self.args)
         time.sleep(0)
         # TODO sync with media.dispatch_events
 
@@ -408,7 +408,7 @@ class SourceInfo(object):
         `genre` : str
             Genre
 
-    :since: pyglet 1.2
+    :since: fos.lib.pyglet 1.2
     '''
 
     title = ''
@@ -434,7 +434,7 @@ class Source(object):
             Source metadata such as title, artist, etc; or None if the
             information is not available.
 
-            **Since:** pyglet 1.2
+            **Since:** fos.lib.pyglet 1.2
     '''
 
     _duration = None
@@ -481,11 +481,11 @@ class Source(object):
         This method is unsuitable for videos running longer than a
         few seconds.
 
-        :since: pyglet 1.1
+        :since: fos.lib.pyglet 1.1
 
         :rtype: `pyglet.image.Animation`
         '''
-        from pyglet.image import Animation, AnimationFrame
+        from fos.lib.pyglet.image import Animation, AnimationFrame
         if not self.video_format:
             return Animation([])
         else:
@@ -504,7 +504,7 @@ class Source(object):
     def get_next_video_timestamp(self):
         '''Get the timestamp of the next video frame.
 
-        :since: pyglet 1.1
+        :since: fos.lib.pyglet 1.1
 
         :rtype: float
         :return: The next timestamp, or ``None`` if there are no more video
@@ -519,7 +519,7 @@ class Source(object):
         or corrupted when this method is called unless the application has
         made a copy of it.
 
-        :since: pyglet 1.1
+        :since: fos.lib.pyglet 1.1
 
         :rtype: `pyglet.image.AbstractImage`
         :return: The next video frame image, or ``None`` if the video frame
@@ -903,7 +903,7 @@ class AbstractAudioPlayer(object):
         '''See `Player.cone_outer_gain`.'''
         pass
 
-class Player(pyglet.event.EventDispatcher):
+class Player(fos.lib.pyglet.event.EventDispatcher):
     '''High-level sound and video player.
     '''
 
@@ -992,12 +992,12 @@ class Player(pyglet.event.EventDispatcher):
                     period = 1. / self.source.video_format.frame_rate
                 else:
                     period = 1. / 30.
-                pyglet.clock.schedule_interval(self.update_texture, period)
+                fos.lib.pyglet.clock.schedule_interval(self.update_texture, period)
         else:
             if self._audio_player:
                 self._audio_player.stop()
 
-            pyglet.clock.unschedule(self.update_texture)
+            fos.lib.pyglet.clock.unschedule(self.update_texture)
 
     def play(self): 
         self._set_playing(True)
@@ -1023,7 +1023,7 @@ class Player(pyglet.event.EventDispatcher):
 
         if self.source.video_format:
             self._texture = None
-            pyglet.clock.unschedule(self.update_texture)
+            fos.lib.pyglet.clock.unschedule(self.update_texture)
 
         if self._audio_player:
             self._audio_player.delete()
@@ -1100,7 +1100,7 @@ class Player(pyglet.event.EventDispatcher):
 
     def _create_texture(self):
         video_format = self.source.video_format
-        self._texture = pyglet.image.Texture.create(
+        self._texture = fos.lib.pyglet.image.Texture.create(
             video_format.width, video_format.height, rectangle=True)
         self._texture = self._texture.get_transform(flip_y=True)
         self._texture.anchor_y = 0
@@ -1413,7 +1413,7 @@ def get_audio_driver():
 
     _audio_driver = None
 
-    for driver_name in pyglet.options['audio']:
+    for driver_name in fos.lib.pyglet.options['audio']:
         try:
             if driver_name == 'pulse':
                 from drivers import pulse

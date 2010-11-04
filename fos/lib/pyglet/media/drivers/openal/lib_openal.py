@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -51,9 +51,9 @@ import ctypes
 from ctypes import *
 import sys
 
-import pyglet.lib
+import fos.lib.pyglet.lib
 
-_lib = pyglet.lib.load_library('openal', win32='openal32',
+_lib = fos.lib.pyglet.lib.load_library('openal', win32='openal32',
         framework='/System/Library/Frameworks/OpenAL.framework')
 
 _int_types = (c_int16, c_int32)

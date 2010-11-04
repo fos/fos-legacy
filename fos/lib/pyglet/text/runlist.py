@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -33,7 +33,7 @@
 # ----------------------------------------------------------------------------
 '''Run list encoding utilities.
 
-:since: pyglet 1.1
+:since: fos.lib.pyglet 1.1
 '''
 
 __docformat__ = 'restructuredtext'
@@ -56,7 +56,7 @@ class RunList(object):
     run list without needing to deal with the tricky cases of splitting and
     merging the run list entries.
 
-    Run lists are used to represent formatted character data in pyglet.  A
+    Run lists are used to represent formatted character data in fos.lib.pyglet.  A
     separate run list is maintained for each style attribute, for example,
     bold, italic, font size, and so on.  Unless you are overriding the
     document interfaces, the only interaction with run lists is via

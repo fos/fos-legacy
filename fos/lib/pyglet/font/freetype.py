@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -42,14 +42,14 @@ import ctypes
 from ctypes import *
 from warnings import warn
 
-import pyglet.lib
-from pyglet.font import base
-from pyglet import image
-from pyglet.font.freetype_lib import *
-from pyglet.compat import asbytes
+import fos.lib.pyglet.lib
+from fos.lib.pyglet.font import base
+from fos.lib.pyglet import image
+from fos.lib.pyglet.font.freetype_lib import *
+from fos.lib.pyglet.compat import asbytes
 
 # fontconfig library definitions
-fontconfig = pyglet.lib.load_library('fontconfig')
+fontconfig = fos.lib.pyglet.lib.load_library('fontconfig')
 
 FcResult = c_int
 
@@ -249,7 +249,7 @@ class FreeTypeFont(base.Font):
         super(FreeTypeFont, self).__init__()
 
         if dpi is None:
-            dpi = 96  # as of pyglet 1.1; pyglet 1.0 had 72.
+            dpi = 96  # as of fos.lib.pyglet 1.1; fos.lib.pyglet 1.0 had 72.
 
         # Check if font name/style matches a font loaded into memory by user
         lname = name and name.lower() or ''

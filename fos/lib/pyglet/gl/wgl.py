@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -41,8 +41,8 @@ __docformat__ = 'restructuredtext'
 __version__ = '$Id: gengl.py 601 2007-02-04 05:36:59Z Alex.Holkner $'
 
 from ctypes import *
-from pyglet.gl.lib import link_WGL as _link_function
-from pyglet.gl.lib import c_ptrdiff_t
+from fos.lib.pyglet.gl.lib import link_WGL as _link_function
+from fos.lib.pyglet.gl.lib import c_ptrdiff_t
 
 if not _link_function:
     raise ImportError('opengl32.dll is not available.')

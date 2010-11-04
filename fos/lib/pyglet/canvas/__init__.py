@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -55,7 +55,7 @@ and virtual positions on the desktop.
 The size of a screen is determined by its current mode, which can be changed
 by the application; see the documentation for `Screen`.
 
-:since: pyglet 1.2
+:since: fos.lib.pyglet 1.2
 '''
 
 import sys
@@ -68,13 +68,13 @@ def get_display():
     Otherwise, a default `Display` is created and returned.  If multiple
     display connections are active, an arbitrary one is returned.
 
-    :since: pyglet 1.2
+    :since: fos.lib.pyglet 1.2
 
     :rtype: `Display`
     '''
     # If there's an existing display, return it (return arbitrary display if
     # there are multiple).
-    from pyglet.app import displays
+    from fos.lib.pyglet.app import displays
     for display in displays:
         return display
 
@@ -82,17 +82,17 @@ def get_display():
     return Display()
 
 if _is_epydoc:
-    from pyglet.canvas.base import Display, Screen, Canvas
+    from fos.lib.pyglet.canvas.base import Display, Screen, Canvas
 else:
     if sys.platform == 'darwin':
-        from pyglet.canvas.carbon import CarbonDisplay as Display
-        from pyglet.canvas.carbon import CarbonScreen as Screen
-        from pyglet.canvas.carbon import CarbonCanvas as Canvas
+        from fos.lib.pyglet.canvas.carbon import CarbonDisplay as Display
+        from fos.lib.pyglet.canvas.carbon import CarbonScreen as Screen
+        from fos.lib.pyglet.canvas.carbon import CarbonCanvas as Canvas
     elif sys.platform in ('win32', 'cygwin'):
-        from pyglet.canvas.win32 import Win32Display as Display
-        from pyglet.canvas.win32 import Win32Screen as Screen
-        from pyglet.canvas.win32 import Win32Canvas as Canvas
+        from fos.lib.pyglet.canvas.win32 import Win32Display as Display
+        from fos.lib.pyglet.canvas.win32 import Win32Screen as Screen
+        from fos.lib.pyglet.canvas.win32 import Win32Canvas as Canvas
     else:
-        from pyglet.canvas.xlib import XlibDisplay as Display
-        from pyglet.canvas.xlib import XlibScreen as Screen
-        from pyglet.canvas.xlib import XlibCanvas as Canvas
+        from fos.lib.pyglet.canvas.xlib import XlibDisplay as Display
+        from fos.lib.pyglet.canvas.xlib import XlibScreen as Screen
+        from fos.lib.pyglet.canvas.xlib import XlibCanvas as Canvas

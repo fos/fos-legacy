@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -41,8 +41,8 @@ collection of atlases of a given size.
 Example usage::
 
     # Load images from disk
-    car_image = pyglet.image.load('car.png')
-    boat_image = pyglet.image.load('boat.png')
+    car_image = fos.lib.pyglet.image.load('car.png')
+    boat_image = fos.lib.pyglet.image.load('boat.png')
 
     # Pack these images into one or more textures
     bin = TextureBin()
@@ -55,13 +55,13 @@ list of images be obtained from a given bin or atlas -- it is the
 application's responsibility to keep track of the regions returned by the
 ``add`` methods.
 
-:since: pyglet 1.1
+:since: fos.lib.pyglet 1.1
 '''
 
 __docformat__ = 'restructuredtext'
 __version__ = '$Id: $'
 
-import pyglet
+import fos.lib.pyglet
 
 class AllocatorException(Exception):
     '''The allocator does not have sufficient free space for the requested
@@ -181,8 +181,8 @@ class TextureAtlas(object):
                 Height of the underlying texture.
 
         '''
-        self.texture = pyglet.image.Texture.create(
-            width, height, pyglet.gl.GL_RGBA, rectangle=True)
+        self.texture = fos.lib.pyglet.image.Texture.create(
+            width, height, fos.lib.pyglet.gl.GL_RGBA, rectangle=True)
         self.allocator = Allocator(width, height)
 
     def add(self, img):

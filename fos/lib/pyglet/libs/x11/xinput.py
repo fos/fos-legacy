@@ -12,9 +12,9 @@ __version__ = '$Id: wrap.py 1694 2008-01-30 23:12:00Z Alex.Holkner $'
 import ctypes
 from ctypes import *
 
-import pyglet.lib
+import fos.lib.pyglet.lib
 
-_lib = pyglet.lib.load_library('Xi')
+_lib = fos.lib.pyglet.lib.load_library('Xi')
 
 _int_types = (c_int16, c_int32)
 if hasattr(ctypes, 'c_int64'):
@@ -33,7 +33,7 @@ class c_void(Structure):
     _fields_ = [('dummy', c_int)]
 
 
-import pyglet.libs.x11.xlib
+import fos.lib.pyglet.libs.x11.xlib
 
 sz_xGetExtensionVersionReq = 8 	# /usr/include/X11/extensions/XI.h:56
 sz_xGetExtensionVersionReply = 32 	# /usr/include/X11/extensions/XI.h:57
@@ -240,10 +240,10 @@ class struct_anon_94(Structure):
         'first_axis',
         'axis_data',
     ]
-Display = pyglet.libs.x11.xlib.Display
-Window = pyglet.libs.x11.xlib.Window
-XID = pyglet.libs.x11.xlib.XID
-Time = pyglet.libs.x11.xlib.Time
+Display = fos.lib.pyglet.libs.x11.xlib.Display
+Window = fos.lib.pyglet.libs.x11.xlib.Window
+XID = fos.lib.pyglet.libs.x11.xlib.XID
+Time = fos.lib.pyglet.libs.x11.xlib.Time
 struct_anon_94._fields_ = [
     ('type', c_int),
     ('serial', c_ulong),
@@ -685,7 +685,7 @@ class struct_anon_111(Structure):
         'num_syms_supported',
         'syms_supported',
     ]
-KeySym = pyglet.libs.x11.xlib.KeySym
+KeySym = fos.lib.pyglet.libs.x11.xlib.KeySym
 struct_anon_111._fields_ = [
     ('class', XID),
     ('length', c_int),
@@ -1112,7 +1112,7 @@ class struct__XDeviceInfo(Structure):
         'use',
         'inputclassinfo',
     ]
-Atom = pyglet.libs.x11.xlib.Atom
+Atom = fos.lib.pyglet.libs.x11.xlib.Atom
 struct__XDeviceInfo._fields_ = [
     ('id', XID),
     ('type', Atom),
@@ -1426,7 +1426,7 @@ XDeviceBell = _lib.XDeviceBell
 XDeviceBell.restype = c_int
 XDeviceBell.argtypes = [POINTER(Display), POINTER(XDevice), XID, XID, c_int]
 
-KeyCode = pyglet.libs.x11.xlib.KeyCode
+KeyCode = fos.lib.pyglet.libs.x11.xlib.KeyCode
 # /usr/include/X11/extensions/XInput.h:5878
 XGetDeviceKeyMapping = _lib.XGetDeviceKeyMapping
 XGetDeviceKeyMapping.restype = POINTER(KeySym)
@@ -1437,7 +1437,7 @@ XChangeDeviceKeyMapping = _lib.XChangeDeviceKeyMapping
 XChangeDeviceKeyMapping.restype = c_int
 XChangeDeviceKeyMapping.argtypes = [POINTER(Display), POINTER(XDevice), c_int, c_int, POINTER(KeySym), c_int]
 
-XModifierKeymap = pyglet.libs.x11.xlib.XModifierKeymap
+XModifierKeymap = fos.lib.pyglet.libs.x11.xlib.XModifierKeymap
 # /usr/include/X11/extensions/XInput.h:5899
 XGetDeviceModifierMapping = _lib.XGetDeviceModifierMapping
 XGetDeviceModifierMapping.restype = POINTER(XModifierKeymap)
@@ -1533,7 +1533,7 @@ XGetDeviceDontPropagateList = _lib.XGetDeviceDontPropagateList
 XGetDeviceDontPropagateList.restype = POINTER(XEventClass)
 XGetDeviceDontPropagateList.argtypes = [POINTER(Display), Window, POINTER(c_int)]
 
-XEvent = pyglet.libs.x11.xlib.XEvent
+XEvent = fos.lib.pyglet.libs.x11.xlib.XEvent
 # /usr/include/X11/extensions/XInput.h:6014
 XSendExtensionEvent = _lib.XSendExtensionEvent
 XSendExtensionEvent.restype = c_int

@@ -24,10 +24,10 @@ More Examples
 import numpy as np
 from fos.core.machine import Machine, batch, mouse_x,mouse_y,actors
 from fos.imageviewer.arrayimage import ArrayInterfaceImage
-import pyglet
+import fos.lib.pyglet
 #pyglet.options['debug_gl']=False
-from pyglet.gl import *
-from pyglet.image import Animation, AnimationFrame
+from fos.lib.pyglet.gl import *
+from fos.lib.pyglet.image import Animation, AnimationFrame
 import os
 from fos.core import collision as cll
 import time

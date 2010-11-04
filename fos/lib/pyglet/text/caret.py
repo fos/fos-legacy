@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -37,15 +37,15 @@
 
 Example usage::
 
-    from pyglet import window
-    from pyglet.text import layout, caret
+    from fos.lib.pyglet import window
+    from fos.lib.pyglet.text import layout, caret
 
     my_window = window.Window(...)
     my_layout = layout.IncrementalTextLayout(...)
     my_caret = caret.Caret(my_layout)
     my_window.push_handlers(my_caret)
 
-:since: pyglet 1.1
+:since: fos.lib.pyglet 1.1
 '''
 
 __docformat__ = 'restructuredtext'
@@ -54,9 +54,9 @@ __version__ = '$Id: $'
 import re
 import time
 
-from pyglet import clock
-from pyglet import event
-from pyglet.window import key
+from fos.lib.pyglet import clock
+from fos.lib.pyglet import event
+from fos.lib.pyglet.window import key
 
 class Caret(object):
     '''Visible text insertion marker for 
@@ -79,7 +79,7 @@ class Caret(object):
     text, mouse and activation events, including double- and triple-clicks.
     If the text layout is being used alongside other graphical widgets, a
     GUI toolkit will be needed to delegate keyboard and mouse events to the
-    appropriate widget.  pyglet does not provide such a toolkit at this stage.
+    appropriate widget.  fos.lib.pyglet does not provide such a toolkit at this stage.
     '''
 
     _next_word_re = re.compile(r'(?<=\W)\w')
@@ -117,7 +117,7 @@ class Caret(object):
                 RGB tuple with components in range [0, 255].
 
         '''
-        from pyglet import gl
+        from fos.lib.pyglet import gl
         self._layout = layout
         if batch is None:
             batch = layout.batch

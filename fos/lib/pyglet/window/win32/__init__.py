@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -46,20 +46,20 @@ import sys
 if sys.platform not in ('cygwin', 'win32'):
     raise ImportError('Not a win32 platform.')
 
-import pyglet
-from pyglet.window import BaseWindow, \
+import fos.lib.pyglet
+from fos.lib.pyglet.window import BaseWindow, \
     WindowException, MouseCursor, DefaultMouseCursor, _PlatformEventHandler, \
     _ViewEventHandler
-from pyglet.event import EventDispatcher
-from pyglet.window import key
-from pyglet.window import mouse
+from fos.lib.pyglet.event import EventDispatcher
+from fos.lib.pyglet.window import key
+from fos.lib.pyglet.window import mouse
 
-from pyglet.canvas.win32 import Win32Canvas
+from fos.lib.pyglet.canvas.win32 import Win32Canvas
 
-from pyglet.libs.win32 import _user32, _kernel32, _gdi32
-from pyglet.libs.win32.constants import *
-from pyglet.libs.win32.winkey import *
-from pyglet.libs.win32.types import *
+from fos.lib.pyglet.libs.win32 import _user32, _kernel32, _gdi32
+from fos.lib.pyglet.libs.win32.constants import *
+from fos.lib.pyglet.libs.win32.winkey import *
+from fos.lib.pyglet.libs.win32.types import *
 
 # symbol,ctrl -> motion mapping
 _motion_map = {
@@ -245,7 +245,7 @@ class Win32Window(BaseWindow):
         if self._fullscreen:
             _user32.SetWindowPos(self._hwnd, hwnd_after,
                 self._screen.x, self._screen.y, width, height, SWP_FRAMECHANGED)
-        elif False: # TODO location not in pyglet API
+        elif False: # TODO location not in fos.lib.pyglet API
             x, y = self._client_to_window_pos(*factory.get_location())
             _user32.SetWindowPos(self._hwnd, hwnd_after,
                 x, y, width, height, SWP_FRAMECHANGED)
@@ -297,8 +297,8 @@ class Win32Window(BaseWindow):
     vsync = property(_get_vsync) # overrides BaseWindow property
 
     def set_vsync(self, vsync):
-        if pyglet.options['vsync'] is not None:
-            vsync = pyglet.options['vsync']
+        if fos.lib.pyglet.options['vsync'] is not None:
+            vsync = fos.lib.pyglet.options['vsync']
         self.context.set_vsync(vsync)
 
     def switch_to(self):
@@ -583,7 +583,7 @@ class Win32Window(BaseWindow):
     # Event dispatching
 
     def dispatch_events(self):
-        from pyglet import app
+        from fos.lib.pyglet import app
         app.platform_event_loop.start()
         self._allow_dispatch_event = True
         self.dispatch_pending_events()
@@ -598,7 +598,7 @@ class Win32Window(BaseWindow):
         while self._event_queue:
             event = self._event_queue.pop(0)
             if type(event[0]) is str:
-                # pyglet event
+                # fos.lib.pyglet event
                 EventDispatcher.dispatch_event(self, *event)
             else:
                 # win32 event
@@ -864,7 +864,7 @@ class Win32Window(BaseWindow):
         #rect = cast(lParam, POINTER(RECT)).contents
         #width, height = self.get_size()
 
-        from pyglet import app
+        from fos.lib.pyglet import app
         if app.event_loop is not None:
             app.event_loop.enter_blocking()
         return 1
@@ -898,7 +898,7 @@ class Win32Window(BaseWindow):
     def _event_syscommand(self, msg, wParam, lParam):
         if wParam & 0xfff0 in (SC_MOVE, SC_SIZE):
             # Should be in WM_ENTERSIZEMOVE, but we never get that message.
-            from pyglet import app
+            from fos.lib.pyglet import app
             if app.event_loop is not None:
                 app.event_loop.enter_blocking()
         return 0
@@ -912,7 +912,7 @@ class Win32Window(BaseWindow):
 
     @Win32EventHandler(WM_EXITSIZEMOVE)
     def _event_entersizemove(self, msg, wParam, lParam):
-        from pyglet import app
+        from fos.lib.pyglet import app
         if app.event_loop is not None:
             app.event_loop.exit_blocking()
         return 0

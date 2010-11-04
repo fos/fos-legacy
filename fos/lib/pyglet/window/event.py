@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -42,8 +42,8 @@ __version__ = '$Id$'
 
 import sys
 
-from pyglet.window import key
-from pyglet.window import mouse
+from fos.lib.pyglet.window import key
+from fos.lib.pyglet.window import mouse
 
 class WindowExitHandler(object):
     '''Determine if the window should be closed.
@@ -54,7 +54,7 @@ class WindowExitHandler(object):
     objects.
 
     :deprecated: This class's functionality is provided directly on `Window`
-        in pyglet 1.1.
+        in fos.lib.pyglet 1.1.
 
     :Ivariables:
         `has_exit` : bool

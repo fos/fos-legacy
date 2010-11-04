@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -43,19 +43,19 @@ import os.path
 import unicodedata
 import warnings
 
-import pyglet
-from pyglet.window import WindowException, \
+import fos.lib.pyglet
+from fos.lib.pyglet.window import WindowException, \
     BaseWindow, MouseCursor, DefaultMouseCursor, _PlatformEventHandler
-from pyglet.window import key
-from pyglet.window import mouse
-from pyglet.window import event
-from pyglet.canvas.carbon import CarbonCanvas
+from fos.lib.pyglet.window import key
+from fos.lib.pyglet.window import mouse
+from fos.lib.pyglet.window import event
+from fos.lib.pyglet.canvas.carbon import CarbonCanvas
 
-from pyglet.libs.darwin import *
-from pyglet.libs.darwin import _oscheck
-from pyglet.libs.darwin.quartzkey import keymap, charmap
+from fos.lib.pyglet.libs.darwin import *
+from fos.lib.pyglet.libs.darwin import _oscheck
+from fos.lib.pyglet.libs.darwin.quartzkey import keymap, charmap
 
-from pyglet.event import EventDispatcher
+from fos.lib.pyglet.event import EventDispatcher
 
 # Map symbol,modifiers -> motion
 # Determined by experiment with TextEdit.app
@@ -110,7 +110,7 @@ class CarbonWindow(BaseWindow):
         # otherwise the (OS X) event dispatcher gets lost and segfaults.
         #
         # Defer actual recreation until dispatch_events next finishes.
-        from pyglet import app
+        from fos.lib.pyglet import app
         app.platform_event_loop.post_event(self, 
                                            'on_recreate_immediate', changes)
 
@@ -298,14 +298,14 @@ class CarbonWindow(BaseWindow):
     vsync = property(_get_vsync) # overrides BaseWindow property
 
     def set_vsync(self, vsync):
-        if pyglet.options['vsync'] is not None:
-            vsync = pyglet.options['vsync']
+        if fos.lib.pyglet.options['vsync'] is not None:
+            vsync = fos.lib.pyglet.options['vsync']
         self._vsync = vsync # _recreate depends on this
         if self.context:
             self.context.set_vsync(vsync)
 
     def dispatch_events(self):
-        from pyglet import app
+        from fos.lib.pyglet import app
         app.platform_event_loop.dispatch_posted_events()
 
         self._allow_dispatch_event = True
@@ -922,7 +922,7 @@ class CarbonWindow(BaseWindow):
 
     @CarbonEventHandler(kEventClassWindow, kEventWindowResizeStarted)
     def _on_window_resize_started(self, next_handler, ev, data):
-        from pyglet import app
+        from fos.lib.pyglet import app
         if app.event_loop is not None:
             app.event_loop.enter_blocking()
 
@@ -931,7 +931,7 @@ class CarbonWindow(BaseWindow):
 
     @CarbonEventHandler(kEventClassWindow, kEventWindowResizeCompleted)
     def _on_window_resize_completed(self, next_handler, ev, data):
-        from pyglet import app
+        from fos.lib.pyglet import app
         if app.event_loop is not None:
             app.event_loop.exit_blocking()
 
@@ -953,7 +953,7 @@ class CarbonWindow(BaseWindow):
     def _on_window_drag_started(self, next_handler, ev, data):
         self._dragging = True
 
-        from pyglet import app
+        from fos.lib.pyglet import app
         if app.event_loop is not None:
             app.event_loop.enter_blocking()
 
@@ -964,7 +964,7 @@ class CarbonWindow(BaseWindow):
     def _on_window_drag_completed(self, next_handler, ev, data):
         self._dragging = False
 
-        from pyglet import app
+        from fos.lib.pyglet import app
         if app.event_loop is not None:
             app.event_loop.exit_blocking()
 
@@ -994,7 +994,7 @@ class CarbonWindow(BaseWindow):
             self.switch_to()
             self.dispatch_event('on_resize', width, height)
             
-            from pyglet import app
+            from fos.lib.pyglet import app
             if app.event_loop is not None:
                 app.event_loop.enter_blocking()
 

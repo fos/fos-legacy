@@ -12,9 +12,9 @@ __version__ = '$Id: wrap.py 1694 2008-01-30 23:12:00Z Alex.Holkner $'
 import ctypes
 from ctypes import *
 
-import pyglet.lib
+import fos.lib.pyglet.lib
 
-_lib = pyglet.lib.load_library('pulse')
+_lib = fos.lib.pyglet.lib.load_library('pulse')
 
 _int_types = (c_int16, c_int32)
 if hasattr(ctypes, 'c_int64'):

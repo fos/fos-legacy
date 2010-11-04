@@ -2,10 +2,9 @@ import numpy as np
 
 from fos.lib.pyglet.gl import *
 
-from fos.core.managed_window import ManagedWindow
+from fos.core.window.managed_window import ManagedWindow
 from fos import World
 
-#from fos.lib import pyglet
 from fos.lib.pyglet.window import key,mouse
 from fos.lib.pyglet.clock import Clock
 from fos.lib.pyglet.window import FPSDisplay
@@ -55,13 +54,17 @@ class FosWindow(ManagedWindow):
         emptyworld = World("Zero-Point World")
         self.attach(emptyworld)
         
-        # the frame rate display from pyglet
+        # the frame rate display from fos.lib.pyglet
         self.fps_display = FPSDisplay(self)
-        self.foslabel = WindowText(self, 'Fos', x=10 , y=38)
+        self.foslabel = WindowText(self, 'fos', x=10 , y=40)
+        self.show_logos = True
         
         # fos ad
         super(FosWindow, self).__init__(**kwargs)
         
+    
+    def remove_logos(self):
+        self.show_logos = False
         
         
     def setup(self):           
@@ -103,7 +106,7 @@ class FosWindow(ManagedWindow):
                 c.update(dt)
             except:
                 pass
-             
+         
 #        if dt != 0:
 #            print "freq", round(1.0/dt)
 #            pass
@@ -147,8 +150,9 @@ class FosWindow(ManagedWindow):
             except:
                 pass
         
-        self.fps_display.draw()
-        self.foslabel.draw()
+        if self.show_logos:
+            self.fps_display.draw()
+            self.foslabel.draw()
 
         self._world._render_lock.release()
     

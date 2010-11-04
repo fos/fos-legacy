@@ -1,6 +1,6 @@
 import ctypes
 
-from pyglet import com
+from fos.lib.pyglet import com
 
 lib = ctypes.oledll.dinput8
 
