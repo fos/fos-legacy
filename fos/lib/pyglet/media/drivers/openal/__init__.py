@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -42,11 +42,11 @@ import Queue
 
 import lib_openal as al
 import lib_alc as alc
-from pyglet.media import MediaException, MediaEvent, AbstractAudioPlayer, \
+from fos.lib.pyglet.media import MediaException, MediaEvent, AbstractAudioPlayer, \
     AbstractAudioDriver, AbstractListener, MediaThread
 
-import pyglet
-_debug = pyglet.options['debug_media']
+import fos.lib.pyglet
+_debug = fos.lib.pyglet.options['debug_media']
 
 class OpenALException(MediaException):
     pass

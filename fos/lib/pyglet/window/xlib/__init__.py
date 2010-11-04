@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -39,22 +39,22 @@ from ctypes import *
 import unicodedata
 import warnings
 
-import pyglet
-from pyglet.window import WindowException, NoSuchDisplayException, \
+import fos.lib.pyglet
+from fos.lib.pyglet.window import WindowException, NoSuchDisplayException, \
     MouseCursorException, MouseCursor, \
     DefaultMouseCursor, ImageMouseCursor, BaseWindow, _PlatformEventHandler, \
     _ViewEventHandler
-from pyglet.window import key
-from pyglet.window import mouse
-from pyglet.event import EventDispatcher
+from fos.lib.pyglet.window import key
+from fos.lib.pyglet.window import mouse
+from fos.lib.pyglet.event import EventDispatcher
 
-from pyglet.canvas.xlib import XlibCanvas
+from fos.lib.pyglet.canvas.xlib import XlibCanvas
 
-from pyglet.libs.x11 import xlib
-from pyglet.libs.x11 import cursorfont
+from fos.lib.pyglet.libs.x11 import xlib
+from fos.lib.pyglet.libs.x11 import cursorfont
 
 try:
-    from pyglet.libs.x11 import xsync
+    from fos.lib.pyglet.libs.x11 import xsync
     _have_xsync = True
 except:
     _have_xsync = False
@@ -93,7 +93,7 @@ _motion_map = {
 
 class XlibException(WindowException):
     '''An X11-specific exception.  This exception is probably a programming
-    error in pyglet.'''
+    error in fos.lib.pyglet.'''
     pass
 
 class XlibMouseCursor(MouseCursor):
@@ -256,7 +256,7 @@ class XlibWindow(BaseWindow):
             #            effect anyway, it's just commented out.
             #xlib.XSetWindowBackgroundPixmap(self._x_display, self._window, 0)
 
-            self._enable_xsync = (pyglet.options['xsync'] and
+            self._enable_xsync = (fos.lib.pyglet.options['xsync'] and
                                   self.display._enable_xsync and
                                   self.config.double_buffer)
 
@@ -291,7 +291,7 @@ class XlibWindow(BaseWindow):
 
         self._override_redirect = False
         if self._fullscreen:
-            if pyglet.options['xlib_fullscreen_override_redirect']:
+            if fos.lib.pyglet.options['xlib_fullscreen_override_redirect']:
                 # Try not to use this any more, it causes problems; disabled
                 # by default in favour of _NET_WM_STATE_FULLSCREEN.
                 attributes.override_redirect = self._fullscreen
@@ -458,8 +458,8 @@ class XlibWindow(BaseWindow):
         self._sync_resize()
 
     def set_vsync(self, vsync):
-        if pyglet.options['vsync'] is not None:
-            vsync = pyglet.options['vsync']
+        if fos.lib.pyglet.options['vsync'] is not None:
+            vsync = fos.lib.pyglet.options['vsync']
         self._vsync = vsync
         self.context.set_vsync(vsync)
 
@@ -882,7 +882,7 @@ class XlibWindow(BaseWindow):
     # Event handlers
     '''
     def _event_symbol(self, event):
-        # pyglet.self.key keysymbols are identical to X11 keysymbols, no
+        # fos.lib.pyglet.self.key keysymbols are identical to X11 keysymbols, no
         # need to map the keysymbol.
         symbol = xlib.XKeycodeToKeysym(self._x_display, event.xkey.keycode, 0)
         if symbol == 0:
@@ -941,8 +941,8 @@ class XlibWindow(BaseWindow):
         if ev.xkey.keycode == 0 and not filtered:
             symbol = None
 
-        # pyglet.self.key keysymbols are identical to X11 keysymbols, no
-        # need to map the keysymbol.  For keysyms outside the pyglet set, map
+        # fos.lib.pyglet.self.key keysymbols are identical to X11 keysymbols, no
+        # need to map the keysymbol.  For keysyms outside the fos.lib.pyglet set, map
         # raw key code to a user key.
         if symbol and symbol not in key._key_names and ev.xkey.keycode:
             # Issue 353: Symbol is uppercase when shift key held down.

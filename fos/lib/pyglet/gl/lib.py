@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -41,13 +41,13 @@ __version__ = '$Id$'
 import sys
 import ctypes
 
-import pyglet
+import fos.lib.pyglet
 
 __all__ = ['link_GL', 'link_GLU', 'link_AGL', 'link_GLX', 'link_WGL']
 
-_debug_gl = pyglet.options['debug_gl']
-_debug_gl_trace = pyglet.options['debug_gl_trace']
-_debug_gl_trace_args = pyglet.options['debug_gl_trace_args']
+_debug_gl = fos.lib.pyglet.options['debug_gl']
+_debug_gl_trace = fos.lib.pyglet.options['debug_gl_trace']
+_debug_gl_trace_args = fos.lib.pyglet.options['debug_gl_trace_args']
 
 class MissingFunctionException(Exception):
     def __init__(self, name, requires=None, suggestions=None):
@@ -94,7 +94,7 @@ def errcheck(result, func, arguments):
         else:
             print name
 
-    from pyglet import gl
+    from fos.lib.pyglet import gl
     context = gl.current_context
     if not context:
         raise GLException('No GL context; create a Window first')
@@ -106,7 +106,7 @@ def errcheck(result, func, arguments):
         return result
 
 def errcheck_glbegin(result, func, arguments):
-    from pyglet import gl
+    from fos.lib.pyglet import gl
     context = gl.current_context
     if not context:
         raise GLException('No GL context; create a Window first')
@@ -114,7 +114,7 @@ def errcheck_glbegin(result, func, arguments):
     return result
 
 def errcheck_glend(result, func, arguments):
-    from pyglet import gl
+    from fos.lib.pyglet import gl
     context = gl.current_context
     if not context:
         raise GLException('No GL context; create a Window first')
@@ -136,9 +136,9 @@ link_GLX = None
 link_WGL = None
 
 if sys.platform in ('win32', 'cygwin'):
-    from pyglet.gl.lib_wgl import link_GL, link_GLU, link_WGL
+    from fos.lib.pyglet.gl.lib_wgl import link_GL, link_GLU, link_WGL
 elif sys.platform == 'darwin':
-    from pyglet.gl.lib_agl import link_GL, link_GLU, link_AGL
+    from fos.lib.pyglet.gl.lib_agl import link_GL, link_GLU, link_AGL
 else:
-    from pyglet.gl.lib_glx import link_GL, link_GLU, link_GLX
+    from fos.lib.pyglet.gl.lib_glx import link_GL, link_GLU, link_GLX
 

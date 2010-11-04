@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -48,7 +48,7 @@ Getting started
 
 Call the Window constructor to create a new window::
 
-    from pyglet.window import Window
+    from fos.lib.pyglet.window import Window
     win = Window(width=640, height=480)
 
 Attach your own event handlers::
@@ -66,7 +66,7 @@ Place drawing code for the window within the `Window.on_draw` event handler::
 Call `pyglet.app.run` to enter the main event loop (by default, this
 returns when all open windows are closed)::
 
-    from pyglet import app
+    from fos.lib.pyglet import app
     app.run()
 
 Creating a game window
@@ -103,7 +103,7 @@ Each window has its own context which is created when the window is created.
 You can specify the properties of the context before it is created
 by creating a "template" configuration::
 
-    from pyglet import gl
+    from fos.lib.pyglet import gl
     # Create template config
     config = gl.Config()
     config.stencil_size = 8
@@ -128,12 +128,12 @@ __version__ = '$Id$'
 import pprint
 import sys
 
-import pyglet
-from pyglet import gl
-from pyglet.gl import gl_info
-from pyglet.event import EventDispatcher
-import pyglet.window.key
-import pyglet.window.event
+import fos.lib.pyglet
+from fos.lib.pyglet import gl
+from fos.lib.pyglet.gl import gl_info
+from fos.lib.pyglet.event import EventDispatcher
+import fos.lib.pyglet.window.key
+import fos.lib.pyglet.window.event
 
 _is_epydoc = hasattr(sys, 'is_epydoc') and sys.is_epydoc
 
@@ -171,7 +171,7 @@ class MouseCursor(object):
         '''Abstract render method.
 
         The cursor should be drawn with the "hot" spot at the given
-        coordinates.  The projection is set to the pyglet default (i.e., 
+        coordinates.  The projection is set to the fos.lib.pyglet default (i.e., 
         orthographic in window-space), however no other aspects of the 
         state can be assumed.
 
@@ -370,10 +370,10 @@ class BaseWindow(EventDispatcher):
     #: update.
     #:
     #: :type: bool
-    #: :since: pyglet 1.1
+    #: :since: fos.lib.pyglet 1.1
     invalid = True
 
-    #: Legacy invalidation flag introduced in pyglet 1.2: set by all event
+    #: Legacy invalidation flag introduced in fos.lib.pyglet 1.2: set by all event
     #: dispatches that go to non-empty handlers.  The default 1.2 event loop
     #: will therefore redraw after any handled event or scheduled function.
     _legacy_invalid = True
@@ -543,8 +543,8 @@ class BaseWindow(EventDispatcher):
         self._resizable = resizable
         self._fullscreen = fullscreen
         self._style = style
-        if pyglet.options['vsync'] is not None:
-            self._vsync = pyglet.options['vsync']
+        if fos.lib.pyglet.options['vsync'] is not None:
+            self._vsync = fos.lib.pyglet.options['vsync']
         else:
             self._vsync = vsync
 
@@ -553,7 +553,7 @@ class BaseWindow(EventDispatcher):
             caption = sys.argv[0]
         self._caption = caption
 
-        from pyglet import app
+        from fos.lib.pyglet import app
         app.windows.add(self)
         self._create()
 
@@ -630,13 +630,13 @@ class BaseWindow(EventDispatcher):
                 previous window size when windowed, or the screen size if
                 fullscreen.
 
-                **Since:** pyglet 1.2
+                **Since:** fos.lib.pyglet 1.2
             `height` : int
                 Optional height of the window.  If unspecified, defaults to
                 the previous window size when windowed, or the screen size if
                 fullscreen.
 
-                **Since:** pyglet 1.2
+                **Since:** fos.lib.pyglet 1.2
         '''
         if (fullscreen == self._fullscreen and 
             (screen is None or screen is self._screen) and
@@ -720,7 +720,7 @@ class BaseWindow(EventDispatcher):
     def on_close(self):
         '''Default on_close handler.'''
         self.has_exit = True
-        from pyglet import app
+        from fos.lib.pyglet import app
         if app.event_loop is not None:
             self.close()
 
@@ -740,7 +740,7 @@ class BaseWindow(EventDispatcher):
         The `pyglet.app.EventLoop.on_window_close` event is dispatched on
         `pyglet.app.event_loop` when this method is called.
         '''
-        from pyglet import app
+        from fos.lib.pyglet import app
         if not self._context:
             return
         app.windows.remove(self)
@@ -1156,7 +1156,7 @@ class BaseWindow(EventDispatcher):
         '''Poll the operating system event queue for new events and call
         attached event handlers.
 
-        This method is provided for legacy applications targeting pyglet 1.0,
+        This method is provided for legacy applications targeting fos.lib.pyglet 1.0,
         and advanced applications that must integrate their event loop
         into another framework.
 
@@ -1170,10 +1170,10 @@ class BaseWindow(EventDispatcher):
         def on_key_press(symbol, modifiers):
             '''A key on the keyboard was pressed (and held down).
 
-            In pyglet 1.0 the default handler sets `has_exit` to ``True`` if
+            In fos.lib.pyglet 1.0 the default handler sets `has_exit` to ``True`` if
             the ``ESC`` key is pressed.
 
-            In pyglet 1.1 the default handler dispatches the `on_close`
+            In fos.lib.pyglet 1.1 the default handler dispatches the `on_close`
             event if the ``ESC`` key is pressed.
 
             :Parameters:
@@ -1388,7 +1388,7 @@ class BaseWindow(EventDispatcher):
             This event can be triggered by clicking on the "X" control box in
             the window title bar, or by some other platform-dependent manner.
 
-            The default handler sets `has_exit` to ``True``.  In pyglet 1.1, if
+            The default handler sets `has_exit` to ``True``.  In fos.lib.pyglet 1.1, if
             `pyglet.app.event_loop` is being used, `close` is also called,
             closing the window immediately.
 
@@ -1465,7 +1465,7 @@ class BaseWindow(EventDispatcher):
                     of the window.
                 `y` : int
                     Distance from the top edge of the screen to the top edge of
-                    the window.  Note that this is one of few methods in pyglet
+                    the window.  Note that this is one of few methods in fos.lib.pyglet
                     which use a Y-down coordinate system.
 
             :event:
@@ -1525,7 +1525,7 @@ class BaseWindow(EventDispatcher):
         def on_context_state_lost():
             '''The state of the window's GL context was lost.
 
-            pyglet may sometimes need to recreate the window's GL context if
+            fos.lib.pyglet may sometimes need to recreate the window's GL context if
             the window is moved to another video device, or between fullscreen
             or windowed mode.  In this case it will try to share the objects
             (display lists, texture objects, shaders) between the old and new
@@ -1550,7 +1550,7 @@ class BaseWindow(EventDispatcher):
             this event is triggered; a resize or expose event may have
             invalidated the framebuffer since the last time it was drawn.
 
-            :since: pyglet 1.1
+            :since: fos.lib.pyglet 1.1
 
             :event:
             '''
@@ -1586,7 +1586,7 @@ class FPSDisplay(object):
     usage is to create an `FPSDisplay` for each window, and draw the display
     at the end of the windows' `on_draw` event handler::
 
-        window = pyglet.window.Window()
+        window = fos.lib.pyglet.window.Window()
         fps_display = FPSDisplay(window)
 
         @window.event
@@ -1613,10 +1613,9 @@ class FPSDisplay(object):
 
     def __init__(self, window):
         from time import time
-        from pyglet.text import Label
-        
+        from fos.lib.pyglet.text import Label
         self.label = Label('', x=10, y=10, 
-                           font_size=20, bold=True,
+                           font_size=24, bold=True,
                            color=(127, 127, 127, 127))
 
         self.window = window
@@ -1689,10 +1688,10 @@ if _is_epydoc:
 else:
     # Try to determine which platform to use.
     if sys.platform == 'darwin':
-        from pyglet.window.carbon import CarbonWindow
+        from fos.lib.pyglet.window.carbon import CarbonWindow
         Window = CarbonWindow
     elif sys.platform in ('win32', 'cygwin'):
-        from pyglet.window.win32 import Win32Window
+        from fos.lib.pyglet.window.win32 import Win32Window
         Window = Win32Window
     else:
         # XXX HACK around circ problem, should be fixed after removal of
@@ -1700,7 +1699,7 @@ else:
         #pyglet.window = sys.modules[__name__]
         #import key, mouse
 
-        from pyglet.window.xlib import XlibWindow
+        from fos.lib.pyglet.window.xlib import XlibWindow
         Window = XlibWindow
 
 
@@ -1732,7 +1731,7 @@ class Platform(object):
         ``"localhost:1"``.
 
         On platforms other than X11, `name` is ignored and the default
-        display is returned.  pyglet does not support multiple multiple
+        display is returned.  fos.lib.pyglet does not support multiple multiple
         video devices on Windows or OS X.  If more than one device is
         attached, they will appear as a single virtual device comprising
         all the attached screens.
@@ -1745,10 +1744,10 @@ class Platform(object):
 
         :rtype: `Display`
         '''
-        for display in pyglet.app.displays:
+        for display in fos.lib.pyglet.app.displays:
             if display.name == name:
                 return display
-        return pyglet.canvas.Display(name)
+        return fos.lib.pyglet.canvas.Display(name)
 
     def get_default_display(self):
         '''Get the default display device.
@@ -1757,7 +1756,7 @@ class Platform(object):
 
         :rtype: `Display`
         '''
-        return pyglet.canvas.get_display()
+        return fos.lib.pyglet.canvas.get_display()
 
 if _is_epydoc:
     class Display(object):
@@ -1800,12 +1799,12 @@ if _is_epydoc:
             '''
             raise NotImplementedError('deprecated')
 else:
-    Display = pyglet.canvas.Display
-    Screen = pyglet.canvas.Screen
+    Display = fos.lib.pyglet.canvas.Display
+    Screen = fos.lib.pyglet.canvas.Screen
 
 
 # XXX remove
 # Create shadow window. (trickery is for circular import)
 if not _is_epydoc:
-    pyglet.window = sys.modules[__name__]
+    fos.lib.pyglet.window = sys.modules[__name__]
     gl._create_shadow_window()

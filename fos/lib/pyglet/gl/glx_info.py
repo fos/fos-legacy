@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -36,14 +36,14 @@
 
 Usage::
 
-    from pyglet.gl import glx_info
+    from fos.lib.pyglet.gl import glx_info
 
     if glx_info.have_extension('GLX_NV_float_buffer'):
         # ...
 
 Or, if using more than one display::
 
-    from pyglet.gl.glx_info import GLXInfo
+    from fos.lib.pyglet.gl.glx_info import GLXInfo
 
     info = GLXInfo(window._display)
     if info.get_server_vendor() == 'ATI':
@@ -56,8 +56,8 @@ __version__ = '$Id$'
 
 from ctypes import *
 
-from pyglet.gl.glx import *
-from pyglet.compat import asstr
+from fos.lib.pyglet.gl.glx import *
+from fos.lib.pyglet.compat import asstr
 
 class GLXInfoException(Exception):
     pass

@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -42,11 +42,11 @@ __version__ = '$Id: glx_info.py 615 2007-02-07 13:17:05Z Alex.Holkner $'
 from ctypes import *
 import warnings
 
-from pyglet.gl.lib import MissingFunctionException
-from pyglet.gl.gl import *
-from pyglet.gl import gl_info
-from pyglet.gl.wgl import *
-from pyglet.gl.wglext_arb import *
+from fos.lib.pyglet.gl.lib import MissingFunctionException
+from fos.lib.pyglet.gl.gl import *
+from fos.lib.pyglet.gl import gl_info
+from fos.lib.pyglet.gl.wgl import *
+from fos.lib.pyglet.gl.wglext_arb import *
 
 class WGLInfoException(Exception):
     pass

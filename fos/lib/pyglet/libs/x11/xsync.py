@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -45,9 +45,9 @@ __version__ = '$Id$'
 import ctypes
 from ctypes import *
 
-import pyglet.lib
+import fos.lib.pyglet.lib
 
-_lib = pyglet.lib.load_library('Xext')
+_lib = fos.lib.pyglet.lib.load_library('Xext')
 
 _int_types = (c_int16, c_int32)
 if hasattr(ctypes, 'c_int64'):
@@ -68,7 +68,7 @@ class c_void(Structure):
 
 # XXX DODGY relative import of xlib.py, which contains XID etc definitions.
 # can't use wrapped import which gave
-#   import pyglet.window.xlib.xlib
+#   import fos.lib.pyglet.window.xlib.xlib
 # because Python has the lamest import semantics and can't handle that kind of
 # recursive import, even though it's the same as
 import xlib

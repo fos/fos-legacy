@@ -10,15 +10,15 @@ import sys
 import threading
 import Queue
 
-from pyglet import app
-from pyglet import clock
-from pyglet import event
+from fos.lib.pyglet import app
+from fos.lib.pyglet import clock
+from fos.lib.pyglet import event
 
 _is_epydoc = hasattr(sys, 'is_epydoc') and sys.is_epydoc
 
 class PlatformEventLoop(object):
     '''
-    :since: pyglet 1.2
+    :since: fos.lib.pyglet 1.2
     '''
     def __init__(self):
         self._event_queue = Queue.Queue()
@@ -207,7 +207,7 @@ class EventLoop(event.EventDispatcher):
 
     def _legacy_setup(self):
         # Disable event queuing for dispatch_events
-        from pyglet.window import Window
+        from fos.lib.pyglet.window import Window
         Window._enable_event_queue = False
         
         # Dispatch pending events
@@ -216,7 +216,7 @@ class EventLoop(event.EventDispatcher):
             window.dispatch_pending_events()
 
     def enter_blocking(self):
-        '''Called by pyglet internal processes when the operating system
+        '''Called by fos.lib.pyglet internal processes when the operating system
         is about to block due to a user interaction.  For example, this
         is common when the user begins resizing or moving a window.
 
@@ -227,13 +227,13 @@ class EventLoop(event.EventDispatcher):
         The default implementation ensures that `idle` continues to be called
         as documented.
 
-        :since: pyglet 1.2
+        :since: fos.lib.pyglet 1.2
         '''
         timeout = self.idle()
         app.platform_event_loop.set_timer(self._blocking_timer, timeout)
 
     def exit_blocking(self):
-        '''Called by pyglet internal processes when the blocking operation
+        '''Called by fos.lib.pyglet internal processes when the blocking operation
         completes.  See `enter_blocking`.
         '''
         app.platform_event_loop.set_timer(None, None)
@@ -298,7 +298,7 @@ class EventLoop(event.EventDispatcher):
     the next iteration.  When set, all waiting threads are interrupted (see
     `sleep`).
     
-    Thread-safe since pyglet 1.2.
+    Thread-safe since fos.lib.pyglet 1.2.
 
     :see: `exit`
     :type: bool
@@ -324,7 +324,7 @@ class EventLoop(event.EventDispatcher):
             `timeout` : float
                 Time to wait, in seconds.
 
-        :since: pyglet 1.2
+        :since: fos.lib.pyglet 1.2
 
         :rtype: bool
         :return: ``True`` if the `has_exit` flag is now set, otherwise

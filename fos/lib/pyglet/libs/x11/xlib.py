@@ -12,9 +12,9 @@ __version__ = '$Id$'
 import ctypes
 from ctypes import *
 
-import pyglet.lib
+import fos.lib.pyglet.lib
 
-_lib = pyglet.lib.load_library('X11')
+_lib = fos.lib.pyglet.lib.load_library('X11')
 
 _int_types = (c_int16, c_int32)
 if hasattr(ctypes, 'c_int64'):

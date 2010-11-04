@@ -7,15 +7,15 @@ __docformat__ = 'restructuredtext'
 __version__ = '$Id: $'
 
 import ctypes
-import pyglet
-from pyglet.input.base import \
+import fos.lib.pyglet
+from fos.lib.pyglet.input.base import \
     Device, DeviceException, DeviceOpenException, \
     Control, Button, RelativeAxis, AbsoluteAxis
-from pyglet.libs.x11 import xlib
-from pyglet.compat import asstr
+from fos.lib.pyglet.libs.x11 import xlib
+from fos.lib.pyglet.compat import asstr
 
 try:
-    from pyglet.libs.x11 import xinput as xi
+    from fos.lib.pyglet.libs.x11 import xinput as xi
     _have_xinput = True
 except:
     _have_xinput = False
@@ -252,7 +252,7 @@ class XInputWindowEventDispatcher(object):
                                  array,
                                  len(array))
 
-    @pyglet.window.xlib.XlibEventHandler(0)
+    @fos.lib.pyglet.window.xlib.XlibEventHandler(0)
     def _event_xinput_key_press(self, ev):
         e = ctypes.cast(ctypes.byref(ev),
             ctypes.POINTER(xi.XDeviceKeyEvent)).contents
@@ -261,7 +261,7 @@ class XInputWindowEventDispatcher(object):
         if device is not None:
             device._key_press(e)
 
-    @pyglet.window.xlib.XlibEventHandler(0)
+    @fos.lib.pyglet.window.xlib.XlibEventHandler(0)
     def _event_xinput_key_release(self, ev):
         e = ctypes.cast(ctypes.byref(ev),
             ctypes.POINTER(xi.XDeviceKeyEvent)).contents
@@ -270,7 +270,7 @@ class XInputWindowEventDispatcher(object):
         if device is not None:
             device._key_release(e)
 
-    @pyglet.window.xlib.XlibEventHandler(0)
+    @fos.lib.pyglet.window.xlib.XlibEventHandler(0)
     def _event_xinput_button_press(self, ev):
         e = ctypes.cast(ctypes.byref(ev),
             ctypes.POINTER(xi.XDeviceButtonEvent)).contents
@@ -279,7 +279,7 @@ class XInputWindowEventDispatcher(object):
         if device is not None:
             device._button_press(e)
 
-    @pyglet.window.xlib.XlibEventHandler(0)
+    @fos.lib.pyglet.window.xlib.XlibEventHandler(0)
     def _event_xinput_button_release(self, ev):
         e = ctypes.cast(ctypes.byref(ev),
             ctypes.POINTER(xi.XDeviceButtonEvent)).contents
@@ -288,7 +288,7 @@ class XInputWindowEventDispatcher(object):
         if device is not None:
             device._button_release(e)
 
-    @pyglet.window.xlib.XlibEventHandler(0)
+    @fos.lib.pyglet.window.xlib.XlibEventHandler(0)
     def _event_xinput_motion(self, ev):
         e = ctypes.cast(ctypes.byref(ev),
             ctypes.POINTER(xi.XDeviceMotionEvent)).contents
@@ -297,7 +297,7 @@ class XInputWindowEventDispatcher(object):
         if device is not None:
             device._motion(e)
 
-    @pyglet.window.xlib.XlibEventHandler(0)
+    @fos.lib.pyglet.window.xlib.XlibEventHandler(0)
     def _event_xinput_proximity_in(self, ev):
         e = ctypes.cast(ctypes.byref(ev),
             ctypes.POINTER(xi.XProximityNotifyEvent)).contents
@@ -306,7 +306,7 @@ class XInputWindowEventDispatcher(object):
         if device is not None:
             device._proximity_in(e)
 
-    @pyglet.window.xlib.XlibEventHandler(-1)
+    @fos.lib.pyglet.window.xlib.XlibEventHandler(-1)
     def _event_xinput_proximity_out(self, ev):
         e = ctypes.cast(ctypes.byref(ev),
             ctypes.POINTER(xi.XProximityNotifyEvent)).contents
@@ -327,7 +327,7 @@ def _check_extension(display):
 
 def get_devices(display=None):
     if display is None:
-        display = pyglet.canvas.get_display()
+        display = fos.lib.pyglet.canvas.get_display()
 
     if not _have_xinput or not _check_extension(display):
         return []

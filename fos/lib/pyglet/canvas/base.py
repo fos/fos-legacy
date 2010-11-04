@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # $Id:$
 
-from pyglet import app
-from pyglet import gl
-from pyglet import window
+from fos.lib.pyglet import app
+from fos.lib.pyglet import gl
+from fos.lib.pyglet import window
 
 class Display(object):
     '''A display device supporting one or more screens.
@@ -14,7 +14,7 @@ class Display(object):
         `x_screen` : int
             The X11 screen number of this display, if applicable.
 
-    :since: pyglet 1.2
+    :since: fos.lib.pyglet 1.2
     '''
     name = None
     x_screen = None
@@ -24,14 +24,14 @@ class Display(object):
 
         On X11, `name` is of the form ``"hostname:display"``, where the
         default is usually ``":1"``.  On X11, `x_screen` gives the X screen
-        number to use with this display.  A pyglet display can only be used
+        number to use with this display.  A fos.lib.pyglet display can only be used
         with one X screen; open multiple display connections to access
         multiple X screens.  
         
         Note that TwinView, Xinerama, xrandr and other extensions present
         multiple monitors on a single X screen; this is usually the preferred
         mechanism for working with multiple monitors under X11 and allows each
-        screen to be accessed through a single pyglet `Display`.
+        screen to be accessed through a single fos.lib.pyglet `Display`.
 
         On platforms other than X11, `name` and `x_screen` are ignored; there is
         only a single display device on these systems.
@@ -162,7 +162,7 @@ class Screen(object):
 
         :rtype: list of `ScreenMode`
 
-        :since: pyglet 1.2
+        :since: fos.lib.pyglet 1.2
         '''
         raise NotImplementedError('abstract')
 
@@ -171,7 +171,7 @@ class Screen(object):
 
         :rtype: `ScreenMode`
 
-        :since: pyglet 1.2
+        :since: fos.lib.pyglet 1.2
         '''
         raise NotImplementedError('abstract')
 
@@ -189,7 +189,7 @@ class Screen(object):
 
         :rtype: `ScreenMode`
 
-        :since: pyglet 1.2
+        :since: fos.lib.pyglet 1.2
         '''
         # Best mode is one with smallest resolution larger than width/height,
         # with depth and refresh rate equal to current mode.
@@ -258,7 +258,7 @@ class ScreenMode(object):
         `rate` : int
             Screen refresh rate in Hz.
 
-    :since: pyglet 1.2
+    :since: fos.lib.pyglet 1.2
 
     '''
 
@@ -278,14 +278,14 @@ class ScreenMode(object):
 class Canvas(object):
     '''Abstract drawing area.
 
-    Canvases are used internally by pyglet to represent drawing areas --
+    Canvases are used internally by fos.lib.pyglet to represent drawing areas --
     either within a window or full-screen.
 
     :Ivariables:
         `display` : `Display`
             Display this canvas was created on.
 
-    :since: pyglet 1.2
+    :since: fos.lib.pyglet 1.2
     '''
     def __init__(self, display):
         self.display = display

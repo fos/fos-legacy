@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -32,7 +32,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 # ----------------------------------------------------------------------------
 
-'''Extensible attributed text format for representing pyglet formatted
+'''Extensible attributed text format for representing fos.lib.pyglet formatted
 documents.
 '''
 
@@ -44,7 +44,7 @@ import parser
 import re
 import token
 
-import pyglet
+import fos.lib.pyglet
 
 _pattern = re.compile(r'''
     (?P<escape_hex>\{\#x(?P<escape_hex_val>[0-9a-fA-F]+)\})
@@ -61,9 +61,9 @@ _pattern = re.compile(r'''
   | (?P<text>[^\{\}\n]+)
     ''', re.VERBOSE | re.DOTALL)
 
-class AttributedTextDecoder(pyglet.text.DocumentDecoder):
+class AttributedTextDecoder(fos.lib.pyglet.text.DocumentDecoder):
     def decode(self, text, location=None):
-        self.doc = pyglet.text.document.FormattedDocument()
+        self.doc = fos.lib.pyglet.text.document.FormattedDocument()
 
         self.length = 0
         self.attributes = {}

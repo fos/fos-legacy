@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -43,15 +43,15 @@ import ctypes
 import math
 
 from sys import byteorder
-import pyglet
-from pyglet.font import base
-import pyglet.image
-from pyglet.libs.win32.constants import *
-from pyglet.libs.win32.types import *
-from pyglet.libs.win32 import _gdi32 as gdi32, _user32 as user32
-from pyglet.libs.win32 import _kernel32 as kernel32
+import fos.lib.pyglet
+from fos.lib.pyglet.font import base
+import fos.lib.pyglet.image
+from fos.lib.pyglet.libs.win32.constants import *
+from fos.lib.pyglet.libs.win32.types import *
+from fos.lib.pyglet.libs.win32 import _gdi32 as gdi32, _user32 as user32
+from fos.lib.pyglet.libs.win32 import _kernel32 as kernel32
 
-_debug_font = pyglet.options['debug_font']
+_debug_font = fos.lib.pyglet.options['debug_font']
 
 HFONT = HANDLE
 HBITMAP = HANDLE
@@ -272,7 +272,7 @@ class GDIGlyphRenderer(Win32GlyphRenderer):
         gdi32.GdiFlush()
 
         # Create glyph object and copy bitmap data to texture
-        image = pyglet.image.ImageData(width, height, 
+        image = fos.lib.pyglet.image.ImageData(width, height, 
             'AXXX', self._bitmap_data, self._bitmap_rect.right * 4)
         return image
         
@@ -370,8 +370,8 @@ class Win32Font(base.Font):
 
 # --- GDI+ font rendering ---
 
-from pyglet.image.codecs.gdiplus import PixelFormat32bppARGB, gdiplus, Rect
-from pyglet.image.codecs.gdiplus import ImageLockModeRead, BitmapData
+from fos.lib.pyglet.image.codecs.gdiplus import PixelFormat32bppARGB, gdiplus, Rect
+from fos.lib.pyglet.image.codecs.gdiplus import ImageLockModeRead, BitmapData
 
 DriverStringOptionsCmapLookup = 1
 DriverStringOptionsRealizedAdvance = 4
@@ -504,7 +504,7 @@ class GDIPlusGlyphRenderer(Win32GlyphRenderer):
         # Unlock data
         gdiplus.GdipBitmapUnlockBits(self._bitmap, byref(bitmap_data))
         
-        image = pyglet.image.ImageData(width, height, 
+        image = fos.lib.pyglet.image.ImageData(width, height, 
             'BGRA', buffer, -bitmap_data.Stride)
 
         glyph = self.font.create_glyph(image)

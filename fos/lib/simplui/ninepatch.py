@@ -43,8 +43,8 @@ http://developer.android.com/guide/topics/graphics/2d-graphics.html#nine-patch.
 
 __all__ = ["NinePatch"]
 
-import pyglet
-from pyglet.gl import *
+import fos.lib.pyglet
+from fos.lib.pyglet.gl import *
 
 class PixelData(object):
 	def __init__(self, image):

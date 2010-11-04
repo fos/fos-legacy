@@ -1,4 +1,4 @@
-from fos.lib import pyglet
+import fos.lib.pyglet as pyglet
 from fos.lib.pyglet.gl import *
 
 

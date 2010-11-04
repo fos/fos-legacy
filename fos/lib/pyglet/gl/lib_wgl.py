@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -41,19 +41,19 @@ __version__ = '$Id: lib_glx.py 597 2007-02-03 16:13:07Z Alex.Holkner $'
 import ctypes
 from ctypes import *
 
-import pyglet
-from pyglet.gl.lib import missing_function, decorate_function
+import fos.lib.pyglet
+from fos.lib.pyglet.gl.lib import missing_function, decorate_function
 
 __all__ = ['link_GL', 'link_GLU', 'link_WGL']
 
-_debug_trace = pyglet.options['debug_trace']
+_debug_trace = fos.lib.pyglet.options['debug_trace']
 
 gl_lib = ctypes.windll.opengl32
 glu_lib = ctypes.windll.glu32
 wgl_lib = gl_lib
 
 if _debug_trace:
-    from pyglet.lib import _TraceLibrary
+    from fos.lib.pyglet.lib import _TraceLibrary
     gl_lib = _TraceLibrary(gl_lib)
     glu_lib = _TraceLibrary(glu_lib)
     wgl_lib = _TraceLibrary(wgl_lib)
@@ -80,7 +80,7 @@ class WGLFunctionProxy(object):
         if self.func:
             return self.func(*args, **kwargs)
 
-        from pyglet.gl import current_context
+        from fos.lib.pyglet.gl import current_context
         if not current_context:
             raise Exception(
                 'Call to function "%s" before GL context created' % self.name)
@@ -107,7 +107,7 @@ def link_GL(name, restype, argtypes, requires=None, suggestions=None):
             fargs = (restype,) + tuple(argtypes)
             ftype = ctypes.WINFUNCTYPE(*fargs)
             if _have_get_proc_address:
-                from pyglet.gl import gl_info
+                from fos.lib.pyglet.gl import gl_info
                 if gl_info.have_context():
                     address = wglGetProcAddress(name)
                     if address:
@@ -135,7 +135,7 @@ def link_GLU(name, restype, argtypes, requires=None, suggestions=None):
             fargs = (restype,) + tuple(argtypes)
             ftype = ctypes.WINFUNCTYPE(*fargs)
             if _have_get_proc_address:
-                from pyglet.gl import gl_info
+                from fos.lib.pyglet.gl import gl_info
                 if gl_info.have_context():
                     address = wglGetProcAddress(name)
                     if address:

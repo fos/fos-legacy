@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -43,11 +43,11 @@ __version__ = '$Id$'
 from ctypes import *
 import struct
 
-from pyglet.gl import *
-from pyglet.image import CompressedImageData
-from pyglet.image import codecs
-from pyglet.image.codecs import s3tc
-from pyglet.compat import izip_longest
+from fos.lib.pyglet.gl import *
+from fos.lib.pyglet.image import CompressedImageData
+from fos.lib.pyglet.image import codecs
+from fos.lib.pyglet.image.codecs import s3tc
+from fos.lib.pyglet.compat import izip_longest
 
 class DDSException(codecs.ImageDecodeException):
     exception_priority = 0

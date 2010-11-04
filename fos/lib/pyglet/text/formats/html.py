@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -41,7 +41,7 @@ supported fully::
     LI MENU OL P PRE Q SAMP STRONG SUB SUP TT U UL VAR 
 
 The mark (bullet or number) of a list item is separated from the body of the
-list item with a tab, as the pyglet document model does not allow
+list item with a tab, as the fos.lib.pyglet document model does not allow
 out-of-stream text.  This means lists display as expected, but behave a little
 oddly if edited.
 
@@ -55,8 +55,8 @@ import HTMLParser
 import htmlentitydefs
 import re
 
-import pyglet
-from pyglet.text.formats import structured
+import fos.lib.pyglet
+from fos.lib.pyglet.text.formats import structured
 
 def _hex_color(val):
     return [(val >> 16) & 0xff, (val >> 8) & 0xff, val & 0xff, 255]
@@ -153,7 +153,7 @@ class HTMLDecoder(HTMLParser.HTMLParser, structured.StructuredTextDecoder):
         self.close()
 
     def get_image(self, filename):
-        return pyglet.image.load(filename, file=self.location.open(filename))
+        return fos.lib.pyglet.image.load(filename, file=self.location.open(filename))
 
     def prepare_for_data(self):
         if self.need_block_begin:

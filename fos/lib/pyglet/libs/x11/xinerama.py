@@ -12,9 +12,9 @@ __version__ = '$Id$'
 import ctypes
 from ctypes import *
 
-import pyglet.lib
+import fos.lib.pyglet.lib
 
-_lib = pyglet.lib.load_library('Xinerama')
+_lib = fos.lib.pyglet.lib.load_library('Xinerama')
 
 _int_types = (c_int16, c_int32)
 if hasattr(ctypes, 'c_int64'):
@@ -33,7 +33,7 @@ class c_void(Structure):
     _fields_ = [('dummy', c_int)]
 
 
-import pyglet.libs.x11.xlib
+import fos.lib.pyglet.libs.x11.xlib
 
 class struct_anon_93(Structure):
     __slots__ = [
@@ -52,7 +52,7 @@ struct_anon_93._fields_ = [
 ]
 
 XineramaScreenInfo = struct_anon_93 	# /usr/include/X11/extensions/Xinerama.h:40
-Display = pyglet.libs.x11.xlib.Display
+Display = fos.lib.pyglet.libs.x11.xlib.Display
 # /usr/include/X11/extensions/Xinerama.h:44
 XineramaQueryExtension = _lib.XineramaQueryExtension
 XineramaQueryExtension.restype = c_int

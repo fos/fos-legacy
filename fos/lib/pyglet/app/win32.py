@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -38,12 +38,12 @@ __version__ = '$Id: $'
 
 import ctypes
 
-from pyglet import app
+from fos.lib.pyglet import app
 from base import PlatformEventLoop
 
-from pyglet.libs.win32 import _kernel32, _user32, types, constants
-from pyglet.libs.win32.constants import *
-from pyglet.libs.win32.types import *
+from fos.lib.pyglet.libs.win32 import _kernel32, _user32, types, constants
+from fos.lib.pyglet.libs.win32.constants import *
+from fos.lib.pyglet.libs.win32.types import *
 
 class Win32EventLoop(PlatformEventLoop):
     def __init__(self):
@@ -52,8 +52,8 @@ class Win32EventLoop(PlatformEventLoop):
         self._next_idle_time = None
 
         # Force immediate creation of an event queue on this thread -- note
-        # that since event loop is created on pyglet.app import, whatever
-        # imports pyglet.app _must_ own the main run loop.
+        # that since event loop is created on fos.lib.pyglet.app import, whatever
+        # imports fos.lib.pyglet.app _must_ own the main run loop.
         msg = types.MSG()
         _user32.PeekMessageW(ctypes.byref(msg), 0,
                              constants.WM_USER, constants.WM_USER, 
@@ -88,7 +88,7 @@ class Win32EventLoop(PlatformEventLoop):
     def start(self):
         if _kernel32.GetCurrentThreadId() != self._event_thread:
             raise RuntimeError('EventLoop.run() must be called from the same ' +
-                               'thread that imports pyglet.app')
+                               'thread that imports fos.lib.pyglet.app')
 
         self._timer_proc = types.TIMERPROC(self._timer_proc_func)
         self._timer = _user32.SetTimer(

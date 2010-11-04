@@ -1,6 +1,6 @@
 import numpy as np
 
-from fos.lib import pyglet
+import fos.lib.pyglet as pyglet
 from fos.lib.pyglet.gl import *
 from fos.core.arrayimage import ArrayInterfaceImage
 from fos.core.actor import Actor

@@ -1,18 +1,18 @@
 #!/usr/bin/python
 # $Id:$
 
-from pyglet.canvas.win32 import Win32Canvas
+from fos.lib.pyglet.canvas.win32 import Win32Canvas
 from base import Config, CanvasConfig, Context
 
-from pyglet import gl
-from pyglet.gl import gl_info
-from pyglet.gl import wgl
-from pyglet.gl import wglext_arb
-from pyglet.gl import wgl_info
+from fos.lib.pyglet import gl
+from fos.lib.pyglet.gl import gl_info
+from fos.lib.pyglet.gl import wgl
+from fos.lib.pyglet.gl import wglext_arb
+from fos.lib.pyglet.gl import wgl_info
 
-from pyglet.libs.win32 import _user32, _kernel32, _gdi32
-from pyglet.libs.win32.constants import *
-from pyglet.libs.win32.types import *
+from fos.lib.pyglet.libs.win32 import _user32, _kernel32, _gdi32
+from fos.lib.pyglet.libs.win32.constants import *
+from fos.lib.pyglet.libs.win32.types import *
 
 class Win32Config(Config):
     def match(self, canvas):
@@ -44,7 +44,7 @@ class Win32Config(Config):
         else:
             pfd.dwFlags |= PFD_STEREO_DONTCARE
 
-        '''Not supported in pyglet API        
+        '''Not supported in fos.lib.pyglet API        
         if attributes.get('swap_copy', False):
             pfd.dwFlags |= PFD_SWAP_COPY
         if attributes.get('swap_exchange', False):

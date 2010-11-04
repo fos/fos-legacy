@@ -8,11 +8,11 @@ __version__ = '$Id: $'
 
 import ctypes
 
-import pyglet
-from pyglet.input.base import Tablet, TabletCanvas, TabletCursor
-from pyglet.window.carbon import CarbonEventHandler
-from pyglet.libs.darwin import *
-from pyglet.libs.darwin import _oscheck
+import fos.lib.pyglet
+from fos.lib.pyglet.input.base import Tablet, TabletCanvas, TabletCursor
+from fos.lib.pyglet.window.carbon import CarbonEventHandler
+from fos.lib.pyglet.libs.darwin import *
+from fos.lib.pyglet.libs.darwin import _oscheck
 
 class CarbonTablet(Tablet):
     name = 'OS X System Tablet'

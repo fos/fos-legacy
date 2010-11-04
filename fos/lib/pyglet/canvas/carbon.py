@@ -6,11 +6,11 @@
 __docformat__ = 'restructuredtext'
 __version__ = '$Id: $'
 
-from pyglet import app
+from fos.lib.pyglet import app
 from base import Display, Screen, ScreenMode, Canvas
 
-from pyglet.libs.darwin import *
-from pyglet.libs.darwin import _oscheck
+from fos.lib.pyglet.libs.darwin import *
+from fos.lib.pyglet.libs.darwin import _oscheck
 
 class CarbonDisplay(Display):
     # TODO: CarbonDisplay could be per display device, which would make

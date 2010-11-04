@@ -10,14 +10,14 @@ import ctypes
 import errno
 import os
 
-import pyglet
-from pyglet.app.xlib import XlibSelectDevice
+import fos.lib.pyglet
+from fos.lib.pyglet.app.xlib import XlibSelectDevice
 from base import Device, Control, RelativeAxis, AbsoluteAxis, Button, Joystick
 from base import DeviceOpenException
 from evdev_constants import *
 from evdev_constants import _rel_raw_names, _abs_raw_names, _key_raw_names
 
-c = pyglet.lib.load_library('c')
+c = fos.lib.pyglet.lib.load_library('c')
 
 _IOC_NRBITS = 8
 _IOC_TYPEBITS = 8
@@ -264,7 +264,7 @@ class EvdevDevice(XlibSelectDevice, Device):
         except OSError, e:
             raise DeviceOpenException(e)
 
-        pyglet.app.platform_event_loop._select_devices.add(self)
+        fos.lib.pyglet.app.platform_event_loop._select_devices.add(self)
 
     def close(self):
         super(EvdevDevice, self).close()
@@ -272,7 +272,7 @@ class EvdevDevice(XlibSelectDevice, Device):
         if not self._fileno:
             return
 
-        pyglet.app.platform_event_loop._select_devices.remove(self)
+        fos.lib.pyglet.app.platform_event_loop._select_devices.remove(self)
         os.close(self._fileno)
         self._fileno = None
 

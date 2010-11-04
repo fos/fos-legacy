@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -38,7 +38,7 @@ This package imports all OpenGL, GLU and registered OpenGL extension
 functions.  Functions have identical signatures to their C counterparts.  For
 example::
 
-    from pyglet.gl import *
+    from fos.lib.pyglet.gl import *
     
     # [...omitted: set up a GL context and framebuffer]
     glBegin(GL_QUADS)
@@ -94,15 +94,11 @@ below.
 __docformat__ = 'restructuredtext'
 __version__ = '$Id$'
 
-## replace the pyglet package
-from fos.lib import import_thirdparty
-pyglet = import_thirdparty("pyglet")
-
-from pyglet.gl.lib import GLException
-from pyglet.gl.gl import *
-from pyglet.gl.glu import *
-from pyglet.gl.glext_arb import *
-from pyglet.gl import gl_info
+from fos.lib.pyglet.gl.lib import GLException
+from fos.lib.pyglet.gl.gl import *
+from fos.lib.pyglet.gl.glu import *
+from fos.lib.pyglet.gl.glext_arb import *
+from fos.lib.pyglet.gl import gl_info
 
 import sys as _sys
 _is_epydoc = hasattr(_sys, 'is_epydoc') and _sys.is_epydoc
@@ -114,7 +110,7 @@ _is_epydoc = hasattr(_sys, 'is_epydoc') and _sys.is_epydoc
 #:
 #: :type: `Context`
 #:
-#: :since: pyglet 1.1
+#: :since: fos.lib.pyglet 1.1
 current_context = None
 
 def get_current_context():
@@ -136,7 +132,7 @@ class ContextException(Exception):
 class ConfigException(Exception):
     pass
 
-import pyglet as _pyglet
+import fos.lib.pyglet as _pyglet
 
 if _pyglet.options['debug_texture']:
     _debug_texture_total = 0
@@ -201,15 +197,15 @@ if _pyglet.options['debug_texture']:
 def _create_shadow_window():
     global _shadow_window
 
-    import pyglet
-    if not pyglet.options['shadow_window'] or _is_epydoc:
+    import fos.lib.pyglet
+    if not fos.lib.pyglet.options['shadow_window'] or _is_epydoc:
         return
     
-    from pyglet.window import Window
+    from fos.lib.pyglet.window import Window
     _shadow_window = Window(width=1, height=1, visible=False)
     _shadow_window.switch_to()
 
-    from pyglet import app
+    from fos.lib.pyglet import app
     app.windows.remove(_shadow_window)
 
 from base import ObjectSpace, CanvasConfig, Context
@@ -226,11 +222,11 @@ del base
 # XXX remove
 _shadow_window = None
 
-# Import pyglet.window now if it isn't currently being imported (this creates
+# Import fos.lib.pyglet.window now if it isn't currently being imported (this creates
 # the shadow window).
 if (not _is_epydoc and
     'pyglet.window' not in _sys.modules and 
     _pyglet.options['shadow_window']):
     # trickery is for circular import 
     _pyglet.gl = _sys.modules[__name__]
-    import pyglet.window
+    import fos.lib.pyglet.window

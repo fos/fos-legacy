@@ -3,11 +3,11 @@
 
 from ctypes import *
 
-import pyglet
+import fos.lib.pyglet
 import constants
 from types import *
 
-_debug_win32 = pyglet.options['debug_win32']
+_debug_win32 = fos.lib.pyglet.options['debug_win32']
 
 if _debug_win32:
     import traceback

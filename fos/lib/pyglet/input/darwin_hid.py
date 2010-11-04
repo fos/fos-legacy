@@ -8,9 +8,9 @@ __version__ = '$Id: $'
 
 import ctypes
 
-import pyglet
-from pyglet.libs.darwin import carbon, _oscheck, create_cfstring
-from pyglet.libs.darwin.constants import *
+import fos.lib.pyglet
+from fos.lib.pyglet.libs.darwin import carbon, _oscheck, create_cfstring
+from fos.lib.pyglet.libs.darwin.constants import *
 
 from base import Device, Control, AbsoluteAxis, RelativeAxis, Button
 from base import Joystick, AppleRemote
@@ -373,7 +373,7 @@ class DarwinHIDDevice(Device):
                 self._queue_callback_func, None, None)
         )
 
-        event_loop = pyglet.app.platform_event_loop._event_loop
+        event_loop = fos.lib.pyglet.app.platform_event_loop._event_loop
         carbon.GetCFRunLoopFromEventLoop.restype = void_p
         run_loop = carbon.GetCFRunLoopFromEventLoop(event_loop)
         kCFRunLoopDefaultMode = \

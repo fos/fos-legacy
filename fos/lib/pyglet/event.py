@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -34,7 +34,7 @@
 
 '''Event dispatch framework.
 
-All objects that produce events in pyglet implement `EventDispatcher`,
+All objects that produce events in fos.lib.pyglet implement `EventDispatcher`,
 providing a consistent interface for registering and manipulating event
 handlers.  A commonly used event dispatcher is `pyglet.window.Window`.
 
@@ -323,7 +323,7 @@ class EventDispatcher(object):
         `EventDispatcher` implementors; applications should call
         the ``dispatch_events`` method.
 
-        Since pyglet 1.2, the method returns `EVENT_HANDLED` if an event
+        Since fos.lib.pyglet 1.2, the method returns `EVENT_HANDLED` if an event
         handler returned `EVENT_HANDLED` or `EVENT_UNHANDLED` if all events
         returned `EVENT_UNHANDLED`.  If no matching event handlers are in the
         stack, ``False`` is returned.
@@ -335,10 +335,10 @@ class EventDispatcher(object):
                 Arguments to pass to the event handler.
 
         :rtype: bool or None
-        :return: (Since pyglet 1.2) `EVENT_HANDLED` if an event handler 
+        :return: (Since fos.lib.pyglet 1.2) `EVENT_HANDLED` if an event handler 
             returned `EVENT_HANDLED`; `EVENT_UNHANDLED` if one or more event
             handlers were invoked but returned only `EVENT_UNHANDLED`;
-            otherwise ``False``.  In pyglet 1.1 and earler, the return value
+            otherwise ``False``.  In fos.lib.pyglet 1.1 and earler, the return value
             is always ``None``.
 
         '''

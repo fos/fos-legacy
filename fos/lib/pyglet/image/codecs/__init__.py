@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -146,7 +146,7 @@ def get_animation_decoders(filename=None):
 def add_decoders(module):
     '''Add a decoder module.  The module must define `get_decoders`.  Once
     added, the appropriate decoders defined in the codec will be returned by
-    pyglet.image.codecs.get_decoders.
+    fos.lib.pyglet.image.codecs.get_decoders.
     '''
     for decoder in module.get_decoders():
         _decoders.append(decoder)
@@ -162,7 +162,7 @@ def add_decoders(module):
 def add_encoders(module):
     '''Add an encoder module.  The module must define `get_encoders`.  Once
     added, the appropriate encoders defined in the codec will be returned by
-    pyglet.image.codecs.get_encoders.
+    fos.lib.pyglet.image.codecs.get_encoders.
     '''
     for encoder in module.get_encoders():
         _encoders.append(encoder)
@@ -173,11 +173,11 @@ def add_encoders(module):
  
 def add_default_image_codecs():
     # Add the codecs we know about.  These should be listed in order of
-    # preference.  This is called automatically by pyglet.image.
+    # preference.  This is called automatically by fos.lib.pyglet.image.
 
     # Compressed texture in DDS format
     try:
-        from pyglet.image.codecs import dds
+        from fos.lib.pyglet.image.codecs import dds
         add_encoders(dds)
         add_decoders(dds)
     except ImportError:
@@ -186,7 +186,7 @@ def add_default_image_codecs():
     # Mac OS X default: QuickTime
     if sys.platform == 'darwin':
         try:
-            import pyglet.image.codecs.quicktime
+            import fos.lib.pyglet.image.codecs.quicktime
             add_encoders(quicktime)
             add_decoders(quicktime)
         except ImportError:
@@ -195,7 +195,7 @@ def add_default_image_codecs():
     # Windows XP default: GDI+
     if sys.platform in ('win32', 'cygwin'):
         try:
-            import pyglet.image.codecs.gdiplus
+            import fos.lib.pyglet.image.codecs.gdiplus
             add_encoders(gdiplus)
             add_decoders(gdiplus)
         except ImportError:
@@ -204,7 +204,7 @@ def add_default_image_codecs():
     # Linux default: GdkPixbuf 2.0
     if sys.platform == 'linux2':
         try:
-            import pyglet.image.codecs.gdkpixbuf2
+            import fos.lib.pyglet.image.codecs.gdkpixbuf2
             add_encoders(gdkpixbuf2)
             add_decoders(gdkpixbuf2)
         except ImportError:
@@ -212,7 +212,7 @@ def add_default_image_codecs():
 
     # Fallback: PIL
     try:
-        import pyglet.image.codecs.pil
+        import fos.lib.pyglet.image.codecs.pil
         add_encoders(pil)
         add_decoders(pil)
     except ImportError:
@@ -220,7 +220,7 @@ def add_default_image_codecs():
 
     # Fallback: PNG loader (slow)
     try:
-        import pyglet.image.codecs.png
+        import fos.lib.pyglet.image.codecs.png
         add_encoders(png)
         add_decoders(png)
     except ImportError:
@@ -228,7 +228,7 @@ def add_default_image_codecs():
 
     # Fallback: BMP loader (slow)
     try:
-        import pyglet.image.codecs.bmp
+        import fos.lib.pyglet.image.codecs.bmp
         add_encoders(bmp)
         add_decoders(bmp)
     except ImportError:

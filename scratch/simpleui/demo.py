@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-# import pyglet, as usual
+# import fos.lib.pyglet, as usual
 import fos.lib.pyglet as pyglet
 # disable error checking for increased performance
 pyglet.options['debug_gl'] = False

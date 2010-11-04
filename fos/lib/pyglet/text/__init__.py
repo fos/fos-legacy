@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -36,7 +36,7 @@
 '''Text formatting, layout and display.
 
 This module provides classes for loading styled documents from text files,
-HTML files and a pyglet-specific markup format.  Documents can be styled with
+HTML files and a fos.lib.pyglet-specific markup format.  Documents can be styled with
 multiple fonts, colours, styles, text sizes, margins, paragraph alignments,
 and so on.  
 
@@ -50,14 +50,14 @@ application simply needs to display some text in a window.
 
 A plain text label can be created with::
 
-    label = pyglet.text.Label('Hello, world', 
+    label = fos.lib.pyglet.text.Label('Hello, world', 
                               font_name='Times New Roman', 
                               font_size=36,
                               x=10, y=10)
 
 Alternatively, a styled text label using HTML can be created with::
 
-    label = pyglet.text.HTMLLabel('<b>Hello</b>, <i>world</i>',
+    label = fos.lib.pyglet.text.HTMLLabel('<b>Hello</b>, <i>world</i>',
                                   x=10, y=10)
 
 Either label can then be drawn at any time with::
@@ -70,7 +70,7 @@ Refer to the Programming Guide for advanced usage of the document and layout
 classes, including interactive editing, embedding objects within documents and
 creating scrollable layouts.
 
-:since: pyglet 1.1
+:since: fos.lib.pyglet 1.1
 '''
 
 __docformat__ = 'restructuredtext'
@@ -78,8 +78,8 @@ __version__ = '$Id: $'
 
 import os.path
 
-import pyglet
-from pyglet.text import layout, document, caret
+import fos.lib.pyglet
+from fos.lib.pyglet.text import layout, document, caret
 
 class DocumentDecodeException(Exception):
     '''An error occurred decoding document text.'''
@@ -137,13 +137,13 @@ def get_decoder(filename, mimetype=None):
             mimetype = 'text/plain'
 
     if mimetype == 'text/plain':
-        from pyglet.text.formats import plaintext
+        from fos.lib.pyglet.text.formats import plaintext
         return plaintext.PlainTextDecoder()
     elif mimetype == 'text/html':
-        from pyglet.text.formats import html
+        from fos.lib.pyglet.text.formats import html
         return html.HTMLDecoder()
     elif mimetype == 'text/vnd.pyglet-attributed':
-        from pyglet.text.formats import attributed
+        from fos.lib.pyglet.text.formats import attributed
         return attributed.AttributedTextDecoder()
     else:
         raise DocumentDecodeException('Unknown format "%s"' % mimetype)
@@ -167,7 +167,7 @@ def load(filename, file=None, mimetype=None):
     decoder = get_decoder(filename, mimetype)
     if file is None:
         file = open(filename)
-    location = pyglet.resource.FileLocation(os.path.dirname(filename))
+    location = fos.lib.pyglet.resource.FileLocation(os.path.dirname(filename))
     return decoder.decode(file.read(), location)
 
 def decode_html(text, location=None):

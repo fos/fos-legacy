@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -145,12 +145,12 @@ entire paragraph, otherwise results are undefined.
     wraps anywhere in the text; with ``word`` or True, the line wraps at
     appropriate boundaries between words; with False the line does not wrap,
     and may overflow the layout width.  ``char`` and ``word`` styles are
-    since pyglet 1.2.
+    since fos.lib.pyglet 1.2.
 
 Other attributes can be used to store additional style information within the
 document; they will be ignored by the built-in text classes.
 
-:since: pyglet 1.1
+:since: fos.lib.pyglet 1.1
 '''
 
 __docformat__ = 'restructuredtext'
@@ -159,12 +159,12 @@ __version__ = '$Id: $'
 import re
 import sys
 
-from pyglet.gl import *
-from pyglet import event
-from pyglet import graphics
-from pyglet.text import runlist
+from fos.lib.pyglet.gl import *
+from fos.lib.pyglet import event
+from fos.lib.pyglet import graphics
+from fos.lib.pyglet.text import runlist
 
-from pyglet.font.base import _grapheme_break
+from fos.lib.pyglet.font.base import _grapheme_break
 
 _is_epydoc = hasattr(sys, 'is_epydoc') and sys.is_epydoc
 

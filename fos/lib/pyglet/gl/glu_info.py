@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -36,7 +36,7 @@
 
 Usage::
 
-    from pyglet.gl import glu_info
+    from fos.lib.pyglet.gl import glu_info
 
     if glu_info.have_extension('GLU_EXT_nurbs_tessellator'):
         # ...
@@ -45,7 +45,7 @@ If multiple contexts are in use you can use a separate GLUInfo object for each
 context.  Call `set_active_context` after switching to the desired context for
 each GLUInfo::
 
-    from pyglet.gl.glu_info import GLUInfo
+    from fos.lib.pyglet.gl.glu_info import GLUInfo
 
     info = GLUInfo()
     info.set_active_context()
@@ -62,7 +62,7 @@ __version__ = '$Id$'
 from ctypes import *
 import warnings
 
-from pyglet.gl.glu import *
+from fos.lib.pyglet.gl.glu import *
 
 class GLUInfo(object):
     '''Information interface for the GLU library. 

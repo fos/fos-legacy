@@ -4,8 +4,8 @@ import traceback
 import threading
 import collections
 import IPython.ipapi
-import pyglet
-from pyglet.gl import *
+import fos.lib.pyglet
+from fos.lib.pyglet.gl import *
 
 def call (function, args, kwargs, output=None):
     ''' WARNING: This can be only called from the OpenGL thread '''
@@ -157,8 +157,8 @@ _queue = collections.deque()
 
 
 import sys
-import pyglet
-from pyglet.gl import *
+import fos.lib.pyglet
+from fos.lib.pyglet.gl import *
 
 window = pyglet.window.Window(visible=False, resizable=True)
 

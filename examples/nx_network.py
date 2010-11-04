@@ -13,10 +13,10 @@ e=np.zeros( (n,3))
 for i in range(n):
     e[i,:] = ret[i]
 
-from fos import FosWindow
+from fos import Window
 from fos.actor.network import AttributeNetwork
 
-wi = FosWindow()
+wi = Window()
 w = wi.get_world()
 
 cu = AttributeNetwork(node_position=e*100,

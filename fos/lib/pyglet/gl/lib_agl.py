@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -40,14 +40,14 @@ __version__ = '$Id: $'
 
 from ctypes import *
 
-import pyglet.lib
-from pyglet.gl.lib import missing_function, decorate_function
+import fos.lib.pyglet.lib
+from fos.lib.pyglet.gl.lib import missing_function, decorate_function
 
 __all__ = ['link_GL', 'link_GLU', 'link_AGL']
 
-gl_lib = pyglet.lib.load_library(
+gl_lib = fos.lib.pyglet.lib.load_library(
     framework='/System/Library/Frameworks/OpenGL.framework')
-agl_lib = pyglet.lib.load_library(
+agl_lib = fos.lib.pyglet.lib.load_library(
     framework='/System/Library/Frameworks/AGL.framework')
 
 def link_GL(name, restype, argtypes, requires=None, suggestions=None):

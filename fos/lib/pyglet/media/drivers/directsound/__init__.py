@@ -8,12 +8,12 @@ import threading
 import time
 
 import lib_dsound as lib
-from pyglet.media import MediaException, MediaThread, AbstractAudioDriver, \
+from fos.lib.pyglet.media import MediaException, MediaThread, AbstractAudioDriver, \
     AbstractAudioPlayer, MediaEvent
-from pyglet.window.win32 import _user32, _kernel32
+from fos.lib.pyglet.window.win32 import _user32, _kernel32
 
-import pyglet
-_debug = pyglet.options['debug_media']
+import fos.lib.pyglet
+_debug = fos.lib.pyglet.options['debug_media']
 
 class DirectSoundException(MediaException):
     pass
@@ -109,7 +109,7 @@ class DirectSoundAudioPlayer(AbstractAudioPlayer):
     # How many bytes the ring buffer should be
     _buffer_size = 44800 * 1
 
-    # Need to cache these because pyglet API allows update separately, but
+    # Need to cache these because fos.lib.pyglet API allows update separately, but
     # DSound requires both to be set at once.
     _cone_inner_angle = 360
     _cone_outer_angle = 360
@@ -464,7 +464,7 @@ class DirectSoundDriver(AbstractAudioDriver):
         lib.DirectSoundCreate(None, ctypes.byref(self._dsound), None)
 
         # A trick used by mplayer.. use desktop as window handle since it
-        # would be complex to use pyglet window handles (and what to do when
+        # would be complex to use fos.lib.pyglet window handles (and what to do when
         # application is audio only?).
         hwnd = _user32.GetDesktopWindow()
         self._dsound.SetCooperativeLevel(hwnd, lib.DSSCL_NORMAL)

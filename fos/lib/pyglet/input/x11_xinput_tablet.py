@@ -6,14 +6,14 @@
 __docformat__ = 'restructuredtext'
 __version__ = '$Id: $'
 
-import pyglet
-from pyglet.input.base import \
+import fos.lib.pyglet
+from fos.lib.pyglet.input.base import \
     Tablet, TabletCanvas, TabletCursor, DeviceOpenException
-from pyglet.input.x11_xinput import \
+from fos.lib.pyglet.input.x11_xinput import \
     get_devices, XInputWindowEventDispatcher, DeviceResponder
 
 try:
-    from pyglet.libs.x11 import xinput as xi
+    from fos.lib.pyglet.libs.x11 import xinput as xi
     _have_xinput = True
 except:
     _have_xinput = False

@@ -3,9 +3,9 @@
 
 import sys as _sys
 
-from pyglet import gl
-from pyglet.gl import gl_info
-from pyglet.gl import glu_info
+from fos.lib.pyglet import gl
+from fos.lib.pyglet.gl import gl_info
+from fos.lib.pyglet.gl import glu_info
 
 class Config(object):
     '''Graphics configuration.
@@ -118,7 +118,7 @@ class Config(object):
     def match(self, canvas):
         '''Return a list of matching complete configs for the given canvas.
 
-        :since: pyglet 1.2
+        :since: fos.lib.pyglet 1.2
 
         :Parameters:
             `canvas` : `Canvas`
@@ -169,7 +169,7 @@ class CanvasConfig(Config):
 
     Use `Config.match` to obtain an instance of this class.
 
-    :since: pyglet 1.2
+    :since: fos.lib.pyglet 1.2
 
     :Ivariables:
         `canvas` : `Canvas`
@@ -258,7 +258,7 @@ class Context(object):
                             'Intel 965/963 Graphics Media Accelerator')),
 
         # Some ATI cards on OS X start drawing from a VBO before it's written
-        # to.  In these cases pyglet needs to call glFinish() to flush the
+        # to.  In these cases fos.lib.pyglet needs to call glFinish() to flush the
         # pipeline after updating a buffer but before rendering.
         ('_workaround_vbo_finish',
          lambda info: ('ATI' in info.get_renderer() and 
@@ -368,7 +368,7 @@ class Context(object):
             `buffer_id` : int
                 The OpenGL name of the buffer to delete.
 
-        :since: pyglet 1.1
+        :since: fos.lib.pyglet 1.1
         '''
         if self.object_space is gl.current_context.object_space and False:
             id = gl.GLuint(buffer_id)
@@ -379,7 +379,7 @@ class Context(object):
     def get_info(self):
         '''Get the OpenGL information for this context.
 
-        :since: pyglet 1.2
+        :since: fos.lib.pyglet 1.2
 
         :rtype: `GLInfo`
         '''

@@ -9,11 +9,11 @@ __version__ = '$Id: $'
 import sys
 
 import lib_pulseaudio as pa
-from pyglet.media import AbstractAudioDriver, AbstractAudioPlayer, \
+from fos.lib.pyglet.media import AbstractAudioDriver, AbstractAudioPlayer, \
     AbstractListener, MediaException, MediaEvent
 
-import pyglet
-_debug = pyglet.options['debug_media']
+import fos.lib.pyglet
+_debug = fos.lib.pyglet.options['debug_media']
 
 def check(result):
     if result < 0:
@@ -34,7 +34,7 @@ class PulseAudioDriver(AbstractAudioDriver):
         self.mainloop = pa.pa_threaded_mainloop_get_api(
             self.threaded_mainloop)
 
-        self._players = pyglet.app.WeakSet()
+        self._players = fos.lib.pyglet.app.WeakSet()
         self._listener = PulseAudioListener(self)
 
     def create_audio_player(self, source_group, player):
@@ -123,7 +123,7 @@ class PulseAudioDriver(AbstractAudioDriver):
 
     def get_app_name(self):
         '''Get the application name as advertised to the pulseaudio server.'''
-        # TODO move app name into pyglet.app (also useful for OS X menu bar?).
+        # TODO move app name into fos.lib.pyglet.app (also useful for OS X menu bar?).
         return sys.argv[0]
 
     def dump_debug_info(self):
@@ -385,7 +385,7 @@ class PulseAudioPlayer(AbstractAudioPlayer):
             event._sync_dispatch_to_player(self.player)
 
     def _sync_dispatch_player_event(self, event, *args):
-        pyglet.app.platform_event_loop.post_event(self.player, event, *args)
+        fos.lib.pyglet.app.platform_event_loop.post_event(self.player, event, *args)
 
     def __del__(self):
         try:

@@ -31,7 +31,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 # ----------------------------------------------------------------------
 
-import pyglet
+import fos.lib.pyglet
 
 from shape import Rectangle, EditableLabel
 from widget import Widget
@@ -143,7 +143,7 @@ class TextInput(Widget):
 		return pyglet.event.EVENT_UNHANDLED
 	
 	def on_key_press(self, symbol, modifiers):
-		from pyglet.window import key
+		from fos.lib.pyglet.window import key
 		
 		if self._focused and symbol in (key.ENTER, key.TAB):
 			self.label.caret.visible = False

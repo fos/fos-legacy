@@ -3,11 +3,11 @@
 
 import ctypes
 
-import pyglet
-from pyglet.input.base import DeviceOpenException
-from pyglet.input.base import Tablet, TabletCursor, TabletCanvas
+import fos.lib.pyglet
+from fos.lib.pyglet.input.base import DeviceOpenException
+from fos.lib.pyglet.input.base import Tablet, TabletCursor, TabletCanvas
 
-from pyglet.libs.win32 import libwintab as wintab
+from fos.lib.pyglet.libs.win32 import libwintab as wintab
 lib = wintab.lib
 
 def wtinfo(category, index, buffer):
@@ -127,7 +127,7 @@ class WintabTabletCanvas(TabletCanvas):
         if self._current_cursor:
             self.dispatch_event('on_enter', self._current_cursor)
 
-    @pyglet.window.win32.Win32EventHandler(0)
+    @fos.lib.pyglet.window.win32.Win32EventHandler(0)
     def _event_wt_packet(self, msg, wParam, lParam):
         if lParam != self._context:
             return
@@ -154,7 +154,7 @@ class WintabTabletCanvas(TabletCanvas):
 
         print packet.pkButtons
 
-    @pyglet.window.win32.Win32EventHandler(0)
+    @fos.lib.pyglet.window.win32.Win32EventHandler(0)
     def _event_wt_proximity(self, msg, wParam, lParam):
         if wParam != self._context:
             return

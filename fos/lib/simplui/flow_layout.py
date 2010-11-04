@@ -31,7 +31,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 # ----------------------------------------------------------------------
 
-import pyglet
+import fos.lib.pyglet
 
 from widget import Widget
 from container import Container

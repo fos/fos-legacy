@@ -11,3 +11,4 @@
 * view volume
 * change transparency
 * "action" wrapper for objects
+* use function overwriting for e.g. draw functions, lighting condition changes

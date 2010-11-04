@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -33,7 +33,7 @@
 # ----------------------------------------------------------------------------
 # png.py - PNG encoder in pure Python
 # Copyright (C) 2006 Johann C. Rocholl <johann@browsershots.org>
-# <ah> Modifications for pyglet by Alex Holkner <alex.holkner@gmail.com> 
+# <ah> Modifications for fos.lib.pyglet by Alex Holkner <alex.holkner@gmail.com> 
 #
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation files
@@ -94,7 +94,7 @@ import struct
 import math
 from array import array
 
-from pyglet.compat import asbytes
+from fos.lib.pyglet.compat import asbytes
 
 _adam7 = ((0, 0, 8, 8),
           (4, 0, 8, 8),

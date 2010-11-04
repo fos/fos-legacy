@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -58,9 +58,9 @@ object is drawn.
 The following example creates a batch, adds two sprites to the batch, and then
 draws the entire batch::
     
-    batch = pyglet.graphics.Batch()
-    car = pyglet.sprite.Sprite(car_image, batch=batch)
-    boat = pyglet.sprite.Sprite(boat_image, batch=batch)
+    batch = fos.lib.pyglet.graphics.Batch()
+    car = fos.lib.pyglet.sprite.Sprite(car_image, batch=batch)
+    boat = fos.lib.pyglet.sprite.Sprite(boat_image, batch=batch)
     
     def on_draw()
         batch.draw()
@@ -74,14 +74,14 @@ to ensure items are drawn in a particular order.  For example,  the following
 example adds a background sprite which is guaranteed to be drawn before the
 car and the boat::
 
-    batch = pyglet.graphics.Batch()
-    background = pyglet.graphics.OrderedGroup(0)
-    foreground = pyglet.graphics.OrderedGroup(1)
+    batch = fos.lib.pyglet.graphics.Batch()
+    background = fos.lib.pyglet.graphics.OrderedGroup(0)
+    foreground = fos.lib.pyglet.graphics.OrderedGroup(1)
 
-    background = pyglet.sprite.Sprite(background_image, 
+    background = fos.lib.pyglet.sprite.Sprite(background_image, 
                                       batch=batch, group=background)
-    car = pyglet.sprite.Sprite(car_image, batch=batch, group=foreground)
-    boat = pyglet.sprite.Sprite(boat_image, batch=batch, group=foreground)
+    car = fos.lib.pyglet.sprite.Sprite(car_image, batch=batch, group=foreground)
+    boat = fos.lib.pyglet.sprite.Sprite(boat_image, batch=batch, group=foreground)
     
     def on_draw()
         batch.draw()
@@ -115,12 +115,12 @@ When no initial data is to be given, the data item is just the format string.
 For example, the following creates a 2 element vertex list with position and
 color attributes::
 
-    vertex_list = pyglet.graphics.vertex_list(2, 'v2f', 'c4B')
+    vertex_list = fos.lib.pyglet.graphics.vertex_list(2, 'v2f', 'c4B')
 
 When initial data is required, wrap the format string and the initial data in
 a tuple, for example::
 
-    vertex_list = pyglet.graphics.vertex_list(2, 
+    vertex_list = fos.lib.pyglet.graphics.vertex_list(2, 
                                               ('v2f', (0.0, 1.0, 1.0, 0.0)),
                                               ('c4B', (255, 255, 255, 255) * 2))
 
@@ -150,7 +150,7 @@ present.  This also permits use of ``GL_POLYGON``, ``GL_LINE_LOOP`` and
 ``GL_TRIANGLE_FAN``.   Unfortunately the extension is not provided by older
 video drivers, and requires indexed vertex lists.
 
-:since: pyglet 1.1
+:since: fos.lib.pyglet 1.1
 '''
 
 __docformat__ = 'restructuredtext'
@@ -158,12 +158,12 @@ __version__ = '$Id: $'
 
 import ctypes
 
-import pyglet
-from pyglet.gl import *
-from pyglet import gl
-from pyglet.graphics import vertexbuffer, vertexattribute, vertexdomain
+import fos.lib.pyglet
+from fos.lib.pyglet.gl import *
+from fos.lib.pyglet import gl
+from fos.lib.pyglet.graphics import vertexbuffer, vertexattribute, vertexdomain
 
-_debug_graphics_batch = pyglet.options['debug_graphics_batch']
+_debug_graphics_batch = fos.lib.pyglet.options['debug_graphics_batch']
 
 def draw(size, mode, *data):
     '''Draw a primitive immediately.

@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -32,12 +32,12 @@
 # POSSIBILITY OF SUCH DAMAGE.
 # ----------------------------------------------------------------------------
 
-'''Key constants and utilities for pyglet.window.
+'''Key constants and utilities for fos.lib.pyglet.window.
 
 Usage::
 
-    from pyglet.window import Window
-    from pyglet.window import key
+    from fos.lib.pyglet.window import Window
+    from fos.lib.pyglet.window import key
 
     window = Window()
 
@@ -157,7 +157,7 @@ def motion_string(motion):
     return _motion_names.get(motion, str(motion))
 
 def user_key(scancode):
-    '''Return a key symbol for a key not supported by pyglet.  
+    '''Return a key symbol for a key not supported by fos.lib.pyglet.  
     
     This can be used to map virtual keys or scancodes from unsupported
     keyboard layouts into a machine-specific symbol.  The symbol will

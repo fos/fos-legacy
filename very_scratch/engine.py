@@ -1,6 +1,6 @@
 import numpy as np
 
-#from fos.lib import pyglet
+#from fos.lib import fos.lib.pyglet
 
 from fos.core.world import World
 from fos.core.fos_window import FosWindow

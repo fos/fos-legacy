@@ -12,9 +12,9 @@ __version__ = '$Id$'
 import ctypes
 from ctypes import *
 
-import pyglet.lib
+import fos.lib.pyglet.lib
 
-_lib = pyglet.lib.load_library('Xxf86vm')
+_lib = fos.lib.pyglet.lib.load_library('Xxf86vm')
 
 _int_types = (c_int16, c_int32)
 if hasattr(ctypes, 'c_int64'):
@@ -33,7 +33,7 @@ class c_void(Structure):
     _fields_ = [('dummy', c_int)]
 
 
-import pyglet.libs.x11.xlib
+import fos.lib.pyglet.libs.x11.xlib
 
 X_XF86VidModeQueryVersion = 0 	# /usr/include/X11/extensions/xf86vmode.h:4885
 X_XF86VidModeGetModeLine = 1 	# /usr/include/X11/extensions/xf86vmode.h:4886
@@ -177,9 +177,9 @@ class struct_anon_97(Structure):
         'forced',
         'time',
     ]
-Display = pyglet.libs.x11.xlib.Display
-Window = pyglet.libs.x11.xlib.Window
-Time = pyglet.libs.x11.xlib.Time
+Display = fos.lib.pyglet.libs.x11.xlib.Display
+Window = fos.lib.pyglet.libs.x11.xlib.Window
+Time = fos.lib.pyglet.libs.x11.xlib.Time
 struct_anon_97._fields_ = [
     ('type', c_int),
     ('serial', c_ulong),

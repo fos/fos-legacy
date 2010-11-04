@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# pyglet
+# fos.lib.pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
 # 
@@ -13,7 +13,7 @@
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-#  * Neither the name of pyglet nor the names of its
+#  * Neither the name of fos.lib.pyglet nor the names of its
 #    contributors may be used to endorse or promote products
 #    derived from this software without specific prior written
 #    permission.
@@ -42,13 +42,13 @@ import sys
 
 from ctypes import *
 
-from pyglet.gl import *
-from pyglet.image import *
-from pyglet.image.codecs import *
+from fos.lib.pyglet.gl import *
+from fos.lib.pyglet.image import *
+from fos.lib.pyglet.image.codecs import *
 
-from pyglet.window.carbon import carbon, quicktime, _oscheck
-from pyglet.libs.darwin.constants import _name
-from pyglet.libs.darwin.types import *
+from fos.lib.pyglet.window.carbon import carbon, quicktime, _oscheck
+from fos.lib.pyglet.libs.darwin.constants import _name
+from fos.lib.pyglet.libs.darwin.types import *
 
 Handle = POINTER(POINTER(c_byte))
 
