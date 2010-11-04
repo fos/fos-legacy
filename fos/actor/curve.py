@@ -1,25 +1,12 @@
+import numpy as np
+
+from fos import Actor
 import fos.lib.pyglet as pyglet
 from fos.lib.pyglet.gl import *
+import fos.core.collision as cll
 
 
-class SmoothLineGroup(pyglet.graphics.Group):
-    def set_state(self):
-        #glClearColor(1,0.1,0.9,1)
-        glEnable(GL_DEPTH_TEST)
-        glEnable(GL_BLEND)
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-        glEnable(GL_LINE_SMOOTH)
-        #glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE)
-        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
-        glLineWidth(1.2)
-        
-    def unset_state(self):
-        glDisable(GL_DEPTH_TEST)
-        glDisable(GL_BLEND)
-        glDisable(GL_LINE_SMOOTH)
-        glLineWidth(1.)
-
-class InteractiveCurves(object):
+class InteractiveCurves(Actor):
 
     def __init__(self,curves,colors=None,line_width=2.,centered=True):
         self.vertex_list =len(curves)*[None]
@@ -36,7 +23,7 @@ class InteractiveCurves(object):
         self.mean=np.mean(ccurves,axis=0)
         self.position=(0,0,0)
 
-        print 'MBytes',ccurves.nbytes/2**20
+        print 'MBytes',ccurves.nbytes/2.**20
         self.curves_nbytes=ccurves.nbytes
 
         if colors==None:
@@ -57,9 +44,7 @@ class InteractiveCurves(object):
             colors=np.round(colors).astype('ubyte')
             colors=tuple(colors.ravel().tolist())
                            
-            self.vertex_list[i]= \
-                pyglet.graphics.vertex_list(len(curve),('v3f/static',vertices),\
-                                            ('c4B/static',colors))
+            self.vertex_list[i]= fos.lib.pyglet.graphics.vertex_list(len(curve),('v3f/static',vertices),('c4B/static',colors))
 
         self.compile_gl()
         
@@ -72,7 +57,9 @@ class InteractiveCurves(object):
         
 
     def draw(self):
-        if self.curves_nbytes < 1500000:
+        
+        self.set_state()
+        if self.curves_nbytes < 0: #!!!disabled for now
             [self.vertex_list[i].draw(GL_LINE_STRIP) for i in self.range_vl]
         else:        
             if self.updated:
@@ -86,11 +73,13 @@ class InteractiveCurves(object):
                 #print('Updated in %d secs' % time.clock()-t1)
                 #glDeleteList(prev)
             else:
-                glCallList(self.list_index)     
+                glCallList(self.list_index)
+        self.unset_state()     
         
                   
-    def update(self):
+    def update(self,dt):
         
+        #print 'dt',dt
         cr=self.current
         if cr!=None:
             self.current=None
@@ -125,21 +114,22 @@ class InteractiveCurves(object):
                 ncolors=len(self.curves[cr])*(2*r-br,2*g-bg,2*b-bb,a)
                 self.vertex_list[cr].colors=ncolors
 
-
             self.updated=True 
 
     def process_pickray(self,near,far):
+        
+        print 'near',near,'far',far
+        
         if self.centered:
             shift=np.array(self.position)-self.mean
-            print shift
+            print 'shift', shift
         else:
             shift=np.array([0,0,0])        
-        min_dist_info=[ \
-            cll.mindistance_segment2track_info(near,far,xyz+shift) \
+        min_dist_info=[ cll.mindistance_segment2track_info(near,far,xyz+shift) \
                 for xyz in self.curves]
 
-        #print'Min distance info'        
-        #print min_dist_info
+        print'Min distance info'        
+        print min_dist_info
         A = np.array(min_dist_info)
         #print A
         dist=10**(-3)
@@ -159,7 +149,23 @@ class InteractiveCurves(object):
         #self.selected.append(self.current)
         #self.selected=list(set(self.selected))
         #pass
+        
        
+    def set_state(self):
+        #glClearColor(1,0.1,0.9,1)
+        glEnable(GL_DEPTH_TEST)
+        glEnable(GL_BLEND)
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+        glEnable(GL_LINE_SMOOTH)
+        #glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE)
+        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
+        glLineWidth(1.2)
+        
+    def unset_state(self):
+        glDisable(GL_DEPTH_TEST)
+        glDisable(GL_BLEND)
+        glDisable(GL_LINE_SMOOTH)
+        glLineWidth(1.)
 
     def delete(self):
         for i in range(len(self.vertex_list)):
