@@ -44,7 +44,7 @@ class AABBPrimitive():
                [ 0.5, -0.5, -0.5],
                [ 0.5, -0.5,  0.5],
                [c2[0], c2[1], c2[2]],
-               [ 0.5,  0.5,  0.5]], dtype = np.float32)
+               [0.5,  0.5,  0.5]], dtype = np.float32)
 
         self.vertices = np.array([
                [-0.5, -0.5, -0.5],
