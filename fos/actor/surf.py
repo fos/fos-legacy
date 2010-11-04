@@ -1,12 +1,15 @@
 import numpy as np
 from fos.lib import pyglet
 from fos.lib.pyglet.gl import *
+                                
 from fos.lib.pyglet.graphics import Batch
 from fos.core.actor import Actor
+
 
 def vec(*args):
     return (GLfloat * len(args))(*args)
 
+'''
 class CommonSurfaceGroup(pyglet.graphics.Group):
     def set_state(self):
         glEnable(GL_DEPTH_TEST)
@@ -19,8 +22,7 @@ class CommonSurfaceGroup(pyglet.graphics.Group):
         glDisable(GL_CULL_FACE)
         glLineWidth(3.)
         pass
-    
-
+'''
 
 class Surface(Actor):
     
@@ -95,54 +97,3 @@ class Surface(Actor):
         print 'dt',dt
         pass
     '''
-
-'''    
-
-class Surface(Actor):
-
-    def __init__(self,vertices,faces,values,batch,group=None):
-        
-        
-        
-        self.batch=batch
-            
-        inds=faces.ravel().tolist()
-        verx=vertices.ravel().tolist()
-
-        normals=np.zeros((len(vertices),3))        
-        ones_=np.ones(len(values))
-        colors=np.vstack((values,ones_,ones_)).T
-        colors=colors.ravel().tolist()
-        
-        p=vertices
-        l=faces
-            
-        trinormals=np.cross(p[l[:,0]]-p[l[:,1]],\
-                                p[l[:,1]]-p[l[:,2]],\
-                                axisa=1,axisb=1)
-        
-        for (i,lp) in enumerate(faces):
-            normals[lp]+=trinormals[i]
-
-            div=np.sqrt(np.sum(normals**2,axis=1))     
-            div=div.reshape(len(div),1)
-            normals=(normals/div)            
-            norms=np.array(normals).ravel().tolist()
-    
-        self.vertex_list = self.batch.add_indexed(len(vertices),\
-                                                 GL_TRIANGLES,\
-                                                 group,\
-                                                 inds,\
-                                                 ('v3d/static',verx),\
-                                                 ('n3d/static',norms),\
-                                                 ('c3d/static',colors))
-                                                 
-    def draw(self):
-        self.batch.draw()
-        
-    def update(self,dt):
-        pass    
-        
-    def delete(self):
-        self.vertex_list.delete()
-'''
