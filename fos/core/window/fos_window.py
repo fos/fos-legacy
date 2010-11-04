@@ -8,7 +8,7 @@ from fos import World
 from fos.lib.pyglet.window import key,mouse
 from fos.lib.pyglet.clock import Clock
 from fos.lib.pyglet.window import FPSDisplay
-from fos.core.window_text  import WindowText
+from fos.core.window.window_text  import WindowText
 from fos.core import color
 
 class FosWindow(ManagedWindow):

@@ -29,16 +29,14 @@ class Surface(Actor):
     
     def __init__(self,vertices,faces,normals,colors, affine = None, force_centering = True):
         
-        
-       #self.vertices=vertices
-       #self.faces=faces 
-               
+
         self.vert_ptr=vertices.ctypes.data
         self.face_ptr=faces.ctypes.data
         self.norm_ptr=normals.ctypes.data
         self.color_ptr=colors.ctypes.data
        
         self.el_count=len(faces)*3
+
         
         if affine == None:
             # create a default affine
@@ -57,16 +55,14 @@ class Surface(Actor):
                         
         glEnableClientState(GL_VERTEX_ARRAY)
 #        glEnableClientState(GL_NORMAL_ARRAY)
-        glEnableClientState(GL_COLOR_ARRAY)
-        
+        glEnableClientState(GL_COLOR_ARRAY)        
         #try:  
         glVertexPointer(3, GL_FLOAT, 0, self.vert_ptr)                          
 #        glNormalPointer(GL_FLOAT, 0, self.norm_ptr)        
         glColorPointer(4, GL_FLOAT, 0, self.color_ptr)
         
         #except GLException, e:
-        #    print e
-        
+        #    print e        
             
         glDrawElements(GL_TRIANGLES, self.el_count, GL_UNSIGNED_INT, self.face_ptr)
         glDisableClientState(GL_COLOR_ARRAY)
