@@ -1,4 +1,4 @@
 # import all the primitives
 
-from .network_primitives import NodePrimitive, EdgePrimitive
-from .aabb import AABBPrimitive
+from fos.actor.primitives.network_primitives import NodePrimitive, EdgePrimitive
+from fos.actor.primitives.aabb import AABBPrimitive

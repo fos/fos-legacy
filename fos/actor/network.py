@@ -2,14 +2,14 @@ import numpy as np
 
 from fos.lib.pyglet.gl import *
 from fos.core.world import World
-from fos.lib.pyglet.gl import GLfloat
+
 
 from fos.core.actor import Actor
-from fos.actor.primitives import NodePrimitive, EdgePrimitive, AABBPrimitive
+from fos.actor.primitives import NodePrimitive, EdgePrimitive
         
 class AttributeNetwork(Actor):
     
-    def __init__(self, affine = None, force_centering = True, *args, **kwargs):
+    def __init__(self, node_position, affine = None, force_centering = True, *args, **kwargs):
         """ Draw a network
                 
         affine : (4,4)
@@ -89,14 +89,15 @@ class AttributeNetwork(Actor):
            
         """
         
-        # open questions
-        # - pick a node / edge, show info, etc.
-        # - dynamic graph with lifetime on nodes/edges
-        # - hierarchic graph
-
+        super(AttributeNetwork, self).__init__()
+        
+        if not node_position is None:
+            self.vertices = node_position
+        else:
+            raise Exception("You have to specify the node_position array")
+        
         self.node_glprimitive = NodePrimitive()
         self.edge_glprimitive = EdgePrimitive()
-        self.aabb_glprimitive = AABBPrimitive()
         
         if affine == None:
             # create a default affine
@@ -105,11 +106,6 @@ class AttributeNetwork(Actor):
             self.affine = affine
         
         self.glaffine = self._update_glaffine()
-        
-        if kwargs.has_key('node_position'):
-            self.node_position = kwargs['node_position']
-        else:
-            raise Exception("You have to specify the node_position array")
         
         self.edge_color = None
         if kwargs.has_key('edge_connectivity'):
@@ -155,11 +151,11 @@ class AttributeNetwork(Actor):
         else:
             self.global_edge_width = 1.0
             
-        if not self.node_position is None:
-            nr_nodes = self.node_position.shape[0]
+        if not self.vertices is None:
+            nr_nodes = self.vertices.shape[0]
             
             if force_centering:
-                self.node_position = self.node_position - np.mean(self.node_position)
+                self.vertices = self.vertices - np.mean(self.vertices, axis = 0)
 
             if kwargs.has_key('node_size'):
                 self.node_size = kwargs['node_size'].ravel()
@@ -178,18 +174,10 @@ class AttributeNetwork(Actor):
         
         # network creation
         ##################
-        if not self.node_position is None and not self.node_size is None:
-            assert self.node_position.shape[0] == self.node_size.size
+        if not self.vertices is None and not self.node_size is None:
+            assert self.vertices.shape[0] == self.node_size.size
             
-            self.node_glprimitive._make_cubes(self.node_position, self.node_size)
-
-            if self.aabb is None:
-                # compute aabb
-                self._compute_aabb()
-            
-            if self.obb is None:
-                # compute the obb
-                self._compute_obb()
+            self.node_glprimitive._make_cubes(self.vertices, self.node_size)
                 
             self.scale(self.scale_factor)
                         
@@ -197,84 +185,50 @@ class AttributeNetwork(Actor):
             self.node_glprimitive._make_color(self.node_color)
             
         if not self.edge_connectivity is None:
-            self.edge_glprimitive._make_edges(self.node_position, self.edge_connectivity)
+            
+            self.edge_glprimitive._make_edges(self.vertices, self.edge_connectivity)
             
         if not self.edge_color is None:
             self.edge_glprimitive._make_color(self.edge_color)
         
         self.living = False
         
-        
-    def start(self, tickingtime = 2.0):
-        print "the actor is alive"
-        self.living = True
-        self.internal_timestamp = 0.0
-        self.tickingtime = tickingtime
-        
-    def stop(self):
-        print "the actor stops living"
-        self.living = False
-        
-    def cont(self):
-        print "continue to live happily"
-        self.living = True
-    
-    def set_affine(self, affine):
-        # update the affine
-        print "update affine", self.affine
-        self.affine = affine
-        self._update_glaffine()
-    
-    def scale(self, scale_factor):    
-        """ Scales the actor by scale factor.
-        Multiplies the diagonal of the affine for
-        the first 3 elements """
-        self.affine[0,0] *= scale_factor
-        self.affine[1,1] *= scale_factor
-        self.affine[2,2] *= scale_factor
-        self._update_glaffine()
-        
-    def translate(self, dx, dy, dz):
-        """ Translate the actor.
-        Remember the OpenGL has right-handed 
-        coordinate system """
-        self.affine[0,3] += dx
-        self.affine[1,3] += dy
-        self.affine[2,3] += dz
-        self._update_glaffine()
-    
-    def set_position(self, x, y, z):
-        """ Position the actor.
-        Remember the OpenGL has right-handed 
-        coordinate system """
-        self.affine[0,3] += x
-        self.affine[1,3] += y
-        self.affine[2,3] += z
-        self._update_glaffine()
+        # create aabb (in actor)
+        self.make_aabb(margin = self.node_size.max())
 
-    def _update_glaffine(self):
-        self.glaffine = (GLfloat * 16)(*tuple(self.affine.T.ravel()))
-        
+
     def update(self, dt):
-        
+
         if self.living:
+
             self.internal_timestamp += dt
             
-            if self.internal_timestamp > 10.0:
+            if self.internal_timestamp > 2.0:
                 print "you lived 10 seconds. this is enough"
                 self.stop()
                 
-                
-        # update the node position and size to make it dynamic
-        # only need to update if anything has changed (chaged)
-#        self.node_position += np.random.random( (self.node_position.shape) ) * 2
-#        self.node_size = np.random.random( (self.node_size.shape) ) * 2
+            
+            # update the node position and size to make it dynamic
+            # only need to update if anything has changed (chaged)
         
-        # this functionality could be implemented with cython
-#        self.node_glprimitive._make_cubes(self.node_position, self.node_size)
-#        self.node_color[:,3] += 1
-#        self.node_color[:,3] = self.node_color[:,3] % 255
-#        self.node_glprimitive._make_color(self.node_color)
+#            self.vertices += np.random.random( (self.vertices.shape) ) * 2
+            
+            
+#            self.node_size = np.random.random( (self.node_size.shape) ) * 2
+#            self.node_glprimitive._make_cubes(self.vertices, self.node_size)
+#            print "self", self.edge_glprimitive.vertices[0,:]
+            
+            # this functionality could be implemented with cython
+
+#            self.node_color[:,3] += 1
+#            self.node_color[:,3] = self.node_color[:,3] % 255
+#            self.node_glprimitive._make_color(self.node_color)
+            
+            # update the edges
+#            self.edge_glprimitive._make_edges(self.vertices, self.edge_connectivity)
+            
+            # update bounding box
+            self.make_aabb(margin = self.node_size.max())
         
     def draw(self):
     
@@ -303,40 +257,12 @@ class AttributeNetwork(Actor):
         glDisableClientState(GL_COLOR_ARRAY)
         glDisableClientState(GL_VERTEX_ARRAY)
 
+        self.draw_aabb()
+
         glPopMatrix()
-            
 
-         
-    def _compute_aabb(self):
+        
+        
 
-        # using the node_position, node_size to compute the aabb for the cube
-        # make it a bit bigger
-        nodep = self.node_position
-        nodes = self.node_size.max() / 2.0
-        
-        # two points
-        leftbottom = np.array([[nodep[:,0].min(),nodep[:,1].min(),nodep[:,2].min()]], dtype = np.float32) - nodes
-        righttop = np.array([nodep[:,0].max(), nodep[:,1].max(),nodep[:,2].max()], dtype = np.float32) + nodes
-        
-        # subtract the node size
-        leftbottom -= nodes
-        
-        # add the node size
-        righttop += nodes
-
-        self.aabb = (leftbottom, righttop)
-        
-    def _compute_obb(self):
-        
-        # just reuse the aabb points
-        leftbottom, righttop = self.aabb
-        
-        center = np.mean( np.vstack( (leftbottom, righttop) ), axis = 0)
-        halfwidths = (leftbottom - righttop) / 2.0
-        # in our default network, this obb is axis-aligned, thus the
-        # obb is the identity
-        orientation = np.eye( 3, 3 )
-         
-        self.obb = (center, halfwidths, orientation)
                 
         

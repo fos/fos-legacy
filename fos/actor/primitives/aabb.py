@@ -10,51 +10,42 @@ class AABBPrimitive():
     vertices_ptr = None
     vertices_nr = 0
     
-    color_ptr = None
-    colors = None
-    normal_ptr = None
-    
     mode = None
     type = None
     
-    nr_nodes = None
     indices_ptr = None
     indices = None
     indices_nr = 0
     
-    def __init__(self, coord1, coord2):
+    def __init__(self, blf = None, trb = None, margin = 20):
+        """ Constructs a axis-aligned bounding box primitive
+        from bottom-left-front and top-right-back point coordinates """
         
         self.mode = GL_QUADS
         self.type = GL_UNSIGNED_INT
         
-        # make box
-        self._make_box(coord1, coord2)
+        self._make_box(blf, trb, margin)
             
-    def _make_box(self, c1, c2):
+    def _make_box(self, c1, c2, margin):
+
+        # add the margin on all sides
+        c1[0] = c1[0] - margin
+        c1[1] = c1[1] - margin
+        c1[2] = c1[2] - margin
         
-        dx = abs(coord2[0] - coord1[0])
-        dy = abs(coord2[1] - coord1[1])
-        dz = abs(coord2[2] - coord1[2])
-        
-        self.vertices = np.array([
-               [-0.5, -0.5, -0.5],
-               [c1[0], c1[1], c1[2]],
-               [-0.5,  0.5, -0.5],
-               [-0.5,  0.5,  0.5],
-               [ 0.5, -0.5, -0.5],
-               [ 0.5, -0.5,  0.5],
-               [c2[0], c2[1], c2[2]],
-               [0.5,  0.5,  0.5]], dtype = np.float32)
+        c2[0] = c2[0] + margin
+        c2[1] = c2[1] + margin
+        c2[2] = c2[2] + margin
 
         self.vertices = np.array([
-               [-0.5, -0.5, -0.5],
-               [-0.5, -0.5,  0.5],
-               [-0.5,  0.5, -0.5],
-               [-0.5,  0.5,  0.5],
-               [ 0.5, -0.5, -0.5],
-               [ 0.5, -0.5,  0.5],
-               [ 0.5,  0.5, -0.5],
-               [ 0.5,  0.5,  0.5]], dtype = np.float32)
+               [c1[0],c1[1],c2[2]],
+               [c1[0],c1[1],c1[2]],
+               [c1[0],c2[1],c2[2]],
+               [c1[0],c2[1],c1[2]],
+               [c2[0],c1[1],c2[2]],
+               [c2[0],c1[1],c1[2]],
+               [c2[0],c2[1],c2[2]],
+               [c2[0],c2[1],c1[2]]], dtype = np.float32)
         
         self.indices = np.array([ [0,1,5,4],
                            [2,3,7,6],
@@ -70,6 +61,26 @@ class AABBPrimitive():
         self.vertices_ptr = self.vertices.ctypes.data
         self.indices_ptr = self.indices.ctypes.data
 
+    def update(self, c1, c2, margin):
+        # add the margin on all sides
+        c1[0] = c1[0] - margin
+        c1[1] = c1[1] - margin
+        c1[2] = c1[2] - margin
+        
+        c2[0] = c2[0] + margin
+        c2[1] = c2[1] + margin
+        c2[2] = c2[2] + margin
+
+        self.vertices = np.array([
+               [c1[0],c1[1],c2[2]],
+               [c1[0],c1[1],c1[2]],
+               [c1[0],c2[1],c2[2]],
+               [c1[0],c2[1],c1[2]],
+               [c2[0],c1[1],c2[2]],
+               [c2[0],c1[1],c1[2]],
+               [c2[0],c2[1],c2[2]],
+               [c2[0],c2[1],c1[2]]], dtype = np.float32)
+        
         
     def draw(self):
         pass

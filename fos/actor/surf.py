@@ -101,41 +101,6 @@ class Surface(Actor):
         glLineWidth(1.)
         glDisable(GL_LIGHTING)
     
-    def set_affine(self, affine):
-        # update the affine
-        print "update affine", self.affine
-        self.affine = affine
-        self._update_glaffine()
-    
-    def scale(self, scale_factor):    
-        """ Scales the actor by scale factor.
-        Multiplies the diagonal of the affine for
-        the first 3 elements """
-        self.affine[0,0] *= scale_factor
-        self.affine[1,1] *= scale_factor
-        self.affine[2,2] *= scale_factor
-        self._update_glaffine()
-        
-    def translate(self, dx, dy, dz):
-        """ Translate the actor.
-        Remember the OpenGL has right-handed 
-        coordinate system """
-        self.affine[0,3] += dx
-        self.affine[1,3] += dy
-        self.affine[2,3] += dz
-        self._update_glaffine()
-    
-    def set_position(self, x, y, z):
-        """ Position the actor.
-        Remember the OpenGL has right-handed 
-        coordinate system """
-        self.affine[0,3] += x
-        self.affine[1,3] += y
-        self.affine[2,3] += z
-        self._update_glaffine()
-
-    def _update_glaffine(self):
-        self.glaffine = (GLfloat * 16)(*tuple(self.affine.T.ravel()))
         
     '''
     def update(self, dt):
