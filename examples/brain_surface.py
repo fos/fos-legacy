@@ -1,11 +1,11 @@
 import numpy as np
 from fos.comp_geom.gen_normals import auto_normals 
 
-
-ftriangles='/home/eg309/Data/surface/triangles.npy'
-fvertices='/home/eg309/Data/surface/vertices.npy'
-flowres ='/home/eg309/Data/surface/labellowres.npy'
-fhighres='/home/eg309/Data/surface/labelhighres.npy'
+pa = '/home/stephan/Downloads/Gifti/'
+ftriangles=pa+'triangles.npy'
+fvertices=pa+'vertices.npy'
+flowres =pa+'labellowres.npy'
+fhighres=pa+'labelhighres.npy'
 
 vertices=np.load(fvertices).astype(np.float32)
 faces=np.load(ftriangles).astype(np.uint32)
