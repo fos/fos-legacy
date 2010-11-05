@@ -5,72 +5,77 @@ from fos.lib.pyglet.gl import GLfloat
           
 from fos.lib.pyglet.graphics import Batch
 from fos.core.actor import Actor
-
-
-def vec(*args):
-    return (GLfloat * len(args))(*args)
-
-'''
-class CommonSurfaceGroup(pyglet.graphics.Group):
-    def set_state(self):
-        glEnable(GL_DEPTH_TEST)
-        glEnable(GL_CULL_FACE)        
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
-        glLineWidth(3.)
-       
-    def unset_state(self):
-        glDisable(GL_DEPTH_TEST)
-        glDisable(GL_CULL_FACE)
-        glLineWidth(3.)
-        pass
-'''
+from fos.core.utils import vec
 
 class Surface(Actor):
     
-    def __init__(self,vertices,faces,normals,colors, affine = None, force_centering = True):
+    def __init__(self,vertices,faces,colors,
+                 affine = None,
+                 force_centering = True,
+                 add_lights = False,
+                 normals = None):
         
-
+        super(Surface, self).__init__()
+        # store a reference to vertices for bounding box computation
+        self.vertices = vertices
+        
         self.vert_ptr=vertices.ctypes.data
         self.face_ptr=faces.ctypes.data
-        self.norm_ptr=normals.ctypes.data
         self.color_ptr=colors.ctypes.data
        
         self.el_count=len(faces)*3
 
-        
         if affine == None:
             # create a default affine
             self.affine = np.eye(4, dtype = np.float32)
         else:
             self.affine = affine
-        
         self.glaffine = self._update_glaffine()
         
+        if add_lights:
+            self.norm_ptr=normals.ctypes.data
+            self.draw = self.draw_withlight
+        else:
+            self.draw = self.draw_sanslight
         
-    def draw(self):    
-                
-#        self.set_state()
+        self.show_aabb = True
+        self.make_aabb(margin = 0)
+    
+    
+    def draw_withlight(self):
+        self.set_state()
         glPushMatrix()
-        glMultMatrixf(self.glaffine)
-                        
+        glMultMatrixf(self.glaffine)    
         glEnableClientState(GL_VERTEX_ARRAY)
-#        glEnableClientState(GL_NORMAL_ARRAY)
+        glEnableClientState(GL_NORMAL_ARRAY)
         glEnableClientState(GL_COLOR_ARRAY)        
-        #try:  
         glVertexPointer(3, GL_FLOAT, 0, self.vert_ptr)                          
-#        glNormalPointer(GL_FLOAT, 0, self.norm_ptr)        
+        glNormalPointer(GL_FLOAT, 0, self.norm_ptr)        
         glColorPointer(4, GL_FLOAT, 0, self.color_ptr)
-        
-        #except GLException, e:
-        #    print e        
-            
         glDrawElements(GL_TRIANGLES, self.el_count, GL_UNSIGNED_INT, self.face_ptr)
         glDisableClientState(GL_COLOR_ARRAY)
-#        glDisableClientState(GL_NORMAL_ARRAY)
+        glDisableClientState(GL_NORMAL_ARRAY)
         glDisableClientState(GL_VERTEX_ARRAY)
-#        self.unset_state()              
-        glPopMatrix()
+                 
+        self.unset_state()
+        glEnable(GL_DEPTH_TEST)
+        self.draw_aabb() 
         
+        glPopMatrix()
+
+        
+    def draw_sanslight(self):
+        glPushMatrix()
+        glMultMatrixf(self.glaffine)
+        glEnableClientState(GL_VERTEX_ARRAY)
+        glEnableClientState(GL_COLOR_ARRAY)        
+        glVertexPointer(3, GL_FLOAT, 0, self.vert_ptr)                             
+        glColorPointer(4, GL_FLOAT, 0, self.color_ptr)
+        glDrawElements(GL_TRIANGLES, self.el_count, GL_UNSIGNED_INT, self.face_ptr)
+        glDisableClientState(GL_COLOR_ARRAY)
+        glDisableClientState(GL_VERTEX_ARRAY)             
+        self.draw_aabb()
+        glPopMatrix()
         
     def set_state(self):
         glEnable(GL_DEPTH_TEST)
