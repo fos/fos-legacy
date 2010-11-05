@@ -12,3 +12,12 @@
 * change transparency
 * "action" wrapper for objects
 * use function overwriting for e.g. draw functions, lighting condition changes
+* colormaps. 3d to 1d. e.g. 256 colors, interpolate function inbetween
+* labels (network), follow the camera when moving
+* movie, ffmpeg
+* save screenshot
+* update camera from ipython, window
+* world: list of window
+* picking of cubes, world needs to propagate picking event
+* options for debug modus of opengl
+* graphmenu actor. ortho mode, select options

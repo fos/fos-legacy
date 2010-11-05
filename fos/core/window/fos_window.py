@@ -168,42 +168,40 @@ class FosWindow(ManagedWindow):
         glMatrixMode(GL_MODELVIEW)
 
 
-    def on_key_press(self, symbol,modifiers):
+    def on_key_press(self, symbol, modifiers):
 
         # how to propagate the events to the actors and camera?
             
         if symbol == key.R:
-            self.current_camera.cam_rot.reset()
-            self.current_camera.cam_trans.reset()
+            self.current_camera.reset()
         
         if symbol == key.H:
-            self.set_size(900, 600)
+            self.set_size(1000, 600)
+            
         if modifiers & key.MOD_CTRL:
+            # make window bigger
             if symbol == key.PLUS:
                 neww = self.width + self.width / 10
                 newh = self.height + self.height / 10
                 self.set_size(neww, newh)
+            # make window smaller
             elif symbol == key.MINUS:
                 neww = self.width - self.width / 10
                 newh = self.height - self.height / 10
                 self.set_size(neww, newh)
                  
         if symbol == key.P:          
-                  
+            # generate pickray
             x,y=self.mouse_x,self.mouse_y
             nx,ny,nz=screen_to_model(x,y,0)
             fx,fy,fz=screen_to_model(x,y,1)        
             near=(nx,ny,nz)
             far=(fx,fy,fz)
-            for a in self._world.ag.actors:
-                try:
-                    a.process_pickray(near,far)
-                except:
-                    pass
+            self._world.propagate_pickray(near, far, modifiers)
             
 
-    def on_mouse_motion(self, x,y,dx,dy):
-        self.mouse_x, self.mouse_y=x,y
+    def on_mouse_motion(self, x, y, dx, dy):
+        self.mouse_x, self.mouse_y = x, y
         
     def on_mouse_drag(self, x,y,dx,dy,buttons,modifiers):
         if buttons & mouse.LEFT:

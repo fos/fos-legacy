@@ -3,13 +3,21 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Fos - Scientific Visualization in Python
+fos - free open scientific visualization
 ========================================
+
+fos means light in greek.
+
+* lightweight package for visualization
+* easy-to-use actors to create visualizatios of scientific datasets
+* clearly written and explained code
+* a natural home for collaboration
+
 
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    
    design
    actors
