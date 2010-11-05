@@ -1,10 +1,8 @@
 import numpy as np
 
 from fos.lib.pyglet.gl import *
-from fos.core.world import World
 
-
-from fos.core.actor import Actor
+from fos import Actor, World
 from fos.actor.primitives import NodePrimitive, EdgePrimitive
         
 class AttributeNetwork(Actor):
@@ -203,14 +201,12 @@ class AttributeNetwork(Actor):
 
             self.internal_timestamp += dt
             
-            if self.internal_timestamp > 2.0:
-                print "you lived 10 seconds. this is enough"
-                self.stop()
-                
-            
-            # update the node position and size to make it dynamic
-            # only need to update if anything has changed (chaged)
-        
+#            if self.internal_timestamp > 50.0:
+#                print "you lived 10 seconds. this is enough"
+#                self.stop()
+
+
+            # simulate brownian motion like behaviour
 #            self.vertices += np.random.random( (self.vertices.shape) ) * 2
             
             
@@ -220,11 +216,12 @@ class AttributeNetwork(Actor):
             
             # this functionality could be implemented with cython
 
-#            self.node_color[:,3] += 1
-#            self.node_color[:,3] = self.node_color[:,3] % 255
-#            self.node_glprimitive._make_color(self.node_color)
-            
-            # update the edges
+#            nr = self.edge_color.shape[0]
+#            ran = np.random.random_integers(0,1, (nr,))
+#            self.edge_color[:,3] = np.where(ran > 0, self.edge_color[:,3], 255 - self.edge_color[:,3])
+#            self.edge_glprimitive._make_color(self.edge_color)
+
+            # update the edges, e.g. position
 #            self.edge_glprimitive._make_edges(self.vertices, self.edge_connectivity)
             
             # update bounding box
