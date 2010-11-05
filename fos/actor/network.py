@@ -4,6 +4,7 @@ from fos.lib.pyglet.gl import *
 
 from fos import Actor, World
 from fos.actor.primitives import NodePrimitive, EdgePrimitive
+from fos.core.intersection import intersect_ray_sphere
         
 class AttributeNetwork(Actor):
     
@@ -19,7 +20,7 @@ class AttributeNetwork(Actor):
             your node_position array.
         global_node_size : float
             Size for all nodes, used when node_size is None. If None, defaults to 1.0
-        global_line_width : float
+        global_edge_width : float
             The global line width. Defaults to 1.0
         
         Node related
@@ -228,10 +229,13 @@ class AttributeNetwork(Actor):
             self.make_aabb(margin = self.node_size.max())
         
     def draw(self):
-    
+        
+        glEnable(GL_LINE_SMOOTH)
+        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
+
         glPushMatrix()
         glMultMatrixf(self.glaffine)
-        
+
         # check if network has edges at all
         pri = self.edge_glprimitive
         if not pri.vertices is None:
@@ -258,8 +262,28 @@ class AttributeNetwork(Actor):
 
         glPopMatrix()
 
-        
-        
+    
 
+    def process_pickray(self,near,far):
                 
-        
+        # intersect with cubes
+        # calculate in- and out-sphere for each cube, and compute the
+        # mean readius
+        nr = len(self.vertices)
+        xyz = np.vstack( (np.array(near),
+                          np.array(far)) )
+        ne = np.array(near)
+        fa = np.array(far)
+        d = (fa-ne) / np.linalg.norm(fa-ne)
+        for i in xrange(nr):
+
+            irad = self.node_size[i] / 2.0
+            orad = self.node_size[i] / np.sqrt(2.0)
+            r = np.mean( [irad, orad] )
+            p = self.vertices[i,:]
+            
+            (t,q) = intersect_ray_sphere(ne, d, r, p)
+            if not q is None:
+                print "found intersection at", i, q
+            
+            
