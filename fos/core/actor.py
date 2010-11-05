@@ -217,7 +217,7 @@ class Actor(object):
 
     def _update_glaffine(self):
         self.glaffine = (GLfloat * 16)(*tuple(self.affine.T.ravel()))
-        print self.glaffine
+
         
     # life processes
     ###

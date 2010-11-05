@@ -105,7 +105,7 @@ class AttributeNetwork(Actor):
         else:
             self.affine = affine
         
-        self.glaffine = self._update_glaffine()
+        self._update_glaffine()
         
         self.edge_color = None
         if kwargs.has_key('edge_connectivity'):

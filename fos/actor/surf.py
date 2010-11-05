@@ -11,18 +11,20 @@ class Surface(Actor):
     
     def __init__(self,vertices,faces,colors,
                  affine = None,
-                 force_centering = True,
+                 force_centering = False,
                  add_lights = False,
                  normals = None):
         
         super(Surface, self).__init__()
+        
         # store a reference to vertices for bounding box computation
         self.vertices = vertices
-        
-        self.vert_ptr=vertices.ctypes.data
+        if force_centering:
+            self.vertices = self.vertices - np.mean(self.vertices, axis = 0)
+            
+        self.vert_ptr=self.vertices.ctypes.data
         self.face_ptr=faces.ctypes.data
         self.color_ptr=colors.ctypes.data
-       
         self.el_count=len(faces)*3
 
         if affine == None:
@@ -30,7 +32,8 @@ class Surface(Actor):
             self.affine = np.eye(4, dtype = np.float32)
         else:
             self.affine = affine
-        self.glaffine = self._update_glaffine()
+            
+        self._update_glaffine()
         
         if add_lights:
             self.norm_ptr=normals.ctypes.data

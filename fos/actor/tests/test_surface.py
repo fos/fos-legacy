@@ -31,8 +31,7 @@ from fos.actor.surf import Surface
 from fos import Window, World, DefaultCamera
 
 aff = np.eye(4, dtype = np.float32)
-aff[0,3] = 150
-
+aff[0,3] = 30
 
 s=Surface(vertices,faces,colors,normals=normals, affine = aff,)
 
