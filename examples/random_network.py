@@ -7,15 +7,13 @@ from fos.actor.network import AttributeNetwork
 w = World("myworld")    
 
 # node positions
-s = 1000
-pos = np.random.random( (s,3)).astype(np.float32) * 500
+s = 5000
+pos = np.random.random( (s,3)).astype(np.float32) * 1000
 col = np.random.random_integers( 0, 255, (s,4) ).astype(np.ubyte)
 col[:, 3] = 255
 
 size = np.array( [1.0, 10.0], dtype = np.float32 )
 size = np.random.random( (s,1) ).astype(np.float32)
-
-label = ['node1', 'node2']
 
 ss = 500
 edg = np.array( [ [0,1]], dtype = np.uint8 )
@@ -26,7 +24,7 @@ edg = np.random.random_integers(0, s-1, (ss, 2)).astype(np.uint32)
 edg_weight = np.random.random( (ss,1)).astype(np.float32)
 
 edg_col = np.random.random_integers( 0, 255-1, (ss,4) ).astype(np.ubyte)
-edg_col[:, 3] = np.random.random_integers(0,1, (ss,)).astype(np.ubyte).ravel()
+#edg_col[:, 3] = np.random.random_integers(0,1, (ss,)).astype(np.ubyte).ravel()
 
 aff = np.eye(4, dtype = np.float32)
 aff[:3,3] = [0,0,0]

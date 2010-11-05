@@ -215,13 +215,13 @@ class AttributeNetwork(Actor):
 #            print "self", self.edge_glprimitive.vertices[0,:]
             
             # this functionality could be implemented with cython
-
+#
 #            nr = self.edge_color.shape[0]
 #            ran = np.random.random_integers(0,1, (nr,))
 #            self.edge_color[:,3] = np.where(ran > 0, self.edge_color[:,3], 255 - self.edge_color[:,3])
 #            self.edge_glprimitive._make_color(self.edge_color)
-
-            # update the edges, e.g. position
+#
+#            # update the edges, e.g. position
 #            self.edge_glprimitive._make_edges(self.vertices, self.edge_connectivity)
             
             # update bounding box
