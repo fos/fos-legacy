@@ -5,3 +5,4 @@ build/
 *.c
 *.so
 .settings/
+doc/_build/
