@@ -4,6 +4,7 @@ import fos.lib.pyglet as pyglet
 from fos.lib.pyglet.gl import *
 from fos.core.arrayimage import ArrayInterfaceImage
 from fos.core.actor import Actor
+import fos.core.collision as cll
 
 #sprite = pyglet.sprite.Sprite(img, x=0, y=0)
 #sprite.position = (-sprite.width/2, - sprite.height/2)
@@ -19,6 +20,10 @@ class ConnectedSlices(Actor):
         #volume center coordinates
         self.vxi,self.vxj,self.vxk=self.shape[0]/2,self.shape[1]/2,self.shape[2]/2
         self.update_vox_coords(self.vxi,self.vxj,self.vxk)
+        
+        self.vertices=np.array([[-100,-100,10],[100,100,-10]])
+        self.make_aabb(margin=0)
+        self.show_aabb=True
 
     def update_vox_coords(self,vxi,vxj,vxk):
 
@@ -60,6 +65,7 @@ class ConnectedSlices(Actor):
     def draw(self):
 
         glPushMatrix()
+         
         glTranslatef(-self.spri.width/2-self.sprj.width/2,0,self.z)
         glScalef(1, 1., 0)
         self.spri.draw()
@@ -76,7 +82,9 @@ class ConnectedSlices(Actor):
         #glTranslatef(0,0,self.z)
         glScalef(1, 1., 0)
         self.sprk.draw()
-        glPopMatrix()        
+        glPopMatrix()      
+        
+        self.draw_aabb() 
 
     def process_pickray(self,near,far):
         #collision with plane
@@ -116,7 +124,7 @@ class ConnectedSlices(Actor):
 
         #self.update_vox_coords()
 
-    def update(self):
+    def update(self,dt):
         pass
     
 def tell_me_if(p,low_left,up_right):
@@ -125,15 +133,6 @@ def tell_me_if(p,low_left,up_right):
                     return True
             return False
 
-'''
-import scipy.ndimage as nd
 
-f1='/home/eg309/Data/regtest/fiac0/meanafunctional_01.nii'
-img=ni.load(f1)
 
-data =img.get_data()
-affine=img.get_affine()
 
-cds =ConnectedSlices(affine,data)
-actors.append(cds)
-'''
