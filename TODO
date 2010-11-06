@@ -21,3 +21,5 @@
 * picking of cubes, world needs to propagate picking event
 * options for debug modus of opengl
 * graphmenu actor. ortho mode, select options
+* nx example working again
+* world has a list of windows.

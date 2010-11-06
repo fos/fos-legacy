@@ -19,6 +19,12 @@ edg = np.array( [ [0,1]], dtype = np.uint32 )
 aff = np.eye(4, dtype = np.float32)
 aff[:3,3] = [0,0,0]
 
+node_label = {0 : {label:'Node 1',
+                   size:20,
+                   font:'Times New Roman'},
+              1 : {label:'Node 2'}
+              }
+
 cu = AttributeNetwork(affine = aff,
                       node_position = pos,
                       node_size = siz,

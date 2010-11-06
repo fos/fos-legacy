@@ -54,26 +54,24 @@ class Actor(object):
         
         # data related information
         self.vertices = None
-        self.connectivity = None
-        self.field = None # scalar, vector, tensor
-        self.colormap = None
-        self.texture = None
-        
-        # time related information
         self.living = False
-        
-        # movement related information. use the 
-        self.velocity = None
-        self.acceleration = None
-        
-        # event related information
-        self.event_queue = None
-        # mouse or keyboard events on the actor
-        self.event_handlers = None
-        # related: menu options for the actor
-
         self.show_aabb = True
         
+#        self.connectivity = None
+#        self.field = None # scalar, vector, tensor
+#        self.colormap = None
+#        self.texture = None
+        
+        # movement related information. use the 
+#        self.velocity = None
+#        self.acceleration = None
+        
+        # event related information
+#        self.event_queue = None
+        # mouse or keyboard events on the actor
+#        self.event_handlers = None
+        # related: menu options for the actor
+
         
     def setup(self):
         """ Data preparation """
@@ -92,6 +90,7 @@ class Actor(object):
         if self.show_aabb:
             glPushMatrix()
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
+            glLineWidth(1.0)
             glColor3f(1.0, 1.0, 0.0)
             glEnableClientState(GL_VERTEX_ARRAY)
             glVertexPointer(3, GL_FLOAT, 0, self.aabb.vertices_ptr)

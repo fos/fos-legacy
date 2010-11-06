@@ -259,7 +259,6 @@ class AttributeNetwork(Actor):
         glDisableClientState(GL_VERTEX_ARRAY)
 
         glDisable(GL_LINE_SMOOTH)
-        glLineWidth(1.0)
         self.draw_aabb()
 
         glPopMatrix()
