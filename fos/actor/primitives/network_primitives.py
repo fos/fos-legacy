@@ -126,45 +126,24 @@ class EdgePrimitive():
         self.type = GL_UNSIGNED_INT
         
     def _make_edges(self, position, edges):
-        print "pos", position.shape
+
         assert position.shape[1] == 3
         assert edges.shape[1] == 2
         
         nr = len(edges)
         self.nr_edges = nr
-        
-#        # allocate space for the big array
-#        if self.vertices == None:
-#            self.nr_edges = nr
-#            self.vertices = np.zeros( (2*self.nr_edges, 3), dtype = np.float32)
-#            self.indices = np.zeros( (self.nr_edges, 2), dtype = np.uint32)
-#        else:
-#            # number of nodes changed
-#            if nr != self.nr_lines:
-#                # need to reallocate array
-#                self.nr_edges = nr
-#                self.vertices = np.zeros( (2*self.nr_edges, 3), dtype = np.float32)
-#                self.indices = np.zeros( (self.nr_edges, 2), dtype = np.uint32)
-        self.indices = np.zeros( (self.nr_edges, 2), dtype = np.uint32)
-        self.indices[:,:] = np.array(edges, dtype = np.uint32, copy = True)
-#        self.indices = np.array( [[0,1], [1,2], [5,6], [200,2]] , dtype = np.uint32)
-        self.vertices = np.zeros( (2*self.nr_edges, 3), dtype = np.float32)
-        # need to copy not to modify the original vertices
-        print self.vertices.ctypes
-        print self.vertices.shape
-        print self.indices.ravel()
-        print position.ctypes
-        print np.array(position[self.indices.ravel(),:]).ctypes
-        self.vertices[:,:] = position[self.indices.ravel(),:]
-        print "end", self.vertices.ctypes
-        print "vertices in edge", self.vertices.flags
-        print self.vertices.shape
-        
-        self.vertices_nr = self.vertices.shape[0]
-        self.indices_nr = self.indices.size
 
-        self.vertices_ptr = self.vertices.ctypes.data
+        self.vertices = position
+        self.indices = edges.ravel()
+        self.vertices = self.vertices[self.indices,:]
+        self.indices = np.array( range(len(self.indices)), dtype = np.uint32)
+
         self.indices_ptr = self.indices.ctypes.data
+        self.indices_nr = self.indices.size
+        
+        self.vertices_nr = self.vertices.size
+        self.vertices_ptr = self.vertices.ctypes.data
+
         
     def _make_color(self, color):
         if self.vertices is None:
@@ -172,4 +151,5 @@ class EdgePrimitive():
         assert color.shape[0] == self.nr_edges
         self.colors = color.repeat(2, axis=0)
         self.color_ptr = self.colors.ctypes.data
+        
         

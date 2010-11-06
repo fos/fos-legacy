@@ -15,21 +15,16 @@ col[:, 3] = 255
 size = np.array( [1.0, 10.0], dtype = np.float32 )
 size = np.random.random( (s,1) ).astype(np.float32)
 
-label = ['node1', 'node2']
-
-ss = 40
+ss = 500
 edg = np.array( [ [0,1]], dtype = np.uint8 )
 edg_weight = np.array( [1.5], dtype = np.float32 )
 edg_col = np.array( [ [255, 0, 0, 255]], dtype = np.ubyte )
 
 edg = np.random.random_integers(0, s-1, (ss, 2)).astype(np.uint32)
 edg_weight = np.random.random( (ss,1)).astype(np.float32)
+
 edg_col = np.random.random_integers( 0, 255-1, (ss,4) ).astype(np.ubyte)
-edg_col[:, 3] = 255
-# there is a bug
-edg = np.array( [[0,1], [1,2], [5,6], [200,2]] , dtype = np.uint32)
-edg_col = np.array( [[255,255,0,255],
-                     [255,0,255,10]], dtype = np.ubyte )
+#edg_col[:, 3] = np.random.random_integers(0,1, (ss,)).astype(np.ubyte).ravel()
 
 aff = np.eye(4, dtype = np.float32)
 aff[:3,3] = [0,0,0]
@@ -41,10 +36,13 @@ cu = AttributeNetwork(affine = aff,
                       node_color = col,
                       edge_connectivity = edg,
                       edge_weight = edg_weight,
-#                      edge_color = edg_col
+                      edge_color = edg_col,
+                      global_edge_width = 3.5
                       )
 w.add(cu)
 #w.delete(cu)
 
 wi = Window()
 wi.attach(w)
+
+cu.start()

@@ -44,16 +44,18 @@ print normals.min(),normals.max(), normals.mean()
 print vertices.dtype,faces.dtype, colors.dtype, normals.dtype
 
 from fos.actor.surf import Surface
+aff = np.eye(4, dtype = np.float32)
+aff[:3,3] = [150,0,0]
 
-s=Surface(vertices,faces,normals,colors)
+s=Surface(vertices,faces,colors, affine = aff, add_lights = True, normals = normals)
 
-vertices2=vertices+np.array([100,0,0],dtype=vertices.dtype)
-s2=Surface(vertices2,faces,normals,colors)
+#vertices2=vertices+np.array([100,0,0],dtype=vertices.dtype)
+#s2=Surface(vertices2,faces,normals,colors)
 
 from fos.core.world import World
 w=World()
 w.add(s)
-w.add(s2)
+#w.add(s2)
 
 from fos.core.camera import DefaultCamera
 cam=DefaultCamera()
