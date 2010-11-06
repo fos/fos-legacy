@@ -8,7 +8,7 @@
 * slice viewer
 * command menu for actors
 * scene graph?
-* view volume
+* view volume -> yt
 * change transparency
 * "action" wrapper for objects
 * use function overwriting for e.g. draw functions, lighting condition changes
@@ -16,10 +16,8 @@
 * labels (network), follow the camera when moving
 * movie, ffmpeg
 * save screenshot
-* update camera from ipython, window
-* world: list of window
-* picking of cubes, world needs to propagate picking event
 * options for debug modus of opengl
 * graphmenu actor. ortho mode, select options
 * nx example working again
-* world has a list of windows.
+* world has a list of windows. (add window removal/close)
+* camera logic, e.g. camerapath

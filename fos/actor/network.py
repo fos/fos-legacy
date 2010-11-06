@@ -31,8 +31,8 @@ class AttributeNetwork(Actor):
         node_size
             The size of the node
 
-        node_label
-            Node labels
+        node_label : dictionary of dictionary
+            Node labels. Keys refer to the node index (starting with 0)
             
         node_shape
             cube, sphere, pyramid, electrodes (cylinders)
@@ -121,6 +121,10 @@ class AttributeNetwork(Actor):
         else:
             self.edge_connectivity = None
 
+        if kwargs.has_key('node_label'):
+            self.node_label = kwargs['node_label']
+        else:
+            self.node_label = None
 
         if kwargs.has_key('edge_weight'):
             self.edge_weight = kwargs['edge_weight']
@@ -195,8 +199,46 @@ class AttributeNetwork(Actor):
         # create aabb (in actor)
         self.make_aabb(margin = self.node_size.max())
 
+        if not self.node_label is None:
+            
+            textcenter = np.zeros( (len(self.node_label), 3), dtype = np.float32)
+            texts = []
+            fonts = []
+            font_sizes = []
+            colors = []
+            
+            for i,k in enumerate(self.node_label.keys()):
+                assert k < len(self.vertices)
+                if not self.node_label[k].has_key('label'):
+                    print("node_label dictionary for key %s has no label key. skip.")
+                    continue
+                
+                textcenter[i,:] = self.vertices[k, :] # can shift by nodesize
+                texts.append(self.node_label[k]['label'])
+                
+                if self.node_label[k].has_key('font'):
+                    fonts.append(self.node_label[k]['font'])
+                else:
+                    fonts.append('Arial')
+                    
+                if self.node_label[k].has_key('size'):
+                    font_sizes.append(self.node_label[k]['size'])
+                else:
+                    font_sizes.append(20)
+                    
+                if self.node_label[k].has_key('color'):
+                    colors.append(self.node_label[k]['color'])
+                else:
+                    colors.append( (0,255,0,255) )
+                                
+#            self.label_primitive = Labels(textcenter, texts, fonts, font_sizes, colors)
+
 
     def update(self, dt):
+
+        # send camera position & lookat to labels
+        if not self.node_label is None:
+            pass
 
         if self.living:
 

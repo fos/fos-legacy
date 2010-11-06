@@ -37,7 +37,7 @@ class World():
         else:
             print "Not valid actor or camera!"
             
-    def propagate_pickray(self, near, far, modifiers = None):
+    def propagate_pickray(self, near, far):
         # propagate the pickray to all the actors
         # XXX: implement intersection with the bounding boxes first
         
@@ -45,15 +45,26 @@ class World():
             # aabb intersection
             if not a.aabb is None:
                 if test_segment_aabb(near, far, a.aabb.coord[0], a.aabb.coord[1]):
-                    
-                    #print 'aabintersected'
+                    print "found aabb"
                     try:
                         a.process_pickray(near,far)
                     except:
                         pass
-                #else:
-                #    print 'not intersecting'
-            
+                else:
+                    print "no aabb"
+
+                    
+    def find_selected_actor(self, near, far):
+        """ Finds the first actor """
+        for a in self.ag.actors:
+            # aabb intersection
+            if not a.aabb is None:
+                if test_segment_aabb(near, far, a.aabb.coord[0], a.aabb.coord[1]):
+                    print "found aabb"
+                    return a
+                else:
+                    print "no aabb"
+                    return None
             
     def update_cameraview(self):
         pass

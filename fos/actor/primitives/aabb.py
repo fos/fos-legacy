@@ -30,27 +30,8 @@ class AABBPrimitive():
             
     def _make_box(self, c1, c2, margin):
 
-        # add the margin on all sides
-        c1[0] = c1[0] - margin
-        c1[1] = c1[1] - margin
-        c1[2] = c1[2] - margin
-        
-        c2[0] = c2[0] + margin
-        c2[1] = c2[1] + margin
-        c2[2] = c2[2] + margin
-        
-        self.coord = (c1, c2)
+        self.update(c1, c2, margin)
 
-        self.vertices = np.array([
-               [c1[0],c1[1],c2[2]],
-               [c1[0],c1[1],c1[2]],
-               [c1[0],c2[1],c2[2]],
-               [c1[0],c2[1],c1[2]],
-               [c2[0],c1[1],c2[2]],
-               [c2[0],c1[1],c1[2]],
-               [c2[0],c2[1],c2[2]],
-               [c2[0],c2[1],c1[2]]], dtype = np.float32)
-        
         self.indices = np.array([ [0,1,5,4],
                            [2,3,7,6],
                            [2,0,1,3],
@@ -75,6 +56,9 @@ class AABBPrimitive():
         c2[1] = c2[1] + margin
         c2[2] = c2[2] + margin
 
+        self.coord = (np.array(c1, dtype = np.float32), 
+                      np.array(c2, dtype = np.float32))
+        
         self.vertices = np.array([
                [c1[0],c1[1],c2[2]],
                [c1[0],c1[1],c1[2]],
@@ -85,7 +69,11 @@ class AABBPrimitive():
                [c2[0],c2[1],c2[2]],
                [c2[0],c2[1],c1[2]]], dtype = np.float32)
         
-        
+    def get_center(self):
+        c1 = np.array(self.coord[0]).ravel()
+        c2 = np.array(self.coord[1]).ravel()
+        return (c1 + c2) * 0.5
+    
     def draw(self):
         pass
         # enable wireframe

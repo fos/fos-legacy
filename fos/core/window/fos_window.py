@@ -3,7 +3,7 @@ import numpy as np
 from fos.lib.pyglet.gl import *
 
 from fos.core.window.managed_window import ManagedWindow
-from fos.core.utils import screen_to_model
+
 from fos import World
 
 from fos.lib.pyglet.window import key,mouse
@@ -11,7 +11,7 @@ from fos.lib.pyglet.clock import Clock
 from fos.lib.pyglet.window import FPSDisplay
 from fos.core.window.window_text  import WindowText
 from fos.core import color
-
+from fos.core.handlers.window import FosWinEventHandler
 
 
 class FosWindow(ManagedWindow):
@@ -61,8 +61,11 @@ class FosWindow(ManagedWindow):
         self.fps_display = FPSDisplay(self)
         self.foslabel = WindowText(self, 'fos', x=10 , y=40)
         self.show_logos = True
+
+        # pushing new event handlers
+        foswinhandlers = FosWinEventHandler(self)
+        self.push_handlers(foswinhandlers)
         
-        # fos ad
         super(FosWindow, self).__init__(**kwargs)
         
     
@@ -131,7 +134,11 @@ class FosWindow(ManagedWindow):
         if len(world.get_cameras()) == 0:
             raise Exception("Can not attach window to a world with no cameras")
         
+        # attach the world as a private attribute
         self._world = world
+        
+        # add the world to the list of windows the world is attached to
+        self._world.wins.append(self)
         
         # just take the first camera
         self.current_camera = self._world.get_cameras()[0]
@@ -158,70 +165,11 @@ class FosWindow(ManagedWindow):
             self.foslabel.draw()
 
         self._world._render_lock.release()
-    
-              
+
     def on_resize(self, width, height):
         glViewport(0, 0, width, height)
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
         gluPerspective(60., width / float(height), .1, 2000.)
         glMatrixMode(GL_MODELVIEW)
-
-
-    def on_key_press(self, symbol, modifiers):
-
-        # how to propagate the events to the actors and camera?
-            
-        if symbol == key.R:
-            self.current_camera.reset()
         
-        if symbol == key.H:
-            self.set_size(1000, 600)
-            
-        if modifiers & key.MOD_CTRL:
-            # make window bigger
-            if symbol == key.PLUS:
-                neww = self.width + self.width / 10
-                newh = self.height + self.height / 10
-                self.set_size(neww, newh)
-            # make window smaller
-            elif symbol == key.MINUS:
-                neww = self.width - self.width / 10
-                newh = self.height - self.height / 10
-                self.set_size(neww, newh)
-                 
-        if symbol == key.P:          
-            # generate pickray
-            x,y=self.mouse_x,self.mouse_y
-            nx,ny,nz=screen_to_model(x,y,0)
-            fx,fy,fz=screen_to_model(x,y,1)        
-            near=(nx,ny,nz)
-            far=(fx,fy,fz)
-            self._world.propagate_pickray(near, far, modifiers)
-            
-
-    def on_mouse_motion(self, x, y, dx, dy):
-        self.mouse_x, self.mouse_y = x, y
-        
-    def on_mouse_drag(self, x,y,dx,dy,buttons,modifiers):
-        if buttons & mouse.LEFT:
-            if modifiers & key.MOD_CTRL:
-                print('ctrl dragging')
-            else:
-                self.current_camera.cam_rot.rotate( dx*self.current_camera.mouse_speed,0,1,0)
-                self.current_camera.cam_rot.rotate(-dy*self.current_camera.mouse_speed,1,0,0)
-                
-        if buttons & mouse.RIGHT:
-            tx=dx*self.current_camera.mouse_speed
-            ty=dy*self.current_camera.mouse_speed        
-            self.current_camera.cam_trans.translate(tx,ty,0)
-    
-        if buttons & mouse.MIDDLE:
-            tz=dy*self.current_camera.mouse_speed
-            self.current_camera.cam_trans.translate(0,0,tz)
-    
-    def on_mouse_scroll(self, x,y,scroll_x,scroll_y):
-        self.current_camera.cam_trans.translate(0,0,scroll_y*self.current_camera.scroll_speed)
-
-
-    

@@ -13,7 +13,7 @@ class TransformCamera():
     def reset(self):        
         glPushMatrix()
         glLoadIdentity()
-        self.matrix=get_model_matrix()                
+        self.matrix=get_model_matrix() 
         glPopMatrix()
 
     def translate(self,dx,dy,dz):
@@ -72,9 +72,12 @@ class DefaultCamera(Camera):
         self.cam_rot.reset()
         self.cam_trans.reset()
         
+        
     def set_position(self, x, y, z):
         """ Set the position of the camera """
         self.lookat[0], self.lookat[1], self.lookat[2] = x,y,z
+        self.cam_rot.reset()
+        self.cam_trans.reset()
 
     def set_lookatposition(self, x, y, z):
         """ Set the position the camera looks at """
