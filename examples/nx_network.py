@@ -19,7 +19,10 @@ from fos.actor.network import AttributeNetwork
 wi = Window()
 w = wi.get_world()
 
-cu = AttributeNetwork(node_position=e*100,
+e=e*100
+edges = np.array([ [0,1], [1,2]], dtype = np.uint32)
+
+cu = AttributeNetwork(node_position=e,
                       scale_factor = 1.,
                       #global_node_size = 0.01,
                       edge_connectivity = edges

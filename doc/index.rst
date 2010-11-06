@@ -6,7 +6,9 @@
 fos - free open scientific visualization
 ========================================
 
-fos means light in greek.
+fos stands for Φώς meaning light in Greek or free open scientific,
+a lightweight visualization platform in Python & Cython.
+
 
 * lightweight package for visualization
 * easy-to-use actors to create visualizatios of scientific datasets
@@ -20,6 +22,7 @@ Contents:
    :maxdepth: 1
    
    design
+   faq
    actors
    usecases
    links
