@@ -1,6 +1,6 @@
 import numpy as np
 
-def intersect_ray_sphere(self, p, d, sphereR, sphereC):
+def intersect_ray_sphere(p, d, sphereR, sphereC):
     """ Intersects ray r = p + td, |d| = 1, with sphere s
     
     Parameters
@@ -23,7 +23,6 @@ def intersect_ray_sphere(self, p, d, sphereR, sphereC):
         intersection point
     If not intersect, returns (None, None)
     """
-    print "te"
     m = p - sphereC
     b = np.dot(m, d)
     c = np.dot(m, m) - sphereR * sphereR
@@ -44,11 +43,15 @@ def intersect_ray_sphere(self, p, d, sphereR, sphereC):
     return (t, q)
 
 
-def test_segment_aabb(p0, p1, aabb):
+def test_segment_aabb(p0, p1, aabb_c1, aabb_c2):
     """ Test if segement specified by points p0 and p1
     intersects aabb """
-    c = (aabb[0] + aabb[1]) * 0.5 # box center-point
-    e = aabb[1] - c # box halflength extents
+    aabbc1 = np.array(aabb_c1)
+    aabbc2 = np.array(aabb_c2)
+    p0 = np.array(p0)
+    p1 = np.array(p1)
+    c = (aabbc1 + aabbc2) * 0.5 # box center-point
+    e = aabbc2 - c # box halflength extents
     m = (p0 + p1) * 0.5 # segment midpoint
     d = p1 - m # segment halflength
     m = m -c # translate box and segment to origin
@@ -57,7 +60,7 @@ def test_segment_aabb(p0, p1, aabb):
     if np.abs(m[0]) > e[0] + adx:
         return False
     ady = np.abs(d[1])
-    if np.abs(d[0]) > e[1] + ady:
+    if np.abs(m[1]) > e[1] + ady:
         return False
     adz = np.abs(d[2])
     if np.abs(m[2]) > e[2] + adz:

@@ -230,10 +230,10 @@ class AttributeNetwork(Actor):
         
     def draw(self):
         
+        glPushMatrix()
+        
         glEnable(GL_LINE_SMOOTH)
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
-
-        glPushMatrix()
         glMultMatrixf(self.glaffine)
 
         # check if network has edges at all
@@ -258,6 +258,8 @@ class AttributeNetwork(Actor):
         glDisableClientState(GL_COLOR_ARRAY)
         glDisableClientState(GL_VERTEX_ARRAY)
 
+        glDisable(GL_LINE_SMOOTH)
+        glLineWidth(1.0)
         self.draw_aabb()
 
         glPopMatrix()
@@ -265,7 +267,7 @@ class AttributeNetwork(Actor):
     
 
     def process_pickray(self,near,far):
-                
+
         # intersect with cubes
         # calculate in- and out-sphere for each cube, and compute the
         # mean readius
@@ -276,10 +278,7 @@ class AttributeNetwork(Actor):
         fa = np.array(far)
         d = (fa-ne) / np.linalg.norm(fa-ne)
         for i in xrange(nr):
-
-            irad = self.node_size[i] / 2.0
-            orad = self.node_size[i] / np.sqrt(2.0)
-            r = np.mean( [irad, orad] )
+            r = self.node_size[i] / np.sqrt(2.0)
             p = self.vertices[i,:]
             
             (t,q) = intersect_ray_sphere(ne, d, r, p)

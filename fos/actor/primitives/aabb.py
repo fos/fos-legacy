@@ -24,6 +24,8 @@ class AABBPrimitive():
         self.mode = GL_QUADS
         self.type = GL_UNSIGNED_INT
         
+        self.coord = (None, None)
+        
         self._make_box(blf, trb, margin)
             
     def _make_box(self, c1, c2, margin):
@@ -36,6 +38,8 @@ class AABBPrimitive():
         c2[0] = c2[0] + margin
         c2[1] = c2[1] + margin
         c2[2] = c2[2] + margin
+        
+        self.coord = (c1, c2)
 
         self.vertices = np.array([
                [c1[0],c1[1],c2[2]],

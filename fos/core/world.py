@@ -5,6 +5,7 @@ from fos.core.camera_list import CameraList
 from fos.core.camera import Camera
 from fos.core.actor import Actor
 from fos.core.camera import DefaultCamera
+from fos.core.intersection import test_segment_aabb
 
 class World():
 
@@ -39,11 +40,16 @@ class World():
     def propagate_pickray(self, near, far, modifiers = None):
         # propagate the pickray to all the actors
         # XXX: implement intersection with the bounding boxes first
+        
         for a in self.ag.actors:
-            try:
-                a.process_pickray(near,far)
-            except:
-                pass
+            # aabb intersection
+            if not a.aabb is None:
+                if test_segment_aabb(near, far, a.aabb.coord[0], a.aabb.coord[1]):
+                    try:
+                        a.process_pickray(near,far)
+                    except:
+                        pass
+            
             
     def update_cameraview(self):
         pass
