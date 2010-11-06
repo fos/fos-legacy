@@ -45,10 +45,14 @@ class World():
             # aabb intersection
             if not a.aabb is None:
                 if test_segment_aabb(near, far, a.aabb.coord[0], a.aabb.coord[1]):
+                    
+                    #print 'aabintersected'
                     try:
                         a.process_pickray(near,far)
                     except:
                         pass
+                #else:
+                #    print 'not intersecting'
             
             
     def update_cameraview(self):
