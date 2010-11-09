@@ -7,6 +7,7 @@ from fos import Actor, World, Window
 from fos.lib.pyglet.text import Label
 from fos.lib.pyglet.graphics import Batch
         
+        
 class Dummy(Actor):
     
     def __init__(self, *args, **kwargs):

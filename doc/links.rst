@@ -112,6 +112,11 @@ Computational Geometry
 * Applied Geometry Group ETH :http://www.agg.ethz.ch/
 * bounding volume code http://copythatfloppy.net/bzr/xyzzy/
 
+Graph Visualization
+-------------------
+* GVSR http://gvsr.polytech.univ-nantes.fr/GVSR
+
+
 GUI Backends
 ------------
 * possible to include pyglet in wx (see ML)
