@@ -243,7 +243,7 @@ class AttributeNetwork(Actor):
         if self.living:
 
             self.internal_timestamp += dt
-            
+            print dt
 #            if self.internal_timestamp > 50.0:
 #                print "you lived 10 seconds. this is enough"
 #                self.stop()

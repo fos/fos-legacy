@@ -14,7 +14,7 @@ def get_model_matrix(array_type=c_float, glGetMethod=glGetFloatv):
     """
     m = (array_type*16)()
     glGetMethod(GL_MODELVIEW_MATRIX, m)
-    print "model matrix", np.array(m)
+#    print "model matrix", np.array(m)
     return m
 
 def get_projection_matrix(array_type=c_float, glGetMethod=glGetFloatv):
