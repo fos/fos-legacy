@@ -6,6 +6,8 @@ from fos import Actor, World
 from fos.actor.primitives import NodePrimitive, EdgePrimitive
 from fos.core.intersection import intersect_ray_sphere
         
+
+        
 class AttributeNetwork(Actor):
     
     def __init__(self, node_position, affine = None, force_centering = True, *args, **kwargs):
@@ -243,32 +245,7 @@ class AttributeNetwork(Actor):
         if self.living:
 
             self.internal_timestamp += dt
-            print dt
-#            if self.internal_timestamp > 50.0:
-#                print "you lived 10 seconds. this is enough"
-#                self.stop()
 
-
-            # simulate brownian motion like behaviour
-#            self.vertices += np.random.random( (self.vertices.shape) ) * 2
-            
-            
-#            self.node_size = np.random.random( (self.node_size.shape) ) * 2
-#            self.node_glprimitive._make_cubes(self.vertices, self.node_size)
-#            print "self", self.edge_glprimitive.vertices[0,:]
-            
-            # this functionality could be implemented with cython
-#
-#            nr = self.edge_color.shape[0]
-#            ran = np.random.random_integers(0,1, (nr,))
-#            self.edge_color[:,3] = np.where(ran > 0, self.edge_color[:,3], 255 - self.edge_color[:,3])
-#            self.edge_glprimitive._make_color(self.edge_color)
-#
-#            # update the edges, e.g. position
-#            self.edge_glprimitive._make_edges(self.vertices, self.edge_connectivity)
-            
-            # update bounding box
-            self.make_aabb(margin = self.node_size.max())
         
     def draw(self):
         
@@ -326,4 +303,49 @@ class AttributeNetwork(Actor):
             if not q is None:
                 print "found intersection at", i, q
             
+
+class DynamicNetwork(AttributeNetwork):
+    
+    def __init__(self, node_position, affine = None, force_centering = True, *args, **kwargs):
+          
+        self.global_time_index = 0
+
+        # extract the first time slice to construct the initial network
+        self.all_node_position = node_position
+        self.all_node_size = kwargs['node_size']
+        self.all_node_color = kwargs['node_color']
+        self.all_edge_connectivity = kwargs['edge_connectivity']
+        self.all_edge_color = kwargs['edge_color']
+        
+        super(DynamicNetwork, self).__init__(node_position = self.all_node_position[:,:,self.global_time_index],
+                                             affine = affine,
+                                             force_centering = force_centering,
+                                             node_size = self.all_node_size[:,self.global_time_index],
+                                             node_color = self.all_node_color[:,:,self.global_time_index],
+                                             edge_connectivity = self.all_edge_connectivity[:,:,self.global_time_index],
+                                             edge_color = self.all_edge_color[:,:,self.global_time_index],
+                                             global_edge_width = kwargs['global_edge_width']
+                                             )
+
+    def update(self, dt):
+
+        if self.living:
+            self.global_time_index += 1
+            print "global time index", self.global_time_index
             
+            self.vertices = self.all_node_position[:,:,self.global_time_index]
+            self.node_size = self.all_node_size[:,self.global_time_index]
+            self.node_color = self.all_node_color[:,:,self.global_time_index] 
+            self.edge_connectivity = self.all_edge_connectivity[:,:,self.global_time_index]
+            self.edge_color = self.all_edge_color[:,:,self.global_time_index]
+            
+            self.node_glprimitive._make_cubes(self.vertices, self.node_size)            
+            self.node_glprimitive._make_color(self.node_color)
+
+            self.edge_glprimitive._make_edges(self.vertices, self.edge_connectivity)
+            self.edge_glprimitive._make_color(self.edge_color)
+            
+            # update bounding box
+            self.make_aabb(margin = self.node_size.max())
+
+        

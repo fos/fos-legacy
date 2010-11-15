@@ -88,7 +88,6 @@ class NodePrimitive():
         
         self.vertices_ptr = self.vertices.ctypes.data
         self.indices_ptr = self.indices.ctypes.data
-
     
     def _make_color(self, color):
         if self.vertices is None:
