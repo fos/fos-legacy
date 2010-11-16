@@ -26,7 +26,7 @@ class Dummy(Actor):
                                   anchor_x='center', anchor_y='center',
                                   batch = self.batch)
         fos.lib.pyglet.text.Label('Hi', 
-                                  font_name='fos', 
+                                  font_name='Times New Roman', 
                                   font_size=26,
                                   dpi=100,
 #                                  x=window.width//2, y=window.height//2,
