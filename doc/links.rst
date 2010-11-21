@@ -88,6 +88,11 @@ Onscreen UIs
 2. kytten-read-only http://code.google.com/p/kytten/
 3. http://www.antisphere.com/Wiki/tools:anttweakbar (C++)
 
+Debugging
+---------
+* http://valgrind.org/
+
+
 Fonts
 -----
 1. pyftgl (needs ubuntu libftgl2, ftgl-dev)
