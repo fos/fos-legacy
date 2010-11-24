@@ -6,7 +6,10 @@ from fos import Actor, World, Window
 
 class NeuronRegion(Actor):
     
-    def __init__(self, vertices, connectivity, offset, colors = None, *args, **kwargs):
+    def __init__(self, vertices, connectivity, offset,
+                 colors = None,
+                 force_centering = False,
+                 *args, **kwargs):
         """ Draws a set of static neurons with a scalar value on
         the vertices, or color value and transparency.
         
@@ -19,13 +22,20 @@ class NeuronRegion(Actor):
         self._update_glaffine()
         
         self.vertices = vertices
+        if force_centering:
+            self.vertices = self.vertices - np.mean(self.vertices, axis = 0)
         self.connectivity = connectivity
-        self.colors = colors
+        
+        if colors == None:
+            # default colors
+            self.colors = np.array( [[255,255,255,255]], dtype = np.ubyte).repeat(len(self.vertices),axis=0)            
+        else:
+            self.colors = colors
+            
         self.offset = offset
         
-        self.make_aabb()
+        self.make_aabb(margin = 0)
         
-        print range(len(self.offset)-1)
         # create indicies, seems to be slow with nested loops
         self.indices = []
         for i in range(len(self.offset)-1):
@@ -33,18 +43,13 @@ class NeuronRegion(Actor):
             # offset to add
             off = self.offset[i]
             # skipt the first node (root node)
-            con[0]=0
-            for j in range(0,len(con)-1):
-                self.indices.append(j+off)
+            for j in range(1, len(con)):
                 self.indices.append(con[j]+off)
-                
-        self.indices = np.array(self.indices, dtype = np.uint)
-        print self.indices
-       # self.indices = np.array( range(len(self.indices)), dtype = np.uint32)
-        
-        #self.colors = self.colors.repeat(2, axis = 0)
-        #self.colors_ptr = self.colors.ctypes.data
-        
+                self.indices.append(j+off)
+
+        self.indices = np.array(self.indices, dtype = np.uint32)
+        self.colors = self.colors.repeat(2, axis = 0)
+        self.colors_ptr = self.colors.ctypes.data
         self.vertices_ptr = self.vertices.ctypes.data
         self.indices_ptr = self.indices.ctypes.data
         self.indices_nr = self.indices.size
@@ -64,34 +69,15 @@ class NeuronRegion(Actor):
         
         glLineWidth(2.0)
         glEnableClientState(GL_VERTEX_ARRAY)
-        #glEnableClientState(GL_COLOR_ARRAY)
+        glEnableClientState(GL_COLOR_ARRAY)
         glVertexPointer(3, GL_FLOAT, 0, self.vertices_ptr)
-        #glColorPointer(4, GL_UNSIGNED_BYTE, 0, self.colors_ptr)
+        glColorPointer(4, GL_UNSIGNED_BYTE, 0, self.colors_ptr)
         glDrawElements(self.mode,self.indices_nr,self.type,self.indices_ptr)
-        #glDisableClientState(GL_COLOR_ARRAY)
+        glDisableClientState(GL_COLOR_ARRAY)
         glDisableClientState(GL_VERTEX_ARRAY)
         
         glDisable(GL_LINE_SMOOTH)
-        #self.draw_aabb()
+        self.draw_aabb()
         
         glPopMatrix()
 
-            
-if __name__ == '__main__':
-    import numpy as np
-    pos = np.random.random( (10,3)) * 100
-    # connectivity: each vertices has a parent. -1 denotes the root node
-    # for each neuron, the parent ids are local
-    con = np.array( [-2,0,1,-2,0,2,5,6,3,4], dtype = np.int)
-    # offset and size array to segment the individual neurons
-    offsi = np.array( [ 0,3,10 ], dtype = np.uint)
-    # colors
-    col = np.random.random_integers(10, 255, (10,3)).astype(np.ubyte)
-    
-    wi = Window()
-    w = wi.get_world()
-    act = NeuronRegion(vertices = pos,
-                       connectivity = con,
-                       offset = offsi,
-                       colors = col)
-    w.add(act)
