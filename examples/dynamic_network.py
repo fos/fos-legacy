@@ -6,7 +6,7 @@ from fos.actor.network import DynamicNetwork
 #import fos.lib.pyglet
 #fos.lib.pyglet.options['debug_gl'] = True
 
-wi = Window()
+wi = Window(caption = "Dynamic Network with Fos")
 w = wi.get_world()
 
 # time steps
