@@ -6,6 +6,7 @@ Our aim is to collect knowledge, references and feature requests...
 
 New
 ---
+* gletools, lots of things to learn: http://codeflow.org/entries/2009/jul/31/gletools-advanced-pyglet-utilities/
 * interactorium http://www.systemsbiology.org.au/downloads_interactorium.html
 * tutorial on opengl vbo http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=45
 * http://www.informit.com/articles/article.aspx?p=461848&seqNum=2
