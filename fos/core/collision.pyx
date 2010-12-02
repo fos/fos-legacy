@@ -447,13 +447,13 @@ def point_segment_sq_distance(a,b,c):
     >>> a=np.array([0,0,0],dtype=float32)
     >>> b=np.array([1,0,0],dtype=float32)
     >>> c=np.array([0,1,0],dtype=float32)    
-    >>> coll.point_segment_sq_distance(a,b,c)
+    >>> cll.point_segment_sq_distance(a,b,c)
     >>> 1.0
     >>> c=np.array([0,3,0],dtype=float32)
-    >>> coll.point_segment_sq_distance(a,b,c)
+    >>> cll.point_segment_sq_distance(a,b,c)
     >>> 9.0 
     >>> c=np.array([-1,1,0],dtype=float32)
-    >>> coll.point_segment_sq_distance(a,b,c)
+    >>> cll.point_segment_sq_distance(a,b,c)
     >>> 2.0
     
 

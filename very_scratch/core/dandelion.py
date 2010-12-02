@@ -648,7 +648,7 @@ T2=T[:20000]
 
 import dipy.core.track_performance as pf
 
-T=[pf.approximate_ei_trajectory(t) for t in T]
+T=[pf.approx_polygon_track(t) for t in T]
 
 #slg=SmoothLineGroup()
 #'''

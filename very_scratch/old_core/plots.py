@@ -1958,7 +1958,7 @@ class PlotBundlesExample():
 
         #c=tracks[0][-4]
 
-        ct=tracks[pf.most_similar_track_zhang(tracks,'avg')[0]]
+        ct=tracks[pf.most_similar_track_mam(tracks,'avg')[0]]
         
         c=ct[len(ct)/2]
 

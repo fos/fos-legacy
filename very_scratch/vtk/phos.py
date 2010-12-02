@@ -320,7 +320,7 @@ if __name__ == "__main__":
     lines, hdr = tv.read(fname)
 
     pts = [p[0] for p in lines]
-    pts_reduced = [track_performance.approximate_ei_trajectory(p) for p in pts]
+    pts_reduced = [track_performance.approx_polygon_track(p) for p in pts]
     red = np.array([1,0,0])
 
     trajs=pts_reduced

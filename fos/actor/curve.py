@@ -39,12 +39,15 @@ class InteractiveCurves(Actor):
             curve=curve.astype('f')
             vertices=tuple(curve.ravel().tolist())
 
-            colors=np.tile(self.main_color,(len(curve),1)).astype('f')
-            colors=255*colors
-            colors=np.round(colors).astype('ubyte')
-            colors=tuple(colors.ravel().tolist())
+            if colors==None:
+                color=np.tile(self.main_color,(len(curve),1)).astype('f')
+            else:
+                color=np.tile(colors[i],(len(curve),1)).astype('f')
+            color=255*color
+            color=np.round(color).astype('ubyte')
+            color=tuple(color.ravel().tolist())
                            
-            self.vertex_list[i]= fos.lib.pyglet.graphics.vertex_list(len(curve),('v3f/static',vertices),('c4B/static',colors))
+            self.vertex_list[i]= fos.lib.pyglet.graphics.vertex_list(len(curve),('v3f/static',vertices),('c4B/static',color))
 
         self.compile_gl()
         

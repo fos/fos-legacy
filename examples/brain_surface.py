@@ -1,7 +1,8 @@
 import numpy as np
 from fos.comp_geom.gen_normals import auto_normals 
 
-pa = '/home/stephan/Downloads/Gifti/'
+#pa = '/home/stephan/Downloads/Gifti/'
+pa = '/home/eg309/Data/surface/'
 ftriangles=pa+'triangles.npy'
 fvertices=pa+'vertices.npy'
 flowres =pa+'labellowres.npy'
