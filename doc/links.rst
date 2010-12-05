@@ -6,6 +6,9 @@ Our aim is to collect knowledge, references and feature requests...
 
 New
 ---
+* Vertex Array Objects http://www.opengl.org/wiki/Vertex_Array_Object
+* nice ideas  codeflow.org
+* animation and general design ideas for fos http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/
 * GPU gems: http://developer.nvidia.com/object/gpu_gems_2_home.html
 * gletools, lots of things to learn: http://codeflow.org/entries/2009/jul/31/gletools-advanced-pyglet-utilities/
 * interactorium http://www.systemsbiology.org.au/downloads_interactorium.html
