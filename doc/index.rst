@@ -3,10 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-fos - free open scientific visualization
+FOS - Free Open Scientific visualization
 ========================================
 
-fos stands for Φώς meaning light in Greek or free open scientific,
+Fos stands for Φώς meaning light in Greek or free open scientific,
 a lightweight visualization platform in Python & Cython.
 
 
@@ -23,6 +23,7 @@ Contents:
 
    mission
    authors
+   download
    design
    faq
    actors
