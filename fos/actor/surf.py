@@ -2,8 +2,7 @@ import numpy as np
 import fos.lib.pyglet as pyglet
 from fos.lib.pyglet.gl import *
 from fos.lib.pyglet.gl import GLfloat
-          
-from fos.lib.pyglet.graphics import Batch
+
 from fos.core.actor import Actor
 from fos.core.utils import vec
 

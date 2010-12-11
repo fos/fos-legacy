@@ -8,9 +8,8 @@ eds=np.load(get_sphere('symmetric362'))
 vertices=eds['vertices']
 faces=eds['faces']
 
-
 vertices=vertices.astype(np.float32)
-faces=faces.astype(np.uint32)        
+faces=faces.astype(np.uint32)
 colors=np.ones((len(vertices),4))
 
 len(vertices)

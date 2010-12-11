@@ -20,7 +20,9 @@ Contents:
 
 .. toctree::
    :maxdepth: 1
-   
+
+   mission
+   authors
    design
    faq
    actors
