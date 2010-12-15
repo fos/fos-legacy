@@ -13,7 +13,7 @@ e=np.zeros( (n,3))
 for i in range(n):
     e[i,:] = ret[i]
 
-from fos import Window
+from fos import Window, WindowManager
 from fos.actor.network import AttributeNetwork
 
 wi = Window()
@@ -29,3 +29,7 @@ cu = AttributeNetwork(node_position=e,
                       )
 
 w.add(cu)
+
+wm = WindowManager()
+wm.add(wi)
+wm.run()

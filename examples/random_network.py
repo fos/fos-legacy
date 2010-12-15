@@ -1,6 +1,6 @@
 import numpy as np
 
-from fos import World, Window
+from fos import World, Window, WindowManager
 
 from fos.actor.network import AttributeNetwork
 
@@ -46,3 +46,7 @@ wi = Window()
 wi.attach(w)
 
 cu.start()
+
+wm = WindowManager()
+wm.add(wi)
+wm.run()

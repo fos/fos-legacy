@@ -1,7 +1,7 @@
 import numpy as np
 import nibabel as nib
 
-from fos import World, Window
+from fos import World, Window, WindowManager
 from fos.actor.curve import InteractiveCurves
 
 # bug:
@@ -23,3 +23,7 @@ w.add(cu)
 
 wi = Window(caption="Multi-Modal 1")
 wi.attach(w)
+
+wm = WindowManager()
+wm.add(wi)
+wm.run()

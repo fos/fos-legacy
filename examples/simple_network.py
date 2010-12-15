@@ -1,6 +1,6 @@
 import numpy as np
 
-from fos import Window
+from fos import Window, WindowManager
 from fos.actor.network import AttributeNetwork
 
 #import fos.lib.pyglet
@@ -36,3 +36,7 @@ cu = AttributeNetwork(affine = aff,
 w.add(cu)
 cu.start()
 #w.delete(cu)
+
+wm = WindowManager()
+wm.add(wi)
+wm.run()

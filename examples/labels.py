@@ -2,7 +2,7 @@ import numpy as np
 
 from fos.lib.pyglet.gl import *
 
-from fos import Actor, World, Window
+from fos import Actor, World, Window, WindowManager
 
 from fos.lib.pyglet.text import Label
 from fos.lib.pyglet.graphics import Batch
@@ -52,4 +52,8 @@ if __name__ == '__main__':
     w = wi.get_world()
     act = Dummy()
     w.add(act)
+    
+    wm = WindowManager()
+    wm.add(wi)
+    wm.run()
         
