@@ -6,7 +6,13 @@ Our aim is to collect knowledge, references and feature requests...
 
 New
 ---
-
+* Vertex Array Objects http://www.opengl.org/wiki/Vertex_Array_Object
+* nice ideas  codeflow.org
+* animation and general design ideas for fos http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/
+* GPU gems: http://developer.nvidia.com/object/gpu_gems_2_home.html
+* gletools, lots of things to learn: http://codeflow.org/entries/2009/jul/31/gletools-advanced-pyglet-utilities/
+* interactorium http://www.systemsbiology.org.au/downloads_interactorium.html
+* tutorial on opengl vbo http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=45
 * http://www.informit.com/articles/article.aspx?p=461848&seqNum=2
 * http://github.com/matthew-brett/miniglumpy
 * pyffmpeg
@@ -88,6 +94,11 @@ Onscreen UIs
 2. kytten-read-only http://code.google.com/p/kytten/
 3. http://www.antisphere.com/Wiki/tools:anttweakbar (C++)
 
+Debugging
+---------
+* http://valgrind.org/
+
+
 Fonts
 -----
 1. pyftgl (needs ubuntu libftgl2, ftgl-dev)
@@ -111,6 +122,11 @@ Computational Geometry
 * ghull
 * Applied Geometry Group ETH :http://www.agg.ethz.ch/
 * bounding volume code http://copythatfloppy.net/bzr/xyzzy/
+
+Graph Visualization
+-------------------
+* GVSR http://gvsr.polytech.univ-nantes.fr/GVSR
+
 
 GUI Backends
 ------------
