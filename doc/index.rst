@@ -11,7 +11,7 @@ a lightweight visualization platform in Python & Cython.
 
 
 * lightweight package for visualization
-* easy-to-use actors to create visualizatios of scientific datasets
+* easy-to-use actors to create visualizations of scientific datasets
 * clearly written and explained code
 * a natural home for collaboration
 
