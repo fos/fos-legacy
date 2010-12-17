@@ -22,3 +22,16 @@
 * world has a list of windows. (add window removal/close)
 * camera logic, e.g. camerapath
 * http://3dengine.org
+
+
+a) call and interact from inside ipython 
+b) support multiple windows (we crashing problem when closing a window)
+c) have some general surface, volume, line, point, label,image, network actors
+d) have menus as graphs
+e) make animation easy
+f) save screenshots and record video 
+g) make creating a new actor very simple (just assumes some minor knowledge of opengl)
+h) interacting with everything on the screen ( we have already a pickray system and some collision detection)
+k) have some neat cameras
+
+l) shaders, physics and machine learning additions

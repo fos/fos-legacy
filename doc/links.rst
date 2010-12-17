@@ -6,6 +6,10 @@ Our aim is to collect knowledge, references and feature requests...
 
 New
 ---
+* http://yoshihitoyagi.com/projects/MasterProject/index.html
+* http://lmi.bwh.harvard.edu/~banks/papers/illumBrain.pdf
+* http://www.computer.org/portal/web/csdl/doi/10.1109/TVCG.2007.70622
+* http://alum.wpi.edu/~ginsburg/work.html
 * Vertex Array Objects http://www.opengl.org/wiki/Vertex_Array_Object
 * nice ideas  codeflow.org
 * animation and general design ideas for fos http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/
