@@ -6,6 +6,10 @@ Our aim is to collect knowledge, references and feature requests...
 
 New
 ---
+* http://sites.google.com/site/swinesmallpygletexamples/home
+* http://kooneiform.wordpress.com/2010/01/05/pyglet-and-livecoding-1/
+* http://code.google.com/p/pyglet-shaders/
+* http://codeflow.org/entries/2010/dec/09/minecraft-like-rendering-experiments-in-opengl-4/
 * http://yoshihitoyagi.com/projects/MasterProject/index.html
 * http://lmi.bwh.harvard.edu/~banks/papers/illumBrain.pdf
 * http://www.computer.org/portal/web/csdl/doi/10.1109/TVCG.2007.70622
