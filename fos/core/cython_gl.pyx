@@ -36,6 +36,12 @@ cdef extern from "GL/gl.h":
     void glGetDoublev(GLenum pname, GLdouble *params)     
     void glMultiDrawElements(GLenum mode,GLsizei *count, GLenum type, GLvoid **indices, GLsizei primcount)
 
+cdef extern from "pthread.h":  
+    ctypedef void *pthread_t
+    int pthread_create(pthread_t *thread, void *attr,void *(*start_routine)(void*), void *arg)
+    int   pthread_join(pthread_t, void **)
+    
+
 # initialize numpy runtime
 cnp.import_array()
 
@@ -104,31 +110,36 @@ def ndarray_offset(cnp.ndarray[long, ndim=1] indices, \
 
     return offset(<long*>indices.data,<long*>strides.data,lenind, typesize)
 
-def get_vertices_faces(cnp.ndarray[float, ndim=2] verts,cnp.ndarray[unsigned int, ndim=2] faces):
+cdef void *taskcode(void *argument):
 
-    print 'hello'
-    return
+    cdef int tid
+    cdef int *ptid 
+    ptid = <int *> argument
+    tid = ptid[0]
+    #printf("Hello World! It's me, thread %d!\n", tid);
+    print(tid)
+    return NULL
 
+DEF NUM_THREADS=5
 
-def get_ppointer(cnp.ndarray[unsigned int, ndim=2] indices):
-    
-    #print 'indices'
-    #print indices[0][0]
-    cdef void* pind=<void *>indices[0].data
-    cdef void* pind2=<void *>indices[1].data
-    cdef void* ppind[2]
-    cdef double** test
-    
-    ppind[0]=pind
-    ppind[1]=pind2
-    
-    
-    
+cdef int test_thread ():
+
+    cdef pthread_t threads[NUM_THREADS]
+    cdef int thread_args[NUM_THREADS]
+    cdef int rc, i 
+      
+    for i from 0<=i<NUM_THREADS:
+   
+      thread_args[i] = i   
+      print(i)
+      rc = pthread_create(&threads[i], NULL, taskcode, <void *> &thread_args[i]);
+      
+    for i from 0<=i<NUM_THREADS:    
+      rc = pthread_join(threads[i], NULL)
+      
+def test():
+    test_thread()
         
-        
-    return 
-
-
-  
-
+    
+   
 
