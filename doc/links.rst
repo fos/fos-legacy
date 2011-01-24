@@ -6,6 +6,9 @@ Our aim is to collect knowledge, references and feature requests...
 
 New
 ---
+* nice sciviz: http://www.sciencevisuals.com/ourwork_projects.html
+* more: http://grahamj.com/
+* and more: http://wehi.tv/
 * http://sites.google.com/site/swinesmallpygletexamples/home
 * http://kooneiform.wordpress.com/2010/01/05/pyglet-and-livecoding-1/
 * http://code.google.com/p/pyglet-shaders/
