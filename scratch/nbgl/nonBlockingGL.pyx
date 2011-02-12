@@ -1,12 +1,3 @@
-#include <stdlib.h>
-
-#include <stdio.h>
-#include <pthread.h>
-
-#include <GL/gl.h>
-#include <GL/freeglut.h>
-#include "eventHandlers1.h"
-
 cdef extern from "stdlib.h":
     ctypedef unsigned long size_t
     void *malloc(size_t size)
