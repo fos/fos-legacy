@@ -28,7 +28,6 @@ cdef pthread_t eventLoopThread
 cdef int continueRunning
 cdef int waitForTermination = False
 cdef pthread_mutex_t mutexSharedMemory
-cdef pthread_mutex_t mutexSerializeRequests
 
 # Requests to event handler thread
 cdef int REQUEST_NOTHING = 0
@@ -69,7 +68,6 @@ def initialize(in_args):
 def createWindow(char* title, int x, int y, int w, int h, int scn):      
     global mutexSharedMemory
 
-    pthread_mutex_lock(&mutexSerializeRequests)
     pthread_mutex_lock(&mutexSharedMemory) # Protect shared memory from other threads that produce data for visualization
 
       
@@ -89,7 +87,6 @@ def createWindow(char* title, int x, int y, int w, int h, int scn):
 def destroyWindow(int id):
     global mutexSharedMemory
 
-    pthread_mutex_lock(&mutexSerializeRequests)
     pthread_mutex_lock(&mutexSharedMemory) # Protect shared memory from other threads that produce data for visualization
    
     cdef RequestInfo* requestInfo
@@ -115,7 +112,6 @@ def printNumWindows():
 def changeWindowSize(int id, int w, int h):
     global mutexSharedMemory
 
-    pthread_mutex_lock(&mutexSerializeRequests)
     pthread_mutex_lock(&mutexSharedMemory) # Protect shared memory from other threads that produce data for visualization
 
     cdef RequestInfo* requestInfo
@@ -194,7 +190,6 @@ cdef void *TaskCode(void *argument):
                 if (requestInfo.request != REQUEST_CREATE):
                     free(windowInfo)
                 free(requestInfo) 
-                pthread_mutex_unlock(&mutexSerializeRequests) 
 
             pthread_mutex_unlock(&mutexSharedMemory)
             
