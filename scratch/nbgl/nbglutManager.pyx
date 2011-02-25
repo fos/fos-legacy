@@ -5,29 +5,13 @@ cimport windowLinkedList
 cimport requestLinkedList
 cimport trialDraw
 
-
-
-cdef extern from "pthread.h":
-    ctypedef void *pthread_t
-    ctypedef struct pthread_mutex_t:
-        pass
-
-    int pthread_create(pthread_t *thread, void *attr,void *(*start_routine)(void*), void *arg)
-    int pthread_join(pthread_t, void **)
-   
-    int pthread_mutex_init(pthread_mutex_t *, void *)
-    int pthread_mutex_lock(pthread_mutex_t *)
-    int pthread_mutex_unlock(pthread_mutex_t *)
-
-cdef extern from "string.h":
-    char *strcpy(char *destination, char *source)
-
 # Global Variables
 cdef int hasBeenInitialized = False
 cdef pthread_t eventLoopThread
 cdef int continueRunning
 cdef int waitForTermination = False
 cdef pthread_mutex_t mutexSharedMemory
+cdef pthread_cond_t noWindowsCondition
 
 # Requests to event handler thread
 cdef int REQUEST_NOTHING = 0
@@ -38,6 +22,9 @@ cdef int REQUEST_RESIZE = 3
 def initialize(in_args):
     global hasBeenInitialized
     global mutexSharedMemory
+    global noWindowsCondition
+    global windowLinkedList
+    global requestLinkedList
     
     cdef int argc = len(in_args)
     cdef char** argv = NULL
@@ -61,19 +48,50 @@ def initialize(in_args):
     requestLinkedList.createEmptyList()
 
     pthread_mutex_init(&mutexSharedMemory, NULL)
+    pthread_cond_init(&noWindowsCondition, NULL)
 
     hasBeenInitialized = True
+    
+def destroy():
+    global mutexSharedMemory
+    global noWindowsCondition
 
+    terminateEventLoopThread()
+    pthread_mutex_destroy(&mutexSharedMemory)
+    pthread_cond_destroy(&noWindowsCondition)
+    
+
+def createEventLoopThread():
+    global mutexSharedMemory
+    global windowLinkedList
+
+    pthread_mutex_lock(&mutexSharedMemory) # Protect shared memory from other threads
+  
+    if (windowLinkedList.size() <= 0):   
+        _createEventLoopThread()
+
+    pthread_mutex_unlock(&mutexSharedMemory)
+
+def terminateEventLoopThread():
+    global continueRunning
+    global noWindowsCondition
+
+    destroyAllWindows()
+  
+    continueRunning = False
+    pthread_cond_signal(&noWindowsCondition)
 
 def createWindow(char* title, int x, int y, int w, int h, int scn):      
     global mutexSharedMemory
+    global noWindowsCondition
+    global requestLinkedList
 
-    pthread_mutex_lock(&mutexSharedMemory) # Protect shared memory from other threads that produce data for visualization
 
-      
-    if (windowLinkedList.size() <= 0):   
-        _createEventLoopThread()   
-
+    pthread_mutex_lock(&mutexSharedMemory) # Protect shared memory from other threads
+  
+    #if (windowLinkedList.size() <= 0):   
+    #    _createEventLoopThread()   
+         
     cdef RequestInfo* requestInfo = <RequestInfo*> malloc(sizeof(RequestInfo))
     requestInfo.request = REQUEST_CREATE
     requestInfo.data = _setWindowParameters(0, title, x, y, w, h, scn)
@@ -81,11 +99,13 @@ def createWindow(char* title, int x, int y, int w, int h, int scn):
     requestLinkedList.addLast(requestInfo)
 
     pthread_mutex_unlock(&mutexSharedMemory)
+    pthread_cond_signal(&noWindowsCondition)
     
     
 
 def destroyWindow(int id):
     global mutexSharedMemory
+    global requestLinkedList
 
     pthread_mutex_lock(&mutexSharedMemory) # Protect shared memory from other threads that produce data for visualization
    
@@ -95,13 +115,33 @@ def destroyWindow(int id):
         
         requestInfo = <RequestInfo*> malloc(sizeof(RequestInfo))
          
-        if (continueRunning): # The event loop thead is running and can handle the request
-            requestInfo.request = REQUEST_DESTROY
-            requestInfo.data = _setWindowParameters(id, "", 0, 0, 0, 0, 0)
-            requestLinkedList.addLast(requestInfo)
+        requestInfo.request = REQUEST_DESTROY
+        requestInfo.data = _setWindowParameters(id, "", 0, 0, 0, 0, 0)
+        requestLinkedList.addLast(requestInfo)
 
     pthread_mutex_unlock(&mutexSharedMemory) 
 
+
+def destroyAllWindows():
+    global mutexSharedMemory
+    global requestLinkedList
+    global windowLinkedList
+
+    cdef RequestInfo* requestInfo
+
+    pthread_mutex_lock(&mutexSharedMemory)
+
+    cdef WindowInfo* windowInfo = windowLinkedList.first()
+    while(windowInfo != NULL):
+        requestInfo = <RequestInfo*> malloc(sizeof(RequestInfo))
+         
+        requestInfo.request = REQUEST_DESTROY
+        requestInfo.data = _setWindowParameters(windowInfo.id, "", 0, 0, 0, 0, 0)
+        requestLinkedList.addLast(requestInfo)
+
+        windowInfo = windowLinkedList.first()
+
+    pthread_mutex_unlock(&mutexSharedMemory)
 
 def printNumWindows():
     global windowLinkedList
@@ -111,6 +151,7 @@ def printNumWindows():
 
 def changeWindowSize(int id, int w, int h):
     global mutexSharedMemory
+    global requestLinkedList
 
     pthread_mutex_lock(&mutexSharedMemory) # Protect shared memory from other threads that produce data for visualization
 
@@ -166,9 +207,14 @@ cdef void _createEventLoopThread():
 cdef void *TaskCode(void *argument):
     global continueRunning
     global mutexSharedMemory
+    global noWindowsCondition
+    global requestLinkedList
+    global windowLinkedList
    
     cdef RequestInfo* requestInfo
     cdef WindowInfo* windowInfo
+
+    cdef int i 
 
     continueRunning = True
 
@@ -190,10 +236,17 @@ cdef void *TaskCode(void *argument):
                 if (requestInfo.request != REQUEST_CREATE):
                     free(windowInfo)
                 free(requestInfo) 
-
+ 
             pthread_mutex_unlock(&mutexSharedMemory)
             
-        glutMainLoopEvent()  # dispatch events
+        for i from 0 <= i < 20:
+            glutMainLoopEvent()  # dispatch events
+
+        if (windowLinkedList.size() <= 0):
+            pthread_mutex_lock(&mutexSharedMemory)  
+            if (windowLinkedList.size() <= 0):
+                pthread_cond_wait(&noWindowsCondition, &mutexSharedMemory)
+            pthread_mutex_unlock(&mutexSharedMemory) 
  
 
     pthread_mutex_lock(&mutexSharedMemory)
@@ -201,8 +254,7 @@ cdef void *TaskCode(void *argument):
     pthread_mutex_unlock(&mutexSharedMemory) 
 
     # To drain the event loop before the thread terminates 
-    cdef int i
-    for i from 0 <= i < 1000:
+    for i from 0 <= i < 2000:
         glutMainLoopEvent()
 
     return NULL
@@ -248,11 +300,13 @@ cdef void _close():
 
     if (windowLinkedList.size() > 0):
         id = glutGetWindow()
+        pthread_mutex_lock(&mutexSharedMemory)
         windowInfo = windowLinkedList.remove(id) 
+        pthread_mutex_unlock(&mutexSharedMemory) 
         if (windowInfo != NULL):  
             free(windowInfo)   
-            if (windowLinkedList.size() == 0):
-                continueRunning = False
+            #if (windowLinkedList.size() == 0):
+            #    continueRunning = False
      
 
 cdef void _changeWindowSize(int id, int w, int h):

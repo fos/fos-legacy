@@ -25,8 +25,32 @@ cdef extern from "stdlib.h":
 
 cdef extern from "pthread.h":
     ctypedef void *pthread_t
-    int pthread_create(pthread_t *thread, void *attr,void *(*start_routine)(void*), void *arg)
+    ctypedef union pthread_mutex_t:
+        pass
+
+    ctypedef union pthread_cond_t:
+        pass
+
+    ctypedef union pthread_condattr_t:
+        pass 
+
+    int pthread_create(pthread_t *thread, void *attr, void *(*start_routine)(void*), void *arg)
     int pthread_join(pthread_t, void **)
+   
+    int pthread_mutex_init(pthread_mutex_t *, void *)
+    int pthread_mutex_destroy(pthread_mutex_t *mutex)
+    int pthread_mutex_lock(pthread_mutex_t *)
+    int pthread_mutex_unlock(pthread_mutex_t *)
+
+    int pthread_cond_init(pthread_cond_t *cond, pthread_condattr_t *attr)
+    int pthread_cond_destroy(pthread_cond_t *cond)
+    int pthread_cond_wait(pthread_cond_t *cond, pthread_mutex_t *mutex)
+    int pthread_cond_signal(pthread_cond_t *cond)
+
+    
+
+cdef extern from "string.h":
+    char *strcpy(char *destination, char *source)
 
 
 cdef extern from "GL/gl.h":

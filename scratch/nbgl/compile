@@ -1,0 +1,22 @@
+rm *.o
+rm *.c
+rm *.so
+
+cython requestLinkedList.pyx
+gcc -O2 -c -fPIC -I/usr/include/python2.6/ requestLinkedList.c
+gcc -shared requestLinkedList.o -o requestLinkedList.so -lglut -lGLU
+
+cython windowLinkedList.pyx
+gcc -O2 -c -fPIC -I/usr/include/python2.6/ windowLinkedList.c
+gcc -shared windowLinkedList.o -o windowLinkedList.so -lglut -lGLU
+
+cython trialDraw.pyx
+gcc -O2 -c -fPIC -I/usr/include/python2.6/ trialDraw.c
+gcc -shared trialDraw.o -o trialDraw.so -lglut -lGLU
+
+cython nbglutManager.pyx
+gcc -O2 -c -fPIC -I/usr/include/python2.6/ nbglutManager.c
+gcc -shared nbglutManager.o -o nbglutManager.so -lglut -lGLU
+
+
+
