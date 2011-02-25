@@ -130,8 +130,8 @@ def destroyAllWindows():
     cdef RequestInfo* requestInfo
 
     pthread_mutex_lock(&mutexSharedMemory)
-
     cdef WindowInfo* windowInfo = windowLinkedList.first()
+   
     while(windowInfo != NULL):
         requestInfo = <RequestInfo*> malloc(sizeof(RequestInfo))
          
@@ -139,9 +139,11 @@ def destroyAllWindows():
         requestInfo.data = _setWindowParameters(windowInfo.id, "", 0, 0, 0, 0, 0)
         requestLinkedList.addLast(requestInfo)
 
-        windowInfo = windowLinkedList.first()
+        windowInfo = windowLinkedList.next()
+        
+    pthread_mutex_unlock(&mutexSharedMemory) 
 
-    pthread_mutex_unlock(&mutexSharedMemory)
+    
 
 def printNumWindows():
     global windowLinkedList
@@ -239,7 +241,7 @@ cdef void *TaskCode(void *argument):
  
             pthread_mutex_unlock(&mutexSharedMemory)
             
-        for i from 0 <= i < 20:
+        for i from 0 <= i < 10:
             glutMainLoopEvent()  # dispatch events
 
         if (windowLinkedList.size() <= 0):
@@ -300,9 +302,9 @@ cdef void _close():
 
     if (windowLinkedList.size() > 0):
         id = glutGetWindow()
-        pthread_mutex_lock(&mutexSharedMemory)
+        pthread_mutex_lock(&mutexSharedMemory) 
         windowInfo = windowLinkedList.remove(id) 
-        pthread_mutex_unlock(&mutexSharedMemory) 
+        pthread_mutex_unlock(&mutexSharedMemory)
         if (windowInfo != NULL):  
             free(windowInfo)   
             #if (windowLinkedList.size() == 0):

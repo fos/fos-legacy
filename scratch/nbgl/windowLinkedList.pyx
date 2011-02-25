@@ -67,13 +67,15 @@ cdef WindowInfo* remove(int id):
     global numNodes
 
     cdef ListNode* p = findPrevious(id)
-    cdef ListNode* cur
+    cdef ListNode* cur 
     cdef WindowInfo* windowInfo = NULL
 
     if (p != NULL):
         cur = p.next
         p.next = cur.next
         windowInfo = cur.data  
+        if (cur == iteratorPosition):
+            iteratorPosition = p 
         free(cur)
         numNodes -= 1
         if (numNodes == 0):
