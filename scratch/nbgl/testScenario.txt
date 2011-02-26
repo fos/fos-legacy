@@ -1,0 +1,39 @@
+./compile
+
+ipython
+
+--------------------------
+
+import nbglutManager as nbgl
+
+nbgl.initialize([])
+
+nbgl.createEventLoopThread()
+
+for i in range(14):
+    nbgl.openWindow('a', 40*i+1, 1, 300, 300, 1)
+    nbgl.openWindow('b', 40*i+1, 400, 300, 300, 2)
+
+for i in range(1000):
+    nbgl.changeWindowSize(i, 400, 400)
+
+nbgl.printNumWindows()
+
+for i in range(10):
+    nbgl.closeWindow(i)
+
+nbgl.closeAllWindows()
+
+nbgl.destroy()  # close all windows - terminate event loop thread and release all resources
+
+nbgl.initialize([])
+
+nbgl.createEventLoopThread()
+
+..............
+
+nbgl.terminateEventLoopThread()
+
+nbgl.destroy()
+
+

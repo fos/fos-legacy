@@ -65,6 +65,7 @@ cdef void addFirst(WindowInfo* data):
 cdef WindowInfo* remove(int id):
     global header
     global numNodes
+    global iteratorPosition
 
     cdef ListNode* p = findPrevious(id)
     cdef ListNode* cur 

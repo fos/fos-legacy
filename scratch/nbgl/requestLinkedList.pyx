@@ -72,6 +72,7 @@ cdef RequestInfo* removeFirst():
     global head
     global tail
     global numNodes
+    global iteratorPosition
 
     cdef ListNode* p = head.next
     cdef RequestInfo* requestInfo = NULL
@@ -79,6 +80,8 @@ cdef RequestInfo* removeFirst():
     if (p != NULL):
         head.next = p.next
         requestInfo = p.data  
+        if (iteratorPosition == p):
+            iteratorPosition = head  
         free(p)
         numNodes -= 1
         if (numNodes == 0):
@@ -93,7 +96,9 @@ cdef int size():
 
     return numNodes
 
-# The iterator should not be mixed with remove
+
+# Iterator methods
+
 cdef RequestInfo* first():
     global head
     global iteratorPosition
