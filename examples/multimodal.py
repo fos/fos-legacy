@@ -9,7 +9,7 @@ from fos.actor.curve import InteractiveCurves
 #w = wi.get_world()
 
 # file
-fname = '/home/stephan/Downloads/Tracks/fibers.trk'
+fname = '/home/stephan/dev/Fos/examples/data/fibers_transformed.trk'
 streams,hdr = nib.trackvis.read(fname)
 
 T=[s[0] for s in streams]

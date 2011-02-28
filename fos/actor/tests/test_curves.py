@@ -16,7 +16,7 @@ def test_picking_trajectories():
     streams,hdr=tv.read(fname)
     T=[s[0] for s in streams]
     curves=T[:200000]
-    '''
+    
     fname='/home/eg309/Data/PROC_MR10032/subj_02/101/1312211075232351192010091708112071055601107ep2dadvdiffDSI10125x25x25STs002a001_QA_native.dpy'
     from dipy.io.dpy import Dpy
     dpr=Dpy(fname,'r')
@@ -26,6 +26,7 @@ def test_picking_trajectories():
     curves=[t for t in T if length(t) > 20]
     
     dpr.close()
+'''
     #colors=np.random.rand(len(curves),4).astype('f4')
     colors=0.5*np.ones((len(curves),4)).astype('f4')
     for (i,c) in enumerate(curves):        
