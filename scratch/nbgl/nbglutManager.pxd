@@ -17,6 +17,8 @@ cdef struct RequestInfo:
     WindowInfo* data 
 
 cdef void _sendDestroyMessageToWindow(int id)
+cdef void _lockMutexSharedMemory()
+cdef void _unlockMutexSharedMemory()
 
 cdef extern from "stdlib.h":
     ctypedef unsigned long size_t
@@ -36,6 +38,7 @@ cdef extern from "pthread.h":
 
     int pthread_create(pthread_t *thread, void *attr, void *(*start_routine)(void*), void *arg)
     int pthread_join(pthread_t, void **)
+    int pthread_detach(pthread_t thread)
    
     int pthread_mutex_init(pthread_mutex_t *, void *)
     int pthread_mutex_destroy(pthread_mutex_t *mutex)

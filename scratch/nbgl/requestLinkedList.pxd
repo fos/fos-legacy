@@ -17,6 +17,10 @@ cdef RequestInfo* removeFirst()
 
 cdef int size()
 
+'''
+The functions first and next are neither thread safe nor can be safely 
+'''
+
 cdef RequestInfo* first()
 
 cdef RequestInfo* next()
