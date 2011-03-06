@@ -5,13 +5,13 @@ ctypedef struct ListNode:
     ListNode *next
 
 
-cdef void createEmptyList()
+cdef void create()
 
-cdef void destroyList()
+cdef void destroy()
 
 cdef void makeEmpty()
 
-cdef void addLast(RequestInfo* w)
+cdef int addLast(RequestInfo* w)
 
 cdef RequestInfo* removeFirst()
 

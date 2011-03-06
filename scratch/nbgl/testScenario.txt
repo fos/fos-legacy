@@ -8,9 +8,7 @@ import nbglutManager as nbgl
 
 nbgl.initialize([])
 
-nbgl.createEventLoopThread()
-
-for i in range(14):
+for i in range(12):
     nbgl.openWindow('a', 40*i+1, 1, 300, 300, 1)
     nbgl.openWindow('b', 40*i+1, 400, 300, 300, 2)
 
@@ -26,13 +24,24 @@ nbgl.closeAllWindows()
 
 nbgl.destroy()  # close all windows - terminate event loop thread and release all resources
 
+
+
+
 nbgl.initialize([])
 
-nbgl.createEventLoopThread()
 
-..............
+for i in range(15):
+    k = nbgl.openWindow('a', 1+40*i, 1, 300, 300, 1)
+    m = nbgl.openWindow('a', 1+40*i, 400, 300, 300, 2)
+    j = 2*i+1
+    if (i % 2 == 0):
+        nbgl.closeWindow(k)
+        nbgl.changeWindowSize(m, 400, 400)
+    else:
+        if (i > 5):
+            nbgl.changeWindowSize(m, 400, 400)
+            nbgl.closeWindow(m)
 
-nbgl.terminateEventLoopThread()
 
 nbgl.destroy()
 

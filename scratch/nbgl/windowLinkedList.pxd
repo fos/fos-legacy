@@ -4,13 +4,13 @@ ctypedef struct ListNode:
     WindowInfo *data
     ListNode *next
 
-cdef void createEmptyList()
+cdef void create()
 
-cdef void destroyList()
+cdef void destroy()
 
 cdef void makeEmpty()
 
-cdef void addFirst(WindowInfo* data)
+cdef int addFirst(WindowInfo* data)
 
 cdef WindowInfo* remove(int id)
 

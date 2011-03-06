@@ -128,7 +128,7 @@ cdef void update(int arg):
     if (angle > 360): 
         angle -= 360
 	
-    _lockMutexSharedMemory()
+    _lockMutexWindowList()
     cdef WindowInfo* windowInfo = windowLinkedList.first()
 
     while(windowInfo != NULL):
@@ -136,7 +136,7 @@ cdef void update(int arg):
         glutPostRedisplay() # Tell GLUT that the display has changed 
         windowInfo = windowLinkedList.next()
     
-    _unlockMutexSharedMemory() 
+    _unlockMutexWindowList() 
 
     # Tell GLUT to call update again in 25 milliseconds 
     glutTimerFunc(25, update, 0)

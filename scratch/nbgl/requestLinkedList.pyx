@@ -13,13 +13,13 @@ cdef int numNodes = 0
 cdef ListNode *iteratorPosition
 
 
-cdef void createEmptyList():
+cdef void create():
     global head
     global tail
     global numNodes
 
     if (head != NULL):
-        destroyList()
+        destroy()
 
     head = <ListNode*> malloc(sizeof(ListNode))
     head.data = NULL
@@ -28,13 +28,17 @@ cdef void createEmptyList():
     numNodes = 0
 
 
-cdef void destroyList():
+cdef void destroy():
     global head
+    global tail
+    global iteratorPosition
  
     if (head != NULL):
         makeEmpty( )
         free(head)
         head = NULL
+        tail = NULL
+        iteratorPosition = NULL
 
 
 cdef void makeEmpty(): 
@@ -56,9 +60,12 @@ cdef void makeEmpty():
     numNodes = 0 
 
 
-cdef void addLast(RequestInfo* data):
+cdef int addLast(RequestInfo* data):
     global tail
     global numNodes
+
+    if (tail == NULL):
+        return False
 
     cdef ListNode* p = <ListNode*> malloc(sizeof(ListNode))
     p.data = data
@@ -66,6 +73,8 @@ cdef void addLast(RequestInfo* data):
     tail.next = p
     tail = p
     numNodes += 1
+
+    return True
    
 
 cdef RequestInfo* removeFirst():

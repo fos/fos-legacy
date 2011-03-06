@@ -7,38 +7,38 @@ cdef extern from "stdlib.h":
 
 
 # Global Variables
-cdef ListNode *header = NULL
+cdef ListNode *head = NULL
 cdef int numNodes = 0
 cdef ListNode *iteratorPosition
 
 
-cdef void createEmptyList():
-    global header
+cdef void create():
+    global head
     global numNodes
 
-    if (header != NULL):
-        destroyList()
+    if (head != NULL):
+        destroy()
 
-    header = <ListNode*> malloc(sizeof(ListNode))
-    header.data = NULL
-    header.next = NULL
+    head = <ListNode*> malloc(sizeof(ListNode))
+    head.data = NULL
+    head.next = NULL
     numNodes = 0
 
 
-cdef void destroyList():
-    global header
+cdef void destroy():
+    global head
  
-    if (header != NULL):
+    if (head != NULL):
         makeEmpty( )
-        free(header)
-        header = NULL
+        free(head)
+        head = NULL
 
 
 cdef void makeEmpty(): 
-    global header
+    global head
     global numNodes
 
-    cdef ListNode* p = header.next
+    cdef ListNode* p = head.next
     cdef ListNode *cur
     while (p != NULL):
         if (p.data != NULL):
@@ -47,23 +47,27 @@ cdef void makeEmpty():
         p = p.next 
         free(cur)
     
-    header.next = NULL
+    head.next = NULL
     numNodes = 0 
 
 
-cdef void addFirst(WindowInfo* data):
-    global header
+cdef int addFirst(WindowInfo* data):
+    global head
     global numNodes
+
+    if (head == NULL):
+        return False
 
     cdef ListNode* p = <ListNode*> malloc(sizeof(ListNode))
     p.data = data
-    p.next = header.next
-    header.next = p
+    p.next = head.next
+    head.next = p
     numNodes += 1
 
+    return True
 
 cdef WindowInfo* remove(int id):
-    global header
+    global head
     global numNodes
     global iteratorPosition
 
@@ -80,15 +84,18 @@ cdef WindowInfo* remove(int id):
         free(cur)
         numNodes -= 1
         if (numNodes == 0):
-            header.next = NULL
+            head.next = NULL
 
     return windowInfo
 
 
 cdef WindowInfo* find( int id ):
-    global header
+    global head
 
-    cdef ListNode* p = header.next
+    if (head == NULL):
+        return NULL
+
+    cdef ListNode* p = head.next
     while (p != NULL):
         if (p.data.id == id):
             return p.data
@@ -99,10 +106,13 @@ cdef WindowInfo* find( int id ):
 
 
 cdef ListNode* findPrevious( int id ):
-    global header
+    global head
 
-    cdef ListNode *prev = header
-    cdef ListNode *cur = header.next
+    if (head == NULL):
+        return NULL
+
+    cdef ListNode *prev = head
+    cdef ListNode *cur = head.next
 
     while(cur != NULL):
         if (cur.data.id == id):
@@ -124,10 +134,13 @@ cdef int size():
 
 # The iterator should not be mixed with remove
 cdef WindowInfo* first():
-    global header
+    global head
     global iteratorPosition
 
-    iteratorPosition = header.next
+    if (head == NULL):
+        return NULL
+
+    iteratorPosition = head.next
     if (iteratorPosition != NULL):
         return iteratorPosition.data
 

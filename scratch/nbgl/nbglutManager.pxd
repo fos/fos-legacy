@@ -17,8 +17,8 @@ cdef struct RequestInfo:
     WindowInfo* data 
 
 cdef void _sendDestroyMessageToWindow(int id)
-cdef void _lockMutexSharedMemory()
-cdef void _unlockMutexSharedMemory()
+cdef void _lockMutexWindowList()
+cdef void _unlockMutexWindowList()
 
 cdef extern from "stdlib.h":
     ctypedef unsigned long size_t
