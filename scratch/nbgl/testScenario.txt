@@ -25,7 +25,7 @@ nbgl.closeAllWindows()
 nbgl.destroy()  # close all windows - terminate event loop thread and release all resources
 
 
-
+----------------------------------------------------
 
 nbgl.initialize([])
 
