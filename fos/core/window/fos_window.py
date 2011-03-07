@@ -1,5 +1,15 @@
 import numpy as np
 
+import fos.lib.pyglet as pyglet
+pyglet.options['debug_gl'] = True
+pyglet.options['debug_gl_trace'] = True
+pyglet.options['debug_gl_trace_args'] = True
+pyglet.options['debug_graphics_batch'] = True
+pyglet.options['shadow_window'] = False
+
+print pyglet.options
+
+
 from fos.lib.pyglet.gl import *
 
 from fos.core.window.managed_window import ManagedWindow
@@ -58,9 +68,9 @@ class FosWindow(ManagedWindow):
         self.attach(emptyworld)
         
         # the frame rate display from fos.lib.pyglet
-        self.fps_display = FPSDisplay(self)
-        self.foslabel = WindowText(self, 'fos', x=10 , y=40)
-        self.show_logos = True
+        #self.fps_display = FPSDisplay(self)
+        #self.foslabel = WindowText(self, 'fos', x=10 , y=40)
+        self.show_logos = False
 
         # pushing new event handlers
         foswinhandlers = FosWinEventHandler(self)

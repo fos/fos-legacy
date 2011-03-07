@@ -16,6 +16,7 @@ class InteractiveCurves(Actor):
         self.current=None        
         self.main_color=None
         self.updated=False
+        self.line_width = line_width
 
         ccurves=np.concatenate(curves)
         self.min=np.min(ccurves,axis=0)
@@ -162,13 +163,13 @@ class InteractiveCurves(Actor):
         glEnable(GL_LINE_SMOOTH)
         #glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE)
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
-        glLineWidth(1.2)
+        glLineWidth(self.line_width)
         
     def unset_state(self):
         glDisable(GL_DEPTH_TEST)
         glDisable(GL_BLEND)
         glDisable(GL_LINE_SMOOTH)
-        glLineWidth(1.)
+        glLineWidth(self.line_width)
 
     def delete(self):
         for i in range(len(self.vertex_list)):
