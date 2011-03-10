@@ -1,0 +1,26 @@
+import nbglutManager as nbgl
+
+for i1 in range(10):
+    nbgl.initialize([])
+    for i3 in range(1000000):
+       i4 = 1
+    for i in range(15):
+        k = nbgl.openWindow('a', 1+40*i, 1, 300, 300, 1)
+        m = nbgl.openWindow('a', 1+40*i, 400, 300, 300, 2)
+        j = 2*i+1
+        if (i % 2 == 0):
+            nbgl.closeWindow(k)
+            nbgl.changeWindowSize(m, 400, 400)
+        else:
+            if (i > 6):
+                nbgl.changeWindowSize(m, 400, 400)
+                nbgl.closeWindow(m)
+    for i3 in range(2000000):
+       i4 = 1 
+    nbgl.destroy()
+    for i3 in range(1000000):
+       i4 = 1 
+        
+   
+
+

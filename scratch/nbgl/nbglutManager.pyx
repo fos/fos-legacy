@@ -73,13 +73,22 @@ def destroy():
     global continueRunning
 
     if (thread_initialized): 
-        pthread_mutex_lock(&mutexRequestList)
-        requestLinkedList.makeEmpty()
-        pthread_mutex_unlock(&mutexRequestList) 
+        flag = 1
+
+        while(flag): # busy wait until all requests have been considered.
+            pthread_mutex_lock(&mutexRequestList)
+            flag = requestLinkedList.size() > 0
+            pthread_mutex_unlock(&mutexRequestList) 
+
 
         closeAllWindows()
-        while(windowLinkedList.size() > 0): # busy wait. 
-            pass
+
+        flag = 1
+
+        while(flag): # busy wait until all windows have been closed.
+            pthread_mutex_lock(&mutexWindowList)
+            flag = (windowLinkedList.size() > 0)
+            pthread_mutex_unlock(&mutexWindowList) 
 
         continueRunning = False
 
@@ -145,8 +154,7 @@ def closeAllWindows():
     cdef RequestInfo* requestInfo
 
     pthread_mutex_lock(&mutexWindowList)
-    cdef WindowInfo* windowInfo = windowLinkedList.first()
-    pthread_mutex_unlock(&mutexWindowList)   
+    cdef WindowInfo* windowInfo = windowLinkedList.first()   
 
     while(windowInfo != NULL):
         requestInfo = <RequestInfo*> malloc(sizeof(RequestInfo))
@@ -157,9 +165,9 @@ def closeAllWindows():
         requestLinkedList.addLast(requestInfo)
         pthread_mutex_unlock(&mutexRequestList) 
 
-        pthread_mutex_lock(&mutexWindowList)
         windowInfo = windowLinkedList.next()
-        pthread_mutex_unlock(&mutexWindowList)   
+       
+    pthread_mutex_unlock(&mutexWindowList)   
         
     
 
@@ -259,13 +267,15 @@ cdef void *TaskCode(void *argument):
         for i from 0 <= i < 5:
             glutMainLoopEvent()  # dispatch events
 
-        if (windowLinkedList.size() <= 0):
-            # To drain the event loop before the thread terminates 
-            for i from 0 <= i < 2000:
+        if ((windowLinkedList.size() <= 0) and (requestLinkedList.size() <= 0)):
+            # To drain the event loop before the thread waits on condition variable 
+            for i from 0 <= i < 5000:
                 glutMainLoopEvent()
-            pthread_mutex_lock(&mutexWindowList)  
-            if ((windowLinkedList.size() <= 0) and continueRunning):  
+            pthread_mutex_lock(&mutexWindowList)
+            #pthread_mutex_lock(&mutexRequestList)
+            if ((windowLinkedList.size() <= 0) and (requestLinkedList.size() <= 0) and continueRunning):  
                 pthread_cond_wait(&conditionNoOpenWindows, &mutexWindowList)
+            #pthread_mutex_unlock(&mutexRequestList)
             pthread_mutex_unlock(&mutexWindowList) 
  
 
@@ -274,7 +284,7 @@ cdef void *TaskCode(void *argument):
     pthread_mutex_unlock(&mutexRequestList) 
 
     # To drain the event loop before the thread terminates 
-    for i from 0 <= i < 2000:
+    for i from 0 <= i < 5000:
         glutMainLoopEvent()
 
     return NULL
