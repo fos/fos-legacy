@@ -7,7 +7,7 @@ from fos.actor.curve import InteractiveCurves
 def test_picking_trajectories():
 
     curves=[100*np.random.rand(10,3),100*np.random.rand(5,3),100*np.random.rand(3,3)]
-    curves=[100*np.array([[0,0,0],[1,0,0]]), 100*np.array([[0,1,0],[0,1,3]]),100*np.array([[0,2,0],[0,2,3]])]
+    #curves=[100*np.array([[0,0,0],[1,0,0]]), 100*np.array([[0,1,0],[0,1,3]]),100*np.array([[0,2,0],[0,2,3]])]
     
     '''
     from nibabel import trackvis as tv
