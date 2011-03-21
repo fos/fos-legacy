@@ -5,7 +5,9 @@ Our aim is to collect knowledge, references and feature requests...
 
 
 New
----
+--
+* http://cfd.mace.manchester.ac.uk/sph/meetings/1stSPHERIC_workshop/Foggia_CSCS_SPHERIC_2006.pdf
+* http://personal.cscs.ch/~mvalle/visualization/TopVizProblems.html
 * http://www.ted.com/talks/anders_ynnerman_visualizing_the_medical_data_explosion.html
 * nice sciviz: http://www.sciencevisuals.com/ourwork_projects.html
 * more: http://grahamj.com/
