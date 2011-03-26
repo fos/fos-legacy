@@ -130,7 +130,7 @@ class Actor(object):
         
         Parameters
         ----------
-        aabb : 2-tuple
+        aabb : 2-tuple of numpy arrays of shape(3,)
             Defining the box by left-bottom-front and the top-right-back
             coordinate points. If None, a bounding box based on the
             vertices is computed.
