@@ -69,6 +69,8 @@ class Surface(Actor):
     def draw_sanslight(self):
         glPushMatrix()
         glMultMatrixf(self.glaffine)
+        #glEnable (GL_BLEND) 
+        #glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
         glEnableClientState(GL_VERTEX_ARRAY)
         glEnableClientState(GL_COLOR_ARRAY)        
         glVertexPointer(3, GL_FLOAT, 0, self.vert_ptr)                             
@@ -76,7 +78,7 @@ class Surface(Actor):
         glDrawElements(GL_TRIANGLES, self.el_count, GL_UNSIGNED_INT, self.face_ptr)
         glDisableClientState(GL_COLOR_ARRAY)
         glDisableClientState(GL_VERTEX_ARRAY)             
-        self.draw_aabb()
+        #self.draw_aabb()
         glPopMatrix()
         
     def set_state(self):

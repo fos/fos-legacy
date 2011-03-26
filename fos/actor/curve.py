@@ -5,10 +5,14 @@ import fos.lib.pyglet as pyglet
 from fos.lib.pyglet.gl import *
 import fos.core.collision as cll
 
+from fos.actor.primitives import AABBPrimitive
 
 class InteractiveCurves(Actor):
 
     def __init__(self,curves,colors=None,line_width=2.,centered=True):
+    
+        #super(InteractiveCurves, self).__init__()
+        
         self.vertex_list =len(curves)*[None]
         self.len_vl=len(curves)
         self.range_vl=range(len(curves))
@@ -23,6 +27,20 @@ class InteractiveCurves(Actor):
         self.max=np.max(ccurves,axis=0)
         self.mean=np.mean(ccurves,axis=0)
         self.position=(0,0,0)
+                
+        coord1 = np.array([ccurves[:,0].min(),
+                           ccurves[:,1].min(),
+                           ccurves[:,2].min()], dtype = np.float32)
+        
+        coord2 = np.array([ccurves[:,0].max(),
+                           ccurves[:,1].max(),
+                           ccurves[:,2].max()], dtype = np.float32)
+        
+        print coord1
+        print coord2
+        self.make_aabb((coord1,coord2),10)
+        
+        #self.aabb=AABBPrimitive(np.array([-1000,-1000,1000]),np.array([1000,1000,-1000]),margin=0)
 
         print 'MBytes',ccurves.nbytes/2.**20
         self.curves_nbytes=ccurves.nbytes
