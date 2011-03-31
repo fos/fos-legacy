@@ -35,3 +35,12 @@ h) interacting with everything on the screen ( we have already a pickray system 
 k) have some neat cameras
 
 l) shaders, physics and machine learning additions
+
+# need to install in fresh ubuntu
+python-dev
+cython 
+freeglut3-dev (2.6.0-0ubuntu2)
+glutg3 (3.7-25)
+glutg3-dev (3.7-25)
+libglut3 (3.7-25)
+
