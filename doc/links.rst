@@ -4,6 +4,11 @@ Links
 Our aim is to collect knowledge, references and feature requests...
 
 
+Shaders
+-------
+* http://swiftcoder.wordpress.com/2008/12/19/simple-glsl-wrapper-for-pyglet/
+* GLSL and Python http://www.pythonstuff.org/glsl/index.html
+
 New
 --
 * http://cfd.mace.manchester.ac.uk/sph/meetings/1stSPHERIC_workshop/Foggia_CSCS_SPHERIC_2006.pdf
