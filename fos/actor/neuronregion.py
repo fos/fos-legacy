@@ -2,7 +2,7 @@ import numpy as np
 
 from fos.lib.pyglet.gl import *
 
-from fos import Actor, World, Window
+from fos import Actor
 
 class NeuronRegion(Actor):
     

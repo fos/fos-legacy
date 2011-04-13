@@ -4,12 +4,8 @@ import nibabel as nib
 from fos import World, Window
 from fos.actor.curve import InteractiveCurves
 
-# bug:
-# check ordering of window. get_world not working
-#w = wi.get_world()
-
 # file
-fname = '/home/stephan/dev/Fos/examples/data/fibers_transformed.trk'
+fname = 'streamline.trk'
 streams,hdr = nib.trackvis.read(fname)
 
 T=[s[0] for s in streams]
@@ -21,5 +17,5 @@ cu = InteractiveCurves(curves = T)
 w=World()
 w.add(cu)
 
-wi = Window(caption="Multi-Modal 1")
+wi = Window(caption="Interactive Curves")
 wi.attach(w)
