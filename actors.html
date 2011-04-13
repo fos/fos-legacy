@@ -31,12 +31,12 @@
       <div class="header">
         <h1><a href="index.html">FOS v0.2 documentation</a></h1>
         <div class="rel">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a> |
+          <a href="faq.html" title="FAQ"
+             accesskey="P">previous</a> |
           <a href="usecases.html" title="Use Cases"
              accesskey="N">next</a> |
-          <a href="faq.html" title="FAQ"
-             accesskey="P">previous</a>
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a>
         </div>
        </div>
     </div>
@@ -51,22 +51,49 @@
             
   <div class="section" id="actors">
 <h1>Actors<a class="headerlink" href="#actors" title="Permalink to this headline">¶</a></h1>
-<p>Fos is shipped with different actors (visualization objects) that
-you can use to visualize your data.</p>
+<p>Fos includes various actors (visualization objects) for visualization.
+They expose an easy interface for creation, usually using Numpy arrays.
+Two classes of actors are defined:</p>
+<dl class="docutils">
+<dt>Static actors</dt>
+<dd>For static structures that do not evolve in time.</dd>
+<dt>Dynamic actors</dt>
+<dd>One, or more parameters can have a time dimension, making the actor
+evolving dynamically.</dd>
+</dl>
+<div class="section" id="static-actors">
+<h2>Static actors<a class="headerlink" href="#static-actors" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="attributenetwork">
-<h2>AttributeNetwork<a class="headerlink" href="#attributenetwork" title="Permalink to this headline">¶</a></h2>
+<h3>AttributeNetwork<a class="headerlink" href="#attributenetwork" title="Permalink to this headline">¶</a></h3>
+<img alt="images/network_random.png" src="images/network_random.png" />
 </div>
 <div class="section" id="connectedslices">
-<h2>ConnectedSlices<a class="headerlink" href="#connectedslices" title="Permalink to this headline">¶</a></h2>
+<h3>ConnectedSlices<a class="headerlink" href="#connectedslices" title="Permalink to this headline">¶</a></h3>
+<img alt="images/connectedslices.png" src="images/connectedslices.png" />
 </div>
 <div class="section" id="surface">
-<h2>Surface<a class="headerlink" href="#surface" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="odfslicer">
-<h2>ODFSlicer<a class="headerlink" href="#odfslicer" title="Permalink to this headline">¶</a></h2>
+<h3>Surface<a class="headerlink" href="#surface" title="Permalink to this headline">¶</a></h3>
+<img alt="images/surface.png" src="images/surface.png" />
 </div>
 <div class="section" id="interactivecurves">
-<h2>InteractiveCurves<a class="headerlink" href="#interactivecurves" title="Permalink to this headline">¶</a></h2>
+<h3>InteractiveCurves<a class="headerlink" href="#interactivecurves" title="Permalink to this headline">¶</a></h3>
+<img alt="images/interactivecurves.png" src="images/interactivecurves.png" />
+</div>
+<div class="section" id="neuronregion">
+<h3>NeuronRegion<a class="headerlink" href="#neuronregion" title="Permalink to this headline">¶</a></h3>
+<img alt="images/neuronregion.png" src="images/neuronregion.png" />
+</div>
+<div class="section" id="spherecloud">
+<h3>SphereCloud<a class="headerlink" href="#spherecloud" title="Permalink to this headline">¶</a></h3>
+<img alt="images/spherecloud.png" src="images/spherecloud.png" />
+</div>
+</div>
+<div class="section" id="dynamic-actors">
+<h2>Dynamic actors<a class="headerlink" href="#dynamic-actors" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="dynamicnetwork">
+<h3>DynamicNetwork<a class="headerlink" href="#dynamicnetwork" title="Permalink to this headline">¶</a></h3>
+<img alt="images/network_dynamic.png" src="images/network_dynamic.png" />
+</div>
 </div>
 </div>
 
@@ -106,12 +133,12 @@ you can use to visualize your data.</p>
     <div class="footer-wrapper">
       <div class="footer">
         <div class="left">
-          <a href="genindex.html" title="General Index"
-             >index</a> |
+          <a href="faq.html" title="FAQ"
+             >previous</a> |
           <a href="usecases.html" title="Use Cases"
              >next</a> |
-          <a href="faq.html" title="FAQ"
-             >previous</a>
+          <a href="genindex.html" title="General Index"
+             >index</a>
             <br/>
             <a href="sources/actors.txt"
                rel="nofollow">Show Source</a>
@@ -121,7 +148,7 @@ you can use to visualize your data.</p>
           
     <div class="footer">
         &copy; Copyright 2010, FOS developers.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
         </div>
         <div class="clearer"></div>

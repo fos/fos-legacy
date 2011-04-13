@@ -3,9 +3,20 @@ Links
 =====
 Our aim is to collect knowledge, references and feature requests...
 
-
-New
----
+* http://cfd.mace.manchester.ac.uk/sph/meetings/1stSPHERIC_workshop/Foggia_CSCS_SPHERIC_2006.pdf
+* http://personal.cscs.ch/~mvalle/visualization/TopVizProblems.html
+* http://www.ted.com/talks/anders_ynnerman_visualizing_the_medical_data_explosion.html
+* nice sciviz: http://www.sciencevisuals.com/ourwork_projects.html
+* more: http://grahamj.com/
+* and more: http://wehi.tv/
+* http://sites.google.com/site/swinesmallpygletexamples/home
+* http://kooneiform.wordpress.com/2010/01/05/pyglet-and-livecoding-1/
+* http://code.google.com/p/pyglet-shaders/
+* http://codeflow.org/entries/2010/dec/09/minecraft-like-rendering-experiments-in-opengl-4/
+* http://yoshihitoyagi.com/projects/MasterProject/index.html
+* http://lmi.bwh.harvard.edu/~banks/papers/illumBrain.pdf
+* http://www.computer.org/portal/web/csdl/doi/10.1109/TVCG.2007.70622
+* http://alum.wpi.edu/~ginsburg/work.html
 * Vertex Array Objects http://www.opengl.org/wiki/Vertex_Array_Object
 * nice ideas  codeflow.org
 * animation and general design ideas for fos http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/
@@ -19,7 +30,6 @@ New
 * pymt packages: http://pymt.eu/wiki/Devel/FeaturesByLibraries
 * read: http://groups.google.com/group/pyglet-users/browse_thread/thread/ab1d988f2b5373cf
 * see glumpy4bounding box, e.g. function in box
-
 * http://local.wasp.uwa.edu.au/~pbourke/geometry/polygonise/
 * http://code.google.com/p/pythonisosurfaces/
 * http://stackoverflow.com/questions/145838/benefits-of-inline-functions-in-c
@@ -40,25 +50,26 @@ New
 * SVG for pyglet http://www.supereffective.org/pages/Squirtle-SVG-Library
 * The Vish Project http://vish.origo.ethz.ch/
 * YT http://yt.enzotools.org/doc/index.html
-** http://yt.enzotools.org/video_gallery.html
-** http://yt.enzotools.org/doc/extensions/volume_rendering.html
+* http://yt.enzotools.org/video_gallery.html
+* http://yt.enzotools.org/doc/extensions/volume_rendering.html
 * VISIT https://wci.llnl.gov/codes/visit/home.html
-
-* 3/4 D Planetarium
-http://www.haydenplanetarium.org/universe/download/
-http://www.ted.com/talks/carter_emmart_demos_a_3d_atlas_of_the_universe.html
-http://virdir.ncsa.illinois.edu/partiview/
-
 * Gephi discussion about 3D in web: http://forum.gephi.org/viewtopic.php?f=9&t=89
 * web image authoring tipps: http://www.web3d.org/x3d/content/examples/X3dSceneAuthoringHints.html#Images
 * Gary Flake: is Pivot a turning point for web exploration? http://www.ted.com/talks/gary_flake_is_pivot_a_turning_point_for_web_exploration.html
 * fiber bundle, F5 format! http://www.fiberbundle.net/
+* Meminfo: http://www.geeks3d.com/20100531/programming-tips-how-to-know-the-graphics-memory-size-and-usage-in-opengl/ (GL_NVX_gpu_memory_info or WGL_AMD_gpu_association)
 
-Our aim is to collect knowledge, references and feature requests...
-Meminfo: http://www.geeks3d.com/20100531/programming-tips-how-to-know-the-graphics-memory-size-and-usage-in-opengl/
-GL_NVX_gpu_memory_info 
-WGL_AMD_gpu_association
+3/4 D Planetarium
+-----------------
+http://www.haydenplanetarium.org/universe/download/
+http://www.ted.com/talks/carter_emmart_demos_a_3d_atlas_of_the_universe.html
+http://virdir.ncsa.illinois.edu/partiview/
 
+
+Shaders
+-------
+* http://swiftcoder.wordpress.com/2008/12/19/simple-glsl-wrapper-for-pyglet/
+* GLSL and Python http://www.pythonstuff.org/glsl/index.html
 
 Engines
 -------
