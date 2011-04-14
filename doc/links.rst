@@ -70,6 +70,7 @@ Shaders
 -------
 * http://swiftcoder.wordpress.com/2008/12/19/simple-glsl-wrapper-for-pyglet/
 * GLSL and Python http://www.pythonstuff.org/glsl/index.html
+* GLSL Tutorial http://www.lighthouse3d.com/tutorials/glsl-tutorial/
 
 Engines
 -------
