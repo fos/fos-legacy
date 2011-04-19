@@ -3,6 +3,10 @@ Links
 =====
 Our aim is to collect knowledge, references and feature requests...
 
+* http://www.songho.ca/opengl/index.html
+* http://3dshaders.com/home/index.php?option=com_weblinks&catid=14&Itemid=34
+* http://http.developer.nvidia.com/GPUGems2/
+* http://pivy.coin3d.org/documentation/pycon
 * http://cfd.mace.manchester.ac.uk/sph/meetings/1stSPHERIC_workshop/Foggia_CSCS_SPHERIC_2006.pdf
 * http://personal.cscs.ch/~mvalle/visualization/TopVizProblems.html
 * http://www.ted.com/talks/anders_ynnerman_visualizing_the_medical_data_explosion.html
@@ -71,6 +75,9 @@ Shaders
 * http://swiftcoder.wordpress.com/2008/12/19/simple-glsl-wrapper-for-pyglet/
 * GLSL and Python http://www.pythonstuff.org/glsl/index.html
 * GLSL Tutorial http://www.lighthouse3d.com/tutorials/glsl-tutorial/
+* http://www.slidefinder.net/S/Shader/11893836/p2
+* http://gitorious.org/personal-julian-ibarz/obj-viewer/blobs/master/shaders/cullDirection.geom
+* Shader-Based Wireframe Drawing http://cgg-journal.com/2008-2/06/index.html#tth_sEc2.2
 
 Engines
 -------
