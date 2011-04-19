@@ -5,6 +5,11 @@
 # (see http://www.boost.org/LICENSE_1_0.txt)
 #
 
+from ctypes import (
+    byref, c_char, c_char_p, c_int, cast, create_string_buffer, pointer,
+    POINTER
+)
+
 from fos.lib.pyglet.gl import *
 
 class Shader:
@@ -21,7 +26,7 @@ class Shader:
 		# create the fragment shader
 		self.createShader(frag, GL_FRAGMENT_SHADER)
 		# the geometry shader will be the same, once pyglet supports the extension
-		# self.createShader(frag, GL_GEOMETRY_SHADER_EXT)
+		self.createGeometryShader(geom[0], GL_GEOMETRY_SHADER_EXT, geom[1], geom[2], geom[3])
 
 		# attempt to link the program
 		self.link()
@@ -58,6 +63,49 @@ class Shader:
 			# print the log to the console
 			print buffer.value
 		else:
+			# all is well, so attach the shader to the program
+			glAttachShader(self.handle, shader);
+
+	def createGeometryShader(self, strings, type, input_type, output_type, vertices_out):
+		count = len(strings)
+		# if we have no source code, ignore this shader
+		if count < 1:
+			return
+
+		# create the shader handle
+		shader = glCreateShader(type)
+
+		# convert the source strings into a ctypes pointer-to-char array, and upload them
+		# this is deep, dark, dangerous black magick - don't try stuff like this at home!
+		src = (c_char_p * count)(*strings)
+		glShaderSource(shader, count, cast(pointer(src), POINTER(POINTER(c_char))), None)
+
+		# compile the shader
+		glCompileShader(shader)
+
+		temp = c_int(0)
+		# retrieve the compile status
+		glGetShaderiv(shader, GL_COMPILE_STATUS, byref(temp))
+
+		# if compilation failed, print the log
+		if not temp:
+			# retrieve the log length
+			glGetShaderiv(shader, GL_INFO_LOG_LENGTH, byref(temp))
+			# create a buffer for the log
+			buffer = create_string_buffer(temp.value)
+			# retrieve the log text
+			glGetShaderInfoLog(shader, temp, None, buffer)
+			# print the log to the console
+			print buffer.value
+		else:
+			print "->well compiled geometry shader"
+            
+            # And define the input and output of the geometry shader, point and triangle strip in this case. Four is how many the vertices the shader will create.
+
+			glProgramParameteriEXT(self.handle, GL_GEOMETRY_INPUT_TYPE_EXT, input_type);
+			glProgramParameteriEXT(self.handle, GL_GEOMETRY_OUTPUT_TYPE_EXT, output_type);
+			glProgramParameteriEXT(self.handle, GL_GEOMETRY_VERTICES_OUT_EXT, vertices_out);
+            
 			# all is well, so attach the shader to the program
 			glAttachShader(self.handle, shader);
 
