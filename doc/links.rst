@@ -3,6 +3,11 @@ Links
 =====
 Our aim is to collect knowledge, references and feature requests...
 
+* http://github.com/BenSmith/PythonOpenGLSuperBible4
+* gpu raycasting shader http://www.daimi.au.dk/~trier/?page_id=98
+http://code.google.com/p/visvis/source/browse/visvisResources/raycasting.fragment.glsl
+* http://jainek.de/projects/iBrain/
+* http://vis.lbl.gov/Research/H5hut/
 * http://www.songho.ca/opengl/index.html
 * http://3dshaders.com/home/index.php?option=com_weblinks&catid=14&Itemid=34
 * http://http.developer.nvidia.com/GPUGems2/
