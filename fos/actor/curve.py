@@ -140,7 +140,7 @@ class InteractiveCurves(Actor):
 
     def process_pickray(self,near,far):
         
-        print 'near',near,'far',far
+        #print 'near',near,'far',far
         
         if self.centered:
             shift=np.array(self.position)-self.mean
@@ -150,8 +150,8 @@ class InteractiveCurves(Actor):
         min_dist_info=[ cll.mindistance_segment2track_info(near,far,xyz+shift) \
                 for xyz in self.curves]
 
-        print'Min distance info'        
-        print min_dist_info
+        #print'Min distance info'        
+        #print min_dist_info
         A = np.array(min_dist_info)
         #print A
         dist=10**(-3)

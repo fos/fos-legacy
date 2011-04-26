@@ -33,8 +33,7 @@ class Shader:
         #/* Bind attribute index 0 (coordinates) to in_Position and attribute index 1 (color) to in_Color */
         #/* Attribute locations must be setup before calling glLinkProgram. */
 		glBindAttribLocation(self.handle, 0, "in_Position");
-		#glBindAttribLocation(self.handle, 1, "in_Color");
-
+		glBindAttribLocation(self.handle, 1, "in_Color");
 
 		# attempt to link the program
 		self.link()
@@ -142,11 +141,17 @@ class Shader:
 	def bind(self):
 		# bind the program
 		glUseProgram(self.handle)
+        
+        glEnableVertexAttribArray(0)
+        glEnableVertexAttribArray(1)
 
 	def unbind(self):
 		# unbind whatever program is currently bound - not necessarily this program,
 		# so this should probably be a class method instead
 		glUseProgram(0)
+        
+        glDisableVertexAttribArray(1)
+        glDisableVertexAttribArray(0)
 
 	# upload a floating point uniform
 	# this program must be currently bound
