@@ -1,13 +1,13 @@
 import numpy as np
 
 import fos.lib.pyglet as pyglet
-pyglet.options['debug_gl'] = True
-pyglet.options['debug_gl_trace'] = True
-pyglet.options['debug_gl_trace_args'] = True
-pyglet.options['debug_graphics_batch'] = True
-pyglet.options['shadow_window'] = False
+#pyglet.options['debug_gl'] = True
+#pyglet.options['debug_gl_trace'] = True
+#pyglet.options['debug_gl_trace_args'] = True
+#pyglet.options['debug_graphics_batch'] = True
+#pyglet.options['shadow_window'] = False
 
-print pyglet.options
+#print pyglet.options
 
 
 from fos.lib.pyglet.gl import *

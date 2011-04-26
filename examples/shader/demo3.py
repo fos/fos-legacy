@@ -3,13 +3,18 @@ from sys import exit
 from fos.lib.pyglet import app, gl
 from fos.lib.pyglet.event import EVENT_HANDLED
 from fos.lib.pyglet.window import Window
+
+#from pyglet import app, gl
+#from pyglet.event import EVENT_HANDLED
+#from pyglet.window import Window
+
 from fos.shader import Shader
 from fos.shader.lib import get_shader_code
 
 # load the shaders
 shader = Shader( [get_shader_code('zoomRotate.vert')],
                  [get_shader_code('allGreen.frag')],
-                 [get_shader_code('LineToQuad.geom'), gl.GL_LINES, gl.GL_TRIANGLE_STRIP, 3]
+                 [get_shader_code('LineToQuad.geom'), gl.GL_LINES, gl.GL_TRIANGLE_STRIP, 6]
                   )
                  
 def on_resize(width, height):
@@ -33,8 +38,11 @@ def draw_red_square():
 def draw_line():
     gl.glColor3ub(127, 0, 0)
     gl.glBegin(gl.GL_LINES)
-    gl.glVertex2f(-100, -100)
-    gl.glVertex2f(100, 100)
+    gl.glVertex3f(0, 0, 0)
+    gl.glVertex3f(100, 100, 0)
+    
+    gl.glVertex3f(100, 100, 0)
+    gl.glVertex3f(150, 200, 0)
     gl.glEnd()
 
 def on_draw(win):
@@ -48,15 +56,12 @@ def on_draw(win):
     # unbind the shader
     shader.unbind()
     
-def main():
-    win = Window(fullscreen=False)
-    win.on_resize = on_resize
-    
-    try:
-        win.on_draw = lambda: on_draw(win)
-        app.run()
-    finally:
-        win.close()
+win = Window(fullscreen=False)
+win.on_resize = on_resize
 
-if __name__ == '__main__':
-    exit(main())
+try:
+    win.on_draw = lambda: on_draw(win)
+    app.run()
+finally:
+    win.close()
+

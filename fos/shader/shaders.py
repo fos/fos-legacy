@@ -25,8 +25,16 @@ class Shader:
 		self.createShader(vert, GL_VERTEX_SHADER)
 		# create the fragment shader
 		self.createShader(frag, GL_FRAGMENT_SHADER)
-		# the geometry shader will be the same, once pyglet supports the extension
-		self.createGeometryShader(geom[0], GL_GEOMETRY_SHADER_EXT, geom[1], geom[2], geom[3])
+        
+		if not len(geom) == 0:
+			# the geometry shader will be the same, once pyglet supports the extension
+			self.createGeometryShader(geom[0], GL_GEOMETRY_SHADER_EXT, geom[1], geom[2], geom[3])
+
+        #/* Bind attribute index 0 (coordinates) to in_Position and attribute index 1 (color) to in_Color */
+        #/* Attribute locations must be setup before calling glLinkProgram. */
+		glBindAttribLocation(self.handle, 0, "in_Position");
+		#glBindAttribLocation(self.handle, 1, "in_Color");
+
 
 		# attempt to link the program
 		self.link()
