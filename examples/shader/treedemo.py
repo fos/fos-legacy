@@ -10,8 +10,9 @@ vert = np.array( [ [0,0,0],
                    [100,50,0]], dtype = np.float32 )
                    
 conn = np.array( [ 0, 1, 1, 2, 1, 3 ], dtype = np.uint32 )
+
 cols = np.array( [ [ 255, 0, 0, 255],
-                   [   0, 255, 0, 255],
+                   [ 0, 255, 0, 255],
                    [255, 255, 0, 255],
                    [0, 0, 255, 255] ] , dtype = np.ubyte )
 

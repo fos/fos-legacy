@@ -9,6 +9,8 @@ from fos.shader.lib import get_shader_code
 
 # load the shaders
 shader = Shader( [get_shader_code('propagatevertex.vert')],
+                 ##   [get_shader_code('zoomRotate.vert')],
+
                  [get_shader_code('allGreen.frag')],
                  #[get_shader_code('LineToQuad.geom'), gl.GL_LINES, gl.GL_TRIANGLE_STRIP, 6]
                  []
@@ -72,14 +74,14 @@ class Tree(Actor):
         # VBO related
         self.vertex_vbo = GLuint(0)        
         glGenBuffers(1, self.vertex_vbo)
-        glBindBuffer(GL_ARRAY_BUFFER, self.vertex_vbo)
+        glBindBuffer(GL_ARRAY_BUFFER_ARB, self.vertex_vbo)
         # copy the vertex data to our buffer
         #glBufferData(GL_ARRAY_BUFFER, ADT.arrayByteCount(circle), ADT.voidDataPointer(circle), GL_STATIC_DRAW_ARB)
         #glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(GLfloat), diamond, GL_STATIC_DRAW);
         # print "vertices size", self.vertices.size
         
         # 4 * because float32 has 4 bytes
-        glBufferData(GL_ARRAY_BUFFER, 4 * self.vertices.size, self.vertices_ptr, GL_STATIC_DRAW)
+        glBufferData(GL_ARRAY_BUFFER_ARB, 4 * self.vertices.size, self.vertices_ptr, GL_STATIC_DRAW)
         
         # /* Specify that our coordinate data is going into attribute index 0, and contains three floats per vertex */
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -99,12 +101,15 @@ class Tree(Actor):
         pass
         
     def draw_shader(self):
+
+        glClear(GL_COLOR_BUFFER_BIT)
+        glClearColor(1.0, 1.0, 1.0, 0.0)
+
         # bind the shader
         shader.bind()
-    
-        glBindBuffer(GL_ARRAY_BUFFER, self.vertex_vbo)
+                
+        glBindBuffer(GL_ARRAY_BUFFER_ARB, self.vertex_vbo)
         glEnableVertexAttribArray(0)
-        
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0)
         
         # bind the indices buffer
