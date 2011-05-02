@@ -1,10 +1,10 @@
 #version 150
 // in_Position was bound to attribute index 0 and in_Color was bound to attribute index 1
 in vec2 in_Position;
-in vec3 in_Color;
+//in vec3 in_Color;
  
 // We output the ex_Color variable to the next shader in the chain
-out vec3 ex_Color;
+//out vec3 ex_Color;
 
 void main(void) {
     // Since we are using flat lines, our input only had two points: x and y.
@@ -20,7 +20,7 @@ void main(void) {
     
     // We're simply passing the color through unmodified
  
-    ex_Color = in_Color;
+    //ex_Color = in_Color;
 }
 /*
 void main()

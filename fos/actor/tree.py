@@ -118,26 +118,24 @@ class Tree(Actor):
         pass
         
     def draw_shader(self):
+        
+        glClearColor(1.0, 0.0, 0.0, 1.0)
+        glClear(GL_COLOR_BUFFER_BIT)
+        
         # bind the shader
         shader.bind()
     
-        glClearColor(1.0, 0.0, 0.0, 1.0)
-        glClear(GL_COLOR_BUFFER_BIT)
-
-        
         glBindBuffer(GL_ARRAY_BUFFER, self.vertex_vbo)
-        #glBindBuffer(GL_ARRAY_BUFFER, self.colors_vbo)
+        glBindBuffer(GL_ARRAY_BUFFER, self.colors_vbo)
         
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0)
-        #glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0)
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0)
         
         # bind the indices buffer
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self.indices_vbo)
         
         glDrawElements(self.mode,self.indices_nr,self.type,0)
-
-
-        
+    
         # unbind the shader
         shader.unbind()
         

@@ -3,6 +3,7 @@ Links
 =====
 Our aim is to collect knowledge, references and feature requests...
 
+* http://neurobureau.projects.nitrc.org/BrainArt/Competition.html
 * http://github.com/BenSmith/PythonOpenGLSuperBible4
 * gpu raycasting shader http://www.daimi.au.dk/~trier/?page_id=98
 http://code.google.com/p/visvis/source/browse/visvisResources/raycasting.fragment.glsl
