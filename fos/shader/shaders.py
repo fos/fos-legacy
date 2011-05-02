@@ -32,8 +32,11 @@ class Shader:
 
         #/* Bind attribute index 0 (coordinates) to in_Position and attribute index 1 (color) to in_Color */
         #/* Attribute locations must be setup before calling glLinkProgram. */
-		glBindAttribLocation(self.handle, 0, "in_Position");
-		glBindAttribLocation(self.handle, 1, "in_Color");
+
+		glBindAttribLocation(self.handle, 0, "aPosition");
+		#glBindAttribLocation(self.handle, 1, "in_Color");
+
+
 
 		# attempt to link the program
 		self.link()
