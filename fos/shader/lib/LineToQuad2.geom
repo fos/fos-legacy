@@ -50,15 +50,6 @@ void main(void)
     gl_Position.xyz += width * perpen;
     EmitVertex();
     EndPrimitive();
-    	
-    /*int i;
-    for(i=0; i< gl_VerticesIn; i++)
-    {
-        gl_Position = gl_PositionIn[i];
-        gl_Position.xyz += width * perpen;
-        EmitVertex();
-    }
-    EndPrimitive();*/
 
     
 }

@@ -10,10 +10,9 @@ from fos.shader.lib import get_shader_code
 # load the shaders
 shader = Shader( [get_shader_code('propagatevertex.vert')],
                  ##   [get_shader_code('zoomRotate.vert')],
-
-                 [get_shader_code('allGreen.frag')],
-                 #[get_shader_code('LineToQuad.geom'), gl.GL_LINES, gl.GL_TRIANGLE_STRIP, 6]
-                 []
+                 [get_shader_code('allRed.frag')],
+                 [get_shader_code('LineToTube.geom'), gl.GL_LINES, gl.GL_TRIANGLE_STRIP, 6]
+                 #[]
                   )
 
 class Tree(Actor):
@@ -118,18 +117,9 @@ class Tree(Actor):
         pass
         
     def draw_shader(self):
-<<<<<<< HEAD
-        
-        glClearColor(1.0, 0.0, 0.0, 1.0)
-        glClear(GL_COLOR_BUFFER_BIT)
-        
-        # bind the shader
-        shader.bind()
-    
-        glBindBuffer(GL_ARRAY_BUFFER, self.vertex_vbo)
-        glBindBuffer(GL_ARRAY_BUFFER, self.colors_vbo)
-        
-=======
+
+#        glBindBuffer(GL_ARRAY_BUFFER, self.vertex_vbo)
+#        glBindBuffer(GL_ARRAY_BUFFER, self.colors_vbo)
 
         glClear(GL_COLOR_BUFFER_BIT)
         glClearColor(1.0, 1.0, 1.0, 0.0)
@@ -139,9 +129,9 @@ class Tree(Actor):
                 
         glBindBuffer(GL_ARRAY_BUFFER_ARB, self.vertex_vbo)
         glEnableVertexAttribArray(0)
->>>>>>> f9dbf6df61d6aff1fdc908a28ea3406aee07beb0
+
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0)
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0)
+       # glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0)
         
         # bind the indices buffer
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self.indices_vbo)

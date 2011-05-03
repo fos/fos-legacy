@@ -37,7 +37,6 @@ class Shader:
 		#glBindAttribLocation(self.handle, 1, "in_Color");
 
 
-
 		# attempt to link the program
 		self.link()
 
