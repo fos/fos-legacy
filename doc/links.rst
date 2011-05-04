@@ -63,23 +63,27 @@ http://code.google.com/p/visvis/source/browse/visvisResources/raycasting.fragmen
 * http://yt.enzotools.org/video_gallery.html
 * http://yt.enzotools.org/doc/extensions/volume_rendering.html
 * VISIT https://wci.llnl.gov/codes/visit/home.html
-<<<<<<< HEAD
-=======
 
 * 3/4 D Planetarium
 http://www.haydenplanetarium.org/universe/download/
 http://www.ted.com/talks/carter_emmart_demos_a_3d_atlas_of_the_universe.html
 http://virdir.ncsa.illinois.edu/partiview/
 
-* Celestia 
-http://www.shatters.net/celestia/
-
->>>>>>> 6c14866ce58f442ceae2f1a5685cdc2cb4b77488
+* Celestia  http://www.shatters.net/celestia/
 * Gephi discussion about 3D in web: http://forum.gephi.org/viewtopic.php?f=9&t=89
 * web image authoring tipps: http://www.web3d.org/x3d/content/examples/X3dSceneAuthoringHints.html#Images
 * Gary Flake: is Pivot a turning point for web exploration? http://www.ted.com/talks/gary_flake_is_pivot_a_turning_point_for_web_exploration.html
 * fiber bundle, F5 format! http://www.fiberbundle.net/
 * Meminfo: http://www.geeks3d.com/20100531/programming-tips-how-to-know-the-graphics-memory-size-and-usage-in-opengl/ (GL_NVX_gpu_memory_info or WGL_AMD_gpu_association)
+
+Polygon Mesh Processing
+-----------------------
+Geometry processing: surface reconstruction from point samples, filtering operations for noise removal,
+geometry analysis, shape simplification, geometric modelling.
+queries: e.g. p e R3. Is it inside or outside? distance from p to surface
+http://cgal.org
+http://openmesh.org
+http://meshlab.org
 
 3/4 D Planetarium
 -----------------
