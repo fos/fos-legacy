@@ -6,7 +6,7 @@ Our aim is to collect knowledge, references and feature requests...
 * http://neurobureau.projects.nitrc.org/BrainArt/Competition.html
 * http://github.com/BenSmith/PythonOpenGLSuperBible4
 * gpu raycasting shader http://www.daimi.au.dk/~trier/?page_id=98
-http://code.google.com/p/visvis/source/browse/visvisResources/raycasting.fragment.glsl
+** http://code.google.com/p/visvis/source/browse/visvisResources/raycasting.fragment.glsl
 * http://jainek.de/projects/iBrain/
 * http://vis.lbl.gov/Research/H5hut/
 * http://www.songho.ca/opengl/index.html
@@ -63,6 +63,7 @@ http://code.google.com/p/visvis/source/browse/visvisResources/raycasting.fragmen
 * http://yt.enzotools.org/video_gallery.html
 * http://yt.enzotools.org/doc/extensions/volume_rendering.html
 * VISIT https://wci.llnl.gov/codes/visit/home.html
+* http://cs.nyu.edu/~weinkauf/publications/absbenger10a.html
 
 * 3/4 D Planetarium
 http://www.haydenplanetarium.org/universe/download/
