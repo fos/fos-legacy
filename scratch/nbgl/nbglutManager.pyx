@@ -112,6 +112,9 @@ def openWindow(char* title, int x, int y, int w, int h, int scn):
     global requestLinkedList
     global lastCreatedWindowID
 
+    if (thread_initialized == False):
+        print "The window manager is not initialized"  
+        return -1
          
     cdef RequestInfo* requestInfo = <RequestInfo*> malloc(sizeof(RequestInfo))
     requestInfo.request = REQUEST_CREATE
@@ -133,6 +136,9 @@ def closeWindow(int id):
     global mutexRequestList
     global requestLinkedList
 
+    if (thread_initialized == False):
+        print "The window manager is not initialized"  
+        return -1
 
     cdef RequestInfo* requestInfo
 
@@ -150,6 +156,10 @@ def closeAllWindows():
     global mutexRequestList
     global requestLinkedList
     global windowLinkedList
+
+    if (thread_initialized == False):
+        print "The window manager is not initialized"  
+        return -1
 
     cdef RequestInfo* requestInfo
 
@@ -183,6 +193,10 @@ def changeWindowSize(int id, int w, int h):
     global mutexRequestList
     global mutexWindowList
     global requestLinkedList
+
+    if (thread_initialized == False):
+        print "The window manager is not initialized"  
+        return -1
 
     cdef RequestInfo* requestInfo
 
@@ -271,11 +285,10 @@ cdef void *TaskCode(void *argument):
             # To drain the event loop before the thread waits on condition variable 
             for i from 0 <= i < 5000:
                 glutMainLoopEvent()
+
             pthread_mutex_lock(&mutexWindowList)
-            #pthread_mutex_lock(&mutexRequestList)
             if ((windowLinkedList.size() <= 0) and (requestLinkedList.size() <= 0) and continueRunning):  
                 pthread_cond_wait(&conditionNoOpenWindows, &mutexWindowList)
-            #pthread_mutex_unlock(&mutexRequestList)
             pthread_mutex_unlock(&mutexWindowList) 
  
 

@@ -1,0 +1,18 @@
+rm *.o
+rm *.c
+rm *.so
+
+cython FosWindow.pyx
+gcc -O2 -c -fPIC -I/usr/include/python2.6/ FosWindow.c
+gcc -shared FosWindow.o -o FosWindow.so -lglut -lGLU
+
+cython RequestInfo.pyx
+gcc -O2 -c -fPIC -I/usr/include/python2.6/ RequestInfo.c
+gcc -shared RequestInfo.o -o RequestInfo.so -lglut -lGLU
+
+cython nbglutManager.pyx
+gcc -O2 -c -fPIC -I/usr/include/python2.6/ nbglutManager.c
+gcc -shared nbglutManager.o -o nbglutManager.so -lglut -lGLU
+
+
+
