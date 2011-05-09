@@ -10,8 +10,9 @@ from fos.shader.lib import get_shader_code
 # load the shaders
 shader = Shader( [get_shader_code('propagatevertex.vert')],
                  ##   [get_shader_code('zoomRotate.vert')],
-                 [get_shader_code('allRed.frag')],
-                 [get_shader_code('LineToTube.geom'), gl.GL_LINES, gl.GL_TRIANGLE_STRIP, 6]
+                 [get_shader_code('propagatecolor.frag')],
+                 #[get_shader_code('LineToTube.geom'), gl.GL_LINES, gl.GL_TRIANGLE_STRIP, 6]
+                 [get_shader_code('LineExtrusion.geom'), gl.GL_LINES, gl.GL_TRIANGLE_STRIP, 6]
                  #[]
                   )
 

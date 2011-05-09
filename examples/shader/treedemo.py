@@ -18,7 +18,7 @@ cols = np.array( [ [ 255, 0, 0, 255],
 
 
 
-wi = Window()
+wi = Window(width = 800, height = 500)
 w = wi.get_world()
 
 act = Tree(vertices = vert,

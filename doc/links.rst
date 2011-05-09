@@ -3,6 +3,8 @@ Links
 =====
 Our aim is to collect knowledge, references and feature requests...
 
+* http://www.sofa-framework.org/home
+* http://www.pyside.org/docs/pyside/PySide/QtOpenGL/index.html
 * http://neurobureau.projects.nitrc.org/BrainArt/Competition.html
 * http://github.com/BenSmith/PythonOpenGLSuperBible4
 * gpu raycasting shader http://www.daimi.au.dk/~trier/?page_id=98
@@ -101,6 +103,7 @@ Shaders
 * http://www.slidefinder.net/S/Shader/11893836/p2
 * http://gitorious.org/personal-julian-ibarz/obj-viewer/blobs/master/shaders/cullDirection.geom
 * Shader-Based Wireframe Drawing http://cgg-journal.com/2008-2/06/index.html#tth_sEc2.2
+* http://www.flashbang.se/archives/307
 
 Engines
 -------

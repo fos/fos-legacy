@@ -1,3 +1,6 @@
+#version 120
+#extension GL_EXT_geometry_shader4 : enable
+    
 // Authors
 // Dan Ginsburg & Stephan Gerhard
 
@@ -46,23 +49,59 @@ void unProjectCoord(vec3 winCoord, float w, ivec4 viewport, out vec4 clipCoord)
 
 void main()
 {
-    // ...
-    // Now in pseudocode the GS does something like this
+    const float extrude = 5.0;
+
     vec3 winCoord0;
     vec3 winCoord1;
+    vec3 computedWinCoord0;
+    vec3 computedWinCoord1;
+    vec3 computedWinCoord2;
+    vec3 computedWinCoord3;
+
+    vec4 clipCoord0;
+    vec4 clipCoord1;
+    vec4 clipCoord2;
+    vec4 clipCoord3;
+    vec3 dir;
+    vec2 perp;
+
+    const ivec4 viewport = ivec4(0, 0, 800, 500);
 
     // viewport should be a uniform ivec4 that you set
-    projectCord(gl_PositionIn[0], viewport, winCoord0);
-    projectCord(gl_PositionIn[1], viewport, winCoord1);
+    projectCoord(gl_PositionIn[0], viewport, winCoord0);
+    projectCoord(gl_PositionIn[1], viewport, winCoord1);
 
     // Now do the quad extrusion in screen-coordinates, don't have time to work this out now, if you need help with it let me know...
+    // using winCoord0
+
+    dir = normalize(winCoord1 - winCoord0);
+
+    perp = vec2(-dir.y, dir.x);
+
+    // extrude in both directions
+    computedWinCoord0.xyz = vec3(winCoord0.xy + perp.xy * extrude, winCoord0.z );
+    computedWinCoord1.xyz = vec3(winCoord0.xy - perp.xy * extrude, winCoord0.z );
+    computedWinCoord2.xyz = vec3(winCoord1.xy - perp.xy * extrude, winCoord1.z );
+    computedWinCoord3.xyz = vec3(winCoord1.xy + perp.xy * extrude, winCoord1.z );
 
     // Unproject the window-coordinates BACK to clip-space
-    unprojectCoord(computedWinCoord0, gl_PositionIn[0].w, viewport, clipCoord0);
-    // ..
+    // unprojectCoord(computedWinCoord0, gl_PositionIn[0].w, viewport, clipCoord0);
+    unProjectCoord(computedWinCoord0, gl_PositionIn[0].w, viewport, clipCoord0);
+    unProjectCoord(computedWinCoord1, gl_PositionIn[0].w, viewport, clipCoord1);
+    unProjectCoord(computedWinCoord2, gl_PositionIn[1].w, viewport, clipCoord2);
+    unProjectCoord(computedWinCoord3, gl_PositionIn[1].w, viewport, clipCoord3);
 
     // (you'll do one of the above for each computed coordinate
     // Now you can pass those along as clip-space coords for the frag shader
-    gl_Position=clipCoord0;
-    // ... And the rest... Emitting vertices as you go
+    // first triangle
+    gl_Position = clipCoord0; EmitVertex();
+    gl_Position = clipCoord1; EmitVertex();
+    gl_Position = clipCoord2; EmitVertex();
+    EndPrimitive();
+
+    gl_Position = clipCoord2; EmitVertex();
+    gl_Position = clipCoord3; EmitVertex();
+    gl_Position = clipCoord0; EmitVertex();
+    EndPrimitive();
+
 }
