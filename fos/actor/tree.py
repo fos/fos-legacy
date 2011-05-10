@@ -139,7 +139,7 @@ class Tree(Actor):
         glBindBuffer(GL_ARRAY_BUFFER_ARB, self.vertex_vbo)
         #glBindBuffer(GL_ARRAY_BUFFER_ARB, self.colors_vbo)
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0)
+        #glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0)
         #glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0)
         
         # bind the indices buffer
