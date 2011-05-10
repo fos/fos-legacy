@@ -118,7 +118,9 @@ class Tree(Actor):
 
         # encapsulate vbo
         # http://www.siafoo.net/snippet/185
-
+        print self.vertices
+        print self.indices
+        print self.colors
         
     def update(self, dt):
         pass
@@ -135,8 +137,9 @@ class Tree(Actor):
         shader.bind()
                 
         glBindBuffer(GL_ARRAY_BUFFER_ARB, self.vertex_vbo)
-        glEnableVertexAttribArray(0)
         #glBindBuffer(GL_ARRAY_BUFFER_ARB, self.colors_vbo)
+        #glEnableVertexAttribArray(0)
+
 
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0)
         #glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0)
