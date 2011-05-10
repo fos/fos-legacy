@@ -8,9 +8,9 @@ from fos.shader import Shader
 from fos.shader.lib import get_shader_code
 
 # load the shaders
-shader = Shader( [get_shader_code('propagatevertex.vert')],
-                 [get_shader_code('allRed.frag')],
-                 [get_shader_code('LineExtrusion.geom'), gl.GL_LINES, gl.GL_TRIANGLE_STRIP, 6]
+shader = Shader( [get_shader_code('propagatevertex110.vert')],
+                 [get_shader_code('propagatecolor110.frag')],
+                 [get_shader_code('lineextrusion120.geom'), gl.GL_LINES, gl.GL_TRIANGLE_STRIP, 6]
                   )
 
 class Tree(Actor):
@@ -67,11 +67,6 @@ class Tree(Actor):
 #                assert(len(colors) == len(self.vertices))
 #                self.colors = colors
 
-        print self.vertices
-        print self.connectivity
-        print self.colors
-
-
         self.make_aabb(margin = 0)
         
         # create indicies, seems to be slow with nested loops
@@ -114,13 +109,13 @@ class Tree(Actor):
         glBindBuffer(GL_ARRAY_BUFFER, self.colors_vbo)
 
         glBufferData(GL_ARRAY_BUFFER, 4 * self.colors.size, self.colors_ptr, GL_STATIC_DRAW)
-        #glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0)
+        glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0)
 
         # encapsulate vbo
         # http://www.siafoo.net/snippet/185
-        print self.vertices
-        print self.indices
-        print self.colors
+#        print self.vertices
+#        print self.indices
+#        print self.colors
         
     def update(self, dt):
         pass
@@ -137,10 +132,10 @@ class Tree(Actor):
         shader.bind()
                 
         glBindBuffer(GL_ARRAY_BUFFER_ARB, self.vertex_vbo)
-        #glBindBuffer(GL_ARRAY_BUFFER_ARB, self.colors_vbo)
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0)
 
-        #glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0)
-        #glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0)
+        glBindBuffer(GL_ARRAY_BUFFER_ARB, self.colors_vbo)
+        glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0)
         
         # bind the indices buffer
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self.indices_vbo)

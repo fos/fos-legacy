@@ -1,7 +1,7 @@
 #version 110
 in vec3 aPosition;
-attribute vec3 aColor; // This is the per-vertex color
-varying vec3 vColor;   // This is the output to the geometry shader
+attribute vec4 aColor; // This is the per-vertex color
+varying vec4 vColor;   // This is the output to the geometry shader
 
 void main()
 {

@@ -11,14 +11,9 @@ vert = np.array( [ [0,0,0],
                    
 conn = np.array( [ 0, 1, 1, 2, 1, 3 ], dtype = np.uint32 ) 
 
-# the colors are per line
-#cols = np.array( [ [0, 255, 0, 255],
-#                   [0, 255, 0, 255],
-#                   [0, 0, 255, 255] ] , dtype = np.ubyte )
-
-cols = np.array( [ [0, 1, 0, 1],
-                   [0, 1, 0, 0],
-                   [0, 0, 1, 1] ] , dtype = np.float32 )
+cols = np.array( [ [1, 0, 0, 1],
+                   [0, 1, 0, 1],
+                   [0, 0, 1, 0.5] ] , dtype = np.float32 )
 
 wi = Window(width = 800, height = 500)
 w = wi.get_world()

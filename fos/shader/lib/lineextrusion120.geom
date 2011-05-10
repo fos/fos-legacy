@@ -1,8 +1,8 @@
 #version 120
 #extension GL_EXT_geometry_shader4 : enable
 
-varying in vec3 vColor[2]; // One for each vertex in the line
-varying out vec3 vColor0; // Output color, pass from GS -> FS
+varying in vec4 vColor[2]; // One for each vertex in the line
+varying out vec4 vColor0; // Output color, pass from GS -> FS
 
 // Authors
 // Dan Ginsburg & Stephan Gerhard

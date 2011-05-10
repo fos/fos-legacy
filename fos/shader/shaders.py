@@ -34,7 +34,7 @@ class Shader:
         #/* Attribute locations must be setup before calling glLinkProgram. */
 
         glBindAttribLocation(self.handle, 0, "aPosition");
-        #glBindAttribLocation(self.handle, 1, "in_Color");
+        glBindAttribLocation(self.handle, 1, "aColor");
 
 
         # attempt to link the program
@@ -107,7 +107,7 @@ class Shader:
             # print the log to the console
             print buffer.value
         else:
-            print "->well compiled geometry shader"
+            print("Geometry shader compiled.")
             
             # And define the input and output of the geometry shader, point and triangle strip in this case. Four is how many the vertices the shader will create.
 
@@ -145,15 +145,15 @@ class Shader:
         glUseProgram(self.handle)
         
         glEnableVertexAttribArray(0)
-        #glEnableVertexAttribArray(1)
+        glEnableVertexAttribArray(1)
 
     def unbind(self):
         # unbind whatever program is currently bound - not necessarily this program,
         # so this should probably be a class method instead
         glUseProgram(0)
-        
-        #glDisableVertexAttribArray(1)
+
         glDisableVertexAttribArray(0)
+        glDisableVertexAttribArray(1)
 
     # upload a floating point uniform
     # this program must be currently bound
