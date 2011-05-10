@@ -152,7 +152,7 @@ class Shader:
         # so this should probably be a class method instead
         glUseProgram(0)
         
-        glDisableVertexAttribArray(1)
+        #glDisableVertexAttribArray(1)
         glDisableVertexAttribArray(0)
 
     # upload a floating point uniform

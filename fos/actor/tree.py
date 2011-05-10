@@ -75,7 +75,7 @@ class Tree(Actor):
         self.make_aabb(margin = 0)
         
         # create indicies, seems to be slow with nested loops
-        self.indices = connectivity.astype( np.uint32 )
+        self.indices = self.connectivity
         self.indices_ptr = self.indices.ctypes.data
         self.indices_nr = self.indices.size
         
@@ -114,7 +114,7 @@ class Tree(Actor):
         glBindBuffer(GL_ARRAY_BUFFER, self.colors_vbo)
 
         glBufferData(GL_ARRAY_BUFFER, 4 * self.colors.size, self.colors_ptr, GL_STATIC_DRAW)
-        #glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        #glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0)
 
         # encapsulate vbo
         # http://www.siafoo.net/snippet/185
@@ -138,8 +138,6 @@ class Tree(Actor):
                 
         glBindBuffer(GL_ARRAY_BUFFER_ARB, self.vertex_vbo)
         #glBindBuffer(GL_ARRAY_BUFFER_ARB, self.colors_vbo)
-        #glEnableVertexAttribArray(0)
-
 
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0)
         #glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0)
