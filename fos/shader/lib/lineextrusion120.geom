@@ -52,7 +52,7 @@ void unProjectCoord(vec3 winCoord, float w, ivec4 viewport, out vec4 clipCoord)
 
 void main()
 {
-    const float extrude = 5.0;
+    const float extrude = 3.0;
 
     vec3 winCoord0;
     vec3 winCoord1;
