@@ -33,9 +33,8 @@ class Shader:
         #/* Bind attribute index 0 (coordinates) to in_Position and attribute index 1 (color) to in_Color */
         #/* Attribute locations must be setup before calling glLinkProgram. */
 
-		glBindAttribLocation(self.handle, 0, "aPosition");
-		#glBindAttribLocation(self.handle, 1, "in_Color");
-
+		glBindAttribLocation(self.handle, 0, "aPosition")
+		#glBindAttribLocation(self.handle, 1, "aColor")
 
 		# attempt to link the program
 		self.link()
@@ -73,7 +72,7 @@ class Shader:
 			print buffer.value
 		else:
 			# all is well, so attach the shader to the program
-			glAttachShader(self.handle, shader);
+			glAttachShader(self.handle, shader)
 
 	def createGeometryShader(self, strings, type, input_type, output_type, vertices_out):
 		count = len(strings)
@@ -145,15 +144,16 @@ class Shader:
 		glUseProgram(self.handle)
         
         glEnableVertexAttribArray(0)
-        glEnableVertexAttribArray(1)
+#        glEnableVertexAttribArray(1)
 
 	def unbind(self):
 		# unbind whatever program is currently bound - not necessarily this program,
 		# so this should probably be a class method instead
 		glUseProgram(0)
         
-        glDisableVertexAttribArray(1)
+
         glDisableVertexAttribArray(0)
+#        glDisableVertexAttribArray(1)
 
 	# upload a floating point uniform
 	# this program must be currently bound

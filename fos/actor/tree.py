@@ -9,11 +9,8 @@ from fos.shader.lib import get_shader_code
 
 # load the shaders
 shader = Shader( [get_shader_code('propagatevertex.vert')],
-                 ##   [get_shader_code('zoomRotate.vert')],
-                 [get_shader_code('propagatecolor.frag')],
-                 #[get_shader_code('LineToTube.geom'), gl.GL_LINES, gl.GL_TRIANGLE_STRIP, 6]
+                 [get_shader_code('allRed.frag')],
                  [get_shader_code('LineExtrusion.geom'), gl.GL_LINES, gl.GL_TRIANGLE_STRIP, 6]
-                 #[]
                   )
 
 class Tree(Actor):
@@ -31,7 +28,7 @@ class Tree(Actor):
         connectivity : Mx1
             Tree topology
         colors : Nx4 or 1x4
-            Per vertex color, or actor color
+            Per connection color
         affine : 4x4
             Affine transformation of the actor
 
@@ -44,18 +41,37 @@ class Tree(Actor):
         self.vertices = vertices
         if force_centering:
             self.vertices = self.vertices - np.mean(self.vertices, axis = 0)
+
         self.connectivity = connectivity
+
+        # unfortunately, we need to duplicate vertices if we
+        # want per line color
+        self.vertices = self.vertices[self.connectivity,:]
+
+        # we want per line color
+        # duplicating the color array, we have the colors per vertex
+        self.colors =  np.repeat(colors, 2, axis=0)
+
+        # we have a simplified connectivity
+        self.connectivity = np.array( range(len(self.vertices)), dtype = np.uint32 )
         
-        if colors == None:
-            # default colors
-            self.colors = np.array( [[255,255,255,255]], dtype = np.float32).repeat(len(self.vertices),axis=0) / 255.
-        else:
-            if len(colors) == 1:
-                self.colors = np.array( [colors], dtype = np.float32).repeat(len(self.vertices),axis=0) / 255.
-            else:
-                assert(len(colors) == len(self.vertices))
-                self.colors = colors
-            
+
+        # this coloring section is for per/vertex color
+#        if colors == None:
+#            # default colors
+#            self.colors = np.array( [[255,255,255,255]], dtype = np.float32).repeat(len(self.vertices),axis=0) / 255.
+#        else:
+#            if len(colors) == 1:
+#                self.colors = np.array( [colors], dtype = np.float32).repeat(len(self.vertices),axis=0) / 255.
+#            else:
+#                assert(len(colors) == len(self.vertices))
+#                self.colors = colors
+
+        print self.vertices
+        print self.connectivity
+        print self.colors
+
+
         self.make_aabb(margin = 0)
         
         # create indicies, seems to be slow with nested loops
@@ -64,7 +80,6 @@ class Tree(Actor):
         self.indices_nr = self.indices.size
         
         # duplicate colors to make it "per vertex"
-       # self.colors = self.colors.repeat(2, axis = 0)
         self.colors_ptr = self.colors.ctypes.data
         
         self.vertices_ptr = self.vertices.ctypes.data
@@ -86,11 +101,6 @@ class Tree(Actor):
         # /* Specify that our coordinate data is going into attribute index 0, and contains three floats per vertex */
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-        
-        print "vertices", self.vertices
-        print "vertices size", self.vertices.size
-        print "vertices dtype", self.vertices.dtype
-
         # for indices
         self.indices_vbo = GLuint(0)
         glGenBuffers(1, self.indices_vbo)
@@ -102,13 +112,9 @@ class Tree(Actor):
         self.colors_vbo = GLuint(0)        
         glGenBuffers(1, self.colors_vbo)
         glBindBuffer(GL_ARRAY_BUFFER, self.colors_vbo)
-        
-        print "colors", self.colors
-        print "colors size", self.colors.size
-        print "colors dtype", self.colors.dtype
-        
+
         glBufferData(GL_ARRAY_BUFFER, 4 * self.colors.size, self.colors_ptr, GL_STATIC_DRAW)
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        #glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
         # encapsulate vbo
         # http://www.siafoo.net/snippet/185
@@ -123,16 +129,17 @@ class Tree(Actor):
 #        glBindBuffer(GL_ARRAY_BUFFER, self.colors_vbo)
 
         glClear(GL_COLOR_BUFFER_BIT)
-        glClearColor(1.0, 1.0, 1.0, 0.0)
+        glClearColor(0.5, 0.5, 0.5, 0.0)
 
         # bind the shader
         shader.bind()
                 
         glBindBuffer(GL_ARRAY_BUFFER_ARB, self.vertex_vbo)
         glEnableVertexAttribArray(0)
+        #glBindBuffer(GL_ARRAY_BUFFER_ARB, self.colors_vbo)
 
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0)
-       # glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0)
+        #glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0)
         
         # bind the indices buffer
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self.indices_vbo)
