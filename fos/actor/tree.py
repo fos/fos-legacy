@@ -125,7 +125,7 @@ class Tree(Actor):
 #        glBindBuffer(GL_ARRAY_BUFFER, self.vertex_vbo)
 #        glBindBuffer(GL_ARRAY_BUFFER, self.colors_vbo)
 
-        glClear(GL_COLOR_BUFFER_BIT)
+#        glClear(GL_COLOR_BUFFER_BIT)
         glClearColor(0.5, 0.5, 0.5, 0.0)
 
         # bind the shader

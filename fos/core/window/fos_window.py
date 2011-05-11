@@ -180,6 +180,6 @@ class FosWindow(ManagedWindow):
         glViewport(0, 0, width, height)
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
-        gluPerspective(60., width / float(height), .1, 2000.)
+        gluPerspective(60., width / float(height), .1, 8000.)
         glMatrixMode(GL_MODELVIEW)
         

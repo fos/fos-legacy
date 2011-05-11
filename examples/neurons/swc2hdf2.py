@@ -90,6 +90,7 @@ for i,a in enumerate(ficon):
 
     off += n
     offseg += (n-1) * 2
+    print big_con[:10], big_con[-20:]
 
 big_con = big_con.astype( np.uint32 )
 
