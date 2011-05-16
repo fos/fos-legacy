@@ -33,17 +33,14 @@ class Shader:
         #/* Bind attribute index 0 (coordinates) to in_Position and attribute index 1 (color) to in_Color */
         #/* Attribute locations must be setup before calling glLinkProgram. */
 
-        glBindAttribLocation(self.handle, 0, "aPosition");
-        glBindAttribLocation(self.handle, 1, "aColor");
+        glBindAttribLocation(self.handle, 0, "aPosition")
+        glBindAttribLocation(self.handle, 1, "aColor")
 
-        # bind textures
-
-#        GLint(0)
-#        glGetUniformLocation(self.handle, "widthSampler")
-
-
+        #self.uniformf( "widthSampler", [2.23, 23.3, 2.2])
+        
         # attempt to link the program
         self.link()
+
 
     def createShader(self, strings, type):
         count = len(strings)
@@ -148,7 +145,7 @@ class Shader:
     def bind(self):
         # bind the program
         glUseProgram(self.handle)
-        
+
         glEnableVertexAttribArray(0)
         glEnableVertexAttribArray(1)
 

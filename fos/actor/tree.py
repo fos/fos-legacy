@@ -111,11 +111,41 @@ class Tree(Actor):
         glBufferData(GL_ARRAY_BUFFER, 4 * self.colors.size, self.colors_ptr, GL_STATIC_DRAW)
         glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0)
 
+        # for texture
+
+        # the data array
+        #self.mytex = np.array( [1, 10, 10, 15, 5, 10], dtype = np.float32 )
+        self.mytex = np.array( [0.5,0.5,0.5,0.5,0.5,0.5], dtype = np.float32 )
+        self.mytex_ptr = self.mytex.ctypes.data
+
+        # reserve for oen texture
+        self.texId = GLuint(0)
+        
+        glGenTextures(1, self.texId)
+        # bind the named texture texId to a texture target
+        glBindTexture(GL_TEXTURE_1D, self.texId)
+        # create the texture
+        # (type, lod, number of components, size, border, 
+        glTexImage1D(GL_TEXTURE_1D, 0, 4, 4*self.mytex.size, 0, GL_LUMINANCE, GL_FLOAT, self.mytex_ptr)
+        
+
+        #glActiveTexture(GL_TEXTURE0)
+        #glBindTexture(GL_TEXTURE_1D, mytex_ptr)
+
+
+#        glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, blubb)
+#        print "blubb", blubb
+
         # encapsulate vbo
         # http://www.siafoo.net/snippet/185
 #        print self.vertices
 #        print self.indices
 #        print self.colors
+        self.draw_init()
+
+    def draw_init(SELF):
+        
+        glClearColor(0.5, 0.5, 0.5, 0.0)
         
     def update(self, dt):
         pass
@@ -125,8 +155,14 @@ class Tree(Actor):
 #        glBindBuffer(GL_ARRAY_BUFFER, self.vertex_vbo)
 #        glBindBuffer(GL_ARRAY_BUFFER, self.colors_vbo)
 
-#        glClear(GL_COLOR_BUFFER_BIT)
+        #glClear(GL_COLOR_BUFFER_BIT)
         glClearColor(0.5, 0.5, 0.5, 0.0)
+        
+        # bind texture
+        # Select Our Texture
+        #glActiveTexture(GL_TEXTURE0)
+
+        glBindTexture(GL_TEXTURE_1D, self.texId)
 
         # bind the shader
         shader.bind()
@@ -136,7 +172,7 @@ class Tree(Actor):
 
         glBindBuffer(GL_ARRAY_BUFFER_ARB, self.colors_vbo)
         glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0)
-        
+
         # bind the indices buffer
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self.indices_vbo)
         

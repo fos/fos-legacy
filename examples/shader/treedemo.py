@@ -11,8 +11,8 @@ vert = np.array( [ [0,0,0],
                    
 conn = np.array( [ 0, 1, 1, 2, 1, 3 ], dtype = np.uint32 ) 
 
-cols = np.array( [ [1, 0, 0, 1],
-                   [0, 1, 0, 1],
+cols = np.array( [ [0, 0, 1, 1],
+                   [1, 0, 1, 1],
                    [0, 0, 1, 0.5] ] , dtype = np.float32 )
 
 wi = Window(width = 800, height = 500)
