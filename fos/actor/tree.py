@@ -8,7 +8,7 @@ from fos.shader import Shader
 from fos.shader.lib import get_shader_code
 
 # load the shaders
-shader = Shader( [get_shader_code('propagatevertex110.vert')],
+shader = Shader( [get_shader_code('propagatevertex130.vert')],
                  [get_shader_code('propagatecolor110.frag')],
                  [get_shader_code('lineextrusion120.geom'), gl.GL_LINES, gl.GL_TRIANGLE_STRIP, 6]
                   )

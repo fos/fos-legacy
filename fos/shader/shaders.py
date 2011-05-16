@@ -36,6 +36,11 @@ class Shader:
         glBindAttribLocation(self.handle, 0, "aPosition");
         glBindAttribLocation(self.handle, 1, "aColor");
 
+        # bind textures
+
+#        GLint(0)
+#        glGetUniformLocation(self.handle, "widthSampler")
+
 
         # attempt to link the program
         self.link()
