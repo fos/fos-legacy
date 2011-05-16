@@ -52,7 +52,7 @@ void unProjectCoord(vec3 winCoord, float w, ivec4 viewport, out vec4 clipCoord)
 
 void main()
 {
-    const float extrude = 1.0;
+    const float extrude = 5.0;
 
     vec3 winCoord0;
     vec3 winCoord1;
@@ -100,11 +100,11 @@ void main()
     gl_Position = clipCoord0; vColor0 = vColor[0]; EmitVertex();
     gl_Position = clipCoord1; vColor0 = vColor[0]; EmitVertex();
     gl_Position = clipCoord2; vColor0 = vColor[1]; EmitVertex();
-    EndPrimitive();
+    // EndPrimitive();
 
+    gl_Position = clipCoord0; vColor0 = vColor[0]; EmitVertex();
     gl_Position = clipCoord2; vColor0 = vColor[1]; EmitVertex();
     gl_Position = clipCoord3; vColor0 = vColor[1]; EmitVertex();
-    gl_Position = clipCoord0; vColor0 = vColor[0]; EmitVertex();
     EndPrimitive();
 
 }
