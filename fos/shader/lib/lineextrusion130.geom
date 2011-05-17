@@ -102,7 +102,8 @@ void main()
     gl_Position = clipCoord0; vColor0 = vColor[0]; EmitVertex();
     gl_Position = clipCoord1; vColor0 = vColor[0]; EmitVertex();
     gl_Position = clipCoord2; vColor0 = vColor[1]; EmitVertex();
-
+    EndPrimitive();
+    
     // second triangle
     gl_Position = clipCoord0; vColor0 = vColor[0]; EmitVertex();
     gl_Position = clipCoord2; vColor0 = vColor[1]; EmitVertex();

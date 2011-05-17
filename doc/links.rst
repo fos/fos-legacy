@@ -3,6 +3,9 @@ Links
 =====
 Our aim is to collect knowledge, references and feature requests...
 
+* also freeGLUT or OpenGLUT http://www.lighthouse3d.com/cg-topics/glut-and-freeglut/
+* http://www.panda3d.org/
+* http://gamedev.stackexchange.com/
 * http://www.sofa-framework.org/home
 * http://www.pyside.org/docs/pyside/PySide/QtOpenGL/index.html
 * http://neurobureau.projects.nitrc.org/BrainArt/Competition.html

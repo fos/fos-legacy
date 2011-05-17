@@ -1,16 +1,18 @@
 import numpy as np
 
-from fos.lib.pyglet.gl import *
+#from fos.lib.pyglet.gl import *
+from pyglet.gl import *
 
-from fos import Actor
+#from fos import Actor
 
 from fos.shader import Shader
 from fos.shader.lib import get_shader_code
 
 # load the shaders
-shader = Shader( [get_shader_code('propagatevertex130.vert')],
-                 [get_shader_code('propagatecolor130.frag')],
-                 [get_shader_code('lineextrusion130.geom'), gl.GL_LINES, gl.GL_TRIANGLE_STRIP, 6]
+def get_shader():
+    return Shader( [get_shader_code('propagatevertex130.vert')],
+                   [get_shader_code('propagatecolor130.frag')],
+                   [get_shader_code('lineextrusion130.geom'), gl.GL_LINES, gl.GL_TRIANGLE_STRIP, 6]
                   )
 
 from ctypes import byref
@@ -19,7 +21,7 @@ def gen_texture():
     glGenTextures(1, byref(id))
     return id
 
-class Tree(Actor):
+class Tree(object):
     
     def __init__(self, vertices,
                  connectivity,
@@ -42,7 +44,7 @@ class Tree(Actor):
         super(Tree, self).__init__()
         
         self.affine = np.eye(4, dtype = np.float32)
-        self._update_glaffine()
+        #self._update_glaffine()
         
         self.vertices = vertices
         if force_centering:
@@ -73,7 +75,7 @@ class Tree(Actor):
 #                assert(len(colors) == len(self.vertices))
 #                self.colors = colors
 
-        self.make_aabb(margin = 0)
+#        self.make_aabb(margin = 0)
         
         # create indicies, seems to be slow with nested loops
         self.indices = self.connectivity
@@ -125,6 +127,8 @@ class Tree(Actor):
         # texture init
         self.init_texture()
 
+        self.shader = get_shader()
+
     def init_texture(self):
 
         self.tex_unit = gen_texture()
@@ -143,12 +147,12 @@ class Tree(Actor):
     def draw_shader(self):
 
         # bind the shader
-        shader.bind()
+        self.shader.bind()
 
         # TODO: when enabling the next line nothing is displayed anymore
         # glUniform1i(shader.width_sampler, self.tex_unit)
-        glActiveTexture(GL_TEXTURE0)
-        glBindTexture(GL_TEXTURE_1D, self.tex_unit)
+        #glActiveTexture(GL_TEXTURE0)
+        #glBindTexture(GL_TEXTURE_1D, self.tex_unit)
 
         glBindBuffer(GL_ARRAY_BUFFER_ARB, self.vertex_vbo)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0)
@@ -162,7 +166,7 @@ class Tree(Actor):
         glDrawElements(self.mode,self.indices_nr,self.type,0)
 
         # unbind the shader
-        shader.unbind()
+        self.shader.unbind()
 
     def draw(self):
 
