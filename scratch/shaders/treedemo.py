@@ -20,7 +20,6 @@ except pyglet.window.NoSuchConfigException:
     # Fall back to no multisampling for old hardware
     window = pyglet.window.Window(resizable=True)
 
-
 fps_display = pyglet.clock.ClockDisplay() # see programming guide pg 48
 
 @window.event
@@ -30,7 +29,7 @@ def on_resize(width, height):
     glViewport(0, 0, width, height)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluPerspective(50., width / float(height), .1, 8000)
+    gluPerspective(50., width / float(height), -100, 8000)
     glMatrixMode(GL_MODELVIEW)
     return pyglet.event.EVENT_HANDLED
 
