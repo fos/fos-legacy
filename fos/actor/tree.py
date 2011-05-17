@@ -9,9 +9,15 @@ from fos.shader.lib import get_shader_code
 
 # load the shaders
 shader = Shader( [get_shader_code('propagatevertex130.vert')],
-                 [get_shader_code('propagatecolor110.frag')],
-                 [get_shader_code('lineextrusion120.geom'), gl.GL_LINES, gl.GL_TRIANGLE_STRIP, 6]
+                 [get_shader_code('propagatecolor130.frag')],
+                 [get_shader_code('lineextrusion130.geom'), gl.GL_LINES, gl.GL_TRIANGLE_STRIP, 6]
                   )
+
+from ctypes import byref
+def gen_texture():
+    id = GLuint()
+    glGenTextures(1, byref(id))
+    return id
 
 class Tree(Actor):
     
@@ -94,7 +100,7 @@ class Tree(Actor):
         glBufferData(GL_ARRAY_BUFFER_ARB, 4 * self.vertices.size, self.vertices_ptr, GL_STATIC_DRAW)
         
         # /* Specify that our coordinate data is going into attribute index 0, and contains three floats per vertex */
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0)
 
         # for indices
         self.indices_vbo = GLuint(0)
@@ -111,62 +117,39 @@ class Tree(Actor):
         glBufferData(GL_ARRAY_BUFFER, 4 * self.colors.size, self.colors_ptr, GL_STATIC_DRAW)
         glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0)
 
-        # for texture
-
-        # the data array
-        #self.mytex = np.array( [1, 10, 10, 15, 5, 10], dtype = np.float32 )
-        self.mytex = np.array( [0.5,0.5,0.5,0.5,0.5,0.5], dtype = np.float32 )
+       # the sample 1d texture data array
+        self.mytex = np.array( [1, 10, 10, 15, 5, 10], dtype = np.float32 )
+        #self.mytex = np.array( [0.5,0.5,0.5,0.5,0.5,0.5], dtype = np.float32 )
         self.mytex_ptr = self.mytex.ctypes.data
 
-        # reserve for oen texture
-        self.texId = GLuint(0)
-        
-        glGenTextures(1, self.texId)
-        # bind the named texture texId to a texture target
-        glBindTexture(GL_TEXTURE_1D, self.texId)
-        # create the texture
-        # (type, lod, number of components, size, border, 
-        glTexImage1D(GL_TEXTURE_1D, 0, 4, 4*self.mytex.size, 0, GL_LUMINANCE, GL_FLOAT, self.mytex_ptr)
-        
+        # texture init
+        self.init_texture()
 
-        #glActiveTexture(GL_TEXTURE0)
-        #glBindTexture(GL_TEXTURE_1D, mytex_ptr)
+    def init_texture(self):
 
+        self.tex_unit = gen_texture()
+        glBindTexture(GL_TEXTURE_1D, self.tex_unit)
+        glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+        glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
 
-#        glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, blubb)
-#        print "blubb", blubb
+        # TODO: I hope GL_LUMINANCE32F_ARB is fine
+        glTexImage1D(GL_TEXTURE_1D, 0, GL_LUMINANCE32F_ARB, self.mytex.size, 0, GL_LUMINANCE, GL_FLOAT, self.mytex_ptr)
 
-        # encapsulate vbo
-        # http://www.siafoo.net/snippet/185
-#        print self.vertices
-#        print self.indices
-#        print self.colors
-        self.draw_init()
-
-    def draw_init(SELF):
-        
-        glClearColor(0.5, 0.5, 0.5, 0.0)
+        glBindTexture(GL_TEXTURE_1D, 0)
         
     def update(self, dt):
         pass
         
     def draw_shader(self):
 
-#        glBindBuffer(GL_ARRAY_BUFFER, self.vertex_vbo)
-#        glBindBuffer(GL_ARRAY_BUFFER, self.colors_vbo)
-
-        #glClear(GL_COLOR_BUFFER_BIT)
-        glClearColor(0.5, 0.5, 0.5, 0.0)
-        
-        # bind texture
-        # Select Our Texture
-        #glActiveTexture(GL_TEXTURE0)
-
-        glBindTexture(GL_TEXTURE_1D, self.texId)
-
         # bind the shader
         shader.bind()
-                
+
+        # TODO: when enabling the next line nothing is displayed anymore
+        # glUniform1i(shader.width_sampler, self.tex_unit)
+        glActiveTexture(GL_TEXTURE0)
+        glBindTexture(GL_TEXTURE_1D, self.tex_unit)
+
         glBindBuffer(GL_ARRAY_BUFFER_ARB, self.vertex_vbo)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0)
 
@@ -177,45 +160,10 @@ class Tree(Actor):
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self.indices_vbo)
         
         glDrawElements(self.mode,self.indices_nr,self.type,0)
-    
+
         # unbind the shader
         shader.unbind()
-        
-    def draw_va(self):
-        
-        glPushMatrix()
-    
-        glEnable(GL_LINE_SMOOTH)
-        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
-        glMultMatrixf(self.glaffine)
-        
-        glLineWidth(2.0)
-        glEnableClientState(GL_VERTEX_ARRAY)
-        #glEnableClientState(GL_COLOR_ARRAY)
-        glVertexPointer(3, GL_FLOAT, 0, self.vertices_ptr)
-        #glColorPointer(4, GL_UNSIGNED_BYTE, 0, self.colors_ptr)
-        glDrawElements(self.mode,self.indices_nr,self.type,self.indices_ptr)
-        #glDisableClientState(GL_COLOR_ARRAY)
-        glDisableClientState(GL_VERTEX_ARRAY)
-        
-        glDisable(GL_LINE_SMOOTH)
 
-        glPopMatrix()
-        
-    def draw_immediate(self):
-
-        glColor3ub(127, 0, 0)
-        
-        glBegin(gl.GL_LINES)
-        glVertex3f(0, 0, 0)
-        glVertex3f(100, 100, 0)
-        glVertex3f(100, 100, 0)
-        glVertex3f(150, 200, 0)
-        glEnd()
-
-        
     def draw(self):
 
         self.draw_shader()
-
-

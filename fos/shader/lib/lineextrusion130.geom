@@ -1,8 +1,9 @@
 #version 130
 #extension GL_EXT_geometry_shader4 : enable
 
-varying in vec4 vColor[2]; // One for each vertex in the line
-varying out vec4 vColor0; // Output color, pass from GS -> FS
+in vec4 vColor[2]; // One for each vertex in the line
+in float vWidth[2]; // one width for each vertex in the line
+out vec4 vColor0; // Output color, pass from GS -> FS
 
 // Authors
 // Dan Ginsburg & Stephan Gerhard
@@ -101,8 +102,8 @@ void main()
     gl_Position = clipCoord0; vColor0 = vColor[0]; EmitVertex();
     gl_Position = clipCoord1; vColor0 = vColor[0]; EmitVertex();
     gl_Position = clipCoord2; vColor0 = vColor[1]; EmitVertex();
-    // EndPrimitive();
 
+    // second triangle
     gl_Position = clipCoord0; vColor0 = vColor[0]; EmitVertex();
     gl_Position = clipCoord2; vColor0 = vColor[1]; EmitVertex();
     gl_Position = clipCoord3; vColor0 = vColor[1]; EmitVertex();

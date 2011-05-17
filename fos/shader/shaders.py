@@ -36,11 +36,11 @@ class Shader:
         glBindAttribLocation(self.handle, 0, "aPosition")
         glBindAttribLocation(self.handle, 1, "aColor")
 
-        #self.uniformf( "widthSampler", [2.23, 23.3, 2.2])
-        
         # attempt to link the program
         self.link()
 
+        # TODO: needs to be after linking, otherwise an exception occurs
+        self.with_sampler = glGetUniformLocation(self.handle, "widthSampler" )
 
     def createShader(self, strings, type):
         count = len(strings)
@@ -128,17 +128,17 @@ class Shader:
         # retrieve the link status
         glGetProgramiv(self.handle, GL_LINK_STATUS, byref(temp))
 
-        # if linking failed, print the log
-        if not temp:
-            #    retrieve the log length
-            glGetProgramiv(self.handle, GL_INFO_LOG_LENGTH, byref(temp))
-            # create a buffer for the log
-            buffer = create_string_buffer(temp.value)
-            # retrieve the log text
-            glGetProgramInfoLog(self.handle, temp, None, buffer)
-            # print the log to the console
-            print buffer.value
-        else:
+        #    retrieve the log length
+        glGetProgramiv(self.handle, GL_INFO_LOG_LENGTH, byref(temp))
+        # create a buffer for the log
+        buffer = create_string_buffer(temp.value)
+        # retrieve the log text
+        glGetProgramInfoLog(self.handle, temp, None, buffer)
+        # print the log to the console
+        print buffer.value
+
+        # print the log
+        if temp:
             # all is well, so we are linked
             self.linked = True
 
@@ -148,6 +148,7 @@ class Shader:
 
         glEnableVertexAttribArray(0)
         glEnableVertexAttribArray(1)
+        glEnable(GL_TEXTURE_1D)
 
     def unbind(self):
         # unbind whatever program is currently bound - not necessarily this program,
@@ -156,6 +157,7 @@ class Shader:
 
         glDisableVertexAttribArray(0)
         glDisableVertexAttribArray(1)
+        glDisable(GL_TEXTURE_1D)
 
     # upload a floating point uniform
     # this program must be currently bound

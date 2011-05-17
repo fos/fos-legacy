@@ -15,7 +15,7 @@ cols = np.array( [ [0, 0, 1, 1],
                    [1, 0, 1, 1],
                    [0, 0, 1, 0.5] ] , dtype = np.float32 )
 
-wi = Window(width = 800, height = 500)
+wi = Window(width = 800, height = 500, bgcolor=(0.5, 0.5, 0.5, 1))
 w = wi.get_world()
 
 act = Tree(vertices = vert, connectivity = conn, colors = cols)
