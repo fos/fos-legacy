@@ -40,7 +40,7 @@ class Shader:
         self.link()
 
         # TODO: needs to be after linking, otherwise an exception occurs
-        self.with_sampler = glGetUniformLocation(self.handle, "widthSampler" )
+        self.width_sampler = glGetUniformLocation(self.handle, "widthSampler" )
 
     def createShader(self, strings, type):
         count = len(strings)

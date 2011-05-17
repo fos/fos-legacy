@@ -120,7 +120,7 @@ class Tree(object):
         glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0)
 
        # the sample 1d texture data array
-        self.mytex = np.array( [1, 10, 10, 15, 5, 10], dtype = np.float32 )
+        self.mytex = np.array( [1, 5, 5, 1, 5, 1], dtype = np.float32 )
         #self.mytex = np.array( [0.5,0.5,0.5,0.5,0.5,0.5], dtype = np.float32 )
         self.mytex_ptr = self.mytex.ctypes.data
 
@@ -150,9 +150,9 @@ class Tree(object):
         self.shader.bind()
 
         # TODO: when enabling the next line nothing is displayed anymore
-        # glUniform1i(shader.width_sampler, self.tex_unit)
-        #glActiveTexture(GL_TEXTURE0)
-        #glBindTexture(GL_TEXTURE_1D, self.tex_unit)
+        glUniform1i(self.shader.width_sampler, 0)
+        glActiveTexture(GL_TEXTURE0)
+        glBindTexture(GL_TEXTURE_1D, self.tex_unit)
 
         glBindBuffer(GL_ARRAY_BUFFER_ARB, self.vertex_vbo)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0)

@@ -54,7 +54,8 @@ void unProjectCoord(vec3 winCoord, float w, ivec4 viewport, out vec4 clipCoord)
 
 void main()
 {
-    const float extrude = 5.0;
+    float extrude1 = vWidth[0];
+    float extrude2 = vWidth[1];
 
     vec3 winCoord0;
     vec3 winCoord1;
@@ -84,10 +85,10 @@ void main()
     perp = vec2(-dir.y, dir.x);
 
     // extrude in both directions
-    computedWinCoord0.xyz = vec3(winCoord0.xy + perp.xy * extrude, winCoord0.z );
-    computedWinCoord1.xyz = vec3(winCoord0.xy - perp.xy * extrude, winCoord0.z );
-    computedWinCoord2.xyz = vec3(winCoord1.xy - perp.xy * extrude, winCoord1.z );
-    computedWinCoord3.xyz = vec3(winCoord1.xy + perp.xy * extrude, winCoord1.z );
+    computedWinCoord0.xyz = vec3(winCoord0.xy + perp.xy * extrude1, winCoord0.z );
+    computedWinCoord1.xyz = vec3(winCoord0.xy - perp.xy * extrude1, winCoord0.z );
+    computedWinCoord2.xyz = vec3(winCoord1.xy - perp.xy * extrude2, winCoord1.z );
+    computedWinCoord3.xyz = vec3(winCoord1.xy + perp.xy * extrude2, winCoord1.z );
 
     // Unproject the window-coordinates BACK to clip-space
     // unprojectCoord(computedWinCoord0, gl_PositionIn[0].w, viewport, clipCoord0);

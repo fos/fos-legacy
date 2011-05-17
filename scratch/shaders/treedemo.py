@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-
-
 from math import pi, sin, cos, sqrt
 from euclid import *
 
@@ -58,7 +56,7 @@ def on_draw():
     glLoadIdentity()
     glLoadIdentity()
 
-    glTranslatef(0.0, 0.0, -0.4 + zoom)
+    glTranslatef(0.0, 0.0, zoom)
     glRotatef(rot.x, 0, 0, 1)
     glRotatef(rot.y, 0, 1, 0)
     glRotatef(rot.z, 1, 0, 0)
@@ -68,7 +66,7 @@ def on_draw():
     act.draw()
 
     glLoadIdentity()
-    glTranslatef(-500, 500, -500)
+    glTranslatef(200, 280, -800)
     fps_display.draw()
 
 
@@ -147,16 +145,16 @@ def setup():
 
 rot          = Vector3(0, 0, 90)
 autorotate   = True
-rotstep      = 10
-zoom = 0
+rotstep      = 1
+zoom = -0.4
 
 setup()
 
 # sample data
 vert = np.array( [ [0,0,0],
-                   [50,50,0],
-                   [50,100,0],
-                   [100,50,0]], dtype = np.float32 ) / 40.
+                   [5,5,0],
+                   [5,10,0],
+                   [10,5,0]], dtype = np.float32 )
 
 conn = np.array( [ 0, 1, 1, 2, 1, 3 ], dtype = np.uint32 )
 
