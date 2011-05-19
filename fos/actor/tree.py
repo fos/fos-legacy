@@ -79,9 +79,12 @@ class Tree(Actor):
 
 
        # the sample 1d texture data array
-        self.mytex = vertices_width.astype( np.float32 )
+        if not vertices_width is None:
+            self.mytex = vertices_width.astype( np.float32 )
+        else:
+            self.mytex = np.ones( len(self.vertices), dtype = np.float32 )
+
         self.mytex_ptr = self.mytex.ctypes.data
-        
 #        self.make_aabb(margin = 0)
         
         # create indicies, seems to be slow with nested loops

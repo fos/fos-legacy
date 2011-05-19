@@ -9,6 +9,8 @@ from fos.lib.pyglet.window import key
 
 from fos.actor.tree import Tree
 
+from fos.actor.axes import Axes
+
 import numpy as np
 
 from fos.core.window.simple_window import SimpleWindow
@@ -23,7 +25,7 @@ except pyglet.window.NoSuchConfigException:
 
 
 fps_display = pyglet.clock.ClockDisplay() # see programming guide pg 48
-
+#
 @window.event
 def on_resize(width, height):
     print "newsize ", width, height
@@ -35,17 +37,17 @@ def on_resize(width, height):
     gluPerspective(60., width / float(height), .1, 8000)
     glMatrixMode(GL_MODELVIEW)
     return pyglet.event.EVENT_HANDLED
-
-def update(dt):
-    global autorotate
-    global rot
-
-    if autorotate:
-        rot += Vector3(0.1, 12, 5) * dt
-        rot.x %= 360
-        rot.y %= 360
-        rot.z %= 360
-pyglet.clock.schedule(update)
+#
+#def update(dt):
+#    global autorotate
+#    global rot
+#
+#    if autorotate:
+#        rot += Vector3(0.1, 12, 5) * dt
+#        rot.x %= 360
+#        rot.y %= 360
+#        rot.z %= 360
+#pyglet.clock.schedule(update)
 
 
 # Define a simple function to create ctypes arrays of floats:
@@ -71,69 +73,69 @@ def on_draw():
     glLoadIdentity()
     glTranslatef(200, 280, -800)
     fps_display.draw()
-
-
-@window.event
-def on_key_press(symbol, modifiers):
-    global autorotate
-    global rot
-    global zoom
-
-    if symbol == key.R:
-        print 'Reset'
-        rot = Vector3(0, 90, 0)
-
-    elif symbol == key.ESCAPE or symbol == key.Q:
-        print 'Good Bye !'   # ESC would do it anyway, but not "Q"
-        pyglet.app.exit()
-        return pyglet.event.EVENT_HANDLED
-
-    elif symbol == key.SPACE:
-        print 'Toggle autorotate'
-        autorotate = not autorotate
-
-    elif symbol == key.A:
-        print 'Stop left'
-        if autorotate:
-            autorotate = False
-        else:
-            rot.y += -rotstep
-            rot.y %= 360
-
-    elif symbol == key.Z:
-        print 'Zoom out'
-        zoom += 1
-
-    elif symbol == key.U:
-        print 'Zoom in'
-        zoom -= 1
-
-    elif symbol == key.S:
-        print 'Stop down'
-        if autorotate:
-            autorotate = False
-        else:
-            rot.z += rotstep
-            rot.z %= 360
-
-    elif symbol == key.W:
-        print 'Stop up'
-        if autorotate:
-            autorotate = False
-        else:
-            rot.z += -rotstep
-            rot.z %= 360
-
-    elif symbol == key.D:
-        print 'Stop right'
-        if autorotate:
-            autorotate = False
-        else:
-            rot.y += rotstep
-            rot.y %= 360
-
-    else:
-        print 'OTHER KEY'
+#
+#
+#@window.event
+#def on_key_press(symbol, modifiers):
+#    global autorotate
+#    global rot
+#    global zoom
+#
+#    if symbol == key.R:
+#        print 'Reset'
+#        rot = Vector3(0, 90, 0)
+#
+#    elif symbol == key.ESCAPE or symbol == key.Q:
+#        print 'Good Bye !'   # ESC would do it anyway, but not "Q"
+#        pyglet.app.exit()
+#        return pyglet.event.EVENT_HANDLED
+#
+#    elif symbol == key.SPACE:
+#        print 'Toggle autorotate'
+#        autorotate = not autorotate
+#
+#    elif symbol == key.A:
+#        print 'Stop left'
+#        if autorotate:
+#            autorotate = False
+#        else:
+#            rot.y += -rotstep
+#            rot.y %= 360
+#
+#    elif symbol == key.Z:
+#        print 'Zoom out'
+#        zoom += 1
+#
+#    elif symbol == key.U:
+#        print 'Zoom in'
+#        zoom -= 1
+#
+#    elif symbol == key.S:
+#        print 'Stop down'
+#        if autorotate:
+#            autorotate = False
+#        else:
+#            rot.z += rotstep
+#            rot.z %= 360
+#
+#    elif symbol == key.W:
+#        print 'Stop up'
+#        if autorotate:
+#            autorotate = False
+#        else:
+#            rot.z += -rotstep
+#            rot.z %= 360
+#
+#    elif symbol == key.D:
+#        print 'Stop right'
+#        if autorotate:
+#            autorotate = False
+#        else:
+#            rot.y += rotstep
+#            rot.y %= 360
+#
+#    else:
+#        print 'OTHER KEY'
 
 def setup():
 
@@ -164,16 +166,15 @@ cols = np.array( [ [0, 0, 1, 1],
                    [1, 0, 1, 1],
                    [0, 0, 1, 0.5] ] , dtype = np.float32 )
 
-from fos.core.camera2 import DefaultCamera
-cam = DefaultCamera()
+vert_width = np.array( [1, 20, 15, 1, 5, 1], dtype = np.float32 )
 
-from fos.actor.axes import Axes
+
+
 ax = Axes()
+window.add_actor_to_world(ax)
 
-act = Tree(vertices = vert, connectivity = conn, colors = cols)
-
-# overwrite eventloop
-
+act = Tree(vertices = vert, connectivity = conn, colors = cols, vertices_width = vert_width)
+window.add_actor_to_world(act)
 
 class MyEventLoop(pyglet.app.base.EventLoop):
 
@@ -198,8 +199,5 @@ class MyEventLoop(pyglet.app.base.EventLoop):
         # call parent
         pyglet.app.base.EventLoop.exit(self)
 
-
-
 pyglet.app.event_loop = MyEventLoop()
-
 pyglet.app.run()

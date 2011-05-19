@@ -29,10 +29,10 @@ class World():
 #            if update_camera:
 #                print "TODO: update the camera view"
             
-            print "added actor", obj
+            #print "added actor", obj
             self.ag.add(obj)
         elif isinstance(obj, Camera):
-            print "added camera", obj
+            #print "added camera", obj
             self.cl.add(obj)
         else:
             print "Not valid actor or camera!"

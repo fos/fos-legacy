@@ -14,7 +14,7 @@ import fos.lib.pyglet.window
 from fos.lib.pyglet.window import key,mouse
 from fos.lib.pyglet.clock import Clock, ClockDisplay
 from fos.lib.pyglet.window import FPSDisplay
-
+from fos.lib.pyglet.window.event import WindowEventLogger
 
 from fos import World
 
@@ -51,7 +51,7 @@ class SimpleWindow(fos.lib.pyglet.window.Window):
             having it appear to the user.
 
         """
-        super(SimpleWindow, self).__init__(**kwargs)
+
         
         self.update_dt = 1.0/60
 
@@ -75,9 +75,14 @@ class SimpleWindow(fos.lib.pyglet.window.Window):
         foswinhandlers = FosWinEventHandler(self)
         self.push_handlers(foswinhandlers)
 
+        # log handler
+#        self.push_handlers(WindowEventLogger())
+
         self.show_fps = True
         self.fps_display = ClockDisplay()
 
+        super(SimpleWindow, self).__init__(**kwargs)
+        print "init simple window"
 
     def remove_logos(self):
         self.show_logos = False
@@ -158,7 +163,7 @@ class SimpleWindow(fos.lib.pyglet.window.Window):
 
         
     def on_draw(self):
-
+        
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
@@ -179,3 +184,13 @@ class SimpleWindow(fos.lib.pyglet.window.Window):
         if self.show_logos:
             self.foslabel.draw()
 
+    def on_resize(self, width, height):
+        print "newsize ", width, height
+        if height==0: height=1
+        # Override the default on_resize handler to create a 3D projection
+        glViewport(0, 0, width, height)
+        glMatrixMode(GL_PROJECTION)
+        glLoadIdentity()
+        gluPerspective(60., width / float(height), .1, 8000)
+        glMatrixMode(GL_MODELVIEW)
+        return pyglet.event.EVENT_HANDLED

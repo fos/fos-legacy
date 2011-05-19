@@ -65,7 +65,7 @@ def on_draw():
 
 #    cam.draw()
     ax.draw()
-    
+
     act.draw()
 
     glLoadIdentity()
