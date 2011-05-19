@@ -13,8 +13,7 @@ import numpy as np
 
 try:
     # Try and create a window with multisampling (antialiasing)
-    config = Config(sample_buffers=1, samples=4,
-                    depth_size=16, double_buffer=True,)
+    config = Config(sample_buffers=1, samples=4,depth_size=16, double_buffer=True,)
     window = pyglet.window.Window(resizable=True, config=config, vsync=False, width=1000, height=800) # "vsync=False" to check the framerate
 except pyglet.window.NoSuchConfigException:
     # Fall back to no multisampling for old hardware
@@ -29,7 +28,7 @@ def on_resize(width, height):
     glViewport(0, 0, width, height)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluPerspective(50., width / float(height), -100, 8000)
+    gluPerspective(80., width / float(height), .1, 8000)
     glMatrixMode(GL_MODELVIEW)
     return pyglet.event.EVENT_HANDLED
 
@@ -95,7 +94,6 @@ def on_key_press(symbol, modifiers):
         else:
             rot.y += -rotstep
             rot.y %= 360
-
 
     elif symbol == key.Z:
         print 'Zoom out'
