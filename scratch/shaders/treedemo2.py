@@ -65,7 +65,7 @@ def on_draw():
 
 #    cam.draw()
     ax.draw()
-    
+
     act.draw()
 
     glLoadIdentity()
@@ -78,11 +78,11 @@ def on_key_press(symbol, modifiers):
     global autorotate
     global rot
     global zoom
-    
+
     if symbol == key.R:
         print 'Reset'
         rot = Vector3(0, 90, 0)
-        
+
     elif symbol == key.ESCAPE or symbol == key.Q:
         print 'Good Bye !'   # ESC would do it anyway, but not "Q"
         pyglet.app.exit()
@@ -131,7 +131,7 @@ def on_key_press(symbol, modifiers):
         else:
             rot.y += rotstep
             rot.y %= 360
-            
+
     else:
         print 'OTHER KEY'
 
@@ -164,18 +164,16 @@ cols = np.array( [ [0, 0, 1, 1],
                    [1, 0, 1, 1],
                    [0, 0, 1, 0.5] ] , dtype = np.float32 )
 
-vert_width = np.array( [1, 20, 15, 1, 5, 1], dtype = np.float32 )
-
 from fos.core.camera2 import DefaultCamera
 cam = DefaultCamera()
 
 from fos.actor.axes import Axes
-
 ax = Axes()
-window.add_actor_to_world(ax)
 
-act = Tree(vertices = vert, connectivity = conn, colors = cols, vertices_width = vert_width)
-window.add_actor_to_world(act)
+act = Tree(vertices = vert, connectivity = conn, colors = cols)
+
+# overwrite eventloop
+
 
 class MyEventLoop(pyglet.app.base.EventLoop):
 
@@ -200,5 +198,8 @@ class MyEventLoop(pyglet.app.base.EventLoop):
         # call parent
         pyglet.app.base.EventLoop.exit(self)
 
+
+
 pyglet.app.event_loop = MyEventLoop()
+
 pyglet.app.run()

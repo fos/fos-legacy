@@ -3,8 +3,7 @@ import numpy as np
 #from fos.lib.pyglet.gl import *
 from pyglet.gl import *
 
-#from fos import Actor
-
+from fos import Actor
 from fos.shader import Shader
 from fos.shader.lib import get_shader_code
 
@@ -21,11 +20,12 @@ def gen_texture():
     glGenTextures(1, byref(id))
     return id
 
-class Tree(object):
+class Tree(Actor):
     
     def __init__(self, vertices,
                  connectivity,
                  colors = None,
+                 vertices_width = None,
                  affine = None,
                  force_centering = False,
                  *args, **kwargs):
@@ -37,6 +37,8 @@ class Tree(object):
             Tree topology
         colors : Nx4 or 1x4
             Per connection color
+        vertices_width : N
+            Per vertex width
         affine : 4x4
             Affine transformation of the actor
 
@@ -75,6 +77,11 @@ class Tree(object):
 #                assert(len(colors) == len(self.vertices))
 #                self.colors = colors
 
+
+       # the sample 1d texture data array
+        self.mytex = vertices_width.astype( np.float32 )
+        self.mytex_ptr = self.mytex.ctypes.data
+        
 #        self.make_aabb(margin = 0)
         
         # create indicies, seems to be slow with nested loops
@@ -119,11 +126,6 @@ class Tree(object):
         glBufferData(GL_ARRAY_BUFFER, 4 * self.colors.size, self.colors_ptr, GL_STATIC_DRAW)
         glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0)
 
-       # the sample 1d texture data array
-        self.mytex = np.array( [1, 5, 5, 1, 5, 1], dtype = np.float32 )
-        #self.mytex = np.array( [0.5,0.5,0.5,0.5,0.5,0.5], dtype = np.float32 )
-        self.mytex_ptr = self.mytex.ctypes.data
-
         # texture init
         self.init_texture()
 
@@ -136,7 +138,6 @@ class Tree(object):
         glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
         glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
 
-        # TODO: I hope GL_LUMINANCE32F_ARB is fine
         glTexImage1D(GL_TEXTURE_1D, 0, GL_LUMINANCE32F_ARB, self.mytex.size, 0, GL_LUMINANCE, GL_FLOAT, self.mytex_ptr)
 
         glBindTexture(GL_TEXTURE_1D, 0)
@@ -144,12 +145,11 @@ class Tree(object):
     def update(self, dt):
         pass
         
-    def draw_shader(self):
+    def draw(self):
 
         # bind the shader
         self.shader.bind()
 
-        # TODO: when enabling the next line nothing is displayed anymore
         glUniform1i(self.shader.width_sampler, 0)
         glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_1D, self.tex_unit)
@@ -168,6 +168,3 @@ class Tree(object):
         # unbind the shader
         self.shader.unbind()
 
-    def draw(self):
-
-        self.draw_shader()

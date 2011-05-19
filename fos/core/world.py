@@ -70,9 +70,9 @@ class World():
         pass
         # loop over all windows and update the camera    
     
-    def delete(self, obj):
+    def remove(self, obj):
         if obj in self.ag.actors:
-            print "delete actors"
+            print "remove actors"
             del self.ag.actors[self.ag.actors.index(obj)]
             
     def get_cameras(self):
