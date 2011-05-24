@@ -1,17 +1,15 @@
 #!/usr/bin/env python
 
-
 import numpy as np
 
 import fos.lib.pyglet as pyglet
 from fos.lib.pyglet.gl import *
-from fos.lib.pyglet.window import key
 
-from fos.actor.tree import Tree
+from fos.actor.treeregion import TreeRegion
 from fos import SimpleWindow
 from fos.actor.axes import Axes
 
-mycpt = "Treedemo - Fos.me"
+mycpt = "TreeRegion Demo - Fos.me"
 try:
     # Try and create a window with multisampling (antialiasing)
     config = Config(sample_buffers=1, samples=4,depth_size=16, double_buffer=True,)
@@ -37,9 +35,9 @@ cols = np.array( [ [0, 0, 1, 1],
 vert_width = np.array( [1, 5, 5, 1, 5, 1], dtype = np.float32 )
 
 ax = Axes()
-window.add_actor_to_world(ax)
+act = TreeRegion(vertices = vert, connectivity = conn, colors = cols, radius = vert_width)
 
-act = Tree(vertices = vert, connectivity = conn, colors = cols, vertices_width = vert_width)
+window.add_actor_to_world(ax)
 window.add_actor_to_world(act)
 
 fos.run()
