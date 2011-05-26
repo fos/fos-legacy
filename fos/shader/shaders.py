@@ -40,6 +40,9 @@ class Shader:
         # attempt to link the program
         self.link()
 
+        self.projLoc = glGetUniformLocation(self.handle, "projMatrix")
+        self.mvLoc = glGetUniformLocation(self.handle, "modelviewMatrix")
+
         # needs to be after linking
         self.width_sampler = glGetUniformLocation(self.handle, "widthSampler" )
 

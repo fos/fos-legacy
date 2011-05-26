@@ -22,6 +22,8 @@ from fos.core.window.window_text  import WindowText
 from fos.core import color
 from fos.core.handlers.window import FosWinEventHandler
 
+from fos.shader.vsml import vsml
+
 class SimpleWindow(fos.lib.pyglet.window.Window):
 
     def __init__(self, bgcolor=None, **kwargs):
@@ -56,7 +58,7 @@ class SimpleWindow(fos.lib.pyglet.window.Window):
         self.update_dt = 1.0/60
 
         if bgcolor == None:
-            self.bgcolor = color.black
+            self.bgcolor = color.grey
         else:
             self.bgcolor = bgcolor
 
@@ -165,10 +167,11 @@ class SimpleWindow(fos.lib.pyglet.window.Window):
     def on_draw(self):
         
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        glMatrixMode(GL_MODELVIEW)
-        glLoadIdentity()
 
-        self.current_camera.draw()
+#        glMatrixMode(GL_MODELVIEW)
+#        glLoadIdentity()
+
+#        self.current_camera.draw()
 
         for a in self._world.ag.actors:
             try:
@@ -184,13 +187,23 @@ class SimpleWindow(fos.lib.pyglet.window.Window):
         if self.show_logos:
             self.foslabel.draw()
 
+#    def on_resize(self, width, height):
+#        print "newsize ", width, height
+#        if height==0: height=1
+#        # Override the default on_resize handler to create a 3D projection
+#        glViewport(0, 0, width, height)
+#        glMatrixMode(GL_PROJECTION)
+#        glLoadIdentity()
+#        gluPerspective(60., width / float(height), .1, 8000)
+#        glMatrixMode(GL_MODELVIEW)
+#        return pyglet.event.EVENT_HANDLED
+
     def on_resize(self, width, height):
+
         print "newsize ", width, height
         if height==0: height=1
         # Override the default on_resize handler to create a 3D projection
-        glViewport(0, 0, width, height)
-        glMatrixMode(GL_PROJECTION)
-        glLoadIdentity()
-        gluPerspective(60., width / float(height), .1, 8000)
-        glMatrixMode(GL_MODELVIEW)
+
+        #glViewport(0, 0, width, height)
+        vsml.perspective(60., width / float(height), .1, 8000)
         return pyglet.event.EVENT_HANDLED

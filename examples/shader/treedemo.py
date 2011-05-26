@@ -6,6 +6,7 @@ import fos.lib.pyglet as pyglet
 from fos.lib.pyglet.gl import *
 
 from fos.actor.treeregion import TreeRegion
+from fos.actor.tree import Tree
 from fos import SimpleWindow
 from fos.actor.axes import Axes
 
@@ -34,7 +35,7 @@ cols = np.array( [ [0, 0, 1, 1],
 
 vert_width = np.array( [1, 5, 5, 1, 5, 1], dtype = np.float32 )
 
-ax = Axes()
+ax = Axes(scale=400)
 act = TreeRegion(vertices = vert, connectivity = conn, colors = cols, radius = vert_width)
 
 window.add_actor_to_world(ax)

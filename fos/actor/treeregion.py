@@ -1,3 +1,4 @@
+import gletools
 import numpy as np
 
 from fos.lib.pyglet.gl import *
@@ -5,7 +6,14 @@ from fos.lib.pyglet.gl import *
 from fos import Actor
 from fos.shader import Shader, get_vary_line_width_shader
 
+from fos.shader.vsml import vsml
+
 from ctypes import byref
+def gen_texture():
+    id = GLuint()
+    glGenTextures(1, byref(id))
+    return id
+
 
 class TreeRegion(Actor):
 
@@ -63,7 +71,8 @@ class TreeRegion(Actor):
         if not radius is None:
             self.mytex = radius.astype( np.float32 )
         else:
-            self.mytex = np.ones( len(self.vertices), dtype = np.float32 )
+           #  self.mytex = np.ones( len(self.vertices), dtype = np.float32 )
+            self.mytex = np.random.randint(1,5, (len(self.vertices),)).astype(np.float32)
 
         self.mytex_ptr = self.mytex.ctypes.data
 
@@ -108,6 +117,9 @@ class TreeRegion(Actor):
 
         self.shader = get_vary_line_width_shader()
 
+        # init matrices
+        self.init_matrices()
+
     def init_texture(self):
         # self.tex_unit = gen_texture()
         self.tex_unit = GLuint()
@@ -116,8 +128,16 @@ class TreeRegion(Actor):
         glBindTexture(GL_TEXTURE_1D, self.tex_unit)
         glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
         glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+        # target, level, internalformat, width, border, format, type, pixels
         glTexImage1D(GL_TEXTURE_1D, 0, GL_LUMINANCE32F_ARB, self.mytex.size, 0, GL_LUMINANCE, GL_FLOAT, self.mytex_ptr)
         glBindTexture(GL_TEXTURE_1D, 0)
+
+    def init_matrices(self):
+
+        # should go into the camera!
+        lu = [0,0,100, 0,0,0, 0,1,0]
+        vsml.lookAt(*lu)
+
 
     def update(self, dt):
         pass
@@ -126,7 +146,13 @@ class TreeRegion(Actor):
         # bind the shader
         self.shader.bind()
 
+        # set modelview and projection matrices
+        # the matrices should be handled in VSML later
+        glUniformMatrix4fv(self.shader.projLoc, 1, False, vsml.get_projection().values)
+        glUniformMatrix4fv(self.shader.mvLoc, 1, False, vsml.get_modelview().values)
+
         glUniform1i(self.shader.width_sampler, 0)
+
         glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_1D, self.tex_unit)
 
