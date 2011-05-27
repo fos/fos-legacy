@@ -204,6 +204,6 @@ class SimpleWindow(fos.lib.pyglet.window.Window):
         if height==0: height=1
         # Override the default on_resize handler to create a 3D projection
 
-        #glViewport(0, 0, width, height)
+        glViewport(0, 0, width, height)
         vsml.perspective(60., width / float(height), .1, 8000)
         return pyglet.event.EVENT_HANDLED
