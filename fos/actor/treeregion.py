@@ -117,8 +117,6 @@ class TreeRegion(Actor):
 
         self.shader = get_vary_line_width_shader()
 
-        # init matrices
-        self.init_matrices()
 
     def init_texture(self):
         # self.tex_unit = gen_texture()
@@ -132,12 +130,6 @@ class TreeRegion(Actor):
         glTexImage1D(GL_TEXTURE_1D, 0, GL_LUMINANCE32F_ARB, self.mytex.size, 0, GL_LUMINANCE, GL_FLOAT, self.mytex_ptr)
         glBindTexture(GL_TEXTURE_1D, 0)
 
-    def init_matrices(self):
-
-        # should go into the camera!
-        lu = [0,0,100, 0,0,0, 0,1,0]
-        vsml.lookAt(*lu)
-
 
     def update(self, dt):
         pass
@@ -145,6 +137,12 @@ class TreeRegion(Actor):
     def draw(self):
         # bind the shader
         self.shader.bind()
+
+        if False:
+            print "projection", vsml.get_projection_matrix()
+            print "projection new", np.array( vsml.get_projection().values )
+            print "model", vsml.get_model_matrix()
+            print "model new", np.array( vsml.get_modelview().values )
 
         # set modelview and projection matrices
         # the matrices should be handled in VSML later

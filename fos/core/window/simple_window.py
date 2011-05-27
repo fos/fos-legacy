@@ -24,6 +24,7 @@ from fos.core.handlers.window import FosWinEventHandler
 
 from fos.shader.vsml import vsml
 
+
 class SimpleWindow(fos.lib.pyglet.window.Window):
 
     def __init__(self, bgcolor=None, **kwargs):
@@ -85,6 +86,8 @@ class SimpleWindow(fos.lib.pyglet.window.Window):
 
         super(SimpleWindow, self).__init__(**kwargs)
         print "init simple window"
+        # call on resize?
+        #self.on_resize(self.width, self.height)
 
     def remove_logos(self):
         self.show_logos = False
@@ -163,6 +166,7 @@ class SimpleWindow(fos.lib.pyglet.window.Window):
         # just take the first camera
         self.current_camera = self._world.get_cameras()[0]
 
+
         
     def on_draw(self):
         
@@ -170,40 +174,72 @@ class SimpleWindow(fos.lib.pyglet.window.Window):
 
 #        glMatrixMode(GL_MODELVIEW)
 #        glLoadIdentity()
+#
 
-#        self.current_camera.draw()
 
+        # // Reset transformations
+
+        vsml.loadIdentity(vsml.MatrixTypes.MODELVIEW)
+
+        # set the camera
+        self.current_camera.draw()
+        
         for a in self._world.ag.actors:
             try:
                 a.draw()
             except:
                 pass
 
-        if self.show_fps:
-            glLoadIdentity()
-            glTranslatef(200, 280, -800)
-            self.fps_display.draw()
+#        if self.show_fps:
+#            glLoadIdentity()
+#            glTranslatef(200, 280, -800)
+#            self.fps_display.draw()
             
-        if self.show_logos:
-            self.foslabel.draw()
+#        if self.show_logos:
+#            self.foslabel.draw()
 
-#    def on_resize(self, width, height):
-#        print "newsize ", width, height
-#        if height==0: height=1
-#        # Override the default on_resize handler to create a 3D projection
-#        glViewport(0, 0, width, height)
-#        glMatrixMode(GL_PROJECTION)
-#        glLoadIdentity()
-#        gluPerspective(60., width / float(height), .1, 8000)
-#        glMatrixMode(GL_MODELVIEW)
-#        return pyglet.event.EVENT_HANDLED
+    def on_resize_old(self, width, height):
+        print "newsize ", width, height
+        if height==0: height=1
+        # Override the default on_resize handler to create a 3D projection
+        glViewport(0, 0, width, height)
+        glMatrixMode(GL_PROJECTION)
+        glLoadIdentity()
+        gluPerspective(60., width / float(height), .1, 8000)
+        glMatrixMode(GL_MODELVIEW)
 
-    def on_resize(self, width, height):
+        vsml.perspective(60., width / float(height), .1, 8000)
+
+        return pyglet.event.EVENT_HANDLED
+
+    def on_resize_new(self, width, height):
 
         print "newsize ", width, height
         if height==0: height=1
         # Override the default on_resize handler to create a 3D projection
 
         glViewport(0, 0, width, height)
+        print "window: perspective before", np.array( vsml.get_projection().values )
         vsml.perspective(60., width / float(height), .1, 8000)
+        print "window: after before", np.array( vsml.get_projection().values )
+
         return pyglet.event.EVENT_HANDLED
+
+
+    def on_resize(self, width, height):
+
+        if height == 0:
+            height = 1
+
+        ratio =  width * 1.0 / height
+
+        # // Reset Matrix
+	    # vsml->loadIdentity(VSML::PROJECTION);
+        vsml.loadIdentity(vsml.MatrixTypes.PROJECTION)
+
+        # // Set the viewport to be the entire window
+        glViewport(0, 0, width, height)
+
+        # // Set the correct perspective.
+	    # vsml->perspective(45.0f, ratio, 0.1f, 100.0f);
+        vsml.perspective(60., ratio, .1, 8000)

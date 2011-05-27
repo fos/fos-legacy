@@ -10,10 +10,9 @@
 from fos.lib.pyglet.gl import *
 import gletools
 import numpy as np
+from ctypes import *
 
-class MatrixTypes(object):
-    MODELVIEW = 0
-    PROJECTION = 1
+
 
 
 def normalize(vectarr):
@@ -28,16 +27,117 @@ class VSML(object):
                                 cls, *args, **kwargs)
         return cls._instance
 
+    class MatrixTypes(object):
+        MODELVIEW = 0
+        PROJECTION = 1
+
     def __init__(self):
         self.projection = np.eye(4)
         self.modelview = np.eye(4)
 
+        # setting up the stacks
+        self.mMatrixStack = {}
+
+        # use list as stack
+        self.mMatrixStack[self.MatrixTypes.MODELVIEW] = []
+        self.mMatrixStack[self.MatrixTypes.PROJECTION] = []
+
+    #    /// The storage for the two matrices
+    #    float mMatrix[2][16];
+    # mMatrix = []
+
+    def loadIdentity(self, aType):
+        """
+        /** Similar to glLoadIdentity.
+          *
+          * \param aType either MODELVIEW or PROJECTION
+        */
+        void loadIdentity(MatrixTypes aType);
+        """
+        if aType == self.MatrixTypes.PROJECTION:
+            self.projection = np.eye(4, dtype = np.float32 )
+        elif aType == self.MatrixTypes.MODELVIEW:
+            self.modelview = np.eye(4, dtype = np.float32 )
+        else:
+            print "pushMatrix: wrong matrix type"
+
+    def pushMatrix(self, aType):
+        """
+        /** Similar to glPushMatrix
+          *
+          * \param aType either MODELVIEW or PROJECTION
+        */
+        void pushMatrix(MatrixTypes aType);
+        """
+        # todo: do we need copy?
+        if aType == self.MatrixTypes.PROJECTION:
+            self.mMatrixStack[aType].append(self.projection.copy())
+        elif aType == self.MatrixTypes.MODELVIEW:
+            self.mMatrixStack[aType].append(self.modelview.copy() )
+        else:
+            print "pushMatrix: wrong matrix type"
+
+    def popMatrix(self, aType):
+        """
+        /** Similar to glPopMatrix
+          *
+          * \param aType either MODELVIEW or PROJECTION
+        */
+        void popMatrix(MatrixTypes aType);
+        """
+        if aType == self.MatrixTypes.PROJECTION:
+            self.projection = self.mMatrixStack[aType].pop()
+        elif aType == self.MatrixTypes.MODELVIEW:
+            self.modelview = self.mMatrixStack[aType].pop()
+        else:
+            print "popMatrix: wrong matrix type"
+
+    def multMatrix(self, aType, aMatrix):
+        """
+        /** Similar to glMultMatrix.
+          *
+          * \param aType either MODELVIEW or PROJECTION
+          * \param aMatrix matrix in column major order data, float[16]
+        */
+        void multMatrix(MatrixTypes aType, float *aMatrix);
+        """
+        if aType == self.MatrixTypes.PROJECTION:
+            self.projection = np.dot(self.projection, aMatrix)
+        elif aType == self.MatrixTypes.MODELVIEW:
+            self.modelview = np.dot(self.modelview, aMatrix)
+        else:
+            print "multMatrix: wrong matrix type"
+
+    def get_modelview_matrix(self, array_type=c_float, glGetMethod=glGetFloatv):
+        """
+        Returns the current modelview matrix.
+        """
+        m = (array_type*16)()
+        glGetMethod(GL_MODELVIEW_MATRIX, m)
+        return np.array( m )
+
+    def get_projection_matrix(self, array_type=c_float, glGetMethod=glGetFloatv):
+        """
+        Returns the current modelview matrix.
+        """
+        m = (array_type*16)()
+        glGetMethod(GL_PROJECTION_MATRIX, m)
+        return np.array( m )
+
+    def get_viewport(self):
+        """
+        Returns the current viewport.
+        """
+        m = (c_int*4)()
+        glGetIntegerv(GL_VIEWPORT, m)
+        return np.array( m )
+
     def get_projection(self):
         # todo: do we need .T ?
-        return gletools.Mat4(*self.projection.ravel().tolist())
+        return gletools.Mat4(*self.projection.T.ravel().tolist())
 
     def get_modelview(self):
-        return gletools.Mat4(*self.modelview.ravel().tolist())
+        return gletools.Mat4(*self.modelview.T.ravel().tolist())
 
     def initUniformLocs(sefl, modelviewLoc, projLoc):
         """
@@ -137,26 +237,6 @@ class VSML(object):
         """
         pass
 
-    def loadIdentity(self, aType):
-        """
-        /** Similar to glLoadIdentity.
-          *
-          * \param aType either MODELVIEW or PROJECTION
-        */
-        void loadIdentity(MatrixTypes aType);
-        """
-        pass
-
-    def multMatrix(self, aType, aMatrix):
-        """
-        /** Similar to glMultMatrix.
-          *
-          * \param aType either MODELVIEW or PROJECTION
-          * \param aMatrix matrix in column major order data, float[16]
-        */
-        void multMatrix(MatrixTypes aType, float *aMatrix);
-        """
-        pass
 
     def loadMatrix(self, aType, aMatrix):
         """
@@ -169,25 +249,6 @@ class VSML(object):
         """
         pass
 
-    def pushMatrix(self, aType):
-        """
-        /** Similar to glPushMatrix
-          *
-          * \param aType either MODELVIEW or PROJECTION
-        */
-        void pushMatrix(MatrixTypes aType);
-        """
-        pass
-
-    def popMatrix(self, aType):
-        """
-        /** Similar to glPopMatrix
-          *
-          * \param aType either MODELVIEW or PROJECTION
-        */
-        void popMatrix(MatrixTypes aType);
-        """
-        pass
 
 #    def lookAt(self, xPos, yPos, zPos, xLook, yLook, zLook, xUp, yUp, zUp):
         """
@@ -225,11 +286,15 @@ class VSML(object):
         out[1,3] = -yPos
         out[2,3] = -zPos
         out[3,3] = 1.0
-        print out
-        print "out order?",  out.ravel()
 
         # mulitply on the matrix stack
-        self.modelview = out * self.modelview
+        # self.modelview = np.dot(out, self.modelview)
+        # self.modelview = out
+        self.multMatrix(self.MatrixTypes.MODELVIEW, out)
+
+        print "modelview vsml", np.array( vsml.get_modelview().values )
+        #print "modelview orig", self.get_modelview_matrix()
+
         # self.modelview = gletools.Mat4(*out.T.ravel().tolist())
     
 
@@ -254,8 +319,11 @@ class VSML(object):
         out[3,2] = -1.0;
         out[3,3] = 0.0
 
-        print "perspective", out
-        self.projection = out * self.projection
+        print "projection vsml", np.array( vsml.get_projection().values )
+        # print "projection orig", self.get_projection_matrix()
+        #self.projection = np.dot(out, self.projection)
+        #self.projection = out
+        self.multMatrix(self.MatrixTypes.PROJECTION, out)
 
     
     def ortho(self, left, right, bottom, top, nearp=-1.0, farp=1.0):
@@ -336,11 +404,9 @@ class VSML(object):
 
     #    ///brief Matrix stacks for modelview and projection matrices
     #    std::vector<float *> mMatrixStack[2];
-    mMatrixStack = []
+    # mMatrixStack = []
 
-    #    /// The storage for the two matrices
-    #    float mMatrix[2][16];
-    mMatrix = []
+
 
     #    /// Storage for the uniform locations
     #    GLuint mUniformLoc[2];

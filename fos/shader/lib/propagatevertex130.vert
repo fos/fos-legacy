@@ -28,7 +28,7 @@ void main()
         // Personally, I use uniform buffers containing the modelview and the projection matrix, as well as the MVP
         // matrix in order to avoid unnecessary matrix multiplication on a per-vertex basis.
 
-        //gl_Position = gl_ModelViewProjectionMatrix * vec4(aPosition.x , aPosition.y, aPosition.z, 1.0);
+        // gl_Position = gl_ModelViewProjectionMatrix * vec4(aPosition.x , aPosition.y, aPosition.z, 1.0);
 
         gl_Position = projMatrix * modelviewMatrix * vec4(aPosition.x , aPosition.y, aPosition.z, 1.0);;
 
