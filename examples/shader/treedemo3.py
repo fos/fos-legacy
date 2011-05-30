@@ -34,19 +34,20 @@ ac=[]
 # spread factor
 s=500
 # duplicator
-d = 2200
+d = 2000
 
 # tune it up
 # this is very inefficient, because it copies the position arrays
 bigpos = np.zeros( (d*len(pos), 3), dtype = np.float32 )
 bigpar = np.zeros( (d*len(parents)), dtype = np.int32 )
-
+bigcol = np.zeros( (d*len(parents)/2, 4), dtype = np.float32 )
 print bigpar.shape
 
 off = 0
 offpar = 0
 poslen = len(pos)
 parlen = len(parents)
+parhalf = parlen/2
 
 for i in range(d):
     pos2 = pos.copy()
@@ -56,6 +57,12 @@ for i in range(d):
 
     bigpos[off:off+poslen,:] = pos2
     bigpar[offpar:offpar+parlen] = parents + off
+    # find a color for the tree
+    co=np.random.rand( 1 , 4)
+    co[0,3] = 1.0
+#    co = co.repeat(parhalf, axis = 0)
+    print "parlen", parhalf, "coshape", co.shape, "other", bigcol[offpar:offpar+parhalf,:].shape, "offpar", offpar, "ot", offpar+parhalf
+    bigcol[offpar:offpar+parhalf,:] = co
 
     print "offset: pos/par", off, offpar
     print "from to", off, off+poslen
@@ -68,8 +75,9 @@ for i in range(d):
 print "len bipar", len(bigpar), bigpar
 rad = np.ones( len(bigpar), dtype = np.float32 )
 print "bigpos", bigpos
+print "bigcol", bigcol
 
-treeregion = TreeRegion(vertices = bigpos, connectivity = bigpar.astype(np.int32) ) #, radius = rad )
+treeregion = TreeRegion(vertices = bigpos, connectivity = bigpar.astype(np.int32) , colors = bigcol) #, radius = rad )
 window.add_actor_to_world(treeregion)
 #
 fos.run()
