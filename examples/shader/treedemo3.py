@@ -32,9 +32,9 @@ except fos.lib.pyglet.window.NoSuchConfigException:
 
 ac=[]
 # spread factor
-s=5
+s=500
 # duplicator
-d = 4
+d = 2200
 
 # tune it up
 # this is very inefficient, because it copies the position arrays
