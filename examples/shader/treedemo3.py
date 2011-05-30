@@ -34,7 +34,7 @@ ac=[]
 # spread factor
 s=5
 # duplicator
-d = 1
+d = 10
 
 # tune it up
 # this is very inefficient, because it copies the position arrays

@@ -13,8 +13,7 @@ import numpy as np
 from ctypes import *
 
 
-
-DEBUG = True
+DEBUG = False
 
 def normalize(vectarr):
     return vectarr / np.linalg.norm( vectarr )

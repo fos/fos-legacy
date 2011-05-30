@@ -28,16 +28,19 @@ class Axes(Actor):
             print "vsml modelview is ", vsml.modelview
             print "vsml projection is ", vsml.projection
 
-#        self.shader.bind()
+        #self.shader.bind()
 #
 #        vsml.pushMatrix(vsml.MatrixTypes.MODELVIEW)
         
-#        glPushMatrix()
+        glPushMatrix()
+
         glMatrixMode(GL_MODELVIEW)
-        glLoadMatrix(vsml.get_modelview().values)
+        glLoadIdentity()
+        glLoadMatrix(vsml.get_modelview())
 
         glMatrixMode(GL_PROJECTION)
-        glLoadMatrix(vsml.get_projection().values)
+        glLoadIdentity()
+        glLoadMatrix(vsml.get_projection())
 
         # glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
 
