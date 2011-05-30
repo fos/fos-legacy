@@ -22,15 +22,23 @@ class Axes(Actor):
 
 
     def draw(self):
-        print "draw axes", self.scale
-        print "vsml modelview is ", vsml.modelview
-        print "vsml projection is ", vsml.projection
 
-        self.shader.bind()
+        if vsml.DEBUG:
+            print "draw axes", self.scale
+            print "vsml modelview is ", vsml.modelview
+            print "vsml projection is ", vsml.projection
 
-        vsml.pushMatrix(vsml.MatrixTypes.MODELVIEW)
+#        self.shader.bind()
+#
+#        vsml.pushMatrix(vsml.MatrixTypes.MODELVIEW)
         
-        #glPushMatrix()
+#        glPushMatrix()
+        glMatrixMode(GL_MODELVIEW)
+        glLoadMatrix(vsml.get_modelview().values)
+
+        glMatrixMode(GL_PROJECTION)
+        glLoadMatrix(vsml.get_projection().values)
+
         # glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
 
         glLineWidth(2.0)
@@ -50,7 +58,7 @@ class Axes(Actor):
         glVertex3f(0.0,0.0,self.scale)
         glEnd()
         
-        # glPopMatrix()
-        vsml.popMatrix(vsml.MatrixTypes.MODELVIEW)
-
-        self.shader.unbind()
+        glPopMatrix()
+#        vsml.popMatrix(vsml.MatrixTypes.MODELVIEW)
+#
+#        self.shader.unbind()

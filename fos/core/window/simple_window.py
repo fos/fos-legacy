@@ -175,14 +175,12 @@ class SimpleWindow(fos.lib.pyglet.window.Window):
 #        glMatrixMode(GL_MODELVIEW)
 #        glLoadIdentity()
 #
-
-
         # // Reset transformations
 
-        vsml.loadIdentity(vsml.MatrixTypes.MODELVIEW)
+#        vsml.loadIdentity(vsml.MatrixTypes.MODELVIEW)
 
         # set the camera
-        self.current_camera.draw()
+#        self.current_camera.draw()
         
         for a in self._world.ag.actors:
             try:

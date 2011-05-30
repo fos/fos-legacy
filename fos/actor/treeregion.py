@@ -138,16 +138,19 @@ class TreeRegion(Actor):
         # bind the shader
         self.shader.bind()
 
-        if False:
-            print "projection", vsml.get_projection_matrix()
-            print "projection new", np.array( vsml.get_projection().values )
-            print "model", vsml.get_model_matrix()
-            print "model new", np.array( vsml.get_modelview().values )
+
+#        print "treeregion"
+#        print "projection", vsml.get_projection_matrix()
+#        print "projection new", np.array( vsml.get_projection().values )
+#        print "---"
+        print vsml.get_modelview()
+        print "model", vsml.get_modelview_matrix()
+        print "model new", np.array( vsml.get_modelview().values )
 
         # set modelview and projection matrices
         # the matrices should be handled in VSML later
-        glUniformMatrix4fv(self.shader.projLoc, 1, False, vsml.get_projection().values)
-        glUniformMatrix4fv(self.shader.mvLoc, 1, False, vsml.get_modelview().values)
+        glUniformMatrix4fv(self.shader.projLoc, 1, False, vsml.get_projection() )
+        glUniformMatrix4fv(self.shader.mvLoc, 1, False, vsml.get_modelview() )
 
         glUniform1i(self.shader.width_sampler, 0)
 

@@ -14,6 +14,7 @@ from ctypes import *
 
 
 
+DEBUG = True
 
 def normalize(vectarr):
     return vectarr / np.linalg.norm( vectarr )
@@ -101,10 +102,20 @@ class VSML(object):
         */
         void multMatrix(MatrixTypes aType, float *aMatrix);
         """
+        if DEBUG:
+            print "multiply matrix"
         if aType == self.MatrixTypes.PROJECTION:
+            if DEBUG:
+                print "projection was", self.projection
             self.projection = np.dot(self.projection, aMatrix)
+            if DEBUG:
+                print "projection is", self.projection
         elif aType == self.MatrixTypes.MODELVIEW:
+            if DEBUG:
+                print "modelview was", self.modelview
             self.modelview = np.dot(self.modelview, aMatrix)
+            if DEBUG:
+                print "modelview is", self.modelview
         else:
             print "multMatrix: wrong matrix type"
 
@@ -134,10 +145,13 @@ class VSML(object):
 
     def get_projection(self):
         # todo: do we need .T ?
-        return gletools.Mat4(*self.projection.T.ravel().tolist())
+        # return gletools.Mat4(*self.projection.T.ravel().tolist())
+        return (c_float*16)(*self.projection.ravel().tolist())
+
 
     def get_modelview(self):
-        return gletools.Mat4(*self.modelview.T.ravel().tolist())
+        #return gletools.Mat4(*self.modelview.T.ravel().tolist())
+        return (c_float*16)(*self.modelview.ravel().tolist())
 
     def initUniformLocs(sefl, modelviewLoc, projLoc):
         """
@@ -169,17 +183,17 @@ class VSML(object):
         """
         pass
 
-    def translate(self, aType, x, y, z):
-        """
-        /** Similar to glTranslate*. Can be applied to both MODELVIEW
-          * and PROJECTION matrices.
-          *
-          * \param aType either MODELVIEW or PROJECTION
-          * \param x,y,z vector to perform the translation
-        */
-        void translate(MatrixTypes aType, float x, float y, float z);
-        """
-        pass
+#    def translate(self, aType, x, y, z):
+#        """
+#        /** Similar to glTranslate*. Can be applied to both MODELVIEW
+#          * and PROJECTION matrices.
+#          *
+#          * \param aType either MODELVIEW or PROJECTION
+#          * \param x,y,z vector to perform the translation
+#        */
+#        void translate(MatrixTypes aType, float x, float y, float z);
+#        """
+#        pass
 
     def translate(self, x, y, z):
         """
@@ -189,7 +203,15 @@ class VSML(object):
         */
         void translate(float x, float y, float z);
         """
-        pass
+        mat = np.eye(4, dtype = np.float32 )
+        mat[0,3] = x
+        mat[1,3] = y
+        mat[2,3] = z
+
+        print "translate matrix", mat
+        self.multMatrix(self.MatrixTypes.MODELVIEW, mat)
+
+
 
     def scale(self, aType, x, y, z):
         """
@@ -292,7 +314,8 @@ class VSML(object):
         # self.modelview = out
         self.multMatrix(self.MatrixTypes.MODELVIEW, out)
 
-        print "modelview vsml", np.array( vsml.get_modelview().values )
+        if DEBUG:
+            print "lookat: modelview vsml", np.array( vsml.get_modelview() )
         #print "modelview orig", self.get_modelview_matrix()
 
         # self.modelview = gletools.Mat4(*out.T.ravel().tolist())
@@ -316,15 +339,17 @@ class VSML(object):
         out[1,1] = f
         out[2,2] = (farp + nearp) / (nearp - farp)
         out[2,3] = (2.0 * farp * nearp) / (nearp - farp)
-        out[3,2] = -1.0;
+        out[3,2] = -1.0
         out[3,3] = 0.0
 
-        print "projection vsml", np.array( vsml.get_projection().values )
+
         # print "projection orig", self.get_projection_matrix()
         #self.projection = np.dot(out, self.projection)
         #self.projection = out
         self.multMatrix(self.MatrixTypes.PROJECTION, out)
-
+        
+        if DEBUG:
+            print "perspective: new projection vsml", self.projection, np.array( vsml.get_projection() )
     
     def ortho(self, left, right, bottom, top, nearp=-1.0, farp=1.0):
         """
