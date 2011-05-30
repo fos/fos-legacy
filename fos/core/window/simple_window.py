@@ -88,6 +88,7 @@ class SimpleWindow(fos.lib.pyglet.window.Window):
         print "init simple window"
         # call on resize?
         #self.on_resize(self.width, self.height)
+        self.setup()
 
     def remove_logos(self):
         self.show_logos = False
