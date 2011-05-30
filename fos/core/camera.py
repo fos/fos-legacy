@@ -66,13 +66,18 @@ class MyCamera(Camera):
         vsml.lookAt(*self.lu)
 
     def reset(self):
-        print "reset modelview"
         vsml.loadIdentity(vsml.MatrixTypes.MODELVIEW)
         vsml.lookAt(*self.lu)
 
     def translate(self, x, y, z):
-        print "translate", x,y,z
         vsml.translate(x, y, z)
+
+    def scale(self, x, y, z):
+        vsml.scale(x, y, z, vsml.MatrixTypes.MODELVIEW)
+
+    def rotate(self, angle, x, y, z):
+        vsml.rotate(angle, x, y, z, vsml.MatrixTypes.MODELVIEW)
+
 
 
 class DefaultCamera(Camera):

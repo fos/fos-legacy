@@ -183,19 +183,7 @@ class VSML(object):
         """
         pass
 
-#    def translate(self, aType, x, y, z):
-#        """
-#        /** Similar to glTranslate*. Can be applied to both MODELVIEW
-#          * and PROJECTION matrices.
-#          *
-#          * \param aType either MODELVIEW or PROJECTION
-#          * \param x,y,z vector to perform the translation
-#        */
-#        void translate(MatrixTypes aType, float x, float y, float z);
-#        """
-#        pass
-
-    def translate(self, x, y, z):
+    def translate(self, x, y, z, aType = MatrixTypes.MODELVIEW ):
         """
         /** Similar to glTranslate*. Applied to MODELVIEW only.
           *
@@ -208,12 +196,12 @@ class VSML(object):
         mat[1,3] = y
         mat[2,3] = z
 
-        print "translate matrix", mat
-        self.multMatrix(self.MatrixTypes.MODELVIEW, mat)
+        if aType == self.MatrixTypes.MODELVIEW:
+            self.multMatrix(self.MatrixTypes.MODELVIEW, mat)
+        elif aType == self.MatrixTypes.PROJECTION:
+            self.multMatrix(self.MatrixTypes.PROJECTION, mat)
 
-
-
-    def scale(self, aType, x, y, z):
+    def scale(self, x, y, z, aType = MatrixTypes.MODELVIEW ):
         """
         /** Similar to glScale*. Can be applied to both MODELVIEW
           * and PROJECTION matrices.
@@ -223,19 +211,19 @@ class VSML(object):
         */
         void scale(MatrixTypes aType, float x, float y, float z);
         """
-        pass
+        mat = np.zeros( (4,4), dtype = np.float32)
 
-    def scale(self, x, y, z):
-        """
-        /** Similar to glScale*. Applied to MODELVIEW only.
-          *
-          * \param x,y,z scale factors
-        */
-        void scale(float x, float y, float z);
-        """
-        pass
+        mat[0,0] = x
+        mat[2,2] = y
+        mat[3,3] = z
 
-    def rotate(self, aType, angle, x, y, z):
+        if aType == self.MatrixTypes.MODELVIEW:
+            self.multMatrix(self.MatrixTypes.MODELVIEW, mat)
+        elif aType == self.MatrixTypes.PROJECTION:
+            self.multMatrix(self.MatrixTypes.PROJECTION, mat)
+
+
+    def rotate(self, angle, x, y, z, aType = MatrixTypes.MODELVIEW ):
         """
         /** Similar to glTotate*. Can be applied to both MODELVIEW
           * and PROJECTION matrices.
@@ -246,18 +234,39 @@ class VSML(object):
         */
         void rotate(MatrixTypes aType, float angle, float x, float y, float z);
         """
-        pass
+        mat = np.zeros( (4,4), dtype = np.float32)
 
-    def rotate(self, angle, x, y, z):
-        """
-        /** Similar to glRotate*. Applied to MODELVIEW only.
-          *
-          * \param angle rotation angle in degrees
-          * \param x,y,z rotation axis in degrees
-        */
-        void rotate(float angle, float x, float y, float z);
-        """
-        pass
+        radAngle = np.deg2rad(angle)
+        co = np.cos(radAngle)
+        si = np.sin(radAngle)
+        x2 = x*x
+        y2 = y*y
+        z2 = z*z
+
+        mat[0,0] = x2 + (y2 + z2) * co
+        mat[0,1] = x * y * (1 - co) - z * si
+        mat[0,2] = x * z * (1 - co) + y * si
+        mat[0,3]= 0.0
+
+        mat[1,0] = x * y * (1 - co) + z * si
+        mat[1,1] = y2 + (x2 + z2) * co
+        mat[1,2] = y * z * (1 - co) - x * si
+        mat[1,3]= 0.0
+
+        mat[2,0] = x * z * (1 - co) - y * si
+        mat[2,1] = y * z * (1 - co) + x * si
+        mat[2,2]= z2 + (x2 + y2) * co
+        mat[2,3]= 0.0
+
+        mat[3,0] = 0.0
+        mat[3,1] = 0.0
+        mat[3,2]= 0.0
+        mat[3,3]= 1.0
+
+        if aType == self.MatrixTypes.MODELVIEW:
+            self.multMatrix(self.MatrixTypes.MODELVIEW, mat)
+        elif aType == self.MatrixTypes.PROJECTION:
+            self.multMatrix(self.MatrixTypes.PROJECTION, mat)
 
 
     def loadMatrix(self, aType, aMatrix):
@@ -272,7 +281,8 @@ class VSML(object):
         pass
 
 
-#    def lookAt(self, xPos, yPos, zPos, xLook, yLook, zLook, xUp, yUp, zUp):
+
+    def lookAt(self, xPos, yPos, zPos, xLook, yLook, zLook, xUp, yUp, zUp):
         """
         /** Similar to gluLookAt
           *
@@ -284,8 +294,6 @@ class VSML(object):
                     float xLook, float yLook, float zLook,
                     float xUp, float yUp, float zUp);
         """
-
-    def lookAt(self, xPos, yPos, zPos, xLook, yLook, zLook, xUp, yUp, zUp):
 
         dir = np.array( [xLook - xPos, yLook - yPos, zLook - zPos], dtype = np.float32)
         dir = normalize(dir)
