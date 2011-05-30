@@ -146,12 +146,12 @@ class VSML(object):
     def get_projection(self):
         # todo: do we need .T ?
         # return gletools.Mat4(*self.projection.T.ravel().tolist())
-        return (c_float*16)(*self.projection.ravel().tolist())
+        return (c_float*16)(*self.projection.T.ravel().tolist())
 
 
     def get_modelview(self):
         #return gletools.Mat4(*self.modelview.T.ravel().tolist())
-        return (c_float*16)(*self.modelview.ravel().tolist())
+        return (c_float*16)(*self.modelview.T.ravel().tolist())
 
     def initUniformLocs(sefl, modelviewLoc, projLoc):
         """

@@ -143,14 +143,21 @@ class TreeRegion(Actor):
 #        print "projection", vsml.get_projection_matrix()
 #        print "projection new", np.array( vsml.get_projection().values )
 #        print "---"
-        print vsml.get_modelview()
-        print "model", vsml.get_modelview_matrix()
-        print "model new", np.array( vsml.get_modelview().values )
+#        print vsml.get_modelview()
+#        print "model", vsml.get_modelview_matrix()
+#        print "model new", np.array( vsml.get_modelview().values )
 
         # set modelview and projection matrices
         # the matrices should be handled in VSML later
-        glUniformMatrix4fv(self.shader.projLoc, 1, False, vsml.get_projection() )
-        glUniformMatrix4fv(self.shader.mvLoc, 1, False, vsml.get_modelview() )
+#        glUniformMatrix4fv(self.shader.projLoc, 1, False, vsml.get_projection() )
+#        glUniformMatrix4fv(self.shader.mvLoc, 1, False, vsml.get_modelview() )
+
+
+#        self.shader.uniform_matrixf( 'projMatrix', [1.3856406211853027, 0.0, 0.0, 0.0, 0.0, 1.7320507764816284, 0.0, 0.0, 0.0, 0.0, -1.0000250339508057, -1.0, 0.0, 0.0, -0.20000250637531281, 0.0])
+#        self.shader.uniform_matrixf( 'modelviewMatrix',[1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -120.0, 1.0])
+        self.shader.uniform_matrixf( 'projMatrix', vsml.get_projection())
+        self.shader.uniform_matrixf( 'modelviewMatrix', vsml.get_modelview())
+
 
         glUniform1i(self.shader.width_sampler, 0)
 

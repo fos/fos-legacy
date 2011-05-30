@@ -3,8 +3,8 @@ in vec3 aPosition;
 in vec4 aColor; // This is the per-vertex color
 
 // matrices
-in mat4 projMatrix;
-in mat4 modelviewMatrix;
+uniform mat4 projMatrix;
+uniform mat4 modelviewMatrix;
 
 out vec4 vColor;   // This is the output to the geometry shader
 out float vWidth;

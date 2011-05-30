@@ -7,7 +7,7 @@
 # Modified by Stephan Gerhard, 2010
 
 from ctypes import (
-    byref, c_char, c_char_p, c_int, cast, create_string_buffer, pointer,
+    byref, c_char, c_char_p, c_int, cast, create_string_buffer, pointer, c_float,
     POINTER
 )
 
@@ -40,8 +40,8 @@ class Shader:
         # attempt to link the program
         self.link()
 
-        self.projLoc = glGetUniformLocation(self.handle, "projMatrix")
-        self.mvLoc = glGetUniformLocation(self.handle, "modelviewMatrix")
+#        self.projLoc = glGetUniformLocation(self.handle, "projMatrix")
+#        self.mvLoc = glGetUniformLocation(self.handle, "modelviewMatrix")
 
         # needs to be after linking
         self.width_sampler = glGetUniformLocation(self.handle, "widthSampler" )
