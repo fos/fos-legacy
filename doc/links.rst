@@ -3,6 +3,7 @@ Links
 =====
 Our aim is to collect knowledge, references and feature requests...
 
+* http://vip.cs.utsa.edu/research/Davis/
 * also freeGLUT or OpenGLUT http://www.lighthouse3d.com/cg-topics/glut-and-freeglut/
 * http://www.panda3d.org/
 * http://gamedev.stackexchange.com/
