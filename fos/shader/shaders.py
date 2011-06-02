@@ -7,7 +7,7 @@
 # Modified by Stephan Gerhard, 2010
 
 from ctypes import (
-    byref, c_char, c_char_p, c_int, cast, create_string_buffer, pointer,
+    byref, c_char, c_char_p, c_int, cast, create_string_buffer, pointer, c_float,
     POINTER
 )
 
@@ -40,11 +40,14 @@ class Shader:
         # attempt to link the program
         self.link()
 
-        self.projLoc = glGetUniformLocation(self.handle, "projMatrix")
-        self.mvLoc = glGetUniformLocation(self.handle, "modelviewMatrix")
+        # maximum 2d texture
+        myint = GLint(0)
+        glGetIntegerv(GL_MAX_TEXTURE_SIZE, myint)
+        self.max_tex = myint.value
 
         # needs to be after linking
         self.width_sampler = glGetUniformLocation(self.handle, "widthSampler" )
+        self.tex_width = glGetUniformLocation(self.handle, "textureWidth" )
 
     def createShader(self, strings, type):
         count = len(strings)
@@ -152,16 +155,16 @@ class Shader:
 
         glEnableVertexAttribArray(0)
         glEnableVertexAttribArray(1)
-        glEnable(GL_TEXTURE_1D)
+#        glEnable(GL_TEXTURE_1D)
 
     def unbind(self):
         # unbind whatever program is currently bound - not necessarily this program,
         # so this should probably be a class method instead
         glUseProgram(0)
 
-        glDisableVertexAttribArray(0)
-        glDisableVertexAttribArray(1)
-        glDisable(GL_TEXTURE_1D)
+#        glDisableVertexAttribArray(0)
+#        glDisableVertexAttribArray(1)
+#        glDisable(GL_TEXTURE_1D)
 
     # upload a floating point uniform
     # this program must be currently bound

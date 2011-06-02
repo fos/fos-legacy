@@ -88,6 +88,7 @@ class SimpleWindow(fos.lib.pyglet.window.Window):
         print "init simple window"
         # call on resize?
         #self.on_resize(self.width, self.height)
+        self.setup()
 
     def remove_logos(self):
         self.show_logos = False
@@ -175,14 +176,12 @@ class SimpleWindow(fos.lib.pyglet.window.Window):
 #        glMatrixMode(GL_MODELVIEW)
 #        glLoadIdentity()
 #
-
-
         # // Reset transformations
 
-        vsml.loadIdentity(vsml.MatrixTypes.MODELVIEW)
+#        vsml.loadIdentity(vsml.MatrixTypes.MODELVIEW)
 
         # set the camera
-        self.current_camera.draw()
+#        self.current_camera.draw()
         
         for a in self._world.ag.actors:
             try:

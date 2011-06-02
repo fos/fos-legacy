@@ -71,10 +71,9 @@ class TreeRegion(Actor):
         if not radius is None:
             self.mytex = radius.astype( np.float32 )
         else:
-           #  self.mytex = np.ones( len(self.vertices), dtype = np.float32 )
-            self.mytex = np.random.randint(1,5, (len(self.vertices),)).astype(np.float32)
+            self.mytex = np.ones( len(self.vertices), dtype = np.float32 )
+           # self.mytex = np.random.randint(1,5, (len(self.vertices),)).astype(np.float32)
 
-        self.mytex_ptr = self.mytex.ctypes.data
 
         # create indicies, seems to be slow with nested loops
         self.indices = self.connectivity
@@ -112,10 +111,21 @@ class TreeRegion(Actor):
         glBufferData(GL_ARRAY_BUFFER, 4 * self.colors.size, self.colors_ptr, GL_STATIC_DRAW)
         glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0)
 
-        # texture init
-        self.init_texture()
-
         self.shader = get_vary_line_width_shader()
+
+        # check if we allow to enable texture for radius information
+        self.tex_size = int( np.sqrt( self.mytex.size ) ) + 1
+        print "required squared size for texture", self.tex_size
+
+        
+        if self.tex_size < self.shader.max_tex:
+            self.mytex_ptr = self.mytex.ctypes.data
+            self.use_tex = True
+            self.mytex.resize( self.tex_size )
+            self.mytex_ptr = self.mytex.ctypes.data
+            self.init_texture_2d()
+        else:
+            raise Exception("Too many vertices to use texture for radius mapping")
 
 
     def init_texture(self):
@@ -130,6 +140,17 @@ class TreeRegion(Actor):
         glTexImage1D(GL_TEXTURE_1D, 0, GL_LUMINANCE32F_ARB, self.mytex.size, 0, GL_LUMINANCE, GL_FLOAT, self.mytex_ptr)
         glBindTexture(GL_TEXTURE_1D, 0)
 
+    def init_texture_2d(self):
+        # self.tex_unit = gen_texture()
+        self.tex_unit = GLuint()
+        glGenTextures(1, byref(self.tex_unit))
+
+        glBindTexture(GL_TEXTURE_2D, self.tex_unit)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+        # target, level, internalformat, width, border, format, type, pixels
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE32F_ARB, self.tex_size, self.tex_size, 0, GL_LUMINANCE, GL_FLOAT, self.mytex_ptr)
+        glBindTexture(GL_TEXTURE_2D, 0)
 
     def update(self, dt):
         pass
@@ -138,21 +159,16 @@ class TreeRegion(Actor):
         # bind the shader
         self.shader.bind()
 
-        if False:
-            print "projection", vsml.get_projection_matrix()
-            print "projection new", np.array( vsml.get_projection().values )
-            print "model", vsml.get_model_matrix()
-            print "model new", np.array( vsml.get_modelview().values )
+        self.shader.uniform_matrixf( 'projMatrix', vsml.get_projection())
+        self.shader.uniform_matrixf( 'modelviewMatrix', vsml.get_modelview())
 
-        # set modelview and projection matrices
-        # the matrices should be handled in VSML later
-        glUniformMatrix4fv(self.shader.projLoc, 1, False, vsml.get_projection().values)
-        glUniformMatrix4fv(self.shader.mvLoc, 1, False, vsml.get_modelview().values)
-
+        self.shader.uniformi( 'textureWidth', self.tex_size)
+        
         glUniform1i(self.shader.width_sampler, 0)
 
-        glActiveTexture(GL_TEXTURE0)
-        glBindTexture(GL_TEXTURE_1D, self.tex_unit)
+        if self.use_tex:
+            glActiveTexture(GL_TEXTURE0)
+            glBindTexture(GL_TEXTURE_2D, self.tex_unit)
 
         glBindBuffer(GL_ARRAY_BUFFER_ARB, self.vertex_vbo)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0)

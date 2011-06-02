@@ -55,13 +55,30 @@ class Camera():
 
 class MyCamera(Camera):
     def __init__(self):
-        self.lu = [100,0,100, 0,0,0, 1,1,0]
+        self.lu = [0,0,120, 0,0,0, 0,1,0]
         vsml.lookAt(*self.lu)
+
+        self.scroll_speed = 10
+        self.mouse_speed = 0.1
 
     def draw(self):
         # draw current camera
         vsml.lookAt(*self.lu)
-        
+
+    def reset(self):
+        vsml.loadIdentity(vsml.MatrixTypes.MODELVIEW)
+        vsml.lookAt(*self.lu)
+
+    def translate(self, x, y, z):
+        vsml.translate(x, y, z)
+
+    def scale(self, x, y, z):
+        vsml.scale(x, y, z, vsml.MatrixTypes.MODELVIEW)
+
+    def rotate(self, angle, x, y, z):
+        vsml.rotate(angle, x, y, z, vsml.MatrixTypes.MODELVIEW)
+
+
 
 class DefaultCamera(Camera):
     

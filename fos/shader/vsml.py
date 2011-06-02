@@ -8,12 +8,10 @@
 # also see http://sourceforge.net/projects/libmymath/files/libmymath%20v1.3.1/
 
 from fos.lib.pyglet.gl import *
-import gletools
 import numpy as np
 from ctypes import *
 
-
-
+DEBUG = False
 
 def normalize(vectarr):
     return vectarr / np.linalg.norm( vectarr )
@@ -41,10 +39,6 @@ class VSML(object):
         # use list as stack
         self.mMatrixStack[self.MatrixTypes.MODELVIEW] = []
         self.mMatrixStack[self.MatrixTypes.PROJECTION] = []
-
-    #    /// The storage for the two matrices
-    #    float mMatrix[2][16];
-    # mMatrix = []
 
     def loadIdentity(self, aType):
         """
@@ -101,25 +95,31 @@ class VSML(object):
         */
         void multMatrix(MatrixTypes aType, float *aMatrix);
         """
+        if DEBUG:
+            print "multiply matrix"
         if aType == self.MatrixTypes.PROJECTION:
+            if DEBUG:
+                print "projection was", self.projection
             self.projection = np.dot(self.projection, aMatrix)
+            if DEBUG:
+                print "projection is", self.projection
         elif aType == self.MatrixTypes.MODELVIEW:
+            if DEBUG:
+                print "modelview was", self.modelview
             self.modelview = np.dot(self.modelview, aMatrix)
+            if DEBUG:
+                print "modelview is", self.modelview
         else:
             print "multMatrix: wrong matrix type"
 
     def get_modelview_matrix(self, array_type=c_float, glGetMethod=glGetFloatv):
-        """
-        Returns the current modelview matrix.
-        """
+        """Returns the built-in modelview matrix."""
         m = (array_type*16)()
         glGetMethod(GL_MODELVIEW_MATRIX, m)
         return np.array( m )
 
     def get_projection_matrix(self, array_type=c_float, glGetMethod=glGetFloatv):
-        """
-        Returns the current modelview matrix.
-        """
+        """Returns the current modelview matrix."""
         m = (array_type*16)()
         glGetMethod(GL_PROJECTION_MATRIX, m)
         return np.array( m )
@@ -133,11 +133,10 @@ class VSML(object):
         return np.array( m )
 
     def get_projection(self):
-        # todo: do we need .T ?
-        return gletools.Mat4(*self.projection.T.ravel().tolist())
+        return (c_float*16)(*self.projection.T.ravel().tolist())
 
     def get_modelview(self):
-        return gletools.Mat4(*self.modelview.T.ravel().tolist())
+        return (c_float*16)(*self.modelview.T.ravel().tolist())
 
     def initUniformLocs(sefl, modelviewLoc, projLoc):
         """
@@ -169,19 +168,7 @@ class VSML(object):
         """
         pass
 
-    def translate(self, aType, x, y, z):
-        """
-        /** Similar to glTranslate*. Can be applied to both MODELVIEW
-          * and PROJECTION matrices.
-          *
-          * \param aType either MODELVIEW or PROJECTION
-          * \param x,y,z vector to perform the translation
-        */
-        void translate(MatrixTypes aType, float x, float y, float z);
-        """
-        pass
-
-    def translate(self, x, y, z):
+    def translate(self, x, y, z, aType = MatrixTypes.MODELVIEW ):
         """
         /** Similar to glTranslate*. Applied to MODELVIEW only.
           *
@@ -189,9 +176,17 @@ class VSML(object):
         */
         void translate(float x, float y, float z);
         """
-        pass
+        mat = np.eye(4, dtype = np.float32 )
+        mat[0,3] = x
+        mat[1,3] = y
+        mat[2,3] = z
 
-    def scale(self, aType, x, y, z):
+        if aType == self.MatrixTypes.MODELVIEW:
+            self.multMatrix(self.MatrixTypes.MODELVIEW, mat)
+        elif aType == self.MatrixTypes.PROJECTION:
+            self.multMatrix(self.MatrixTypes.PROJECTION, mat)
+
+    def scale(self, x, y, z, aType = MatrixTypes.MODELVIEW ):
         """
         /** Similar to glScale*. Can be applied to both MODELVIEW
           * and PROJECTION matrices.
@@ -201,21 +196,21 @@ class VSML(object):
         */
         void scale(MatrixTypes aType, float x, float y, float z);
         """
-        pass
+        mat = np.zeros( (4,4), dtype = np.float32)
 
-    def scale(self, x, y, z):
-        """
-        /** Similar to glScale*. Applied to MODELVIEW only.
-          *
-          * \param x,y,z scale factors
-        */
-        void scale(float x, float y, float z);
-        """
-        pass
+        mat[0,0] = x
+        mat[2,2] = y
+        mat[3,3] = z
 
-    def rotate(self, aType, angle, x, y, z):
+        if aType == self.MatrixTypes.MODELVIEW:
+            self.multMatrix(self.MatrixTypes.MODELVIEW, mat)
+        elif aType == self.MatrixTypes.PROJECTION:
+            self.multMatrix(self.MatrixTypes.PROJECTION, mat)
+
+
+    def rotate(self, angle, x, y, z, aType = MatrixTypes.MODELVIEW ):
         """
-        /** Similar to glTotate*. Can be applied to both MODELVIEW
+        /** Similar to glRotate*. Can be applied to both MODELVIEW
           * and PROJECTION matrices.
           *
           * \param aType either MODELVIEW or PROJECTION
@@ -224,18 +219,39 @@ class VSML(object):
         */
         void rotate(MatrixTypes aType, float angle, float x, float y, float z);
         """
-        pass
+        mat = np.zeros( (4,4), dtype = np.float32)
 
-    def rotate(self, angle, x, y, z):
-        """
-        /** Similar to glRotate*. Applied to MODELVIEW only.
-          *
-          * \param angle rotation angle in degrees
-          * \param x,y,z rotation axis in degrees
-        */
-        void rotate(float angle, float x, float y, float z);
-        """
-        pass
+        radAngle = np.deg2rad(angle)
+        co = np.cos(radAngle)
+        si = np.sin(radAngle)
+        x2 = x*x
+        y2 = y*y
+        z2 = z*z
+
+        mat[0,0] = x2 + (y2 + z2) * co
+        mat[0,1] = x * y * (1 - co) - z * si
+        mat[0,2] = x * z * (1 - co) + y * si
+        mat[0,3]= 0.0
+
+        mat[1,0] = x * y * (1 - co) + z * si
+        mat[1,1] = y2 + (x2 + z2) * co
+        mat[1,2] = y * z * (1 - co) - x * si
+        mat[1,3]= 0.0
+
+        mat[2,0] = x * z * (1 - co) - y * si
+        mat[2,1] = y * z * (1 - co) + x * si
+        mat[2,2]= z2 + (x2 + y2) * co
+        mat[2,3]= 0.0
+
+        mat[3,0] = 0.0
+        mat[3,1] = 0.0
+        mat[3,2]= 0.0
+        mat[3,3]= 1.0
+
+        if aType == self.MatrixTypes.MODELVIEW:
+            self.multMatrix(self.MatrixTypes.MODELVIEW, mat)
+        elif aType == self.MatrixTypes.PROJECTION:
+            self.multMatrix(self.MatrixTypes.PROJECTION, mat)
 
 
     def loadMatrix(self, aType, aMatrix):
@@ -250,7 +266,7 @@ class VSML(object):
         pass
 
 
-#    def lookAt(self, xPos, yPos, zPos, xLook, yLook, zLook, xUp, yUp, zUp):
+    def lookAt(self, xPos, yPos, zPos, xLook, yLook, zLook, xUp, yUp, zUp):
         """
         /** Similar to gluLookAt
           *
@@ -262,8 +278,6 @@ class VSML(object):
                     float xLook, float yLook, float zLook,
                     float xUp, float yUp, float zUp);
         """
-
-    def lookAt(self, xPos, yPos, zPos, xLook, yLook, zLook, xUp, yUp, zUp):
 
         dir = np.array( [xLook - xPos, yLook - yPos, zLook - zPos], dtype = np.float32)
         dir = normalize(dir)
@@ -292,7 +306,8 @@ class VSML(object):
         # self.modelview = out
         self.multMatrix(self.MatrixTypes.MODELVIEW, out)
 
-        print "modelview vsml", np.array( vsml.get_modelview().values )
+        if DEBUG:
+            print "lookat: modelview vsml", np.array( vsml.get_modelview() )
         #print "modelview orig", self.get_modelview_matrix()
 
         # self.modelview = gletools.Mat4(*out.T.ravel().tolist())
@@ -316,15 +331,13 @@ class VSML(object):
         out[1,1] = f
         out[2,2] = (farp + nearp) / (nearp - farp)
         out[2,3] = (2.0 * farp * nearp) / (nearp - farp)
-        out[3,2] = -1.0;
+        out[3,2] = -1.0
         out[3,3] = 0.0
 
-        print "projection vsml", np.array( vsml.get_projection().values )
-        # print "projection orig", self.get_projection_matrix()
-        #self.projection = np.dot(out, self.projection)
-        #self.projection = out
         self.multMatrix(self.MatrixTypes.PROJECTION, out)
-
+        
+        if DEBUG:
+            print "perspective: new projection vsml", self.projection, np.array( vsml.get_projection() )
     
     def ortho(self, left, right, bottom, top, nearp=-1.0, farp=1.0):
         """
@@ -336,7 +349,17 @@ class VSML(object):
         */
         void ortho(float left, float right, float bottom, float top, float nearp=-1.0f, float farp=1.0f);
         """
-        pass
+        mat = np.eye( 4, dtype = np.float32 )
+
+        mat[0,0] = 2 / (right - left)
+        mat[1,1] = 2 / (top - bottom)
+        mat[2,2] = -2 / (farp - nearp)
+        mat[0,3] = -(right + left) / (right - left)
+        mat[1,3] = -(top + bottom) / (top - bottom)
+        mat[2,3] = -(farp + nearp) / (farp - nearp)
+
+        self.multMatrix(self.MatrixTypes.PROJECTION, mat)
+
 
     def frustum(self, left, right, bottom, top, nearp, farp):
         """
@@ -348,18 +371,19 @@ class VSML(object):
         */
         void frustum(float left, float right, float bottom, float top, float nearp, float farp);
         """
-        pass
+        mat = np.eye( 4, dtype = np.float32 )
 
-    def get(self, aType):
-        """
-        /** Similar to glGet
-          *
-          * \param aType either MODELVIEW or PROJECTION
-          * \returns pointer to the matrix (float[16])
-        */
-        float *get(MatrixTypes aType);
-        """
-        pass
+        mat[0,0] = 2 * nearp / (right-left)
+        mat[1,1] = 2 * nearp / (top - bottom)
+        mat[0,2] = (right + left) / (right - left)
+        mat[1,2] = (top + bottom) / (top - bottom)
+        mat[2,2] = - (farp + nearp) / (farp - nearp)
+        mat[3,2] = -1.0
+        mat[2,3] = - 2 * farp * nearp / (farp-nearp)
+        mat[3,3] = 0.0
+
+        self.multMatrix(self.MatrixTypes.PROJECTION, mat)
+
 
     def matrixToBuffer(self, aType):
         """
@@ -406,8 +430,6 @@ class VSML(object):
     #    std::vector<float *> mMatrixStack[2];
     # mMatrixStack = []
 
-
-
     #    /// Storage for the uniform locations
     #    GLuint mUniformLoc[2];
     mUniformLoc = []
@@ -420,41 +442,6 @@ class VSML(object):
     #    GLuint mOffset[2];
     mOffset = []
 
-    def setIdentityMatrix(self, mat, size=4):
-        """
-        /** Set a float* to an identity matrix
-          *
-          * \param size the order of the matrix
-        */
-        void setIdentityMatrix( float *mat, int size=4);
-        """
-        pass
 
-    def crossProduct(self, a, b, res):
-        """
-        /** vector cross product
-          *
-          * res = a x b
-        */
-        void crossProduct( float *a, float *b, float *res);
-        """
-        pass
-
-    def normalize(self, a):
-        """
-        /// normalize a vec3
-        void normalize(float *a);
-        """
-        pass
-
-
-# self.glaffine = (GLfloat * 16)(*tuple(self.affine.T.ravel()))
-
-
-# Test it
+# the global vsml instance
 vsml = VSML()
-#print id(s1), s1.normalize(None)
-#
-#s2 = VSML()
-#print id(s2), s2.normalize(None)
-#
