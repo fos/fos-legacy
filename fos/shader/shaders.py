@@ -70,19 +70,18 @@ class Shader:
         # retrieve the compile status
         glGetShaderiv(shader, GL_COMPILE_STATUS, byref(temp))
 
-        # if compilation failed, print the log
-        if not temp:
-            # retrieve the log length
-            glGetShaderiv(shader, GL_INFO_LOG_LENGTH, byref(temp))
-            # create a buffer for the log
-            buffer = create_string_buffer(temp.value)
-            # retrieve the log text
-            glGetShaderInfoLog(shader, temp, None, buffer)
-            # print the log to the console
-            print buffer.value
-        else:
-            # all is well, so attach the shader to the program
-            glAttachShader(self.handle, shader);
+        # retrieve the log length
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, byref(temp))
+        # create a buffer for the log
+        buffer = create_string_buffer(temp.value)
+        # retrieve the log text
+        glGetShaderInfoLog(shader, temp, None, buffer)
+        
+        # print the log to the console
+        print buffer.value
+
+        # all is well, so attach the shader to the program
+        glAttachShader(self.handle, shader)
 
     def createGeometryShader(self, strings, type, input_type, output_type, vertices_out):
         count = len(strings)
@@ -106,26 +105,27 @@ class Shader:
         glGetShaderiv(shader, GL_COMPILE_STATUS, byref(temp))
 
         # if compilation failed, print the log
-        if not temp:
-            # retrieve the log length
-            glGetShaderiv(shader, GL_INFO_LOG_LENGTH, byref(temp))
-            # create a buffer for the log
-            buffer = create_string_buffer(temp.value)
-            # retrieve the log text
-            glGetShaderInfoLog(shader, temp, None, buffer)
-            # print the log to the console
-            print buffer.value
-        else:
-            print("Geometry shader compiled.")
-            
-            # And define the input and output of the geometry shader, point and triangle strip in this case. Four is how many the vertices the shader will create.
+        # retrieve the log length
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, byref(temp))
+        # create a buffer for the log
+        buffer = create_string_buffer(temp.value)
+        # retrieve the log text
+        glGetShaderInfoLog(shader, temp, None, buffer)
+        # print the log to the console
 
-            glProgramParameteriEXT(self.handle, GL_GEOMETRY_INPUT_TYPE_EXT, input_type);
-            glProgramParameteriEXT(self.handle, GL_GEOMETRY_OUTPUT_TYPE_EXT, output_type);
-            glProgramParameteriEXT(self.handle, GL_GEOMETRY_VERTICES_OUT_EXT, vertices_out);
-            
-            # all is well, so attach the shader to the program
-            glAttachShader(self.handle, shader);
+        print("Geometry shader compiled.")
+
+        # And define the input and output of the geometry shader, point and triangle strip in this case. Four is how many the vertices the shader will create.
+
+        glProgramParameteriEXT(self.handle, GL_GEOMETRY_INPUT_TYPE_EXT, input_type)
+        glProgramParameteriEXT(self.handle, GL_GEOMETRY_OUTPUT_TYPE_EXT, output_type)
+        glProgramParameteriEXT(self.handle, GL_GEOMETRY_VERTICES_OUT_EXT, vertices_out)
+
+        print buffer.value
+
+        # all is well, so attach the shader to the program
+        glAttachShader(self.handle, shader);
+
 
     def link(self):
         # link the program

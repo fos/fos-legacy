@@ -4,7 +4,7 @@ import numpy as np
 from fos.lib.pyglet.gl import *
 
 from fos import Actor
-from fos.shader import Shader, get_vary_line_width_shader
+from fos.shader import Shader, get_vary_line_width_shader, get_propagate_shader
 
 from fos.shader.vsml import vsml
 
@@ -74,6 +74,10 @@ class TreeRegion(Actor):
             self.mytex = np.ones( len(self.vertices), dtype = np.float32 )
            # self.mytex = np.random.randint(1,5, (len(self.vertices),)).astype(np.float32)
 
+        print "number of vertex rows", self.vertices.shape
+        print "number of color rows", self.colors.shape
+        print "number of width rows", self.mytex.shape
+        print "number of indices rows", self.connectivity.shape
 
         # create indicies, seems to be slow with nested loops
         self.indices = self.connectivity
@@ -111,7 +115,7 @@ class TreeRegion(Actor):
         glBufferData(GL_ARRAY_BUFFER, 4 * self.colors.size, self.colors_ptr, GL_STATIC_DRAW)
         glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0)
 
-        self.shader = get_vary_line_width_shader()
+        self.shader = get_propagate_shader()
 
         # check if we allow to enable texture for radius information
         self.tex_size = int( np.sqrt( self.mytex.size ) ) + 1
@@ -155,7 +159,45 @@ class TreeRegion(Actor):
     def update(self, dt):
         pass
 
+
+    def draw_vbo(self):
+
+
+
+        # bind the shader
+        self.shader.bind()
+
+        self.shader.uniform_matrixf( 'projMatrix', vsml.get_projection())
+        self.shader.uniform_matrixf( 'modelviewMatrix', vsml.get_modelview())
+
+        self.shader.uniformi( 'textureWidth', self.tex_size)
+
+        glUniform1i(self.shader.width_sampler, 0)
+
+        if self.use_tex:
+            glActiveTexture(GL_TEXTURE0)
+            glBindTexture(GL_TEXTURE_2D, self.tex_unit)
+
+        glBindBuffer(GL_ARRAY_BUFFER_ARB, self.vertex_vbo)
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0)
+
+        glBindBuffer(GL_ARRAY_BUFFER_ARB, self.colors_vbo)
+        glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0)
+
+        # bind the indices buffer
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self.indices_vbo)
+
+        glDrawElements(self.mode,self.indices_nr,self.type,0)
+
+        # unbind the shader
+        self.shader.unbind()
+
     def draw(self):
+
+        self.draw_all()
+
+    def draw_all(self):
+#        import pdb; pdb.set_trace()
         # bind the shader
         self.shader.bind()
 

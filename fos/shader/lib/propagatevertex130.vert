@@ -8,7 +8,7 @@ uniform mat4 projMatrix;
 uniform mat4 modelviewMatrix;
 uniform int textureWidth;
 
-out vec4 vColor;   // This is the output to the geometry shader
+out vec4 vColor0;   // This is the output to the geometry shader
 out float vWidth;
 
 uniform sampler2D widthSampler;
@@ -32,7 +32,7 @@ void main()
                             // so we can just read one component
         vWidth = width;
 
-        vColor = vec4(aColor.x , aColor.y , aColor.z, aColor.w); // Pass from VS -> GS
+        vColor0 = vec4(aColor.x , aColor.y , aColor.z, aColor.w); // Pass from VS -> GS
 
         // Personally, I use uniform buffers containing the modelview and the projection matrix, as well as the MVP
         // matrix in order to avoid unnecessary matrix multiplication on a per-vertex basis.
