@@ -14,7 +14,7 @@ from math import sin, cos
 
 shader = None
 
-USE_POINTS = False
+USE_POINTS = True
 
 def update(*args):
     glutTimerFunc(33, update, 0)
@@ -100,11 +100,23 @@ glAttachShader(shader, geometry_shader)
 glAttachShader(shader, fragment_shader)
 
 glShaderSource(vertex_shader, ["""
-attribute float color;
-varying float geom_color;
-void main(void) {
-  gl_Position = gl_Vertex;
-  geom_color = color;
+#version 110
+in vec3 aPosition;
+in vec4 aColor; // This is the per-vertex color
+
+// matrices
+//in mat4 projMatrix;
+//in mat4 modelviewMatrix;
+
+out vec4 vColor;   // This is the output to the geometry shader
+
+void main()
+{
+
+        vColor = vec4(aColor.x , aColor.y , aColor.z, aColor.w); // Pass from VS -> GS
+
+        gl_Position = gl_ModelViewProjectionMatrix * vec4(aPosition.x , aPosition.y, aPosition.z, 1.0);;
+
 }
 """])
 glCompileShader(vertex_shader)
@@ -149,6 +161,7 @@ glCompileShader(geometry_shader)
 print glGetShaderInfoLog(geometry_shader)
 
 glShaderSource(fragment_shader, ["""
+#version 110
 varying float frag_color;
 void main(void) {
   gl_FragColor = vec4(frag_color,1.0-frag_color,frag_color,1);
@@ -166,5 +179,5 @@ glLinkProgram(shader)
 print glGetProgramInfoLog(shader)
 
 
-glutMainLoop()
+#glutMainLoop()
 
