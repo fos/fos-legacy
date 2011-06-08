@@ -3,13 +3,13 @@ Links
 =====
 Our aim is to collect knowledge, references and feature requests...
 
-
 Camera
 ------
 * http://nehe.gamedev.net/data/articles/article.asp?article=08
 * http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=Quaternion_Camera_Class
 * VTK cameras
 
+* http://graphics.cs.aueb.gr/cgvizbook/contents.html
 * http://vip.cs.utsa.edu/research/Davis/
 * also freeGLUT or OpenGLUT http://www.lighthouse3d.com/cg-topics/glut-and-freeglut/
 * http://www.panda3d.org/
