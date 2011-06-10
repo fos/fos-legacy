@@ -22,5 +22,5 @@ def get_simple_shader():
 def get_propagate_shader():
     return Shader( [get_shader_code('propagatevertex150.vert')],
                    [get_shader_code('propagatecolor150.frag')]
-#                   [get_shader_code('lineextrusion130b.geom'), gl.GL_LINES, gl.GL_TRIANGLE_STRIP, 6]
+                   #[get_shader_code('lineextrusion130.geom'), gl.GL_LINES, gl.GL_TRIANGLE_STRIP, 6]
                   )

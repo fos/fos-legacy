@@ -29,7 +29,7 @@ class Shader:
 
         if not len(geom) == 0:
             # the geometry shader will be the same, once pyglet supports the extension
-            self.createGeometryShader(geom[0], GL_GEOMETRY_SHADER_EXT, geom[1], geom[2], geom[3])
+            self.createGeometryShader( [geom[0]] , GL_GEOMETRY_SHADER_EXT, geom[1], geom[2], geom[3])
 
         #/* Bind attribute index 0 (coordinates) to in_Position and attribute index 1 (color) to in_Color */
         #/* Attribute locations must be setup before calling glLinkProgram. */
@@ -117,9 +117,9 @@ class Shader:
 
         # And define the input and output of the geometry shader, point and triangle strip in this case. Four is how many the vertices the shader will create.
 
-        glProgramParameteriEXT(self.handle, GL_GEOMETRY_INPUT_TYPE_EXT, input_type)
-        glProgramParameteriEXT(self.handle, GL_GEOMETRY_OUTPUT_TYPE_EXT, output_type)
-        glProgramParameteriEXT(self.handle, GL_GEOMETRY_VERTICES_OUT_EXT, vertices_out)
+        #glProgramParameteriEXT(self.handle, GL_GEOMETRY_INPUT_TYPE_EXT, input_type)
+        #glProgramParameteriEXT(self.handle, GL_GEOMETRY_OUTPUT_TYPE_EXT, output_type)
+        #glProgramParameteriEXT(self.handle, GL_GEOMETRY_VERTICES_OUT_EXT, vertices_out)
 
         print buffer.value
 

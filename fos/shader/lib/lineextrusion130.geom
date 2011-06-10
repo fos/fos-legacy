@@ -1,6 +1,10 @@
 #version 130
 #extension GL_EXT_geometry_shader4 : enable
 
+layout(lines) in;
+layout(triangle_strip, max_vertices=6) out;
+
+
 in vec4 vColor[2]; // One for each vertex in the line
 in float vWidth[2]; // one width for each vertex in the line
 out vec4 vColor0; // Output color, pass from GS -> FS

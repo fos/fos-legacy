@@ -35,10 +35,10 @@ cols = np.array( [ [0, 0, 1, 1],
 
 vert_width = np.array( [1, 5, 5, 1, 5, 1], dtype = np.float32 )
 
-#ax = Axes(scale=100)
-act = TreeRegion(vertices = vert, connectivity = conn, colors = cols, radius = vert_width)
+ax = Axes(scale=100)
+act = TreeRegion(vertices = vert, connectivity = conn, radius = vert_width) #colors = cols,
 
-#window.add_actor_to_world(ax)
+window.add_actor_to_world(ax)
 window.add_actor_to_world(act)
 
 fos.run()

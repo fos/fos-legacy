@@ -115,7 +115,7 @@ class TreeRegion(Actor):
         glBufferData(GL_ARRAY_BUFFER, 4 * self.colors.size, self.colors_ptr, GL_STATIC_DRAW)
         glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0)
 
-        self.shader = get_propagate_shader()
+        self.shader = get_vary_line_width_shader()
 
         # check if we allow to enable texture for radius information
         self.tex_size = int( np.sqrt( self.mytex.size ) ) + 1
@@ -194,7 +194,7 @@ class TreeRegion(Actor):
 
     def draw(self):
 
-        self.draw_all()
+        self.draw_vbo()
 
     def draw_all(self):
 #        import pdb; pdb.set_trace()
