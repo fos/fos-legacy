@@ -1,4 +1,4 @@
-import gletools
+
 import numpy as np
 
 from fos.lib.pyglet.gl import *
