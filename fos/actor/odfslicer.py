@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class ODF_Slice(object):
 
     def __init__(self,odfs,vertices,faces,noiso,batch,group=None):

@@ -1,8 +1,10 @@
 import numpy as np
 from fos.comp_geom.gen_normals import auto_normals 
 
-import os.path as op
+#import os.path as op
 #pa = '/home/stephan/Downloads/Gifti/'
+
+"""
 pa = op.join(op.dirname(__file__))
 ftriangles=op.join(pa,'triangles.npy')
 fvertices=op.join(pa,'vertices.npy')
@@ -21,11 +23,11 @@ colors[:,0]=highres.T
 colors=colors.astype(np.float32)
 
 print colors.shape, colors.min(),colors.max(),colors.mean()
+"""
 
-
-#eds=np.load('/home/eg309/Devel/dipy/dipy/core/matrices/evenly_distributed_sphere_362.npz')
-#vertices=eds['vertices']
-#faces=eds['faces']
+eds=np.load('/home/eg309/Devel/dipy/dipy/core/matrices/evenly_distributed_sphere_362.npz')
+vertices=eds['vertices']
+faces=eds['faces']
 
 vertices=vertices.astype(np.float32)
 faces=faces.astype(np.uint32)        
