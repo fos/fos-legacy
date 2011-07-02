@@ -1,6 +1,6 @@
 """ Create an empty Fos world and attach a window to it """
 
-from fos import World, Window, DefaultCamera
+from fos import World, Window, DefaultCamera, WindowManager
 
 # create the first window
 wi = Window(caption = "My Window 1", bgcolor = (1,1,1,1) )
@@ -21,3 +21,9 @@ wi2.attach(w)
 
 # set the camera for the second window to the second camera
 wi2.set_current_camera(cam2)
+
+# Create the window manager, add the windows, and go!
+wm = WindowManager()
+wm.add(wi)
+wm.add(wi2)
+wm.run()

@@ -9,7 +9,6 @@ import fos.lib.pyglet as pyglet
 
 #print pyglet.options
 
-
 from fos.lib.pyglet.gl import *
 
 from fos.core.window.managed_window import ManagedWindow
@@ -122,15 +121,7 @@ class FosWindow(ManagedWindow):
                 c.update(dt)
             except:
                 pass
-         
-#        if dt != 0:
-#            print "freq", round(1.0/dt)
-#            pass
-
-    def get_world(self):
-        """ Returns the world that is attached to this window """
-        return self._world
-    
+             
     def attach(self, world):
         """ Attach a FosWindow to a world. The world needs
         to have at least one camera. The first camera is used
@@ -177,9 +168,11 @@ class FosWindow(ManagedWindow):
         self._world._render_lock.release()
 
     def on_resize(self, width, height):
+        if height==0: height=1
+        print("New window size %i %i" % (width, height) )
         glViewport(0, 0, width, height)
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
         gluPerspective(60., width / float(height), .1, 8000.)
         glMatrixMode(GL_MODELVIEW)
-        
+        return pyglet.event.EVENT_HANDLED

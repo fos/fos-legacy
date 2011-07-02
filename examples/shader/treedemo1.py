@@ -5,19 +5,18 @@ import numpy as np
 import fos.lib.pyglet as pyglet
 from fos.lib.pyglet.gl import *
 
+from fos import World, Window, WindowManager
 from fos.actor.treeregion import TreeRegion
-from fos import SimpleWindow
 from fos.actor.axes import Axes
 
 mycpt = "TreeRegion Demo - Fos.me"
 try:
     # Try and create a window with multisampling (antialiasing)
     config = Config(sample_buffers=1, samples=4,depth_size=16, double_buffer=True,)
-    window = SimpleWindow(resizable=True, config=config, vsync=False, width=1000, height=800, caption = mycpt) # "vsync=False" to check the framerate
+    window = Window(resizable=True, config=config, vsync=False, width=1000, height=800, caption = mycpt) # "vsync=False" to check the framerate
 except pyglet.window.NoSuchConfigException:
     # Fall back to no multisampling for old hardware
-    window = SimpleWindow(resizable=True, caption = mycpt)
-
+    window = Window(resizable=True, caption = mycpt)
 
 # sample tree data
 # ####
@@ -37,7 +36,12 @@ vert_width = np.array( [1, 5, 5, 1, 5, 1], dtype = np.float32 )
 ax = Axes()
 act = TreeRegion(vertices = vert, connectivity = conn, colors = cols, radius = vert_width)
 
-window.add_actor_to_world(ax)
-window.add_actor_to_world(act)
+w = World()
+w.add(ax)
+w.add(act)
 
-fos.run()
+window.attach(w)
+
+wm = WindowManager()
+wm.add(window)
+wm.run()

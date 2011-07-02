@@ -4,10 +4,6 @@ REMINDER: remove the clock from the window and put it to the engine """
 from fos.lib.pyglet.window import Window
 from fos.lib.pyglet.clock import Clock
 
-from threading import Thread, Lock
-
-gl_lock = Lock()
-
 class ManagedWindow(Window):
     """
     A pyglet window with an event loop which executes automatically
@@ -19,6 +15,7 @@ class ManagedWindow(Window):
                             height=480,
                             vsync=False,
                             resizable=False)
+    
 
     def __init__(self, **win_args):
         """
@@ -27,50 +24,42 @@ class ManagedWindow(Window):
         Do any OpenGL initialization calls in setup().
         """
         self.win_args = dict(self.default_win_args, **win_args)
-        self.Thread=Thread(target=self.__event_loop__)
-        self.Thread.start()
-
-    def __event_loop__(self, **win_args):
-        """
-        The event loop thread function. Do not override or call
-        directly (it is called by __init__).
-        """
-        gl_lock.acquire()
-        try:
-            try:
-                super(ManagedWindow, self).__init__(**self.win_args)
-                self.switch_to()
-                self.setup()
-            except Exception, e:
-                print "Window initialization failed: %s" % (str(e))
-                self.has_exit = True
-        finally:
-            gl_lock.release()
-
-        clock = Clock()
-        clock.schedule_interval(self.update, self.update_dt)
         
-        while not self.has_exit:
+    def create_window(self):
+        """Create the window"""        
+        self.clock = Clock()
+        try:            
+            super(ManagedWindow, self).__init__(**self.win_args)
+            self.switch_to()
+            self.setup()            
+        except Exception, e:
+            print "Window initialization failed: %s" % (str(e))
+            self.has_exit = True
+    
+    
+    def process_frame(self):        
+        """
+        Process a frame for the window.  This is called once per frame in the
+        WindowManager::main_loop()
+        """
+                
+        if not self.has_exit:
             # the clock needs to tick but we are not using dt
             # dt = clock.tick()
-            gl_lock.acquire()
-            clock.tick(poll=False)
+            #clock.tick(poll=False)
             try:
-                try:
-                    self.switch_to()
-                    self.dispatch_events()
-                    self.clear()
-                    # the update is called as a scheduled function
-                    # using the clock, not in the event loop anymore
-#                    self.update(dt)
-                    self.draw()
-                    self.flip()
-                except Exception, e:
-                    print "Uncaught exception in event loop: %s" % str(e)
-                    self.has_exit = True
-            finally:
-                gl_lock.release()
-        super(ManagedWindow, self).close()
+                self.switch_to()
+                self.dispatch_events()
+                self.clear()
+                dt = self.clock.tick()
+                self.update(dt)
+                self.draw()
+                self.flip()
+            except Exception, e:
+                print "Uncaught exception in event loop: %s" % str(e)
+                self.has_exit = True
+            
+        #super(ManagedWindow, self).close()
 
     def setup(self):
         """

@@ -2,7 +2,7 @@ import numpy as np
 import h5py
 
 import fos
-from fos import SimpleWindow as Window
+from fos import World, Window, WindowManager
 from fos.lib.pyglet.gl import *
 from fos.actor.tree import Tree
 from numpy.random import randn
