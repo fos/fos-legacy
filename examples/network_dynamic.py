@@ -1,13 +1,13 @@
 import numpy as np
 
-from fos import Window, WindowManager
+from fos import Window, WindowManager, World
 from fos.actor.network import DynamicNetwork
 
 #import fos.lib.pyglet
 #fos.lib.pyglet.options['debug_gl'] = True
 
 wi = Window(caption = "Dynamic Network with Fos")
-w = wi.get_world()
+w = World()
 
 # time steps
 ts = 200

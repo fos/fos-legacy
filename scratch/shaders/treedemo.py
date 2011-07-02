@@ -11,15 +11,15 @@ from fos.actor.tree import Tree
 
 import numpy as np
 
-from fos.core.window.simple_window import SimpleWindow
+from fos import Window
 
 try:
     # Try and create a window with multisampling (antialiasing)
     config = Config(sample_buffers=1, samples=4,depth_size=16, double_buffer=True,)
-    window = SimpleWindow(resizable=True, config=config, vsync=False, width=1000, height=800) # "vsync=False" to check the framerate
+    window = Window(resizable=True, config=config, vsync=False, width=1000, height=800) # "vsync=False" to check the framerate
 except pyglet.window.NoSuchConfigException:
     # Fall back to no multisampling for old hardware
-    window = SimpleWindow(resizable=True)
+    window = Window(resizable=True)
 
 
 fps_display = pyglet.clock.ClockDisplay() # see programming guide pg 48

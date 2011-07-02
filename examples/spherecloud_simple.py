@@ -1,6 +1,6 @@
 import numpy as np
 
-from fos import Window
+from fos import Window, WindowManager, World
 from fos.actor.spherecloud import SphereCloud
 
 # the positions for the sphere
@@ -19,5 +19,10 @@ colors = np.array( [[1, 1, 1, 1],
 sc = SphereCloud( positions = positions, radii=radii, colors=colors )
 
 wi = Window()
-w = wi.get_world()
+w = World()
 w.add(sc)
+wi.attach(w)
+
+wm = WindowManager()
+wm.add(wi)
+wm.run()
