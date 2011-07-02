@@ -13,7 +13,7 @@ T=[s[0] for s in streams]
 Trk=np.array(T, dtype=np.object)
 print "loaded file"
 
-cu = InteractiveCurves(curves = T)
+cu = InteractiveCurves(curves = T,centered=False)
 
 w=World()
 w.add(cu)
