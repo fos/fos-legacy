@@ -27,7 +27,7 @@ class Dummy(Actor):
                                   batch = self.batch)
         fos.lib.pyglet.text.Label('Hi', 
                                   font_name='Times New Roman', 
-                                  font_size=26,
+                                 font_size=26,
                                   dpi=100,
 #                                  x=window.width//2, y=window.height//2,
                                   anchor_x='center', anchor_y='center',
@@ -48,8 +48,8 @@ class Dummy(Actor):
 
             
 if __name__ == '__main__':
+    w = World()
     wi = Window()
-    w = wi.get_world()
     act = Dummy()
     w.add(act)
     

@@ -6,7 +6,7 @@ from fos import World, Window, DefaultCamera, WindowManager
 wi = Window(caption = "My Window 1", bgcolor = (1,1,1,1) )
 
 # return the default empty world of this window
-w = wi.get_world()
+w = World()
 
 # add a new camera to this world
 cam2 = DefaultCamera()

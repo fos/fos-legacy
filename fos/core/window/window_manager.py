@@ -15,8 +15,9 @@ class WindowManager:
         self.window_list.append(window)        
     
     def remove(self, window):
-        """Remove a window from the window manager"""
+        """Remove a window from the window manager and from memory"""
         self.window_list.remove(window)
+        del window
             
     def run(self):
         """Start the main loop for the program"""

@@ -1,7 +1,7 @@
 import networkx as nx
 import numpy as np
 
-from fos import Window, WindowManager
+from fos import Window, WindowManager, World
 from fos.actor.network import AttributeNetwork
 
 n = 100
@@ -14,7 +14,7 @@ for i in range(n):
     e[i,:] = ret[i]
 
 wi = Window()
-w = wi.get_world()
+w = World()
 
 cu = AttributeNetwork(node_position=e,
                       scale_factor = 1.,

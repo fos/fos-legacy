@@ -1,13 +1,13 @@
 import numpy as np
 
-from fos import Window, WindowManager
+from fos import Window, WindowManager, World
 from fos.actor.network import AttributeNetwork
 
 #import fos.lib.pyglet
 #fos.lib.pyglet.options['debug_gl'] = True
 
 wi = Window()
-w = wi.get_world()
+w = World()
 
 # node positions
 pos = np.array( [ [0,0,0], [10,10,10] ], dtype = np.float32)
@@ -34,9 +34,9 @@ cu = AttributeNetwork(affine = aff,
                       edge_connectivity = edg)
 
 w.add(cu)
-cu.start()
-#w.delete(cu)
 
 wm = WindowManager()
 wm.add(wi)
 wm.run()
+
+cu.start()
