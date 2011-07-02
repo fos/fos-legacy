@@ -2,7 +2,6 @@ build/
 *.pyc
 *.py~
 *.pyo
-*.c
 *.so
 .settings/
 doc/_build/

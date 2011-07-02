@@ -29,10 +29,10 @@ class World():
 #            if update_camera:
 #                print "TODO: update the camera view"
             
-            print "added actor", obj
+            #print "added actor", obj
             self.ag.add(obj)
         elif isinstance(obj, Camera):
-            print "added camera", obj
+            #print "added camera", obj
             self.cl.add(obj)
         else:
             print "Not valid actor or camera!"
@@ -70,9 +70,9 @@ class World():
         pass
         # loop over all windows and update the camera    
     
-    def delete(self, obj):
+    def remove(self, obj):
         if obj in self.ag.actors:
-            print "delete actors"
+            print "remove actors"
             del self.ag.actors[self.ag.actors.index(obj)]
             
     def get_cameras(self):

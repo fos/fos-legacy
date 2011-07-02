@@ -3,10 +3,15 @@ Links
 =====
 Our aim is to collect knowledge, references and feature requests...
 
+* also freeGLUT or OpenGLUT http://www.lighthouse3d.com/cg-topics/glut-and-freeglut/
+* http://www.panda3d.org/
+* http://gamedev.stackexchange.com/
+* http://www.sofa-framework.org/home
+* http://www.pyside.org/docs/pyside/PySide/QtOpenGL/index.html
 * http://neurobureau.projects.nitrc.org/BrainArt/Competition.html
 * http://github.com/BenSmith/PythonOpenGLSuperBible4
 * gpu raycasting shader http://www.daimi.au.dk/~trier/?page_id=98
-http://code.google.com/p/visvis/source/browse/visvisResources/raycasting.fragment.glsl
+** http://code.google.com/p/visvis/source/browse/visvisResources/raycasting.fragment.glsl
 * http://jainek.de/projects/iBrain/
 * http://vis.lbl.gov/Research/H5hut/
 * http://www.songho.ca/opengl/index.html
@@ -63,6 +68,7 @@ http://code.google.com/p/visvis/source/browse/visvisResources/raycasting.fragmen
 * http://yt.enzotools.org/video_gallery.html
 * http://yt.enzotools.org/doc/extensions/volume_rendering.html
 * VISIT https://wci.llnl.gov/codes/visit/home.html
+* http://cs.nyu.edu/~weinkauf/publications/absbenger10a.html
 
 * 3/4 D Planetarium
 http://www.haydenplanetarium.org/universe/download/
@@ -100,6 +106,7 @@ Shaders
 * http://www.slidefinder.net/S/Shader/11893836/p2
 * http://gitorious.org/personal-julian-ibarz/obj-viewer/blobs/master/shaders/cullDirection.geom
 * Shader-Based Wireframe Drawing http://cgg-journal.com/2008-2/06/index.html#tth_sEc2.2
+* http://www.flashbang.se/archives/307
 
 Engines
 -------

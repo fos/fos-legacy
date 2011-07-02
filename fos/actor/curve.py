@@ -3,7 +3,7 @@ import numpy as np
 from fos import Actor
 import fos.lib.pyglet as pyglet
 from fos.lib.pyglet.gl import *
-import fos.core.collision as cll
+#import fos.core.collision as cll
 
 from fos.actor.primitives import AABBPrimitive
 

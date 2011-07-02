@@ -1,10 +1,9 @@
 import numpy as np
 
-from fos import World, Window
-
+from fos import World, Window, WindowManager
 from fos.actor.network import AttributeNetwork
 
-w = World("myworld")    
+w = World("myworld")
 
 # node positions
 s = 1000
@@ -50,9 +49,12 @@ cu = AttributeNetwork(affine = aff,
                       global_edge_width = 3.5
                       )
 w.add(cu)
-#w.delete(cu)
 
 wi = Window()
 wi.attach(w)
+
+wm = WindowManager()
+wm.add(wi)
+wm.run()
 
 cu.start()

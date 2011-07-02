@@ -63,8 +63,12 @@ from fos.core.camera import DefaultCamera
 cam=DefaultCamera()
 w.add(cam)
 
-from fos import Window 
+from fos import Window, WindowManager 
 wi=Window()
 wi.attach(w)
+
+wm = WindowManager()
+wm.add(wi)
+wm.run()
 
 

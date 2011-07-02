@@ -4,6 +4,7 @@ from fos.lib.pyglet.gl import *
 
 from fos import Actor
 
+# DEPRECATED
 class NeuronRegion(Actor):
     
     def __init__(self, vertices, connectivity, offset,

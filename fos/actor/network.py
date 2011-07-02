@@ -6,8 +6,6 @@ from fos import Actor, World
 from fos.actor.primitives import NodePrimitive, EdgePrimitive
 from fos.core.intersection import intersect_ray_sphere
         
-
-        
 class AttributeNetwork(Actor):
     
     def __init__(self, node_position, affine = None, force_centering = True, *args, **kwargs):
@@ -283,7 +281,6 @@ class AttributeNetwork(Actor):
         glPopMatrix()
 
     
-
     def process_pickray(self,near,far):
 
         # intersect with cubes
