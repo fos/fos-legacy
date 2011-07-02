@@ -4,9 +4,9 @@ import os.path as op
 
 from fos import World, Window, WindowManager
 from fos.actor.curve import InteractiveCurves
-from fos.core.data import get_track_filename
+from fos.data import get_track_filename
 
-# exmple track file
+# example track file
 streams,hdr = nib.trackvis.read(get_track_filename())
 
 T=[s[0] for s in streams]
