@@ -57,9 +57,9 @@ class FosWinEventHandler(object):
                 print "found an actor that was selected"
                 found_actor.show_aabb = not found_actor.show_aabb
                 # get the center of the aabb
-                ax,ay,az = found_actor.aabb.get_center()
-                print "ax,az", ax, ay, az
-                self.window.current_camera.set_lookatposition(ax,ay,az)
+                #ax,ay,az = found_actor.aabb.get_center()
+                #print "ax,az", ax, ay, az
+                #self.window.current_camera.set_lookatposition(ax,ay,az)
             else:
                 print "no actor found"
 

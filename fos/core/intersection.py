@@ -42,6 +42,85 @@ def intersect_ray_sphere(p, d, sphereR, sphereC):
     q = p + t * d
     return (t, q)
 
+def point_inside_volume(p, ab1, ab2, eps = 0.01):
+    """
+    Check if point p is inside the aabb volume
+    """
+    ab1 = ab1.copy() - eps
+    ab2 = ab2.copy() + eps
+    if ab1[0] <= p[0] <= ab2[0] and \
+        ab1[1] <= p[1] <= ab2[1] and \
+        ab1[2] <= p[2] <= ab2[2]:
+        return True
+    else:
+        return False
+
+
+def ray_aabb_intersection(p0, p1, ab1, ab2):
+    # http://www.cs.princeton.edu/courses/archive/fall00/cs426/lectures/raycast/sld017.htm
+    # faces are interpreted as planes, need
+    # first test segment intersection to confine to bounding box volume
+
+    v = (p1-p0) / np.linalg.norm( (p1-p0) )
+    # ray: p = p0 + t * v
+    # plane: p * n + d = 0
+
+    # create the face planes
+    # because they are axis aligned, to define n is easy
+    xn = -np.array( [1,0,0], dtype = np.float32 )
+    yn = -np.array( [0,1,0], dtype = np.float32 )
+    zn = -np.array( [0,0,1], dtype = np.float32 )
+    norm_vect = (xn, yn, zn)
+    ret = []
+    for n in norm_vect:
+        for d in (ab1, ab2):
+
+            di = np.dot(v,n)
+            if di == 0.0:
+                continue
+                
+            t = -( np.dot(p0, n) + d ) / di
+            pout = p0 + t * v
+
+            if point_inside_volume(pout, ab1, ab2):
+                ret.append(pout)
+
+    return ret
+
+
+def ray_triangle_intersection(p, d, v0, v1, v2):
+    """ Implemented from http://www.lighthouse3d.com/tutorials/maths/ray-triangle-intersection/
+    """
+    e1 = v1 - v0
+    e2 = v2 - v0
+    h = np.cross(d, e2)
+    a = np.dot(e1, h)
+    if a > -0.00001 and a < 0.00001:
+		return False
+
+    f = 1 / a
+    s = p - v0
+    u = f * np.dot(s, h)
+
+    if u < 0.0 or u > 1.0:
+        return False
+
+    q = np.cross(s, e1)
+    v = f * np.dot(d, q)
+
+    if v < 0.0 or u + v > 1.0:
+        return False
+
+    # at this stage we can compute t to find out where
+    # the intersection point is on the lin
+    t = f * np.dot(e2, q)
+
+    if t > 0.00001: # ray intersection
+        # return (t, u, v)
+        return p + t * d
+    else: # this means that there is a line intersection
+        return False # but not a ray intersection
+
 
 def test_segment_aabb(p0, p1, aabb_c1, aabb_c2):
     """ Test if segement specified by points p0 and p1
@@ -83,4 +162,9 @@ def test_segment_aabb(p0, p1, aabb_c1, aabb_c2):
     return True
 
 
-    
+if __name__ == '__main__':
+    p0 = np.array([2,2,4])
+    p1 = np.array([2,2,-2])
+    ab1 = np.array([0,0,2])
+    ab2 = np.array([5,5,-1])
+    ray_aabb_intersection(p0, p1, ab1, ab2)
