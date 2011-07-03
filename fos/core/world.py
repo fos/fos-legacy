@@ -44,7 +44,9 @@ class World():
         for a in self.ag.actors:
             # aabb intersection
             if not a.aabb is None:
-                if test_segment_aabb(near, far, a.aabb.coord[0], a.aabb.coord[1]):
+                ab1, ab2 = a.get_aabb_coords()
+                print 'pick', ab1, ab2
+                if test_segment_aabb(near, far, ab1, ab2):
                     print "found aabb"
                     try:
                         a.process_pickray(near,far)
@@ -59,7 +61,8 @@ class World():
         for a in self.ag.actors:
             # aabb intersection
             if not a.aabb is None:
-                if test_segment_aabb(near, far, a.aabb.coord[0], a.aabb.coord[1]):
+                ab1, ab2 = a.get_aabb_coords()
+                if test_segment_aabb(near, far, ab1, ab2):
                     print "found aabb"
                     return a
                 else:

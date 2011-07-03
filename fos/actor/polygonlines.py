@@ -93,7 +93,8 @@ class PolygonLines(Actor):
         far = np.array(far)
         
         print 'boundingbox', self.aabb.coord[0], self.aabb.coord[1]
-        re = ray_aabb_intersection(near, far, self.aabb.coord[0], self.aabb.coord[1])
+        ab1, ab2 = self.get_aabb_coords()
+        re = ray_aabb_intersection(near, far, ab1, ab2)
 
         print "returned intersection points", re
 
@@ -122,8 +123,11 @@ class PolygonLines(Actor):
             # to the original vertices space
             point_inv = np.dot( np.linalg.inv(self.affine), np.array( [point[0], point[1], point[2], 1.0] ) )
             point_inv2 = point_inv[:3]
-            print "found indices", self.kdtree.query_ball_point(point_inv2, kdtree_sphere_query_radius)
-
+            ind = self.kdtree.query_ball_point(point_inv2, kdtree_sphere_query_radius)
+            if len(ind) > 0:
+                print 'change colors'
+                self.colors[ ind, 1 ] = 1.0
+                self.colors[ ind, 0 ] = 0.0
 
 
     def draw(self):

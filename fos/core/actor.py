@@ -153,7 +153,16 @@ class Actor(object):
             assert len(aabb) == 2
             # otherwise set to given aabb
             self.aabb = AABBPrimitive(blf = aabb[0], trb = aabb[1], margin = margin)
-    
+
+    def get_aabb_coords(self):
+        """
+        Returns AABB coordinates blf and trb in world space (using the affine)
+        """
+        ab1 = self.aabb.coord[0]
+        ab2 = self.aabb.coord[1]
+        r1 = np.dot(self.affine, np.array( [ab1[0], ab1[1], ab1[2], 1.0] ) )
+        r2 = np.dot(self.affine, np.array( [ab2[0], ab2[1], ab2[2], 1.0] ) )
+        return (r1[:3], r2[:3])
     
     def make_obb(self):
         pass
