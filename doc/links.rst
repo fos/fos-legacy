@@ -243,6 +243,7 @@ Conferences
 Links
 -----
 * Illuminated streamlines: http://www.scivis.ethz.ch/research/projects/illuminated_streamlines
+* Lights and materials: tutorials http://www.falloutsoftware.com/tutorials/gl/gl8.htm
 
 Scientific Visualization
 ------------------------

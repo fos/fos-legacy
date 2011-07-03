@@ -26,15 +26,26 @@ print('normals.shape %d %d' % normals.shape)
 print('colors.shape %d %d' % colors.shape)
 print(vertices.dtype,faces.dtype, colors.dtype, normals.dtype)
 
-aff = np.eye(4, dtype = np.float32)
+aff = np.eye(4,dtype='f4')
 aff[:3,3] = [0,0,0]
 
 l=Light(position=np.array((1, 0, .5, 0),'f4'),ambient=(.0,.5,.5,1.),diffuse=(.5,.5,.5,1),specular=(.5,.5,.5,1))
-m=Material(diffuse=red,emissive=None,specular=(.5,.5,.5,1.),shininess=100,color=False)
-s=Surface(vertices,faces,colors,normals, material = m, light = l, affine=aff)
+m=Material(diffuse=red,emissive=None,specular=(.9,.9,.9,1.),shininess=100,color=False)
+s=Surface(vertices,faces,colors,normals=None, material = m, light = l, affine=aff)
+
+aff2=aff.copy()
+aff2[:3,3]=[250,0,0]
+s2=Surface(vertices,faces,colors,normals, material = m, light = l, affine=aff2)
+
+aff3=aff.copy()
+aff3[:3,3]=[500,0,0]
+m3=Material(diffuse=blue,emissive=None,specular=(.9,.9,.9,1.),shininess=100,color=False)
+s3=Surface(vertices,faces,colors,normals, material = m3, light = l, affine=aff3)
 
 w=World()
 w.add(s)
+w.add(s2)
+w.add(s3)
 
 cam=DefaultCamera()
 w.add(cam)
