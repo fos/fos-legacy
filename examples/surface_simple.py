@@ -29,18 +29,21 @@ print(vertices.dtype,faces.dtype, colors.dtype, normals.dtype)
 aff = np.eye(4,dtype='f4')
 aff[:3,3] = [0,0,0]
 
-l=Light(position=np.array((1, 0, .5, 0),'f4'),ambient=(.0,.5,.5,1.),diffuse=(.5,.5,.5,1),specular=(.5,.5,.5,1))
-m=Material(diffuse=red,emissive=None,specular=(.9,.9,.9,1.),shininess=100,color=False)
-s=Surface(vertices,faces,colors,normals=None, material = m, light = l, affine=aff)
+s=Surface(vertices,faces,colors,normals=None, material=None, light=None, affine=aff)
 
 aff2=aff.copy()
 aff2[:3,3]=[250,0,0]
-s2=Surface(vertices,faces,colors,normals, material = m, light = l, affine=aff2)
+
+l2=Light(position=np.array((1, 0, .5, 0),'f4'),ambient=(.0,.5,.5,1.),diffuse=(.5,.5,.5,1),specular=(.5,.5,.5,1))
+m2=Material(diffuse=red,emissive=None,specular=(.9,.9,.9,1.),shininess=100,color=False)
+s2=Surface(vertices,faces,colors,normals, material = m2, light = l2, affine=aff2)
 
 aff3=aff.copy()
 aff3[:3,3]=[500,0,0]
-m3=Material(diffuse=blue,emissive=None,specular=(.9,.9,.9,1.),shininess=100,color=False)
-s3=Surface(vertices,faces,colors,normals, material = m3, light = l, affine=aff3)
+
+l3=Light(position=np.array((1, 0, .5, 0),'f4'),ambient=(.0,.5,.5,1.),diffuse=(.5,.5,.5,1),specular=(.5,.5,.5,1))
+m3=Material(diffuse=blue,emissive=(.4,.4,.4,1.),specular=(.9,.9,.9,1.),shininess=100,color=False)
+s3=Surface(vertices,faces,colors,normals, material = m3, light = l3, affine=aff3)
 
 w=World()
 w.add(s)

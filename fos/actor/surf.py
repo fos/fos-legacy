@@ -48,9 +48,11 @@ class Surface(Actor):
     
     
     def draw_withlight(self):
-        self.set_state()
+        
+        
         glPushMatrix()
-        glMultMatrixf(self.glaffine)    
+        self.set_state()
+        glMultMatrixf(self.glaffine)   
         glEnableClientState(GL_VERTEX_ARRAY)
         glEnableClientState(GL_NORMAL_ARRAY)
         #glEnableClientState(GL_COLOR_ARRAY)        
@@ -60,12 +62,13 @@ class Surface(Actor):
         glDrawElements(GL_TRIANGLES, self.el_count, GL_UNSIGNED_INT, self.face_ptr)
         #glDisableClientState(GL_COLOR_ARRAY)
         glDisableClientState(GL_NORMAL_ARRAY)
-        glDisableClientState(GL_VERTEX_ARRAY)                 
+        glDisableClientState(GL_VERTEX_ARRAY)
         self.unset_state()
         glEnable(GL_DEPTH_TEST)
         if self.show_aabb:
-            self.draw_aabb()        
+            self.draw_aabb()
         glPopMatrix()
+        
 
         
     def draw_sanslight(self):
@@ -89,7 +92,7 @@ class Surface(Actor):
         glEnable(GL_CULL_FACE)        
         #glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
         
-        glShadeModel(GL_SMOOTH)
+        #glShadeModel(GL_SMOOTH)
         glLineWidth(3.)
         glEnable(GL_LIGHTING)
         glEnable(GL_LIGHT0)
@@ -103,10 +106,11 @@ class Surface(Actor):
         glDisable(GL_DEPTH_TEST)
         glDisable(GL_CULL_FACE)
         glLineWidth(1.)
+        
         glDisable(GL_LIGHTING)
-            
-    '''
+        #glDisable(GL_LIGHT0)   
+    
     def update(self, dt):
-        print 'dt',dt
+        #print 'dt',dt
         pass
-    '''
+    
