@@ -23,17 +23,15 @@ except pyglet.window.NoSuchConfigException:
 # sample tree data
 # ####
 vert = np.array( [ [0,0,0],
-                   [5,5,0],
-                   [5,10,0],
-                   [10,5,0]], dtype = np.float32 )
+                   [5,10,0]], dtype = np.float32 )
 
-conn = np.array( [ 0, 1, 1, 2, 1, 3 ], dtype = np.uint32 )
+conn = np.array( [ 0, 1], dtype = np.uint32 )
 
-cols = np.array( [ [0, 0, 1, 1],
-                   [1, 0, 1, 1],
-                   [0, 0, 1, 0.5] ] , dtype = np.float32 )
+cols = np.array( [ [0, 1, 0, 1.0],
+                   [1, 0, 1, 1.0],
+                   [0, 0, 1, 1.0] ] , dtype = np.float32 )
 
-vert_width = np.array( [1, 5, 5, 1, 5, 1], dtype = np.float32 )
+vert_width = np.array( [1, 5, 10], dtype = np.float32 )
 
 ax = Axes(scale=100)
 act = TreeRegion(vertices = vert, connectivity = conn, radius = vert_width) #colors = cols,

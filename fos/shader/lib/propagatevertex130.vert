@@ -1,4 +1,5 @@
-#version 130
+//#version 130
+
 in vec3 aPosition;
 in vec4 aColor; // This is the per-vertex color
 

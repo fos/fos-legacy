@@ -138,7 +138,6 @@ class FosWindow(ManagedWindow):
         by using set_current_camera()
         
         """
-        world._render_lock.acquire()
         
         # can not attach a window to a world that has not cameras
         if len(world.get_cameras()) == 0:
@@ -152,11 +151,9 @@ class FosWindow(ManagedWindow):
         
         # just take the first camera
         self.current_camera = self._world.get_cameras()[0]
-        
-        world._render_lock.release()
+
             
-    def draw(self):   
-        self._world._render_lock.acquire()
+    def draw(self):
         
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glMatrixMode(GL_MODELVIEW)
@@ -173,8 +170,6 @@ class FosWindow(ManagedWindow):
         if self.show_logos:
             self.fps_display.draw()
             self.foslabel.draw()
-
-        self._world._render_lock.release()
 
     def on_resize(self, width, height):
         glViewport(0, 0, width, height)

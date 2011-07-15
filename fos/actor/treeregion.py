@@ -100,6 +100,13 @@ class TreeRegion(Actor):
         # /* Specify that our coordinate data is going into attribute index 0, and contains three floats per vertex */
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0)
 
+        # for colors
+        self.colors_vbo = GLuint(0)
+        glGenBuffers(1, self.colors_vbo)
+        glBindBuffer(GL_ARRAY_BUFFER_ARB, self.colors_vbo)
+        glBufferData(GL_ARRAY_BUFFER_ARB, 4 * self.colors.size, self.colors_ptr, GL_STATIC_DRAW)
+        glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0)
+
         # for indices
         self.indices_vbo = GLuint(0)
         glGenBuffers(1, self.indices_vbo)
@@ -107,15 +114,10 @@ class TreeRegion(Actor):
         # uint32 has 4 bytes
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, 4 * self.indices_nr, self.indices_ptr, GL_STATIC_DRAW)
 
-        # for colors
-        self.colors_vbo = GLuint(0)
-        glGenBuffers(1, self.colors_vbo)
-        glBindBuffer(GL_ARRAY_BUFFER, self.colors_vbo)
 
-        glBufferData(GL_ARRAY_BUFFER, 4 * self.colors.size, self.colors_ptr, GL_STATIC_DRAW)
-        glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0)
 
         self.shader = get_vary_line_width_shader()
+
 
         # check if we allow to enable texture for radius information
         self.tex_size = int( np.sqrt( self.mytex.size ) ) + 1
@@ -128,6 +130,7 @@ class TreeRegion(Actor):
             self.mytex.resize( self.tex_size )
             self.mytex_ptr = self.mytex.ctypes.data
             self.init_texture_2d()
+            print("Initialized texture 2d")
         else:
             raise Exception("Too many vertices to use texture for radius mapping")
 

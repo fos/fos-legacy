@@ -124,7 +124,7 @@ class Shader:
         print buffer.value
 
         # all is well, so attach the shader to the program
-        glAttachShader(self.handle, shader);
+        glAttachShader(self.handle, shader)
 
 
     def link(self):
@@ -155,16 +155,16 @@ class Shader:
 
         glEnableVertexAttribArray(0)
         glEnableVertexAttribArray(1)
-#        glEnable(GL_TEXTURE_1D)
+        glEnable(GL_TEXTURE_2D)
 
     def unbind(self):
         # unbind whatever program is currently bound - not necessarily this program,
         # so this should probably be a class method instead
         glUseProgram(0)
 
-#        glDisableVertexAttribArray(0)
-#        glDisableVertexAttribArray(1)
-#        glDisable(GL_TEXTURE_1D)
+        glDisableVertexAttribArray(0)
+        glDisableVertexAttribArray(1)
+        glDisable(GL_TEXTURE_2D)
 
     # upload a floating point uniform
     # this program must be currently bound
