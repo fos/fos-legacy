@@ -175,6 +175,8 @@ class TreeRegion(Actor):
 
         self.shader.uniformi( 'textureWidth', self.tex_size)
 
+        # load uniform variables defined as sampler types
+        # 0 denotes texture unit 0
         glUniform1i(self.shader.width_sampler, 0)
 
         if self.use_tex:

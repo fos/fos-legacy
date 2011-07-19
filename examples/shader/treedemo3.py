@@ -32,9 +32,9 @@ except fos.lib.pyglet.window.NoSuchConfigException:
 
 ac=[]
 # spread factor
-s=500
+s=10
 # duplicator
-d = 2000
+d = 2
 
 # tune it up
 # this is very inefficient, because it copies the position arrays
@@ -73,11 +73,14 @@ for i in range(d):
     offpar += parlen
 
 print "len bipar", len(bigpar), bigpar
-rad = np.ones( len(bigpar), dtype = np.float32 )
+#rad = np.ones( len(bigpar), dtype = np.float32 )
+rad = np.random.random_integers(4,6, (len(bigpar), ) )
+
 print "bigpos", bigpos
 print "bigcol", bigcol
+print "radius", rad
 
-treeregion = TreeRegion(vertices = bigpos, connectivity = bigpar.astype(np.int32) , colors = bigcol) #, radius = rad )
+treeregion = TreeRegion(vertices = bigpos, connectivity = bigpar.astype(np.int32) , colors = bigcol, radius = rad )
 window.add_actor_to_world(treeregion)
 #
 fos.run()
