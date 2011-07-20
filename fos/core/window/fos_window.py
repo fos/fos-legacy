@@ -168,30 +168,12 @@ class FosWindow(ManagedWindow):
 
         ratio =  width * 1.0 / height
 
-        # // Reset Matrix
-	    # vsml->loadIdentity(VSML::PROJECTION);
+        glViewport(0, 0, width, height)
         vsml.loadIdentity(vsml.MatrixTypes.PROJECTION)
-
-        # // Set the correct perspective.
         vsml.perspective(60., ratio, .1, 8000)
-
         glMatrixMode(GL_PROJECTION)
         glLoadMatrixf(vsml.get_projection())
 
-        # // Set the viewport to be the entire window
-        glViewport(0, 0, width, height)
-
-        
-        return pyglet.event.EVENT_HANDLED
-
-
-    def on_resize1(self, width, height):
-        print "on resizye"
-        if height==0: height=1
-        print("New window size %i %i" % (width, height) )
-        glViewport(0, 0, width, height)
-        glMatrixMode(GL_PROJECTION)
-        glLoadIdentity()
-        gluPerspective(60., width / float(height), .1, 8000.)
         glMatrixMode(GL_MODELVIEW)
+
         return pyglet.event.EVENT_HANDLED
