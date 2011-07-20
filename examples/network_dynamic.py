@@ -58,6 +58,7 @@ cu = DynNet(affine = aff,
                       )
 
 w.add(cu)
+wi.attach(w)
 cu.start()
 
 wm = WindowManager()

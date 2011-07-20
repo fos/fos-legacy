@@ -14,8 +14,8 @@ def get_vary_line_width_shader():
 
 # load the vary-line-width-shader
 def get_simple_shader():
-    return Shader( [get_shader_code('propagatevertex130b.vert')],
-                   [get_shader_code('propagatecolor130.frag')]
+    return Shader( [get_shader_code('propagate.vert')],
+                   [get_shader_code('propagate.frag')]
                   )
 
 # load the vary-line-width-shader

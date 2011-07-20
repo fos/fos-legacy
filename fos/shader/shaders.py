@@ -41,13 +41,13 @@ class Shader:
         self.link()
 
         # maximum 2d texture
-        myint = GLint(0)
-        glGetIntegerv(GL_MAX_TEXTURE_SIZE, myint)
-        self.max_tex = myint.value
+        #myint = GLint(0)
+        #glGetIntegerv(GL_MAX_TEXTURE_SIZE, myint)
+        #self.max_tex = myint.value
 
         # needs to be after linking
-        self.width_sampler = glGetUniformLocation(self.handle, "widthSampler" )
-        self.tex_width = glGetUniformLocation(self.handle, "textureWidth" )
+        #self.width_sampler = glGetUniformLocation(self.handle, "widthSampler" )
+        #self.tex_width = glGetUniformLocation(self.handle, "textureWidth" )
 
     def createShader(self, strings, type):
         count = len(strings)
@@ -155,7 +155,7 @@ class Shader:
 
         glEnableVertexAttribArray(0)
         glEnableVertexAttribArray(1)
-        glEnable(GL_TEXTURE_2D)
+        #glEnable(GL_TEXTURE_2D)
 
     def unbind(self):
         # unbind whatever program is currently bound - not necessarily this program,
@@ -164,7 +164,7 @@ class Shader:
 
         glDisableVertexAttribArray(0)
         glDisableVertexAttribArray(1)
-        glDisable(GL_TEXTURE_2D)
+        #glDisable(GL_TEXTURE_2D)
 
     # upload a floating point uniform
     # this program must be currently bound

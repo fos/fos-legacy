@@ -34,6 +34,7 @@ cu = AttributeNetwork(affine = aff,
                       edge_connectivity = edg)
 
 w.add(cu)
+wi.attach(w)
 
 wm = WindowManager()
 wm.add(wi)
