@@ -104,7 +104,7 @@ class FosWinEventHandler(object):
     
     def on_mouse_scroll(self, x,y,scroll_x,scroll_y):
 #        self.window.current_camera.cam_trans.translate(0,0,scroll_y*self.window.current_camera.scroll_speed)
-        print "mouse,scroll", x, y, scroll_x, scroll_y
+        #print "mouse,scroll", x, y, scroll_x, scroll_y
         self.window.current_camera.translate(0,0, scroll_y * self.window.current_camera.scroll_speed )
 
 

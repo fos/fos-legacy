@@ -21,7 +21,7 @@ from fos.lib.pyglet.window import FPSDisplay
 from fos.core.window.window_text  import WindowText
 from fos.core import color
 from fos.core.handlers.window import FosWinEventHandler
-
+from fos.shader.vsml import vsml
 
 class FosWindow(ManagedWindow):
     
@@ -67,8 +67,8 @@ class FosWindow(ManagedWindow):
         self.attach(emptyworld)
         
         # the frame rate display from fos.lib.pyglet
-        #self.fps_display = FPSDisplay(self)
-        #self.foslabel = WindowText(self, 'fos', x=10 , y=40)
+        self.fps_display = FPSDisplay(self)
+        self.foslabel = WindowText(self, 'fos', x=10 , y=40)
         self.show_logos = False
 
         # pushing new event handlers
@@ -76,14 +76,14 @@ class FosWindow(ManagedWindow):
         self.push_handlers(foswinhandlers)
         
         super(FosWindow, self).__init__(**kwargs)
-        
+
+        self.setup()
     
     def remove_logos(self):
         self.show_logos = False
         
         
-    def setup(self):           
-                
+    def setup(self):
         r,g,b,a = self.bgcolor
         glClearColor(r,g,b,a)
         glClearDepth(1.0)
@@ -136,20 +136,18 @@ class FosWindow(ManagedWindow):
         
         # attach the world as a private attribute
         self._world = world
-        
-        # add the world to the list of windows the world is attached to
-        self._world.wins.append(self)
-        
+
         # just take the first camera
         self.current_camera = self._world.get_cameras()[0]
 
-            
+        # reset the camera
+        self.current_camera.reset()
+
+        
     def draw(self):
         
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        glMatrixMode(GL_MODELVIEW)
-        glLoadIdentity()
-    
+
         self.current_camera.draw()
     
         for a in self._world.ag.actors:
@@ -163,6 +161,32 @@ class FosWindow(ManagedWindow):
             self.foslabel.draw()
 
     def on_resize(self, width, height):
+        
+        print("New window size %i %i" % (width, height) )
+        if height == 0:
+            height = 1
+
+        ratio =  width * 1.0 / height
+
+        # // Reset Matrix
+	    # vsml->loadIdentity(VSML::PROJECTION);
+        vsml.loadIdentity(vsml.MatrixTypes.PROJECTION)
+
+        # // Set the correct perspective.
+        vsml.perspective(60., ratio, .1, 8000)
+
+        glMatrixMode(GL_PROJECTION)
+        glLoadMatrixf(vsml.get_projection())
+
+        # // Set the viewport to be the entire window
+        glViewport(0, 0, width, height)
+
+        
+        return pyglet.event.EVENT_HANDLED
+
+
+    def on_resize1(self, width, height):
+        print "on resizye"
         if height==0: height=1
         print("New window size %i %i" % (width, height) )
         glViewport(0, 0, width, height)

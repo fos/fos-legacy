@@ -1,8 +1,7 @@
 #from fos.lib.pyglet.gl import *
-from fos.lib.pyglet.gl import glPushMatrix, glLoadIdentity, glPopMatrix, glMultMatrixf, \
-    glRotatef, glTranslatef, gluLookAt
+from fos.lib.pyglet.gl import *
     
-from fos.core.utils import get_model_matrix #,screen_to_model,get_viewport
+from fos.core.utils import *
 from fos.shader.vsml import vsml
 import numpy as np
 
@@ -53,31 +52,34 @@ class Camera():
 # http://code.enthought.com/projects/mayavi/docs/development/html/mayavi/auto/mlab_camera.html
 # http://www.opengl.org/resources/faq/technical/viewing.htm
 
-class MyCamera(Camera):
+class VSMLCamera(Camera):
     def __init__(self):
         self.lu = [0,0,120, 0,0,0, 0,1,0]
-        vsml.lookAt(*self.lu)
-
         self.scroll_speed = 10
         self.mouse_speed = 0.1
+        self.reset()
 
     def draw(self):
-        # draw current camera
-        vsml.lookAt(*self.lu)
+        # use the modelview in the OpenGL fixed-pipeline
+        glMatrixMode(GL_MODELVIEW)
+        glLoadMatrixf(vsml.get_modelview())
 
     def reset(self):
+        # load identity for modelview when initializing
         vsml.loadIdentity(vsml.MatrixTypes.MODELVIEW)
+        # setup the initial look at updating the modelview
         vsml.lookAt(*self.lu)
 
     def translate(self, x, y, z):
-        vsml.translate(x, y, z)
+        # need to update .lu and call initidentity and lookat again
+        # or direclty change the modelview
+        vsml.translate(x, y, z, vsml.MatrixTypes.MODELVIEW)
 
     def scale(self, x, y, z):
         vsml.scale(x, y, z, vsml.MatrixTypes.MODELVIEW)
 
     def rotate(self, angle, x, y, z):
         vsml.rotate(angle, x, y, z, vsml.MatrixTypes.MODELVIEW)
-
 
 
 class DefaultCamera(Camera):
