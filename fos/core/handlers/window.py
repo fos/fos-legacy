@@ -17,6 +17,7 @@ class FosWinEventHandler(object):
         # how to propagate the events to the actors and camera?
             
         if symbol == key.R:
+            print "R pressed"
             self.window.current_camera.reset()
         
         if symbol == key.H:
@@ -65,25 +66,45 @@ class FosWinEventHandler(object):
 
     def on_mouse_motion(self, x, y, dx, dy):
         self.window.mouse_x, self.window.mouse_y = x, y
-        
+
     def on_mouse_drag(self, x,y,dx,dy,buttons,modifiers):
         if buttons & mouse.LEFT:
             if modifiers & key.MOD_CTRL:
                 print('ctrl dragging')
             else:
-                self.window.current_camera.cam_rot.rotate( dx*self.window.current_camera.mouse_speed,0,1,0)
-                self.window.current_camera.cam_rot.rotate(-dy*self.window.current_camera.mouse_speed,1,0,0)
-                
+                self.window.current_camera.rotate( dx*self.window.current_camera.mouse_speed,0,1,0)
+                self.window.current_camera.rotate(-dy*self.window.current_camera.mouse_speed,1,0,0)
+
         if buttons & mouse.RIGHT:
             tx=dx*self.window.current_camera.mouse_speed
-            ty=dy*self.window.current_camera.mouse_speed        
-            self.window.current_camera.cam_trans.translate(tx,ty,0)
-    
+            ty=dy*self.window.current_camera.mouse_speed
+            self.window.current_camera.translate(tx,ty,0)
+            
         if buttons & mouse.MIDDLE:
-            tz=dy*self.window.current_camera.mouse_speed
-            self.window.current_camera.cam_trans.translate(0,0,tz)
+            #tz=dy*self.window.current_camera.mouse_speed
+            self.window.current_camera.scale(1.5,1.5,1.5)
+
+#
+#    def on_mouse_drag(self, x,y,dx,dy,buttons,modifiers):
+#        if buttons & mouse.LEFT:
+#            if modifiers & key.MOD_CTRL:
+#                print('ctrl dragging')
+#            else:
+#                self.window.current_camera.cam_rot.rotate( dx*self.window.current_camera.mouse_speed,0,1,0)
+#                self.window.current_camera.cam_rot.rotate(-dy*self.window.current_camera.mouse_speed,1,0,0)
+#
+#        if buttons & mouse.RIGHT:
+#            tx=dx*self.window.current_camera.mouse_speed
+#            ty=dy*self.window.current_camera.mouse_speed
+#            self.window.current_camera.cam_trans.translate(tx,ty,0)
+#
+#        if buttons & mouse.MIDDLE:
+#            tz=dy*self.window.current_camera.mouse_speed
+#            self.window.current_camera.cam_trans.translate(0,0,tz)
     
     def on_mouse_scroll(self, x,y,scroll_x,scroll_y):
-        self.window.current_camera.cam_trans.translate(0,0,scroll_y*self.window.current_camera.scroll_speed)
+#        self.window.current_camera.cam_trans.translate(0,0,scroll_y*self.window.current_camera.scroll_speed)
+        print "mouse,scroll", x, y, scroll_x, scroll_y
+        self.window.current_camera.translate(0,0, scroll_y * self.window.current_camera.scroll_speed )
 
 

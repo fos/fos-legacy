@@ -129,6 +129,7 @@ class Tree(Actor):
         glBufferData(GL_ARRAY_BUFFER, 4 * self.colors.size, self.colors_ptr, GL_STATIC_DRAW)
         glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0)
 
+        print "mytex", self.mytex, self.mytex_ptr, self.mytex.size, self.mytex.dtype
         # texture init
         self.init_texture()
 

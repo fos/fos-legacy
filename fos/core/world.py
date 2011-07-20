@@ -4,7 +4,7 @@ from fos.core.actor_graph import ActorGraph
 from fos.core.camera_list import CameraList
 from fos.core.camera import Camera
 from fos.core.actor import Actor
-from fos.core.camera import DefaultCamera
+from fos.core.camera import MyCamera, DefaultCamera
 from fos.core.intersection import test_segment_aabb
 
 class World():
@@ -18,10 +18,11 @@ class World():
         self.wins = []
         
         # create a simple camera
-        simple_camera = DefaultCamera()
+        simple_camera = MyCamera()
+#        simple_camera = DefaultCamera()
         self.cl.cameras.append(simple_camera)
         
-        self._render_lock = RLock()
+        #self._render_lock = RLock()
         
     def add(self, obj, update_camera = True):
         if isinstance(obj, Actor):

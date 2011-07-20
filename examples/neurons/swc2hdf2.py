@@ -11,7 +11,7 @@ from glob import glob
 # http://neuromorpho.org/neuroMorpho/dableFiles/turner/Source-Version/l71.swc
 # http://neuromorpho.org/neuroMorpho/dableFiles/turner/Source-Version/l55.swc
 
-fi=glob('*.swc')
+fi=glob('l71.swc')
 
 ficon = []
 for file in fi:

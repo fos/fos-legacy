@@ -11,3 +11,16 @@ def get_vary_line_width_shader():
                    [get_shader_code('propagatecolor130.frag')],
                    [get_shader_code('lineextrusion130.geom'), gl.GL_LINES, gl.GL_TRIANGLE_STRIP, 6]
                   )
+
+# load the vary-line-width-shader
+def get_simple_shader():
+    return Shader( [get_shader_code('propagatevertex130b.vert')],
+                   [get_shader_code('propagatecolor130.frag')]
+                  )
+
+# load the vary-line-width-shader
+def get_propagate_shader():
+    return Shader( [get_shader_code('propagatevertex150.vert')],
+                   [get_shader_code('propagatecolor150.frag')]
+                   #[get_shader_code('lineextrusion130.geom'), gl.GL_LINES, gl.GL_TRIANGLE_STRIP, 6]
+                  )

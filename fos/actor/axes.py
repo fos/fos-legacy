@@ -2,6 +2,8 @@ import numpy as np
 
 from fos.lib.pyglet.gl import *
 from fos import Actor, World
+from fos.shader.vsml import vsml
+from fos.shader import Shader, get_simple_shader
 
 class Axes(Actor):
 
@@ -12,6 +14,8 @@ class Axes(Actor):
 
         self.scale = scale
 
+        self.shader = get_simple_shader()
+
 
     def update(self, dt):
         pass
@@ -19,7 +23,25 @@ class Axes(Actor):
 
     def draw(self):
 
+        if vsml.DEBUG:
+            print "draw axes", self.scale
+            print "vsml modelview is ", vsml.modelview
+            print "vsml projection is ", vsml.projection
+
+        #self.shader.bind()
+#
+#        vsml.pushMatrix(vsml.MatrixTypes.MODELVIEW)
+        
         glPushMatrix()
+
+        glMatrixMode(GL_MODELVIEW)
+        glLoadIdentity()
+        glLoadMatrix(vsml.get_modelview())
+
+        glMatrixMode(GL_PROJECTION)
+        glLoadIdentity()
+        glLoadMatrix(vsml.get_projection())
+
         # glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
 
         glLineWidth(2.0)
@@ -40,3 +62,6 @@ class Axes(Actor):
         glEnd()
         
         glPopMatrix()
+#        vsml.popMatrix(vsml.MatrixTypes.MODELVIEW)
+#
+#        self.shader.unbind()

@@ -7,7 +7,7 @@
 # Modified by Stephan Gerhard, 2010
 
 from ctypes import (
-    byref, c_char, c_char_p, c_int, cast, create_string_buffer, pointer,
+    byref, c_char, c_char_p, c_int, cast, create_string_buffer, pointer, c_float,
     POINTER
 )
 
@@ -29,7 +29,7 @@ class Shader:
 
         if not len(geom) == 0:
             # the geometry shader will be the same, once pyglet supports the extension
-            self.createGeometryShader(geom[0], GL_GEOMETRY_SHADER_EXT, geom[1], geom[2], geom[3])
+            self.createGeometryShader( [geom[0]] , GL_GEOMETRY_SHADER_EXT, geom[1], geom[2], geom[3])
 
         #/* Bind attribute index 0 (coordinates) to in_Position and attribute index 1 (color) to in_Color */
         #/* Attribute locations must be setup before calling glLinkProgram. */
@@ -40,8 +40,14 @@ class Shader:
         # attempt to link the program
         self.link()
 
+        # maximum 2d texture
+        myint = GLint(0)
+        glGetIntegerv(GL_MAX_TEXTURE_SIZE, myint)
+        self.max_tex = myint.value
+
         # needs to be after linking
         self.width_sampler = glGetUniformLocation(self.handle, "widthSampler" )
+        self.tex_width = glGetUniformLocation(self.handle, "textureWidth" )
 
     def createShader(self, strings, type):
         count = len(strings)
@@ -64,19 +70,18 @@ class Shader:
         # retrieve the compile status
         glGetShaderiv(shader, GL_COMPILE_STATUS, byref(temp))
 
-        # if compilation failed, print the log
-        if not temp:
-            # retrieve the log length
-            glGetShaderiv(shader, GL_INFO_LOG_LENGTH, byref(temp))
-            # create a buffer for the log
-            buffer = create_string_buffer(temp.value)
-            # retrieve the log text
-            glGetShaderInfoLog(shader, temp, None, buffer)
-            # print the log to the console
-            print buffer.value
-        else:
-            # all is well, so attach the shader to the program
-            glAttachShader(self.handle, shader);
+        # retrieve the log length
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, byref(temp))
+        # create a buffer for the log
+        buffer = create_string_buffer(temp.value)
+        # retrieve the log text
+        glGetShaderInfoLog(shader, temp, None, buffer)
+        
+        # print the log to the console
+        print buffer.value
+
+        # all is well, so attach the shader to the program
+        glAttachShader(self.handle, shader)
 
     def createGeometryShader(self, strings, type, input_type, output_type, vertices_out):
         count = len(strings)
@@ -100,26 +105,27 @@ class Shader:
         glGetShaderiv(shader, GL_COMPILE_STATUS, byref(temp))
 
         # if compilation failed, print the log
-        if not temp:
-            # retrieve the log length
-            glGetShaderiv(shader, GL_INFO_LOG_LENGTH, byref(temp))
-            # create a buffer for the log
-            buffer = create_string_buffer(temp.value)
-            # retrieve the log text
-            glGetShaderInfoLog(shader, temp, None, buffer)
-            # print the log to the console
-            print buffer.value
-        else:
-            print("Geometry shader compiled.")
-            
-            # And define the input and output of the geometry shader, point and triangle strip in this case. Four is how many the vertices the shader will create.
+        # retrieve the log length
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, byref(temp))
+        # create a buffer for the log
+        buffer = create_string_buffer(temp.value)
+        # retrieve the log text
+        glGetShaderInfoLog(shader, temp, None, buffer)
+        # print the log to the console
 
-            glProgramParameteriEXT(self.handle, GL_GEOMETRY_INPUT_TYPE_EXT, input_type);
-            glProgramParameteriEXT(self.handle, GL_GEOMETRY_OUTPUT_TYPE_EXT, output_type);
-            glProgramParameteriEXT(self.handle, GL_GEOMETRY_VERTICES_OUT_EXT, vertices_out);
-            
-            # all is well, so attach the shader to the program
-            glAttachShader(self.handle, shader);
+        print("Geometry shader compiled.")
+
+        # And define the input and output of the geometry shader, point and triangle strip in this case. Four is how many the vertices the shader will create.
+
+        #glProgramParameteriEXT(self.handle, GL_GEOMETRY_INPUT_TYPE_EXT, input_type)
+        #glProgramParameteriEXT(self.handle, GL_GEOMETRY_OUTPUT_TYPE_EXT, output_type)
+        #glProgramParameteriEXT(self.handle, GL_GEOMETRY_VERTICES_OUT_EXT, vertices_out)
+
+        print buffer.value
+
+        # all is well, so attach the shader to the program
+        glAttachShader(self.handle, shader)
+
 
     def link(self):
         # link the program
@@ -149,7 +155,7 @@ class Shader:
 
         glEnableVertexAttribArray(0)
         glEnableVertexAttribArray(1)
-        glEnable(GL_TEXTURE_1D)
+        glEnable(GL_TEXTURE_2D)
 
     def unbind(self):
         # unbind whatever program is currently bound - not necessarily this program,
@@ -158,7 +164,7 @@ class Shader:
 
         glDisableVertexAttribArray(0)
         glDisableVertexAttribArray(1)
-        glDisable(GL_TEXTURE_1D)
+        glDisable(GL_TEXTURE_2D)
 
     # upload a floating point uniform
     # this program must be currently bound

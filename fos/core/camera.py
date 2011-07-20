@@ -3,6 +3,8 @@ from fos.lib.pyglet.gl import glPushMatrix, glLoadIdentity, glPopMatrix, glMultM
     glRotatef, glTranslatef, gluLookAt
     
 from fos.core.utils import get_model_matrix #,screen_to_model,get_viewport
+from fos.shader.vsml import vsml
+import numpy as np
 
 class TransformCamera():
     
@@ -50,7 +52,34 @@ class Camera():
 # for ideas: 
 # http://code.enthought.com/projects/mayavi/docs/development/html/mayavi/auto/mlab_camera.html
 # http://www.opengl.org/resources/faq/technical/viewing.htm
-  
+
+class MyCamera(Camera):
+    def __init__(self):
+        self.lu = [0,0,120, 0,0,0, 0,1,0]
+        vsml.lookAt(*self.lu)
+
+        self.scroll_speed = 10
+        self.mouse_speed = 0.1
+
+    def draw(self):
+        # draw current camera
+        vsml.lookAt(*self.lu)
+
+    def reset(self):
+        vsml.loadIdentity(vsml.MatrixTypes.MODELVIEW)
+        vsml.lookAt(*self.lu)
+
+    def translate(self, x, y, z):
+        vsml.translate(x, y, z)
+
+    def scale(self, x, y, z):
+        vsml.scale(x, y, z, vsml.MatrixTypes.MODELVIEW)
+
+    def rotate(self, angle, x, y, z):
+        vsml.rotate(angle, x, y, z, vsml.MatrixTypes.MODELVIEW)
+
+
+
 class DefaultCamera(Camera):
     
     def __init__(self):
@@ -58,7 +87,9 @@ class DefaultCamera(Camera):
         self.scroll_speed=10
         self.mouse_speed=0.1  
         self.cam_rot = TransformCamera()
-        self.cam_trans = TransformCamera() 
+        self.cam_trans = TransformCamera()
+
+        print "camera init"
         
     def draw(self):
         eyex,eyey,eyez,centx,centy,centz,upx,upy,upz=self.lookat
