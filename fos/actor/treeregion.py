@@ -114,17 +114,18 @@ class TreeRegion(Actor):
         # uint32 has 4 bytes
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, 4 * self.indices_nr, self.indices_ptr, GL_STATIC_DRAW)
 
-
-
         self.shader = get_vary_line_width_shader()
-
 
         # check if we allow to enable texture for radius information
         self.tex_size = int( np.sqrt( self.mytex.size ) ) + 1
         print "required squared size for texture", self.tex_size
 
-        
-        if self.tex_size < self.shader.max_tex:
+        # maximum 2d texture
+        myint = GLint(0)
+        glGetIntegerv(GL_MAX_TEXTURE_SIZE, myint)
+        self.max_tex = myint.value
+
+        if self.tex_size < self.max_tex:
             self.mytex_ptr = self.mytex.ctypes.data
             self.use_tex = True
             self.mytex.resize( self.tex_size )
@@ -165,7 +166,7 @@ class TreeRegion(Actor):
 
     def draw_vbo(self):
 
-
+        import pdb; pdb.set_trace()
 
         # bind the shader
         self.shader.bind()
@@ -174,10 +175,15 @@ class TreeRegion(Actor):
         self.shader.uniform_matrixf( 'modelviewMatrix', vsml.get_modelview())
 
         self.shader.uniformi( 'textureWidth', self.tex_size)
+        self.shader.uniformi( 'widthSampler', 0)
 
         # load uniform variables defined as sampler types
         # 0 denotes texture unit 0
-        glUniform1i(self.shader.width_sampler, 0)
+        #glUniform1i(self.shader.width_sampler, 0)
+
+        glEnableVertexAttribArray(0)
+        glEnableVertexAttribArray(1)
+        glEnable(GL_TEXTURE_2D)
 
         if self.use_tex:
             glActiveTexture(GL_TEXTURE0)
@@ -196,6 +202,10 @@ class TreeRegion(Actor):
 
         # unbind the shader
         self.shader.unbind()
+
+        glDisableVertexAttribArray(0)
+        glDisableVertexAttribArray(1)
+        glDisable(GL_TEXTURE_2D)
 
     def draw(self):
 

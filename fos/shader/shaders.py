@@ -40,11 +40,6 @@ class Shader:
         # attempt to link the program
         self.link()
 
-        # maximum 2d texture
-        #myint = GLint(0)
-        #glGetIntegerv(GL_MAX_TEXTURE_SIZE, myint)
-        #self.max_tex = myint.value
-
         # needs to be after linking
         #self.width_sampler = glGetUniformLocation(self.handle, "widthSampler" )
         #self.tex_width = glGetUniformLocation(self.handle, "textureWidth" )
@@ -153,8 +148,8 @@ class Shader:
         # bind the program
         glUseProgram(self.handle)
 
-        glEnableVertexAttribArray(0)
-        glEnableVertexAttribArray(1)
+        #glEnableVertexAttribArray(0)
+        #glEnableVertexAttribArray(1)
         #glEnable(GL_TEXTURE_2D)
 
     def unbind(self):
@@ -162,8 +157,8 @@ class Shader:
         # so this should probably be a class method instead
         glUseProgram(0)
 
-        glDisableVertexAttribArray(0)
-        glDisableVertexAttribArray(1)
+        #glDisableVertexAttribArray(0)
+        #glDisableVertexAttribArray(1)
         #glDisable(GL_TEXTURE_2D)
 
     # upload a floating point uniform
