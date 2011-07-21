@@ -19,7 +19,7 @@ try:
     window = Window(resizable=True, config=config, vsync=False, width=1000, height=800, caption = mycpt) # "vsync=False" to check the framerate
 except pyglet.window.NoSuchConfigException:
     # Fall back to no multisampling for old hardware
-    window = Window(resizable=True, caption = mycpt)
+    window = Window(resizable=True, caption = "No Multisampling")
 
 # sample tree data
 # ####
@@ -28,17 +28,15 @@ vert = np.array( [ [0,0,0],
 
 conn = np.array( [ 0, 1], dtype = np.uint32 )
 
-cols = np.array( [ [0, 1, 0, 1.0],
-                   [1, 0, 1, 1.0],
-                   [0, 0, 1, 1.0] ] , dtype = np.float32 )
+cols = np.array( [ [0, 1, 0, 1.0] ] , dtype = np.float32 )
 
-vert_width = np.array( [1, 5, 10], dtype = np.float32 )
+vert_width = np.array( [1, 5], dtype = np.float32 )
 
-ax = Axes(scale=100)
+#ax = Axes(scale=100)
 act = TreeRegion(vertices = vert, connectivity = conn, radius = vert_width) #colors = cols,
 
 w = World()
-w.add(ax)
+#w.add(ax)
 w.add(act)
 
 window.attach(w)
