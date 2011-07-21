@@ -166,7 +166,7 @@ class TreeRegion(Actor):
 
     def draw_vbo(self):
 
-        import pdb; pdb.set_trace()
+        #import pdb; pdb.set_trace()
 
         # bind the shader
         self.shader.bind()
@@ -183,7 +183,7 @@ class TreeRegion(Actor):
 
         glEnableVertexAttribArray(0)
         glEnableVertexAttribArray(1)
-        glEnable(GL_TEXTURE_2D)
+        #glEnable(GL_TEXTURE_2D)
 
         if self.use_tex:
             glActiveTexture(GL_TEXTURE0)
@@ -203,9 +203,9 @@ class TreeRegion(Actor):
         # unbind the shader
         self.shader.unbind()
 
-        glDisableVertexAttribArray(0)
-        glDisableVertexAttribArray(1)
-        glDisable(GL_TEXTURE_2D)
+        #glDisableVertexAttribArray(0)
+        #glDisableVertexAttribArray(1)
+        #glDisable(GL_TEXTURE_2D)
 
     def draw(self):
 

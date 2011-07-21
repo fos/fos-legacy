@@ -11,19 +11,19 @@ import fos.lib.pyglet as pyglet
 
 from fos.lib.pyglet.gl import *
 
-from fos.core.window.managed_window import ManagedWindow
+#from fos.core.window.managed_window import ManagedWindow
 
 from fos import World
 
 from fos.lib.pyglet.window import key,mouse
 from fos.lib.pyglet.clock import Clock
-from fos.lib.pyglet.window import FPSDisplay
+from fos.lib.pyglet.window import FPSDisplay, Window
 from fos.core.window.window_text  import WindowText
 from fos.core import color
 from fos.core.handlers.window import FosWinEventHandler
 from fos.shader.vsml import vsml
 
-class FosWindow(ManagedWindow):
+class FosWindow(Window):
     
     def __init__(self, bgcolor=None, **kwargs):
         """ Create a FosWindow. All parameters are optional.
