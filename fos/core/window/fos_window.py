@@ -74,10 +74,43 @@ class FosWindow(Window):
         # pushing new event handlers
         foswinhandlers = FosWinEventHandler(self)
         self.push_handlers(foswinhandlers)
-        
-        super(FosWindow, self).__init__(**kwargs)
 
-        self.setup()
+        self.win_args = dict(self.default_win_args, **kwargs)
+        
+
+    def create_window(self):
+        """Create the window"""
+        self.clock = Clock()
+        try:
+            super(FosWindow, self).__init__(**self.win_args)
+            self.switch_to()
+            self.setup()
+        except Exception, e:
+            print "Window initialization failed: %s" % (str(e))
+            self.has_exit = True
+
+
+    def process_frame(self):
+        """
+        Process a frame for the window.  This is called once per frame in the
+        WindowManager::main_loop()
+        """
+
+        if not self.has_exit:
+            # the clock needs to tick but we are not using dt
+            # dt = clock.tick()
+            #clock.tick(poll=False)
+            try:
+                self.switch_to()
+                self.dispatch_events()
+                self.clear()
+                dt = self.clock.tick()
+                self.update(dt)
+                self.draw()
+                self.flip()
+            except Exception, e:
+                print "Uncaught exception in event loop: %s" % str(e)
+                self.has_exit = True
     
     def remove_logos(self):
         self.show_logos = False
