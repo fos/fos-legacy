@@ -24,7 +24,12 @@ from fos.core.handlers.window import FosWinEventHandler
 from fos.shader.vsml import vsml
 
 class FosWindow(Window):
-    
+
+    default_win_args = dict(width=640,
+                            height=480,
+                            vsync=False,
+                            resizable=False)
+
     def __init__(self, bgcolor=None, **kwargs):
         """ Create a FosWindow. All parameters are optional.
         
