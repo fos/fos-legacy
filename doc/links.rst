@@ -3,6 +3,18 @@ Links
 =====
 Our aim is to collect knowledge, references and feature requests...
 
+* Skeleton Rendering http://www.spieleprogrammierung.net/2010/04/opengl-3-skeletale-animation-vertex.html
+* Working with surfaces http://vcg.sourceforge.net/index.php/Main_Page
+* Generate sphere: http://paulbourke.net/miscellaneous/sphere_cylinder/
+* GLE Tubing and Extrusion Fact Sheet http://linas.org/gle/
+webgl
+http://learningwebgl.com/cookbook/index.php/Main_Page
+http://spidergl.org/code.php
+Geometry shader
+https://agora.cs.illinois.edu/display/graphics/Geometry+Shader+Hello+World
+http://nehe.gamedev.net/data/articles/article.asp?article=21
+http://renderingwonders.wordpress.com/tag/geometry-shader/
+
 Camera
 ------
 * http://nehe.gamedev.net/data/articles/article.asp?article=08
