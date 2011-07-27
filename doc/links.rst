@@ -3,6 +3,7 @@ Links
 =====
 Our aim is to collect knowledge, references and feature requests...
 
+* Ultra-Scale Visualization http://vis.cs.ucdavis.edu/Ultravis/index.php
 * Skeleton Rendering http://www.spieleprogrammierung.net/2010/04/opengl-3-skeletale-animation-vertex.html
 * Working with surfaces http://vcg.sourceforge.net/index.php/Main_Page
 * Generate sphere: http://paulbourke.net/miscellaneous/sphere_cylinder/
