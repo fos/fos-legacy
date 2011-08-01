@@ -3,6 +3,10 @@ Links
 =====
 Our aim is to collect knowledge, references and feature requests...
 
+* http://hgomersall.wordpress.com/2011/03/31/qml_with_opengl_using_python/
+* http://blog.notdot.net/2009/11/Damn-Cool-Algorithms-Spatial-indexing-with-Quadtrees-and-Hilbert-Curves
+* http://en.wikipedia.org/wiki/R-tree
+* http://code.google.com/p/visualizationlibrary/
 * Ultra-Scale Visualization http://vis.cs.ucdavis.edu/Ultravis/index.php
 * Skeleton Rendering http://www.spieleprogrammierung.net/2010/04/opengl-3-skeletale-animation-vertex.html
 * Working with surfaces http://vcg.sourceforge.net/index.php/Main_Page
