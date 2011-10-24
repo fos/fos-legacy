@@ -3,15 +3,19 @@ import numpy as np
 from fos import Actor
 import fos.lib.pyglet as pyglet
 from fos.lib.pyglet.gl import *
-#import fos.core.collision as cll
-
+import fos.core.collision as cll
 from fos.actor.primitives import AABBPrimitive
 
 class InteractiveCurves(Actor):
 
-    def __init__(self,curves,colors=None,line_width=2.,centered=True):
+    def __init__(self,curves,colors=None,line_width=2.,centered=True,affine=None):
     
         #super(InteractiveCurves, self).__init__()
+        
+        if affine is None:
+            self.affine = np.eye(4, dtype = np.float32)
+        else:
+            self.affine = affine
         
         self.vertex_list =len(curves)*[None]
         self.len_vl=len(curves)
@@ -36,8 +40,8 @@ class InteractiveCurves(Actor):
                            ccurves[:,1].max(),
                            ccurves[:,2].max()], dtype = np.float32)
         
-        print coord1
-        print coord2
+        #print coord1
+        #print coord2
         self.make_aabb((coord1,coord2),10)
         
         #self.aabb=AABBPrimitive(np.array([-1000,-1000,1000]),np.array([1000,1000,-1000]),margin=0)
@@ -92,8 +96,6 @@ class InteractiveCurves(Actor):
                 self.compile_gl()                
                 glCallList(self.list_index)
                 print('Updated')
-                #print('Updated in %d secs' % time.clock()-t1)
-                #glDeleteList(prev)
             else:
                 glCallList(self.list_index)
         self.unset_state()     
@@ -109,30 +111,24 @@ class InteractiveCurves(Actor):
             if self.selected.count(cr)==0:
                 self.selected.append(cr)
                 color=self.vertex_list[cr].colors[:4]                
-                r,g,b,a=color
-                
+                r,g,b,a=color                
                 background=(c_float*4)()
                 glGetFloatv(GL_COLOR_CLEAR_VALUE,background)
                 br,bg,bb,ba=background
-
                 br,bg,bb,ba=int(round(255*br)),int(round(255*bg)),\
-                    int(round(255*bb)),int(round(255*ba))
-                
+                    int(round(255*bb)),int(round(255*ba))                
                 ncolors=len(self.curves[cr])*((r+br)/2,(g+bg)/2,(b+bb)/2,a)
                 self.vertex_list[cr].colors=ncolors
             
             elif self.selected.count(cr)>0:
                 self.selected.remove(cr)
                 color=self.vertex_list[cr].colors[:4]
-                r,g,b,a=color
-                
+                r,g,b,a=color                
                 background=(c_float*4)()
                 glGetFloatv(GL_COLOR_CLEAR_VALUE,background)
                 br,bg,bb,ba=background
-
                 br,bg,bb,ba=int(round(255*br)),int(round(255*bg)),\
-                    int(round(255*bb)),int(round(255*ba))
-                
+                    int(round(255*bb)),int(round(255*ba))                
                 ncolors=len(self.curves[cr])*(2*r-br,2*g-bg,2*b-bb,a)
                 self.vertex_list[cr].colors=ncolors
 
@@ -146,7 +142,8 @@ class InteractiveCurves(Actor):
             shift=np.array(self.position)-self.mean
             print 'shift', shift
         else:
-            shift=np.array([0,0,0])        
+            shift=np.array([0,0,0])
+                
         min_dist_info=[ cll.mindistance_segment2track_info(near,far,xyz+shift) \
                 for xyz in self.curves]
 
@@ -166,7 +163,10 @@ class InteractiveCurves(Actor):
             
         #print 'A','minA next',minA, iA
         miniA=minA[:,1].argmin()
-        print 'track_center',self.position, 'selected',iA[0][miniA]
+        
+        #print 'track_center',self.position, 'selected',iA[0][miniA]
+        print 'track_id',iA[0][miniA]
+        
         self.current=iA[0][miniA]
         #self.selected.append(self.current)
         #self.selected=list(set(self.selected))
