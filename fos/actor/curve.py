@@ -85,11 +85,12 @@ class InteractiveCurves(Actor):
     def draw(self):
         
         self.set_state()
-        if self.curves_nbytes < 0: #!!!disabled for now
+        if self.curves_nbytes < 10000: #!!!disabled for now
             [self.vertex_list[i].draw(GL_LINE_STRIP) for i in self.range_vl]
         else:        
             if self.updated:
                 print('Updating...')
+                
                 self.updated=False
                 t1=time.clock()
                 prev=self.list_index
@@ -117,19 +118,25 @@ class InteractiveCurves(Actor):
                 br,bg,bb,ba=background
                 br,bg,bb,ba=int(round(255*br)),int(round(255*bg)),\
                     int(round(255*bb)),int(round(255*ba))                
-                ncolors=len(self.curves[cr])*((r+br)/2,(g+bg)/2,(b+bb)/2,a)
+                #ncolors=len(self.curves[cr])*((r+br)/2,(g+bg)/2,(b+bb)/2,a)
+                ncolors=len(self.curves[cr])*(0,150,0,a)
                 self.vertex_list[cr].colors=ncolors
             
             elif self.selected.count(cr)>0:
+                #print 'SELECTING'
                 self.selected.remove(cr)
                 color=self.vertex_list[cr].colors[:4]
                 r,g,b,a=color                
+                """
                 background=(c_float*4)()
                 glGetFloatv(GL_COLOR_CLEAR_VALUE,background)
                 br,bg,bb,ba=background
+                #print background
                 br,bg,bb,ba=int(round(255*br)),int(round(255*bg)),\
                     int(round(255*bb)),int(round(255*ba))                
                 ncolors=len(self.curves[cr])*(2*r-br,2*g-bg,2*b-bb,a)
+                """
+                ncolors=len(self.curves[cr])*(150,0,0,a)
                 self.vertex_list[cr].colors=ncolors
 
             self.updated=True 
@@ -140,7 +147,7 @@ class InteractiveCurves(Actor):
         
         if self.centered:
             shift=np.array(self.position)-self.mean
-            print 'shift', shift
+            #print 'shift', shift
         else:
             shift=np.array([0,0,0])
                 
@@ -168,8 +175,8 @@ class InteractiveCurves(Actor):
         print 'track_id',iA[0][miniA]
         
         self.current=iA[0][miniA]
-        #self.selected.append(self.current)
-        #self.selected=list(set(self.selected))
+        self.selected.append(self.current)
+        self.selected=list(set(self.selected))
         #pass
         
        
