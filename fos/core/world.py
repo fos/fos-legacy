@@ -15,8 +15,7 @@ class World():
         self.cl = CameraList()
         
         # attached window
-        self.wins = []
-        
+        self.wins = []        
         # create a simple camera
         simple_camera = DefaultCamera()
         self.cl.cameras.append(simple_camera)
@@ -25,10 +24,6 @@ class World():
         
     def add(self, obj, update_camera = True):
         if isinstance(obj, Actor):
-
-#            if update_camera:
-#                print "TODO: update the camera view"
-            
             #print "added actor", obj
             self.ag.add(obj)
         elif isinstance(obj, Camera):
@@ -37,6 +32,7 @@ class World():
         else:
             print "Not valid actor or camera!"
             
+    
     def propagate_pickray(self, near, far):
         # propagate the pickray to all the actors
         # XXX: implement intersection with the bounding boxes first
@@ -45,15 +41,31 @@ class World():
             # aabb intersection
             if not a.aabb is None:
                 ab1, ab2 = a.get_aabb_coords()
-                print 'pick', ab1, ab2
+                #print 'pick', ab1, ab2
                 if test_segment_aabb(near, far, ab1, ab2):
-                    print "found aabb"
+                    #print "found aabb"
                     try:
                         a.process_pickray(near,far)
                     except:
                         pass
                 else:
-                    print "no aabb"
+                    #print "no aabb"
+                    pass
+
+    def propagate_keys(self,symbol,modifiers):
+        for a in self.ag.actors:
+		  try:
+		      a.process_keys(symbol,modifiers)
+		  except:
+		      pass
+    
+    def propagate_mouse_motion(self,x,y,dx,dy):
+        for a in self.ag.actors:
+          try:
+              a.process_mouse_motion(x,y,dx,dy)
+          except:
+              pass
+
 
                     
     def find_selected_actor(self, near, far):

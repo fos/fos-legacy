@@ -139,15 +139,11 @@ class PolygonLines(Actor):
         glMultMatrixf(self.glaffine)
         glEnable(GL_BLEND)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-
         glBindBuffer(GL_ARRAY_BUFFER_ARB, self.vertex_vbo)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0)
-
         glBindBuffer(GL_ARRAY_BUFFER_ARB, self.colors_vbo)
         glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0)
-
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self.connectivity_vbo)
-
         glDrawElements(GL_LINES, self.connectivity_nr, GL_UNSIGNED_INT, 0)
 
         if self.show_aabb:

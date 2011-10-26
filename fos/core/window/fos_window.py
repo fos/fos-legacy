@@ -169,7 +169,7 @@ class FosWindow(ManagedWindow):
 
     def on_resize(self, width, height):
         if height==0: height=1
-        print("New window size %i %i" % (width, height) )
+        #print("New window size %i %i" % (width, height) )
         glViewport(0, 0, width, height)
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()

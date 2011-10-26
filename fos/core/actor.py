@@ -122,9 +122,12 @@ class Actor(object):
         """ Process the pick ray like intersecting with the actor """
         pass
     
-    # bounding box related
-    ###
+    def process_keys(self,symbol,modifiers):
+        pass
     
+    def process_mouse_motion(self,x,y,dx,dy):
+        pass
+        
     def make_aabb(self, aabb = None, margin = 30):
         """ Make the axis aligned bounding box.
         
