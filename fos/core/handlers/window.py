@@ -10,15 +10,15 @@ class FosWinEventHandler(object):
 
     def on_key_press(self, symbol, modifiers):
         
-        if symbol not in [key.R, key.H]:            
+        if symbol not in [key.R]:            
             self.window._world.propagate_keys(symbol, modifiers)
                   
         
         # how to propagate the events to the actors and camera?            
         if symbol == key.R:
             self.window.current_camera.reset()        
-        if symbol == key.H:
-            self.window.set_size(1000, 600)            
+        #if symbol == key.H:
+        #    self.window.set_size(1000, 600)            
         if modifiers & key.MOD_CTRL:
             # make window bigger
             if symbol == key.PLUS:
