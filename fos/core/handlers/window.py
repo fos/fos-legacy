@@ -18,7 +18,8 @@ class FosWinEventHandler(object):
         if symbol == key.R:
             self.window.current_camera.reset()        
         #if symbol == key.H:
-        #    self.window.set_size(1000, 600)            
+        #    self.window.set_size(1000, 600)
+        """            
         if modifiers & key.MOD_CTRL:
             # make window bigger
             if symbol == key.PLUS:
@@ -30,7 +31,7 @@ class FosWinEventHandler(object):
                 neww = self.window.width - self.window.width / 10
                 newh = self.window.height - self.window.height / 10
                 self.window.set_size(neww, newh)
-                 
+        """         
         if symbol == key.P:
             x,y=self.window.mouse_x,self.window.mouse_y
             nx,ny,nz=screen_to_model(x,y,0)
