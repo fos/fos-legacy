@@ -112,15 +112,17 @@ class FosWindow(ManagedWindow):
         for a in self._world.ag.actors:
             try:
                 a.update(dt)
-            except:
-                pass
+            except Exception as e:
+                print 'exception in update fos_window actors'
+                print e
             
         # update the cameras
         for c in self._world.cl.cameras:
             try:
-                c.update(dt)
-            except:
-                pass
+                c.update()
+            except Exception as e:
+                print 'exception in update fos_window camera'
+                print e
              
     def attach(self, world):
         """ Attach a FosWindow to a world. The world needs

@@ -46,27 +46,26 @@ class World():
                     #print "found aabb"
                     try:
                         a.process_pickray(near,far)
-                    except:
-                        pass
+                    except Exception as e:
+                        print e
                 else:
                     #print "no aabb"
                     pass
 
     def propagate_keys(self,symbol,modifiers):
         for a in self.ag.actors:
-		  try:
-		      a.process_keys(symbol,modifiers)
-		  except:
-		      pass
+    		try:
+    		    a.process_keys(symbol,modifiers)
+    		except Exception as e: print e
+
     
     def propagate_mouse_motion(self,x,y,dx,dy):
         for a in self.ag.actors:
           try:
               a.process_mouse_motion(x,y,dx,dy)
-          except:
-              pass
-
-
+          except Exception as e:
+              print e
+              
                     
     def find_selected_actor(self, near, far):
         """ Finds the first actor """
@@ -96,3 +95,4 @@ class World():
     
 
             
+
