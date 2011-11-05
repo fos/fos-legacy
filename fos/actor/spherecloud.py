@@ -5,6 +5,28 @@ from fos.lib.pyglet.gl import *
 from fos import Actor
 from fos.data import get_sphere
 
+octahedron_vertices = np.array( [ 
+    [ 1.0, 0.0, 0.0], # 0 
+    [-1.0, 0.0, 0.0], # 1
+    [ 0.0, 1.0, 0.0], # 2 
+    [ 0.0,-1.0, 0.0], # 3
+    [ 0.0, 0.0, 1.0], # 4 
+    [ 0.0, 0.0,-1.0]  # 5                                
+    ],dtype='f4' )
+
+
+octahedron_triangles = np.array( [ 
+    [ 0,  2,  4],
+    [ 1,  3,  5],
+    [ 2,  6,  8],
+    [ 3,  7,  9],
+    [ 8, 10,  5],
+    [ 9, 11,  4],
+    [ 0, 10,  7],
+    [ 1, 11,  6],
+    ], dtype='uint32')
+
+
 class SphereCloud(Actor):
     
     def __init__(self, positions, 
@@ -42,9 +64,16 @@ class SphereCloud(Actor):
 
         # create vertices / faces for the primitive
         # which is a sphere in this actor
+        
         mys = np.load(get_sphere())
         v = mys['vertices'].astype(np.float32)
         f = mys['faces'].astype(np.uint32)
+        
+        #v=octahedron_vertices
+        #f=octahedron_triangles
+
+        
+        
         lv = v.shape[0]
         lf = f.shape[0]
         # allocate memory
