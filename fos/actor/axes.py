@@ -11,6 +11,10 @@ class Axes(Actor):
         super(Axes, self).__init__()
 
         self.scale = scale
+        
+        self.show_aabb = False        
+        self.make_aabb((np.array([-scale,-scale,-scale]),np.array([scale,scale,scale])),margin = 0)
+        
 
 
     def update(self, dt):
@@ -38,5 +42,5 @@ class Axes(Actor):
         glVertex3f(0.0,0.0,0.0)
         glVertex3f(0.0,0.0,self.scale)
         glEnd()
-        
+        if self.show_aabb:self.draw_aabb()
         glPopMatrix()
