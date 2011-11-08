@@ -1,9 +1,8 @@
 import numpy as np
-
 from fos.lib.pyglet.gl import *
 from fos import Actor, World
-
-#from pyglet.gl import glMultiDrawArrays as glMDA
+from fos.lib.pyglet.lib import load_library
+glib=load_library('GL')
 
 class Axes(Actor):
 
@@ -55,13 +54,15 @@ class Axes(Actor):
         glColorPointer(4,GL_FLOAT,0,self.cptr)
         glPushMatrix()
         #glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
-        #glMultiDrawArrays(GL_LINE_STRIP, self.firstptr,self.countptr, self.items)
+        glib.glMultiDrawArrays(GL_LINE_STRIP, self.firstptr,self.countptr, self.items)
+        #Same as
         #glDrawArrays(GL_LINE_STRIP,0,3)
         #glDrawArrays(GL_LINE_STRIP,3,3)
         #glDrawArrays(GL_LINE_STRIP,6,3)        
         #if self.show_aabb:self.draw_aabb()
-        for i in range(self.items):
-            glDrawArrays(GL_LINE_STRIP,self.first[i],self.count[i])        
+        #Or same as
+        #for i in range(self.items):
+        #    glDrawArrays(GL_LINE_STRIP,self.first[i],self.count[i])        
         glPopMatrix()
         glDisableClientState(GL_COLOR_ARRAY)
         glDisableClientState(GL_VERTEX_ARRAY)        
