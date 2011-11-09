@@ -24,6 +24,8 @@ class Axes(Actor):
         self.vn=len(self.vertices)
         self.cn=len(self.colors)
         
+        assert self.vn==self.cn
+        
         self.vptr=self.vertices.ctypes.data
         self.cptr=self.colors.ctypes.data        
         
@@ -37,17 +39,16 @@ class Axes(Actor):
         self.items=3
         
         self.line_width=line_width
-       
-        self.index=self.compile_gl()        
-                
         self.show_aabb = False        
-        self.make_aabb((np.array([-scale,-scale,-scale]),np.array([scale,scale,scale])),margin = 0)
-    
-    def compile_gl(self):
-        """Compile GL lists. Lowest level.
-        """
-        index = glGenLists(1)        
-        glNewList(index,GL_COMPILE)        
+        self.make_aabb((np.array([-scale,-scale,-scale]),np.array([scale,scale,scale])),margin = 0)    
+        
+    def update(self, dt):
+        pass
+
+
+    def draw(self):
+        
+        glLineWidth(self.line_width)        
         glEnableClientState(GL_VERTEX_ARRAY)
         glEnableClientState(GL_COLOR_ARRAY)
         glVertexPointer(3,GL_FLOAT,0,self.vptr)
@@ -65,18 +66,8 @@ class Axes(Actor):
         #    glDrawArrays(GL_LINE_STRIP,self.first[i],self.count[i])        
         glPopMatrix()
         glDisableClientState(GL_COLOR_ARRAY)
-        glDisableClientState(GL_VERTEX_ARRAY)        
-        glEndList()        
-        return index
-    
-    def update(self, dt):
-        pass
-
-
-    def draw(self):
+        glDisableClientState(GL_VERTEX_ARRAY)
         
-        glLineWidth(self.line_width)
-        glCallList(self.index)
         glLineWidth(1.)
 
         
