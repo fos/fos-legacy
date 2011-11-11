@@ -3,14 +3,6 @@ import nibabel as nib
 import os.path as op
 
 import fos.lib.pyglet
-# debug = True
-# fos.lib.pyglet.options['debug_lib'] = debug
-# fos.lib.pyglet.options['debug_gl'] = debug
-# fos.lib.pyglet.options['debug_gl_trace'] = debug
-# fos.lib.pyglet.options['debug_gl_trace_args'] = debug
-# fos.lib.pyglet.options['debug_graphics_batch'] = debug
-# fos.lib.pyglet.options['shadow_window'] = debug
-
 
 #fos modules
 from fos.actor.axes import Axes
@@ -23,7 +15,7 @@ from dipy.viz.colormap import orient2rgb
 import copy
 #trento modules
 from labeler import TrackLabeler
-from slicer import Slicer
+from fos.actor.slicer import Slicer
 
 if __name__ == '__main__':
 
