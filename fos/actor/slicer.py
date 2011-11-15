@@ -152,6 +152,11 @@ class Slicer(Actor):
     def draw_cube(self):        
         #print self.cube_no
         glPolygonMode( GL_FRONT_AND_BACK, GL_LINE )
+        glEnable(GL_BLEND)
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+        glEnable(GL_LINE_SMOOTH)        
+        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
+        glLineWidth(2.)
         glEnableClientState(GL_VERTEX_ARRAY)
         glEnableClientState(GL_COLOR_ARRAY)
         glVertexPointer(3,GL_FLOAT,0,self.cube_roi_vertices.ctypes.data)
@@ -164,6 +169,9 @@ class Slicer(Actor):
         glDisableClientState(GL_COLOR_ARRAY)
         glDisableClientState(GL_VERTEX_ARRAY)
         glPolygonMode( GL_FRONT_AND_BACK, GL_FILL )
+        glLineWidth(1.)
+        glDisable(GL_LINE_SMOOTH) 
+        glDisable(GL_BLEND)
 
     
     def process_pickray(self,near,far):

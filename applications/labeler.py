@@ -36,7 +36,7 @@ def track2rgb(track):
 
 class TrackLabeler(Actor):   
     
-    def __init__(self, qb, tracks, colors=None, vol_shape=None, virtuals_line_width=20.0, tracks_line_width=2.0, virtuals_alpha=1.0, tracks_alpha=0.6, affine=None, verbose=False):
+    def __init__(self, qb, tracks, colors=None, vol_shape=None, virtuals_line_width=5.0, tracks_line_width=2.0, virtuals_alpha=1.0, tracks_alpha=0.6, affine=None, verbose=False):
         """TrackLabeler is meant to explore and select subsets of the
         tracks. The exploration occurs through quick bundles (qb) in
         order to simplify the scene.
