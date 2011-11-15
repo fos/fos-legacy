@@ -1,8 +1,8 @@
 import numpy as np
 
 from fos.actor.primitives import AABBPrimitive
-from fos.lib.pyglet.gl import GLfloat
-from fos.lib.pyglet.gl import *
+from pyglet.gl import GLfloat
+from pyglet.gl import *
 
 class Actor(object):
     """ Define a visualization object in Fos """

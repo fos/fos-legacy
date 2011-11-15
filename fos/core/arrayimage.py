@@ -32,7 +32,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 # ----------------------------------------------------------------------------
 
-from fos.lib.pyglet.image import ImageData
+from pyglet.image import ImageData
 import ctypes
 
 __version__ = '0.0.7' # keep in sync with ../setup.py

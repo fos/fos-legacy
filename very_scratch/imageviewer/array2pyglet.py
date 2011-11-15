@@ -1,9 +1,9 @@
-from fos.lib.pyglet.gl import *
-from fos.lib.pyglet import window
-from fos.lib.pyglet import image
+from pyglet.gl import *
+from pyglet import window
+from pyglet import image
 from arrayimage import ArrayInterfaceImage
-import fos.lib.pyglet
-from fos.lib.pyglet.gl import *
+import pyglet
+from pyglet.gl import *
 
 #window = pyglet.window.Window(visible=False, resizable=True)
 

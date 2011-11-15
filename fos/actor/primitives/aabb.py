@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from fos.lib.pyglet.gl import GL_QUADS, GL_UNSIGNED_INT
+from pyglet.gl import GL_QUADS, GL_UNSIGNED_INT
 
 class AABBPrimitive():
 

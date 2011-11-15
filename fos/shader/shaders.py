@@ -11,7 +11,7 @@ from ctypes import (
     POINTER
 )
 
-from fos.lib.pyglet.gl import *
+from pyglet.gl import *
 
 class Shader:
     # vert, frag and geom take arrays of source strings

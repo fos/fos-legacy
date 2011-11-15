@@ -1,7 +1,7 @@
 import scipy.spatial as sp
 import numpy as np
 
-from fos.lib.pyglet.gl import *
+from pyglet.gl import *
 from fos import Actor
 from fos.core.intersection import ray_aabb_intersection
 

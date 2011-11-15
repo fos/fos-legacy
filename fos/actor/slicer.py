@@ -1,12 +1,12 @@
 import numpy as np
 import nibabel as nib
-import fos.lib.pyglet as pyglet
-from fos.lib.pyglet.gl import *
+import pyglet as pyglet
+from pyglet.gl import *
 from fos.core.arrayimage import ArrayInterfaceImage
 from fos.core.actor import Actor
 from fos.core.utils import screen_to_model
 import fos.core.collision as cll
-from fos.lib.pyglet.window import key
+from pyglet.window import key
 
 
 # cube ///////////////////////////////////////////////////////////////////////

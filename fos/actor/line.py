@@ -1,6 +1,6 @@
 import numpy as np
-from fos.lib.pyglet.gl import *
-from fos.lib.pyglet.lib import load_library
+from pyglet.gl import *
+from pyglet.lib import load_library
 glib=load_library('GL')
 from fos.actor.axes import Axes
 from fos import Actor,World, Window, WindowManager
@@ -39,13 +39,13 @@ class Line(Actor):
         pass
 
     def draw(self):
-        #glEnable(GL_MULTISAMPLE)
+	
 	glEnable(GL_DEPTH_TEST)
+        glEnable(GL_BLEND)        
 	glEnable(GL_LINE_SMOOTH)
-	glEnable(GL_BLEND)
-	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA)
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
-	glLineWidth(self.line_width)
+        glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA)	
+        glLineWidth(self.line_width)
         glEnableClientState(GL_VERTEX_ARRAY)
         glEnableClientState(GL_COLOR_ARRAY)
         glVertexPointer(3,GL_FLOAT,0,self.vptr)
@@ -62,7 +62,7 @@ class Line(Actor):
 	glDisable(GL_LINE_SMOOTH)
 	glDisable(GL_BLEND)
 	glDisable(GL_DEPTH_TEST)
-	#glDisable(GL_MULTISAMPLE)
+	
 
 if __name__ == '__main__':    
 	
@@ -70,7 +70,18 @@ if __name__ == '__main__':
     colors=np.ones((120,4))
     colors[0:100,:3]=np.array([1,0,0.])
     colors[100:120,:3]=np.array([0,1,0])
-    ax = Line(tracks,colors,line_width=20)
+
+    import nibabel as nib
+    from os import path as op
+    a=nib.trackvis.read( op.join(op.dirname(fos.__file__), "data", "tracks300.trk") )
+    g=np.array(a[0], dtype=np.object)
+    tracks = [tr[0] for tr in a[0]]
+    #tracks = tracks-np.concatenate(tracks,axis=0)
+    lentra = [len(t) for t in tracks]
+    colors = np.ones((np.sum(lentra),4))
+    #colors[:,3]=0.9
+
+    ax = Line(tracks,colors,line_width=2)
 
     w=World()
     w.add(ax)        

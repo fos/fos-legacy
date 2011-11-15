@@ -48,7 +48,7 @@ cdef class FosWindow:
         emptyworld = World("Zero-Point World")
         self.attach(emptyworld)
         
-        # the frame rate display from fos.lib.pyglet
+        # the frame rate display from pyglet
         #self.fps_display = FPSDisplay(self)
         #self.foslabel = WindowText(self, 'fos', x=10 , y=40)
         #self.show_logos = False

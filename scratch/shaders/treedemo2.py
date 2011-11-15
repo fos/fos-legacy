@@ -3,9 +3,9 @@
 from math import pi, sin, cos, sqrt
 from euclid import *
 
-import fos.lib.pyglet as pyglet
-from fos.lib.pyglet.gl import *
-from fos.lib.pyglet.window import key
+import pyglet as pyglet
+from pyglet.gl import *
+from pyglet.window import key
 
 from fos.actor.tree import Tree
 

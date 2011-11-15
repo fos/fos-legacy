@@ -3,7 +3,7 @@ from ctypes import c_void_p, cast, POINTER, c_int32, c_int
 
 import ctypes
 
-from fos.lib.pyglet.gl import *
+from pyglet.gl import *
 from fos.core.actor import Actor
 
 type_to_enum = {

@@ -3,7 +3,7 @@ __author__ = 'Stephan Gerhard'
 
 from .shaders import Shader
 from .lib import get_shader_code
-import fos.lib.pyglet.gl as gl
+import pyglet.gl as gl
 
 # load the vary-line-width-shader
 def get_vary_line_width_shader():

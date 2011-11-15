@@ -31,7 +31,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 # ----------------------------------------------------------------------
 
-import fos.lib.pyglet
+import pyglet
 from ninepatch import NinePatch
 
 try:

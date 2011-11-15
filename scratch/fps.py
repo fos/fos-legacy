@@ -1,4 +1,4 @@
-import fos.lib.pyglet as pyglet
+import pyglet as pyglet
 
 window = pyglet.window.Window()
 

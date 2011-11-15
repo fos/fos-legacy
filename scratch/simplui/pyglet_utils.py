@@ -31,7 +31,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 # ----------------------------------------------------------------------
 
-import fos.lib.pyglet
+import pyglet
 
 def replace_layout_batch(layout, batch=None, group=None):
 	'''Replace the batch and group currently in use by a pyglet.text.Layout subclass'''

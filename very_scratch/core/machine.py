@@ -1,10 +1,10 @@
 from math import sin, cos,sqrt
 import numpy as np
-import fos.lib.pyglet
+import pyglet
 #pyglet.options['debug_gl']=False
 
-from fos.lib.pyglet.gl import *
-from fos.lib.pyglet.window import key,mouse
+from pyglet.gl import *
+from pyglet.window import key,mouse
 from fos.core.utils import get_model_matrix,screen_to_model,get_viewport
 import fos.core.collision as cll
 

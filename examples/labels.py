@@ -1,11 +1,11 @@
 import numpy as np
 
-from fos.lib.pyglet.gl import *
+from pyglet.gl import *
 
 from fos import Actor, World, Window, WindowManager
 
-from fos.lib.pyglet.text import Label
-from fos.lib.pyglet.graphics import Batch
+from pyglet.text import Label
+from pyglet.graphics import Batch
         
         
 class Dummy(Actor):
@@ -18,14 +18,14 @@ class Dummy(Actor):
         
         self.batch = Batch()
         
-        fos.lib.pyglet.text.Label('Hello, world', 
+        pyglet.text.Label('Hello, world', 
                                   font_name='Times New Roman', 
                                   font_size=36,
                                   dpi=250,
 #                                  x=window.width//2, y=window.height//2,
                                   anchor_x='center', anchor_y='center',
                                   batch = self.batch)
-        fos.lib.pyglet.text.Label('Hi', 
+        pyglet.text.Label('Hi', 
                                   font_name='Times New Roman', 
                                  font_size=26,
                                   dpi=100,

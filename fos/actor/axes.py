@@ -1,7 +1,7 @@
 import numpy as np
-from fos.lib.pyglet.gl import *
+from pyglet.gl import *
 from fos import Actor, World
-from fos.lib.pyglet.lib import load_library
+from pyglet.lib import load_library
 glib=load_library('GL')
 
 class Axes(Actor):

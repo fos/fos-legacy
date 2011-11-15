@@ -1,5 +1,5 @@
 
-from fos.lib.pyglet.gl import *
+from pyglet.gl import *
 
 class WindowText(object):
     '''Display of a flat text in the window
@@ -8,7 +8,7 @@ class WindowText(object):
     def __init__(self, window, caption, x, y, font_size = 20,
                  bold = True, color = (127, 127, 127, 127)):
 
-        from fos.lib.pyglet.text import Label
+        from pyglet.text import Label
         self.label = Label(caption, x=x, y=y, font_size=font_size,
                             bold = bold, color = color)
         

@@ -1,7 +1,7 @@
 
 from itertools import chain, izip, repeat
 
-from fos.lib.pyglet.gl import gl
+from pyglet.gl import gl
 
 def face_normal(vertices, face):
     '''

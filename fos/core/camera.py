@@ -1,5 +1,5 @@
-#from fos.lib.pyglet.gl import *
-from fos.lib.pyglet.gl import glPushMatrix, glLoadIdentity, glPopMatrix, glMultMatrixf, \
+#from pyglet.gl import *
+from pyglet.gl import glPushMatrix, glLoadIdentity, glPopMatrix, glMultMatrixf, \
     glRotatef, glTranslatef, gluLookAt
     
 from fos.core.utils import get_model_matrix #,screen_to_model,get_viewport

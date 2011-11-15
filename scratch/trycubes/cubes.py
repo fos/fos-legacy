@@ -3,9 +3,9 @@ from itertools import chain, islice, product, repeat, cycle, izip
 
 from fos.actor.surf import CommonSurfaceGroup, IlluminatedSurfaceGroup
 from fos.core.world import World
-from fos.lib.pyglet.gl import *
+from pyglet.gl import *
 
-from fos.lib.pyglet.graphics import Batch
+from pyglet.graphics import Batch
 from fos.core.actor import Actor
 
 

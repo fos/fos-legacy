@@ -12,7 +12,7 @@
 
 '''
 # glumpy in pyglet?
-import fos.lib.pyglet
+import pyglet
 import numpy, glumpy
 
 Z = numpy.random.random((32,32)).astype(numpy.float32)
@@ -50,7 +50,7 @@ window.mainloop()
 
 # pyglet
 #######
-import fos.lib.pyglet
+import pyglet
 ball_image = pyglet.image.load('/home/stephan/Dev/PyWorkspace/pyglet/examples/pyglet.png')
 ball = pyglet.sprite.Sprite(ball_image, x=50, y=50)
 
@@ -67,8 +67,8 @@ pyglet.app.run()
 # custom
 #####
 from  arrayimage import ArrayInterfaceImage
-import fos.lib.pyglet
-from fos.lib.pyglet.gl import *
+import pyglet
+from pyglet.gl import *
 import numpy as np
 
 window = pyglet.window.Window(400,400)

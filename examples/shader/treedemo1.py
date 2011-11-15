@@ -2,8 +2,8 @@
 
 import numpy as np
 
-import fos.lib.pyglet as pyglet
-from fos.lib.pyglet.gl import *
+import pyglet as pyglet
+from pyglet.gl import *
 
 from fos import World, Window, WindowManager
 from fos.actor.treeregion import TreeRegion

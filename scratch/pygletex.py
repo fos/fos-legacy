@@ -47,8 +47,8 @@ alongside other vertex lists with minimal overhead.
 from math import pi, sin, cos
 
 from fos.core.world import World
-import fos.lib.pyglet as pyglet
-from fos.lib.pyglet.gl import *
+import pyglet as pyglet
+from pyglet.gl import *
 
 try:
     # Try and create a window with multisampling (antialiasing)

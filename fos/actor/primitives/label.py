@@ -1,10 +1,10 @@
 import numpy as np
 import numpy as np
 
-from fos.lib.pyglet.gl import *
+from pyglet.gl import *
 from fos import Actor, World, Window
-from fos.lib.pyglet.text import Label
-from fos.lib.pyglet.graphics import Batch
+from pyglet.text import Label
+from pyglet.graphics import Batch
 
 class Labels(Actor):    
     #def __init__(self, *args, **kwargs):
@@ -13,7 +13,7 @@ class Labels(Actor):
         self.textures=[]    
         for (i,p) in enumerate(positions):
         
-            label=fos.lib.pyglet.text.Label(texts[i], font_name=fonts[i], 
+            label=pyglet.text.Label(texts[i], font_name=fonts[i], 
                                   font_size=fonts_size[i],
                                   dpi=dpi,
                                   anchor_x='center', anchor_y='center')
@@ -30,7 +30,7 @@ class Labels(Actor):
         glPopMatrix()
 
 def label2texture(label):
-    ''' from fos.lib.pyglet.texture to  
+    ''' from pyglet.texture to  
     Thank you http://paste.pocoo.org/show/89317/
     '''
     
@@ -47,7 +47,7 @@ def label2texture(label):
     yend = max(ystart+glyph.height for glyph in glyphs)
     height = yend - ystart
 
-    texture = fos.lib.pyglet.image.Texture.create(width, height, fos.lib.pyglet.gl.GL_RGBA)
+    texture = pyglet.image.Texture.create(width, height, pyglet.gl.GL_RGBA)
 
     for glyph, x, y in zip(glyphs, xpos, ypos):
         data = glyph.get_image_data()

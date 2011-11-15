@@ -3,9 +3,9 @@
 # based on the pygame+PyOpenGL conversion by Paul Furber 2001 - m@verick.co.za
 # Philip Bober 2007 pdbober@gmail.com
 
-from fos.lib.pyglet.gl import *
-from fos.lib.pyglet import window
-import fos.lib.pyglet.clock
+from pyglet.gl import *
+from pyglet import window
+import pyglet.clock
 
 rtri = rquad = 0.0
 

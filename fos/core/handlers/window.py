@@ -1,6 +1,6 @@
 """ The FosWindow Event Handler """
 
-from fos.lib.pyglet.window import key,mouse
+from pyglet.window import key,mouse
 from fos.core.utils import screen_to_model
 
 class FosWinEventHandler(object):

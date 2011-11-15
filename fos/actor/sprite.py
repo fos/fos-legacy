@@ -1,4 +1,4 @@
-import fos.lib.pyglet as pyglet
+import pyglet as pyglet
 
 def load_animation(image_name,columns,rows):
  

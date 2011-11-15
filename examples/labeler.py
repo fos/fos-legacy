@@ -6,10 +6,10 @@ from fos import Actor
 from fos import World, Window, WindowManager
 from fos.actor.curve import InteractiveCurves
 from fos.data import get_track_filename
-from fos.lib.pyglet.window import key
+from pyglet.window import key
 from fos.core.utils import screen_to_model
 import fos.core.collision as cll
-from fos.lib.pyglet.gl import *
+from pyglet.gl import *
 #dipy modules
 from dipy.segment.quickbundles import QuickBundles
 
@@ -72,7 +72,7 @@ class TrackLabeler(Actor):
             color=255*color
             color=np.round(color).astype('ubyte')
             color=tuple(color.ravel().tolist())                             
-            vertex_list[i]= fos.lib.pyglet.graphics.vertex_list(len(curve),('v3f/static',vertices),('c4B/static',color))
+            vertex_list[i]= pyglet.graphics.vertex_list(len(curve),('v3f/static',vertices),('c4B/static',color))
         index=self.compile_gl(vertex_list,range(len(tracks)))
         print('compiled tracks %d' % len(tracks))
         return index,vertex_list

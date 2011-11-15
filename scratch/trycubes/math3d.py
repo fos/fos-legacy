@@ -7,7 +7,7 @@
 # accompanying math.c are meant to suppliment math.h by adding geometry/math routines
 # useful for graphics, simulation, and physics applications (3D stuff).
 # Richard S. Wright Jr.
-from fos.lib.pyglet.gl import *
+from pyglet.gl import *
 from math import sin, cos
 
 

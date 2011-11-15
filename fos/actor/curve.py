@@ -1,8 +1,8 @@
 import numpy as np
 
 from fos import Actor
-import fos.lib.pyglet as pyglet
-from fos.lib.pyglet.gl import *
+import pyglet as pyglet
+from pyglet.gl import *
 import fos.core.collision as cll
 from fos.actor.primitives import AABBPrimitive
 
@@ -59,7 +59,7 @@ class InteractiveCurves(Actor):
             color=255*color
             color=np.round(color).astype('ubyte')
             color=tuple(color.ravel().tolist())                             
-            self.vertex_list[i]= fos.lib.pyglet.graphics.vertex_list(len(curve),('v3f/static',vertices),('c4B/static',color))
+            self.vertex_list[i]= pyglet.graphics.vertex_list(len(curve),('v3f/static',vertices),('c4B/static',color))
         self.range_vl=range(len(curves))
         #print self.range_vl                
         self.compile_gl()

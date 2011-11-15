@@ -31,8 +31,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 # ----------------------------------------------------------------------
 
-import fos.lib.pyglet
-from fos.lib.pyglet.gl import *
+import pyglet
+from pyglet.gl import *
 
 class Rectangle(object):
 	"""Basic rectangular element for renderering and hit testing"""

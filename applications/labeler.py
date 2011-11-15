@@ -5,12 +5,12 @@ import os.path as op
 from fos import Actor
 from fos import World, Window, WindowManager
 from fos.data import get_track_filename
-from fos.lib.pyglet.window import key
+from pyglet.window import key
 from fos.core.utils import screen_to_model
 import fos.core.collision as cll
-from fos.lib.pyglet.gl import *
-from fos.lib.pyglet.graphics import vertex_list as gl_vertex_list
-from fos.lib.pyglet.lib import load_library
+from pyglet.gl import *
+from pyglet.graphics import vertex_list as gl_vertex_list
+from pyglet.lib import load_library
 #dipy modules
 from dipy.segment.quickbundles import QuickBundles
 from dipy.io.dpy import Dpy
@@ -262,6 +262,7 @@ class TrackLabeler(Actor):
                 self.tracks_ids_to_be_saved = self.tracks_ids[np.concatenate([self.qb.label2tracksids(tid) for tid in self.selected])]
             print("Saving %s tracks." % len(self.tracks_ids_to_be_saved))
             root = Tkinter.Tk()
+
             root.withdraw()
             pickle.dump(self.tracks_ids_to_be_saved, tkFileDialog.asksaveasfile(), protocol=pickle.HIGHEST_PROTOCOL)
 
@@ -323,6 +324,7 @@ ESC: exit
         self.tracks = tracks_frozen
         self.tracks_ids = self.tracks_ids[tracks_frozen_ids] # range(len(self.tracks))
         root = Tkinter.Tk()
+        root.wm_title('QuickBundles MDF distance threshold')
         ts = ThresholdSelector(root, default_value=self.qb.dist_thr/2.0)
         root.wait_window()
         # self.qb = QuickBundles(self.tracks, self.qb.dist_thr/2.0, self.qb.pts)

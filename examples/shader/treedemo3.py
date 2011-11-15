@@ -3,7 +3,7 @@ import h5py
 
 import fos
 from fos import SimpleWindow as Window
-from fos.lib.pyglet.gl import *
+from pyglet.gl import *
 from fos.actor.treeregion import TreeRegion
 from numpy.random import randn
 
@@ -25,7 +25,7 @@ try:
     # Try and create a window with multisampling (antialiasing)
     config = Config(sample_buffers=1, samples=4,depth_size=16, double_buffer=True,)
     window = Window(resizable=True, config=config, vsync=False, width=1000, height=800, caption = mycpt) # "vsync=False" to check the framerate
-except fos.lib.pyglet.window.NoSuchConfigException:
+except pyglet.window.NoSuchConfigException:
     # Fall back to no multisampling for old hardware
     print "fallback"
     window = Window(resizable=True, caption = mycpt)

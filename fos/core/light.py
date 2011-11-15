@@ -1,7 +1,7 @@
 import numpy as np
-import fos.lib.pyglet as pyglet
-from fos.lib.pyglet.gl import *
-from fos.lib.pyglet.gl import GLfloat
+import pyglet as pyglet
+from pyglet.gl import *
+from pyglet.gl import GLfloat
 from fos.core.utils import vec
 
 class Light():
