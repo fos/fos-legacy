@@ -1,1 +1,6 @@
 FOS - Free on Shades - A scientific visualization library in Python & Cython
+
+Dependencies
+- Cython >= 0.13
+- Pyglet >= 1.1
+
