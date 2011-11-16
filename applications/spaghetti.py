@@ -4,6 +4,11 @@ import os.path as op
 
 import pyglet
 pyglet.options['debug_gl'] = True
+pyglet.options['debug_x11'] = True
+pyglet.options['debug_gl_trace'] = True
+pyglet.options['debug_gl_trace'] = True
+pyglet.options['debug_texture'] = True
+
 #fos modules
 from fos.actor.axes import Axes
 from fos import World, Window, WindowManager
@@ -40,9 +45,17 @@ if __name__ == '__main__':
     #qb=QuickBundles(T,10.,12)
 
     qb=load_pickle(fpkl)
+    print 'qb ok'
+    
     #visualisation part        
     tl = TrackLabeler(qb,qb.downsampled_tracks(),vol_shape=data.shape,tracks_alpha=1)
-    sl = Slicer(affine,data,alpha=255)    
+    
+    print 'tl ok'
+    
+    sl = Slicer(affine,data,alpha=255)
+    
+    print 'sl ok'
+        
     #one way connection
     tl.slicer=sl
     #coordinate system axes    
@@ -52,14 +65,20 @@ if __name__ == '__main__':
     
     w=World()
     w.add(tl)
-    w.add(sl)
+    #w.add(sl)
     w.add(ax)
         
     #windowing    
     wi = Window(caption="Spaghetti by Free On Shades (fos.me)",\
                 bgcolor=(0,0.,0.2,1),width=800,height=600)
+    
+    print 'wi ok'
     wi.attach(w)
+    print 'w attached ok'
     wm = WindowManager()
+    print 'wm created ok'
     wm.add(wi)
+    print 'wi attached ok'
     wm.run()
+    print 'finished'
     
