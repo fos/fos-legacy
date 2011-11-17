@@ -34,7 +34,7 @@ setup(name='fos',
       author='Fos Team',
       author_email='garyfallidis@gmail.com',
       url='http://github.com/Garyfallidis/Fos',
-      packages=['fos','fos.core'],
+      packages=['fos','fos.core','fos.actor'],
       ext_modules = [col_ext],
       cmdclass    = cmdclass,
       )
