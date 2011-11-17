@@ -23,24 +23,21 @@ class Texture2D(Actor):
         
         Parameters
         ----------- 
-        data : array, shape (X,Y) for grayscale  
+        data : array, shape (X,Y) for Grayscale  
                 or (X.Y,3) for RGB
                 or (X,Y,4) for RGBA
                                 
         affine : array, shape (4,4), space affine
         
-        
         """
 
         self.shape=data.shape
         self.data=data
-        self.affine=affine
-        
-        if data.ndim==2:        
+        self.affine=affine        
+        if data.ndim==2:      
             self.size=data.shape        
             self.format = GL_LUMINANCE #GL_RGBA GL_RGB GL_LUMINANCE
-            self.components = 1 # 3 for RGB and 4 for RGBA
-        
+            self.components = 1 # 3 for RGB and 4 for RGBA        
         if data.ndim==3:
             self.size=data.shape[:2]
             if data.shape[2]==3:
@@ -56,7 +53,7 @@ class Texture2D(Actor):
         #slicer step
         self.vertices=np.array([[-100,-100,-100],[100,100,100]])
         self.make_aabb(margin=0)
-        self.show_aabb=False        
+        self.show_aabb=False                
         self.create_texture()
         
     def create_texture(self):
@@ -65,22 +62,22 @@ class Texture2D(Actor):
         glGenTextures(1,byref(self.texture_index))
         glBindTexture(GL_TEXTURE_2D, self.texture_index.value)
         glPixelStorei(GL_UNPACK_ALIGNMENT,1)
-        glPixelStorei(GL_PACK_ALIGNMENT,1)
+        #glPixelStorei(GL_PACK_ALIGNMENT,1)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)        
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
         w,h = self.size
-        #print self.size        
+        glTexImage2D(GL_TEXTURE_2D, 0, self.components, w, h, 0, self.format, GL_UNSIGNED_BYTE, self.data.ctypes.data)
+        #print self.size
         self.list_index = glGenLists(1)
         #print self.list_index
         glNewList( self.list_index,GL_COMPILE)        
-        glTexImage2D(GL_TEXTURE_2D, 0, self.components, w, h, 0, self.format, GL_UNSIGNED_BYTE, self.data.ctypes.data)                 
-        glEnable(GL_TEXTURE_2D)        
+        #glTexImage2D(GL_TEXTURE_2D, 0, self.components, w, h, 0, self.format, GL_UNSIGNED_BYTE, self.data.ctypes.data)                 
+        glEnable(GL_TEXTURE_2D)
         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,GL_REPLACE)
         glBindTexture(GL_TEXTURE_2D, self.texture_index.value)
         glBegin(GL_QUADS)
-        #glColor4f(1,1,1,1.)
         glTexCoord2f(0.0, 0.0)
         glVertex3f(-w/2., -h/2., 0.0)
         glTexCoord2f(0.0, 1.0)
@@ -89,13 +86,13 @@ class Texture2D(Actor):
         glVertex3f(w/2., h/2., 0.0)
         glTexCoord2f(1.0, 0.0)
         glVertex3f(w/2., -h/2., 0.0)
-        glEnd()        
+        glEnd()
         glDisable(GL_TEXTURE_2D)
-        glEndList()    
+        glEndList()
 
-    def draw(self):        
+    def draw(self):
         self.set_state()
-        glPushMatrix()
+        glPushMatrix()        
         glCallList(self.list_index)
         glPopMatrix()            
         self.unset_state()
@@ -129,9 +126,9 @@ if __name__ =='__main__':
     
     ax = Axes(100)
     #data=np.round(255*np.random.rand(100,100,4)).astype(np.ubyte)
-    data=np.round(255*np.ones((100,100,4))).astype(np.ubyte)
+    data=np.round(255*np.ones((200,100,4))).astype(np.ubyte)
     data[:,:,3]=150
-    tex=Texture2D(data)    
+    tex=Texture2D(data)
     w=World()
     w.add(ax)
     w.add(tex)
