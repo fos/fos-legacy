@@ -16,33 +16,43 @@ from pyglet.window import key
 from fos import World, Window, WindowManager
 from fos.actor.axes import Axes
 
+class Texture2D(Actor):
 
-
-
-class Texture(Actor):
-
-    def __init__(self,data,affine=None,alpha=1.):
-        """ creates a slicer object
+    def __init__(self,data,affine=None):
+        """ creates a 2d texture actor showing data
         
         Parameters
-        -----------
-        affine : array, shape (4,4), image affine
-                
-        data : array, shape (X,Y,Z), data volume
+        ----------- 
+        data : array, shape (X,Y) for grayscale  
+                or (X.Y,3) for RGB
+                or (X,Y,4) for RGBA
+                                
+        affine : array, shape (4,4), space affine
         
-        alpha : transparency
+        
         """
 
         self.shape=data.shape
         self.data=data
         self.affine=affine
-        self.size=data.shape
-        self.format = GL_LUMINANCE #GL_RGBA GL_RGB GL_LUMINANCE
-        self.components = 1 # 3 for RGB and 4 for RGBA
+        
+        if data.ndim==2:        
+            self.size=data.shape        
+            self.format = GL_LUMINANCE #GL_RGBA GL_RGB GL_LUMINANCE
+            self.components = 1 # 3 for RGB and 4 for RGBA
+        
+        if data.ndim==3:
+            self.size=data.shape[:2]
+            if data.shape[2]==3:
+                self.format = GL_RGB
+                self.components = 3                
+            if data.shape[2]==4:
+                self.format = GL_RGBA
+                self.components = 4
+        
         #volume center coordinates
         #self.update_vox_coords(self.vxi,self.vxj,self.vxk)
-        self.x,self.y,self.z=0,0,0
-        self.alpha=alpha        
+        self.x,self.y,self.z=0,0,0                
         #slicer step
         self.vertices=np.array([[-100,-100,-100],[100,100,100]])
         self.make_aabb(margin=0)
@@ -59,8 +69,7 @@ class Texture(Actor):
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-        
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)        
         w,h = self.size
         #print self.size        
         self.list_index = glGenLists(1)
@@ -119,8 +128,10 @@ class Texture(Actor):
 if __name__ =='__main__':
     
     ax = Axes(100)
-    data=np.round(255*np.random.rand(100,100)).astype(np.ubyte)
-    tex=Texture(data)    
+    #data=np.round(255*np.random.rand(100,100,4)).astype(np.ubyte)
+    data=np.round(255*np.ones((100,100,4))).astype(np.ubyte)
+    data[:,:,3]=150
+    tex=Texture2D(data)    
     w=World()
     w.add(ax)
     w.add(tex)
