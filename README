@@ -10,7 +10,7 @@ Application specific dependencies
 - Pytables
 
 Compile using
-Add the Fos to your PYTHONPATH 
-and build it locally using
-python setup.py build_ext --inplace
+-Add the Fos to your PYTHONPATH 
+-Build it locally using
+ >>> python setup.py build_ext --inplace
 
