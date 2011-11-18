@@ -9,3 +9,8 @@ Application specific dependencies
 - Nibabel
 - Pytables
 
+Compile using
+Add the Fos to your PYTHONPATH 
+and build it locally using
+python setup.py build_ext --inplace
+
