@@ -21,3 +21,7 @@ Local Installation Instructions
 3.Go to Fos directory and Build it locally
 >>> python setup.py build_ext --inplace
 
+Fos-Developers Instructions
+------------------------------------
+As above but you need to clone for read+write access
+>>> git clone git@github.com:fos/Fos.git
