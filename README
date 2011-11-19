@@ -8,11 +8,6 @@ General Dependencies
 - Cython >= 0.13
 - Pyglet >= 1.1.4
 
-Application specific dependencies
------------------------------------
-- Nibabel  >= 1.0
-- Pytables >= 2.1.2
-
 Local Installation Instructions
 ------------------------------------
 1.Clone the repository
@@ -25,3 +20,42 @@ Fos-Developers Instructions
 ------------------------------------
 As above but you need to clone for read+write access
 >>> git clone git@github.com:fos/Fos.git
+
+
+Applications
+--------------
+
+Track Interactions using Spaghetti 
+===================================
+(Fos/fos/applications/spaghetti.py)
+
+Extra Dependencies:
+
+- Nibabel  >= 1.0
+- Pytables >= 2.1.2
+
+Interaction Keys:
+
+P : select/unselect the representative track.
+E : expand/collapse the selected tracks 
+F : keep selected tracks rerun QuickBundles and hide everything else.
+A : select all representative tracks which are currently visible.
+H : hide/show all representative tracks.
+Left Mouse Button: keep pressed with dragging - rotation
+Middle Mouse Button: keep pressed with dragging for slow zoom
+Scrolling Mouse: fast zoom
+Right Button : panning - translation
+R : reset camera for the entire scene.
+LEFT, RIGHT, UP, DOWN, PGUP, PGDOWN : change slice.
+SHIFT + (LEFT, RIGHT, UP, DOWN, PGUP, PGDOWN): change slices faster.
+1, 2, 3 : hide/show slice.
+0 : hide/show all slices.
+SPACE : Select ROI
+M : Maximize ROI
+N : minNimize ROI
+ENTER : Store ROI in mask
+G : Get tracks intersecting with mask
+D : Delete all ROIs and reset mask
+? : Print this menui
+ESC : exit
+
