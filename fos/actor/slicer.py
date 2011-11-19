@@ -11,7 +11,7 @@ import fos.core.collision as cll
 from fos.actor.texture import Texture2D 
 
 
-# cube ///////////////////////////////////////////////////////////////////////
+# cube 
 #    v6----- v5
 #   /|      /|
 #  v1------v0|
@@ -20,7 +20,7 @@ from fos.actor.texture import Texture2D
 #  |/      |/
 #  v2------v3
 
-t=0.5#np.sqrt(2.)/2.
+t=0.5
 # vertex coords array
 cube_vertices = np.array([[t,t,t],  [-t,t,t],  [-t,-t,t],  [t,-t,t],   # v0-v1-v2-v3
                       [t,t,t],  [t,-t,t],  [t,-t,-t],  [t,t,-t],        # v0-v3-v4-v5
@@ -39,7 +39,11 @@ class Slicer(Actor):
         affine : array, shape (4,4), image affine
                 
         data : array, shape (X,Y,Z), data volume
-                
+        
+        Notes
+        ---------
+        MNI space volume is expected for the moment
+        
         """
 
         self.shape=data.shape
@@ -177,7 +181,6 @@ class Slicer(Actor):
         glVertexPointer(3,GL_FLOAT,0,self.cube_roi_vertices.ctypes.data)
         glColorPointer(4,GL_FLOAT,0,self.cube_roi_colors.ctypes.data)
         glPushMatrix()
-        #glib.glMultiDrawArrays(GL_QUADS, self.cube_first.ctypes.data,self.cube_count.ctypes.data, self.cube_no)
         for i in range(self.cube_no):
             glDrawArrays(GL_QUADS,i*24,24)
         glPopMatrix()
@@ -201,42 +204,42 @@ class Slicer(Actor):
             self.step=5             
         if symbol == key.UP:
             print 'Up'
-            if self.vxk<self.data.shape[-1]:            
+            if self.vxk<self.data.shape[-1]-self.step:            
                 self.vxk+=self.step
                 self.z+=self.step                
             self.slk=self.update_slice(2,self.vxk)            
             self.step=1 
         if symbol == key.DOWN:
             print 'Down'            
-            if self.vxk>=0:            
+            if self.vxk>=self.step-1:            
                 self.vxk-=self.step
                 self.z-=self.step  
             self.slk=self.update_slice(2,self.vxk)            
             self.step=1
         if symbol == key.LEFT:
             print 'Left'
-            if self.vxi>=0:            
+            if self.vxi>=self.step-1:            
                 self.vxi-=self.step
                 self.x-=self.step       
             self.sli=self.update_slice(0,self.vxi)
             self.step=1         
         if symbol == key.RIGHT:
             print 'Right'
-            if self.vxi<self.data.shape[0]:            
+            if self.vxi<self.data.shape[0]-self.step:            
                 self.vxi+=self.step
                 self.x+=self.step
             self.sli=self.update_slice(0,self.vxi)
             self.step=1            
         if symbol == key.PAGEUP:
             print 'PgUp'
-            if self.vxj<self.data.shape[1]:            
+            if self.vxj<self.data.shape[1]-self.step:            
                 self.vxj+=self.step
                 self.y+=self.step                
             self.slj=self.update_slice(1,self.vxj)
             self.step=1
         if symbol == key.PAGEDOWN:
             print 'PgDown'
-            if self.vxj>=0:            
+            if self.vxj>=self.step-1:            
                 self.vxj-=self.step
                 self.y-=self.step            
             self.slj=self.update_slice(1,self.vxj)
@@ -323,7 +326,7 @@ G : Get tracks intersecting with mask
 D : Delete all ROIs and reset mask
 ? : this menu
             """
-              
+                          
     def slices_ray_intersection(self,near,far,center):        
         bx,by,bz=self.data.shape
         point=None
@@ -379,7 +382,7 @@ D : Delete all ROIs and reset mask
             if dist_z < dist_x and dist_z < dist_y: 
                 return point_z
         return None            
-            
+
     def save_mask(self,fname,mask):               
         img_mask=nib.Nifti1Image(mask,self.affine)
         nib.save(img_mask,fname)

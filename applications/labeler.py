@@ -36,9 +36,9 @@ def track2rgb(track):
 
 class TrackLabeler(Actor):   
     
-    def __init__(self, qb, tracks, colors=None, vol_shape=None, virtuals_line_width=5.0, tracks_line_width=2.0, virtuals_alpha=1.0, tracks_alpha=0.6, affine=None, verbose=False):
+    def __init__(self, qb, tracks, reps='exemplars',colors=None, vol_shape=None, virtuals_line_width=5.0, tracks_line_width=2.0, virtuals_alpha=1.0, tracks_alpha=0.6, affine=None, verbose=False):
         """TrackLabeler is meant to explore and select subsets of the
-        tracks. The exploration occurs through quick bundles (qb) in
+        tracks. The exploration occurs through QuickBundles (qb) in
         order to simplify the scene.
         """
         if affine is None: self.affine = np.eye(4, dtype = np.float32)
@@ -46,8 +46,12 @@ class TrackLabeler(Actor):
          
         self.cache = {}
         self.qb = qb
+        self.reps = reps
         #virtual tracks
-        self.virtuals = qb.virtuals()
+        if self.reps=='virtuals':
+            self.virtuals=qb.virtuals()
+        if self.reps=='exemplars':
+            self.virtuals,self.ex_ids = qb.exemplars()
         self.virtuals_alpha = virtuals_alpha
         self.virtuals_buffer, self.virtuals_colors, self.virtuals_first, self.virtuals_count = self.compute_buffers(self.virtuals, self.virtuals_alpha)
         #full tractography (downsampled at 12 pts per track)
@@ -116,7 +120,6 @@ class TrackLabeler(Actor):
         This is done at every frame and therefore must be real fast.
         """
         # virtuals
-        # self.set_state()
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_BLEND)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
@@ -125,21 +128,14 @@ class TrackLabeler(Actor):
         glEnableClientState(GL_VERTEX_ARRAY)
         glEnableClientState(GL_COLOR_ARRAY)
         if not self.hide_virtuals:
-            # glEnableClientState(GL_VERTEX_ARRAY)
-            # glEnableClientState(GL_COLOR_ARRAY)
             glVertexPointer(3,GL_FLOAT,0,self.virtuals_buffer.ctypes.data)
             glColorPointer(4,GL_FLOAT,0,self.virtuals_colors.ctypes.data)
             glLineWidth(self.virtuals_line_width)
             glPushMatrix()
             glib.glMultiDrawArrays(GL_LINE_STRIP, self.virtuals_first.ctypes.data, self.virtuals_count.ctypes.data, len(self.virtuals))
             glPopMatrix()
-            # glDisableClientState(GL_COLOR_ARRAY)
-            # glDisableClientState(GL_VERTEX_ARRAY)      
-            # glLineWidth(1.)
         # reals:
         if self.expand and self.tracks_visualized_first.size > 0:
-            # glEnableClientState(GL_VERTEX_ARRAY)
-            # glEnableClientState(GL_COLOR_ARRAY)        
             glVertexPointer(3,GL_FLOAT,0,self.tracks_buffer.ctypes.data)
             glColorPointer(4,GL_FLOAT,0,self.tracks_colors.ctypes.data)
             glLineWidth(self.tracks_line_width)
@@ -152,7 +148,6 @@ class TrackLabeler(Actor):
         glDisable(GL_DEPTH_TEST)
         glDisable(GL_BLEND)
         glDisable(GL_LINE_SMOOTH)
-        # self.unset_state()
 
 
     def process_mouse_motion(self,x,y,dx,dy):
@@ -202,15 +197,23 @@ class TrackLabeler(Actor):
                     self.selected.remove(id)
                 else:
                     print('WARNING: unselecting id %s but not in %s' % (id, self.selected))
-    
+                    
+    def invert_tracks(self):
+        """ invert selected tracks to unselected
+        """        
+        tmp_selected=list(set(range(len(self.virtuals))).difference(set(self.selected)))
+        self.unselect_track('all')
+        #print tmp_selected
+        self.selected=[]
+        self.select_track(tmp_selected)
 
     def process_keys(self,symbol,modifiers):
         """Bind actions to key press.
         """
         prev_selected = copy.copy(self.selected)
-        if symbol == key.P:
-            print 'P'
+        if symbol == key.P:            
             id = self.picking_virtuals(symbol, modifiers)
+            print('P %d' % id)
             if prev_selected.count(id) == 0:
                 self.select_track(id)
             else:
@@ -228,9 +231,6 @@ class TrackLabeler(Actor):
                 self.expand = True
             else:
                 self.expand = False
-            
-        if symbol==key.K:
-            print 'K'
         
         # Freeze and restart:
         elif symbol == key.F and len(self.selected) > 0:
@@ -244,15 +244,17 @@ class TrackLabeler(Actor):
                 self.select_track('all')
             else:
                 self.unselect_track('all')
+        
+        elif symbol == key.I:
+            print 'I'
+            print('Invert selection')
+            print self.selected
+            self.invert_tracks()
             
         elif symbol == key.H:
             print 'H'
             print('Hide/show virtuals.')
-            self.hide_virtuals = not self.hide_virtuals
-
-        elif symbol == key.N:
-            print 'N'
-            print('Show/hide just the neighborhood of a selected virtual.')
+            self.hide_virtuals = not self.hide_virtuals       
             
         elif symbol == key.S:
             print 'S'
@@ -262,7 +264,6 @@ class TrackLabeler(Actor):
                 self.tracks_ids_to_be_saved = self.tracks_ids[np.concatenate([self.qb.label2tracksids(tid) for tid in self.selected])]
             print("Saving %s tracks." % len(self.tracks_ids_to_be_saved))
             root = Tkinter.Tk()
-
             root.withdraw()
             pickle.dump(self.tracks_ids_to_be_saved, tkFileDialog.asksaveasfile(), protocol=pickle.HIGHEST_PROTOCOL)
 
@@ -290,7 +291,10 @@ ESC: exit
             if len(self.history) > 1:
                 self.history.pop()
                 self.qb, self.tracks, self.tracks_ids, self.virtuals_buffer, self.virtuals_colors, self.virtuals_first, self.virtuals_count, self.tracks_buffer, self.tracks_colors, self.tracks_first, self.tracks_count = self.history[-1]
-                self.virtuals = self.qb.virtuals()
+                if self.reps=='virtuals':
+                    self.virtuals=qb.virtuals()
+                if self.reps=='exemplars':
+                    self.virtuals, self.ex_ids = self.qb.exemplars()#virtuals()
                 print len(self.virtuals), 'virtuals'
                 # self.virtuals_buffer, self.virtuals_colors, self.virtuals_first, self.virtuals_count = self.compute_buffers(self.virtuals, self.virtuals_alpha)
                 # self.tracks_buffer, self.tracks_colors, self.tracks_first, self.tracks_count = self.compute_buffers(self.tracks, self.tracks_alpha)
@@ -324,13 +328,16 @@ ESC: exit
         self.tracks = tracks_frozen
         self.tracks_ids = self.tracks_ids[tracks_frozen_ids] # range(len(self.tracks))
         root = Tkinter.Tk()
-        root.wm_title('QuickBundles MDF distance threshold')
+        root.wm_title('QuickBundles threshold')
         ts = ThresholdSelector(root, default_value=self.qb.dist_thr/2.0)
         root.wait_window()
         # self.qb = QuickBundles(self.tracks, self.qb.dist_thr/2.0, self.qb.pts)
         self.qb = QuickBundles(self.tracks, dist_thr=ts.value, pts=self.qb.pts)
         self.qb.dist_thr = ts.value
-        self.virtuals = self.qb.virtuals()
+        if self.reps=='virtuals':
+            self.virtuals=qb.virtuals()
+        if self.reps=='exemplars':
+            self.virtuals,self.ex_ids = self.qb.exemplars()
         print len(self.virtuals), 'virtuals'
         self.virtuals_buffer, self.virtuals_colors, self.virtuals_first, self.virtuals_count = self.compute_buffers(self.virtuals, self.virtuals_alpha)
         self.tracks_buffer, self.tracks_colors, self.tracks_first, self.tracks_count = self.compute_buffers(self.tracks, self.tracks_alpha)

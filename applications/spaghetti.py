@@ -56,8 +56,8 @@ if __name__ == '__main__':
     w.add(sl)
     w.add(ax)
     #windowing
-    wi = Window(caption="Spaghetti by Free On Shades (fos.me)",\
-                bgcolor=(0,0.,0.2,1),width=800,height=600)    
+    wi = Window(caption="Interactive Spaghetti using Diffusion Imaging in Python (dipy.org) and Free On Shades (fos.me)",\
+                bgcolor=(0.3,0.3,0.6,1),width=1200,height=800)    
     print 'wi ok'
     wi.attach(w)
     print 'w attached ok'
@@ -66,5 +66,5 @@ if __name__ == '__main__':
     wm.add(wi)
     print 'wi attached ok'
     wm.run()
-    print 'finished'
+    print 'wm running'
     
