@@ -52,7 +52,7 @@ if __name__ == '__main__':
     wi = Window()
     act = Dummy()
     w.add(act)
-    
+    wi.attach(w)    
     wm = WindowManager()
     wm.add(wi)
     wm.run()

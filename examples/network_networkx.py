@@ -22,7 +22,7 @@ cu = AttributeNetwork(node_position=e,
                       )
 
 w.add(cu)
-
+wi.attach(w)
 wm = WindowManager()
 wm.add(wi)
 wm.run()
