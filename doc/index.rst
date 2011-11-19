@@ -6,7 +6,7 @@
 FOS - Free Open Scientific visualization
 ========================================
 
-Fos stands for Φώς meaning light in Greek or free open scientific,
+Fos stands for Φώς meaning light in Greek or Free On Shades,
 a lightweight visualization platform in Python & Cython.
 
 
