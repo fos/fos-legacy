@@ -48,7 +48,7 @@ class Axes(Actor):
         glPushMatrix()
         #glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
         glib.glMultiDrawArrays(GL_LINE_STRIP, self.firstptr,self.countptr, self.items)
-        #Same as
+        #This is the same as
         #glDrawArrays(GL_LINE_STRIP,0,3)
         #glDrawArrays(GL_LINE_STRIP,3,3)
         #glDrawArrays(GL_LINE_STRIP,6,3)        

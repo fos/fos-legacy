@@ -8,7 +8,6 @@ pyglet.options['debug_texture'] = True
 
 from ctypes import *
 from pyglet.gl import *
-from fos.core.arrayimage import ArrayInterfaceImage
 from fos.core.actor import Actor
 from fos.core.utils import screen_to_model
 import fos.core.collision as cll
@@ -46,18 +45,13 @@ class Texture2D(Actor):
             if data.shape[2]==4:
                 self.format = GL_RGBA
                 self.components = 4
-        
-        #volume center coordinates
-        #self.update_vox_coords(self.vxi,self.vxj,self.vxk)
-        self.x,self.y,self.z=0,0,0                
-        #slicer step
+        self.x,self.y,self.z=0,0,0
         self.vertices=np.array([[-100,-100,-100],[100,100,100]])
         self.make_aabb(margin=0)
-        self.show_aabb=False                
+        self.show_aabb=False          
         self.create_texture()
         
-    def create_texture(self):
-        
+    def create_texture(self):        
         self.texture_index = c_uint(0)        
         glGenTextures(1,byref(self.texture_index))
         glBindTexture(GL_TEXTURE_2D, self.texture_index.value)
@@ -69,11 +63,8 @@ class Texture2D(Actor):
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
         w,h = self.size
         glTexImage2D(GL_TEXTURE_2D, 0, self.components, w, h, 0, self.format, GL_UNSIGNED_BYTE, self.data.ctypes.data)
-        #print self.size
         self.list_index = glGenLists(1)
-        #print self.list_index
-        glNewList( self.list_index,GL_COMPILE)        
-        #glTexImage2D(GL_TEXTURE_2D, 0, self.components, w, h, 0, self.format, GL_UNSIGNED_BYTE, self.data.ctypes.data)                 
+        glNewList( self.list_index,GL_COMPILE)
         glEnable(GL_TEXTURE_2D)
         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,GL_REPLACE)
         glBindTexture(GL_TEXTURE_2D, self.texture_index.value)
@@ -85,8 +76,9 @@ class Texture2D(Actor):
         glTexCoord2f(1.0, 1.0)
         glVertex3f(w/2., h/2., 0.0)
         glTexCoord2f(1.0, 0.0)
-        glVertex3f(w/2., -h/2., 0.0)
+        glVertex3f(w/2., -h/2., 0.0)        
         glEnd()
+        glFlush()
         glDisable(GL_TEXTURE_2D)
         glEndList()
 
@@ -107,9 +99,9 @@ class Texture2D(Actor):
     def process_keys(self,symbol,modifiers):        
         if symbol == key.SPACE:
             print('Space')
-    
 
     def set_state(self):
+        glShadeModel(GL_FLAT)
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_BLEND)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
@@ -125,9 +117,11 @@ class Texture2D(Actor):
 if __name__ =='__main__':
     
     ax = Axes(100)
-    #data=np.round(255*np.random.rand(100,100,4)).astype(np.ubyte)
-    data=np.round(255*np.ones((200,100,4))).astype(np.ubyte)
+    data=np.round(255*np.random.rand(182,218,4)).astype(np.ubyte)
+    #data=np.round(255*np.ones((182,218,4))).astype(np.ubyte)
+    data[70:120,:,:3]=100    
     data[:,:,3]=150
+    data=data.astype(np.ubyte)
     tex=Texture2D(data)
     w=World()
     w.add(ax)

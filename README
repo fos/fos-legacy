@@ -27,7 +27,7 @@ Applications
 
 Track Interactions using Spaghetti 
 ===================================
-(Fos/fos/applications/spaghetti.py)
+(Fos/applications/spaghetti.py)
 
 Extra Dependencies:
 
