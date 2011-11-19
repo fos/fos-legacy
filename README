@@ -40,6 +40,7 @@ P : select/unselect the representative track.
 E : expand/collapse the selected tracks 
 F : keep selected tracks rerun QuickBundles and hide everything else.
 A : select all representative tracks which are currently visible.
+I : invert selected tracks to unselected.
 H : hide/show all representative tracks.
 Left Mouse Button: keep pressed with dragging - rotation
 Middle Mouse Button: keep pressed with dragging for slow zoom

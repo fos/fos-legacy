@@ -274,6 +274,7 @@ P : select/unselect the representative track.
 E : expand/collapse the selected tracks 
 F : keep selected tracks rerun QuickBundles and hide everything else.
 A : select all representative tracks which are currently visible.
+I : invert selected tracks to unselected
 H : hide/show all representative tracks.
 >>>Mouse
 Left Button: keep pressed with dragging - rotation
@@ -398,13 +399,8 @@ ESC: exit
         glDisable(GL_LINE_SMOOTH)
         # glLineWidth(1.)
 
-
     def delete(self):
         pass
-        # NO need for this anymore
-        #for i in range(len(self.vertex_list)):
-        #    self.vertex_list[i].delete()
-
 
     def maskout_tracks(self):
         """ retrieve ids of virtuals which go through the mask
