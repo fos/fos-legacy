@@ -1,16 +1,23 @@
 FOS - Free on Shades - A scientific visualization library in Python & Cython
+------------------------------------------------------------------------------
 
 General Dependencies
-- Numpy >= 1.3.0
+-----------------------
+- Python >= 2.6 <=3.0
+- Numpy  >= 1.3.0
 - Cython >= 0.13
-- Pyglet >= 1.1
+- Pyglet >= 1.1.4
 
 Application specific dependencies
-- Nibabel
-- Pytables
+-----------------------------------
+- Nibabel  >= 1.0
+- Pytables >= 2.1.2
 
-Compile using
--Add the Fos to your PYTHONPATH 
--Build it locally using
- >>> python setup.py build_ext --inplace
+Local Installation Instructions
+------------------------------------
+1.Clone the repository
+>>> git clone git://github.com/fos/Fos.git
+2.Add Fos to your PYTHONPATH 
+3.Go to Fos directory and Build it locally
+>>> python setup.py build_ext --inplace
 
