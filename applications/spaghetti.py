@@ -34,7 +34,8 @@ if __name__ == '__main__':
     T = dpr.read_tracks()
     dpr.close()    
     #load initial QuickBundles with threshold 30mm
-    fpkl = 'data/subj_05/101_32/DTI/qb_gqi_1M_linear_30.pkl'    
+    fpkl = 'data/subj_05/101_32/DTI/qb_gqi_1M_linear_30.pkl'
+    #qb=QuickBundles(T,30.,12)    
     qb=load_pickle(fpkl)
     #create the interaction system for tracks 
     tl = TrackLabeler(qb,qb.downsampled_tracks(),vol_shape=data.shape,tracks_alpha=1)   
