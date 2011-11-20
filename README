@@ -32,6 +32,7 @@ Track Interactions using Spaghetti
 Extra Dependencies:
 
 - Nibabel  >= 1.0
+- Dipy >= 0.6-dev
 - Pytables >= 2.1.2
 
 Interaction Keys:
