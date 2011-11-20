@@ -408,7 +408,8 @@ ESC: exit
         mask = self.slicer.mask        
         #tracks = self.tracks_shifted
         tracks = self.virtuals_shifted
-        tcs,self.tes = track_counts(tracks,mask.shape,(1,1,1),True)
+        #tcs,self.tes = track_counts(tracks,mask.shape,(1,1,1),True)
+        tcs,tes = track_counts(tracks,mask.shape,(1,1,1),True)
         # print 'tcs:',tcs
         # print 'tes:',len(self.tes.keys())
         #find volume indices of mask's voxels
@@ -421,7 +422,8 @@ ESC: exit
         mask_tracks_inds = []
         for voxel in roiinds:
             try:
-                mask_tracks_inds+=self.tes[tuple(voxel)]
+                #mask_tracks_inds+=self.tes[tuple(voxel)]
+                mask_tracks_inds+=tes[tuple(voxel)]
             except KeyError:
                 pass
         mask_tracks_inds = list(set(mask_tracks_inds))
