@@ -17,7 +17,7 @@ from fos import World
 
 from pyglet.window import key,mouse
 from pyglet.clock import Clock
-from pyglet.window import FPSDisplay
+#from pyglet.window import FPSDisplay
 from fos.core.window.window_text  import WindowText
 from fos.core import color
 from fos.core.handlers.window import FosWinEventHandler

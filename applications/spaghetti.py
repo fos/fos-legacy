@@ -23,18 +23,21 @@ import copy
 
 if __name__ == '__main__':
 
+    subject = 5
+    seeds = 1
+    qb_dist = 30
     
     #load T1 volume registered in MNI space    
-    img = nib.load('data/subj_05/MPRAGE_32/T1_flirt_out.nii.gz')
+    img = nib.load('data/subj_'+("%02d" % subject)+'/MPRAGE_32/T1_flirt_out.nii.gz')
     data = img.get_data()
     affine = img.get_affine()    
     #load the tracks registered in MNI space 
-    fdpyw = 'data/subj_05/101_32/DTI/tracks_gqi_1M_linear.dpy'    
+    fdpyw = 'data/subj_'+("%02d" % subject)+'/101_32/DTI/tracks_gqi_'+str(seeds)+'M_linear.dpy'    
     dpr = Dpy(fdpyw, 'r')
     T = dpr.read_tracks()
     dpr.close()    
     #load initial QuickBundles with threshold 30mm
-    fpkl = 'data/subj_05/101_32/DTI/qb_gqi_1M_linear_30.pkl'
+    fpkl = 'data/subj_'+("%02d" % subject)+'/101_32/DTI/qb_gqi_'+str(seeds)+'M_linear_'+str(qb_dist)+'.pkl'
     #qb=QuickBundles(T,30.,12)    
     qb=load_pickle(fpkl)
     #create the interaction system for tracks 
