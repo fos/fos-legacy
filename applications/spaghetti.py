@@ -50,7 +50,7 @@ if __name__ == '__main__':
     w=World()
     w.add(tl)
     w.add(sl)
-    w.add(ax)
+    #w.add(ax)
     #create a window
     wi = Window(caption="Interactive Spaghetti using Diffusion Imaging in Python (dipy.org) and Free On Shades (fos.me)",\
                 bgcolor=(0.3,0.3,0.6,1),width=1200,height=800)    
