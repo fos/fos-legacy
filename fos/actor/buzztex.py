@@ -11,6 +11,7 @@ import fos.core.collision as cll
 from fos.actor.texture import Texture2D 
 
 
+
 class BuzzTex(Actor):
 
     def __init__(self,affine,data):
@@ -23,8 +24,8 @@ class BuzzTex(Actor):
         data : array, shape (X,Y,Z), data volume
         
         Notes
-        ---------
-        MNI space volume is expected for the moment
+        ---------                
+        http://content.gpwiki.org/index.php/OpenGL:Tutorials:3D_Textures
         
         """
 

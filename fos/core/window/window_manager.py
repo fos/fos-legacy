@@ -17,7 +17,10 @@ class WindowManager:
     def remove(self, window):
         """Remove a window from the window manager and from memory"""
         self.window_list.remove(window)
-        del window
+        try:
+            del window
+        except Exception as e:
+            print e
             
     def run(self):
         """Start the main loop for the program"""
@@ -35,6 +38,6 @@ class WindowManager:
             for window in self.window_list:
                 if window.has_exit == False:
                     window.process_frame()
-                else:
-                    self.remove(window)
+                else:                    
+                    self.remove(window)                    
                     break                    
