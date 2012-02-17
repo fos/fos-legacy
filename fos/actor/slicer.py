@@ -68,6 +68,11 @@ class Slicer(Actor):
         self.mask=np.zeros(data.shape)
         self.cube_roi_element=cube_vertices
         self.cube_size=1
+
+        self.cube_sizex=1
+        self.cube_sizey=1
+        self.cube_sizez=1
+
         self.cube_size_max=min((self.vxi,self.vxj,self.vxk))
         self.cube_size_min=1
         self.cube_roi_color_selected=np.array([1,1,0,1.],'f4')
@@ -265,19 +270,52 @@ class Slicer(Actor):
         if symbol == key._3:
             print('3')
             self.show_slices[2]= not self.show_slices[2]            
+        if symbol == key._6:
+            print('6')
+            if self.cube_size<self.cube_size_max:
+                #have to change to cubex,cubey,cubez
+                self.cube_sizex+=1
+                self.cube_roi_element=np.array([self.cube_sizex,self.cube_sizey,self.cube_sizez])*cube_vertices+self.cube_center
+                self.change_roi(self.cube_roi_element, [1,1,0,1])        
+                self.cube_size=np.max(np.array([self.cube_sizex,self.cube_sizey,self.cube_sizez]))
+
+        if symbol == key._7:
+            print('7')
+            if self.cube_size<self.cube_size_max:
+                #have to change to cubex,cubey,cubez
+                self.cube_sizey+=1
+                self.cube_roi_element=np.array([self.cube_sizex,self.cube_sizey,self.cube_sizez])*cube_vertices+self.cube_center
+                self.change_roi(self.cube_roi_element, [1,1,0,1])        
+                self.cube_size=np.max(np.array([self.cube_sizex,self.cube_sizey,self.cube_sizez]))
+
+        if symbol == key._8:
+            print('8')
+            if self.cube_size<self.cube_size_max:
+                #have to change to cubex,cubey,cubez
+                self.cube_sizez+=1
+                self.cube_roi_element=np.array([self.cube_sizex,self.cube_sizey,self.cube_sizez])*cube_vertices+self.cube_center
+                self.change_roi(self.cube_roi_element, [1,1,0,1])        
+                self.cube_size=np.max(np.array([self.cube_sizex,self.cube_sizey,self.cube_sizez]))
+        
         if symbol == key.M:
             print('M - Maximizing ROI')
-            if self.cube_size<self.cube_size_max:
-                self.cube_size+=1
-                self.cube_roi_element=self.cube_size*cube_vertices+self.cube_center
+            if self.cube_size<self.cube_size_max:                
+                self.cube_sizex+=1
+                self.cube_sizey+=1
+                self.cube_sizez+=1
+                self.cube_roi_element=np.array([self.cube_sizex,self.cube_sizey,self.cube_sizez])*cube_vertices+self.cube_center
                 self.change_roi(self.cube_roi_element, [1,1,0,1])
+                self.cube_size=np.max(np.array([self.cube_sizex,self.cube_sizey,self.cube_sizez]))
                 print('ROI magnification %d' % self.cube_size)
         if symbol == key.N:
             print('N - miNimizing ROI')
             if self.cube_size>self.cube_size_min:
-                self.cube_size-=1
-                self.cube_roi_element=self.cube_size*cube_vertices+self.cube_center
+                self.cube_sizex-=1
+                self.cube_sizey-=1
+                self.cube_sizez-=1
+                self.cube_roi_element=np.array([self.cube_sizex,self.cube_sizey,self.cube_sizez])*cube_vertices+self.cube_center
                 self.change_roi(self.cube_roi_element, [1,1,0,1])
+                self.cube_size=np.max(np.array([self.cube_sizex,self.cube_sizey,self.cube_sizez]))
                 print('ROI magnification %d' % self.cube_size)
         if symbol == key.SPACE:
             print('Space - Select ROI')
@@ -301,8 +339,10 @@ class Slicer(Actor):
             #self.masks_list.append(mask)
             if self.cube_size>1:                            
                 v0,v1,v2=self.volume_point
-                r=self.cube_size/2
-                self.mask[v0-r:v0+r,v1-r:v1+r,v2-r:v2+r]=1
+                rx=self.cube_sizex/2
+                ry=self.cube_sizey/2
+                rz=self.cube_sizez/2
+                self.mask[v0-rx:v0+rx,v1-ry:v1+ry,v2-rz:v2+rz]=1
             if self.cube_size==1:                        
                 self.mask[tuple(self.volume_point)]=1
             #self.cube_roi_colors=np.ascontiguousarray(np.tile(self.cube_roi_color_stored,(len(cube_vertices),1)))
@@ -326,6 +366,7 @@ SHIFT + (LEFT, RIGHT, UP, DOWN, PGUP, PGDOWN): change slices faster.
 SPACE : Select ROI
 M : Maximize ROI
 N : minNimize ROI
+6, 7, 8: increase one side only
 ENTER : Store ROI in mask
 G : Get tracks intersecting with mask
 D : Delete all ROIs and reset mask

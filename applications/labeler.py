@@ -435,9 +435,8 @@ ESC: exit
 class ThresholdSelector(object):
     def __init__(self, parent, default_value):
         self.parent = parent
-        self.value = default_value
         self.s = Tkinter.Scale(self.parent, from_=1, to=30, width=25, length=300, orient=Tkinter.HORIZONTAL)
-        self.s.set(self.value)
+        self.s.set(default_value)
         self.s.pack()
         self.b = Tkinter.Button(self.parent, text='OK', command=self.ok)
         self.b.pack(side=Tkinter.BOTTOM)
