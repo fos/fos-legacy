@@ -20,8 +20,10 @@ class Line(Actor):
         self.vertices = np.ascontiguousarray(np.concatenate(self.tracks).astype('f4'))        
 	if colors==None:
         	self.colors = np.ascontiguousarray(np.ones((len(self.vertices),4)).astype('f4'))
-	else:		
-        	self.colors = np.ascontiguousarray(colors.astype('f4'))	
+	else:
+            if isinstance(colors, (list, tuple)):
+                self.colors = np.tile(colors,(np.sum(self.tracks_len),1))            
+            self.colors = np.ascontiguousarray(colors.astype('f4'))	
         self.vptr=self.vertices.ctypes.data
         self.cptr=self.colors.ctypes.data        
         self.count=np.array(self.tracks_len, dtype=np.int32)
